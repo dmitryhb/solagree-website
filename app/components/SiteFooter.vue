@@ -7,9 +7,21 @@ interface FooterGroup {
   }>
 }
 
-defineProps<{
+withDefaults(defineProps<{
+  brand?: string
+  title?: string
+  description?: string
+  ctaLabel?: string
+  ctaTo?: string
   groups: FooterGroup[]
-}>()
+}>(), {
+  brand: 'Solagree',
+  title: 'Foundation-ready for the next page builds.',
+  description:
+    'The footer is established as a reusable structure so future static pages inherit the same brand rhythm, hierarchy, and action area.',
+  ctaLabel: 'Start your plan',
+  ctaTo: '/'
+})
 
 const linkTag = (to: string) => {
   if (to.startsWith('mailto:') || to.startsWith('tel:')) {
@@ -26,21 +38,21 @@ const linkTag = (to: string) => {
       <div class="site-footer__grid lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1.8fr)]">
         <div class="space-y-5">
           <p class="eyebrow !text-white/55">
-            Solagree
+            {{ brand }}
           </p>
           <h2 class="section-title !text-[2.25rem] !text-white">
-            Foundation-ready for the next page builds.
+            {{ title }}
           </h2>
           <p class="prose-copy !text-white/72">
-            The footer is established as a reusable structure so future static pages inherit the
-            same brand rhythm, hierarchy, and action area.
+            {{ description }}
           </p>
           <SiteButton
-            to="/"
+            v-if="ctaLabel"
+            :to="ctaTo"
             variant="primary"
             size="sm"
           >
-            Start your plan
+            {{ ctaLabel }}
           </SiteButton>
         </div>
 

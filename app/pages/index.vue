@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {
   faqItems,
+  footerCallout,
   footerGroups,
   navigationLinks,
   pricingCards,
@@ -13,7 +14,11 @@ import {
 <template>
   <main class="page-shell">
     <div class="section-shell py-6 sm:py-8">
-      <header class="flex flex-col gap-5 rounded-[28px] border border-white/65 bg-white/70 px-5 py-4 shadow-[0_18px_50px_rgba(42,43,47,0.08)] backdrop-blur md:flex-row md:items-center md:justify-between md:px-8">
+      <SurfaceCard
+        as="header"
+        class="flex flex-col gap-5 md:flex-row md:items-center md:justify-between"
+        padding="md"
+      >
         <div>
           <p class="eyebrow">
             Solagree
@@ -32,7 +37,7 @@ import {
             {{ link.label }}
           </NuxtLink>
         </nav>
-      </header>
+      </SurfaceCard>
     </div>
 
     <section
@@ -80,7 +85,7 @@ import {
                 </p>
               </div>
               <div class="grid gap-3">
-                <div class="rounded-[20px] border border-white/70 bg-white/85 px-4 py-3">
+                <SurfaceCard padding="md">
                   <p class="text-sm font-bold uppercase tracking-[0.18em] text-[rgba(51,51,51,0.5)]">
                     Palette
                   </p>
@@ -88,15 +93,18 @@ import {
                     `#FEF9EF`, `#333333`, `#2A2B2F`, warm neutrals, white, and an easily swappable
                     CTA yellow.
                   </p>
-                </div>
-                <div class="rounded-[20px] border border-[rgba(42,43,47,0.08)] bg-[var(--color-ink)] px-4 py-3 text-white">
+                </SurfaceCard>
+                <SurfaceCard
+                  tone="dark"
+                  padding="md"
+                >
                   <p class="text-sm font-bold uppercase tracking-[0.18em] text-white/55">
                     Typography
                   </p>
                   <p class="mt-2 text-sm leading-7 text-white/74">
                     Editorial serif for display hierarchy and a clean sans-serif for interface copy.
                   </p>
-                </div>
+                </SurfaceCard>
               </div>
             </div>
           </SurfaceCard>
@@ -197,15 +205,21 @@ import {
       intro="The accordion treatment is lightweight, semantic, and ready to be reused on the review page or any future informational route."
       width="narrow"
     >
-      <div class="rounded-[28px] border border-[rgba(209,201,191,0.72)] bg-white/70 px-5 py-2 shadow-[0_20px_55px_rgba(42,43,47,0.08)] backdrop-blur sm:px-8">
+      <SurfaceCard
+        as="div"
+        class="px-1 sm:px-3"
+      >
         <FaqRow
           v-for="item in faqItems"
           :key="item.question"
           v-bind="item"
         />
-      </div>
+      </SurfaceCard>
     </AppSection>
 
-    <SiteFooter :groups="footerGroups" />
+    <SiteFooter
+      v-bind="footerCallout"
+      :groups="footerGroups"
+    />
   </main>
 </template>

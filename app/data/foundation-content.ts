@@ -156,3 +156,12 @@ export const footerGroups = [
     ]
   }
 ] as const
+
+export const footerCallout = {
+  brand: 'Solagree',
+  title: 'Foundation-ready for the next page builds.',
+  description:
+    'The footer is established as a reusable structure so future static pages inherit the same brand rhythm, hierarchy, and action area.',
+  ctaLabel: 'Start your plan',
+  ctaTo: '/'
+} as const
