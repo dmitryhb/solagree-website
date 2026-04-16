@@ -310,6 +310,7 @@ export interface QuizCtaClickedEvent extends QuizHostEventBase {
   type: 'cta_clicked'
   actionId: QuizCtaActionId
   href: string
+  ctaTrackingId?: string
   outcome: QuizOutcomeId | 'open-policy'
   policyId?: QuizOpenPolicyId
 }

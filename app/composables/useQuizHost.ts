@@ -44,11 +44,11 @@ export function useQuizHost(
   }
 
   function dispatchEvent(event: QuizHostEvent) {
-    options.onEvent?.(event)
-
     if (!import.meta.client) {
       return
     }
+
+    options.onEvent?.(event)
 
     if (hostConfig.value.bridge.postMessage && window.parent !== window) {
       window.parent.postMessage(
@@ -167,6 +167,7 @@ export function useQuizHost(
       type: 'cta_clicked',
       actionId: cta.actionId,
       href: cta.href,
+      ctaTrackingId: cta.trackingId,
       outcome: evaluation.kind === 'resolved' ? evaluation.outcome : 'open-policy',
       policyId: evaluation.kind === 'open-policy' ? evaluation.policyId : undefined,
       ...buildEventContext()
