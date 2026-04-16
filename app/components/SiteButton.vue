@@ -6,11 +6,13 @@ const props = withDefaults(defineProps<{
   variant?: 'primary' | 'secondary' | 'ghost'
   size?: 'sm' | 'md'
   block?: boolean
+  disabled?: boolean
 }>(), {
   type: 'button',
   variant: 'primary',
   size: 'md',
-  block: false
+  block: false,
+  disabled: false
 })
 
 const tag = computed(() => {
@@ -40,7 +42,10 @@ const linkProps = computed(() => {
     }
   }
 
-  return { type: props.type }
+  return {
+    type: props.type,
+    disabled: props.disabled
+  }
 })
 </script>
 

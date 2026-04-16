@@ -246,6 +246,17 @@ select {
   width: 100%;
 }
 
+.sol-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  box-shadow: none;
+  transform: none;
+}
+
+.sol-button:disabled:hover {
+  transform: none;
+}
+
 .value-block {
   display: grid;
   gap: 1rem;
