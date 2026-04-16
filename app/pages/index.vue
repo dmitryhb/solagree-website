@@ -93,6 +93,8 @@ useSeoMeta({
                 :src="homepageAssets.hero"
                 alt=""
                 class="block w-full rounded-[22px] object-cover"
+                fetchpriority="high"
+                decoding="async"
               />
               <div class="grid gap-3 sm:grid-cols-2">
                 <div class="rounded-[22px] border border-[rgba(62,64,89,0.08)] bg-[rgba(255,255,255,0.76)] px-4 py-3">
@@ -246,6 +248,8 @@ useSeoMeta({
             :src="homepageAssets.kids"
             alt=""
             class="block w-full rounded-[22px] object-cover"
+            loading="lazy"
+            decoding="async"
           />
         </SurfaceCard>
 
@@ -564,6 +568,8 @@ useSeoMeta({
             :src="homepageAssets.professionals"
             alt=""
             class="block w-full rounded-[24px] object-cover"
+            loading="lazy"
+            decoding="async"
           />
         </SurfaceCard>
       </div>
