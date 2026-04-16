@@ -1,13 +1,23 @@
 <script setup lang="ts">
-import type { QuizStaticOption } from '~/data/quiz'
+import type { QuizQuestionDefinition, QuizQuestionValue } from '~/data/quiz-types'
 
 defineProps<{
   progress: number
   backLabel: string
-  questionId: string
-  question: string
-  options: readonly QuizStaticOption[]
+  question?: QuizQuestionDefinition
+  value?: QuizQuestionValue
   primaryActionLabel: string
+  canGoBack?: boolean
+  canAdvance?: boolean
+  completionTitle?: string
+  completionBody?: string
+}>()
+
+const emit = defineEmits<{
+  back: []
+  advance: []
+  singleChange: [value: string]
+  multiChange: [payload: { value: string, checked: boolean }]
 }>()
 </script>
 
@@ -18,18 +28,35 @@ defineProps<{
         <QuizProgressMeter :value="progress" />
 
         <div class="quiz-card-shell__back">
-          <QuizBackButton :label="backLabel" />
+          <QuizBackButton
+            :label="backLabel"
+            :disabled="!canGoBack"
+            @click="emit('back')"
+          />
         </div>
 
         <QuizQuestionBlock
+          v-if="question"
           class="quiz-card-shell__question"
-          :question-id="questionId"
           :question="question"
-          :options="options"
+          :value="value"
+          @single-change="emit('singleChange', $event)"
+          @multi-change="emit('multiChange', $event)"
+        />
+
+        <QuizCompletionState
+          v-else
+          class="quiz-card-shell__question"
+          :title="completionTitle ?? ''"
+          :body="completionBody ?? ''"
         />
 
         <div class="quiz-card-shell__action">
-          <QuizPrimaryAction :label="primaryActionLabel" />
+          <QuizPrimaryAction
+            :label="primaryActionLabel"
+            :disabled="!canAdvance"
+            @click="emit('advance')"
+          />
         </div>
       </div>
     </div>

@@ -10,7 +10,6 @@ import {
   homepagePricingCards,
   homepageProfessionalBullets
 } from '~/data/homepage'
-import { solagreeQuizStaticScreen } from '~/data/quiz'
 
 useSeoMeta({
   title: 'Solagree',
@@ -350,7 +349,6 @@ useSeoMeta({
 
     <QuizSection
       id="quiz"
-      :screen="solagreeQuizStaticScreen"
     />
 
     <section
