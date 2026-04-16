@@ -21,8 +21,8 @@ const emit = defineEmits<{
   advance: []
   reset: []
   cta: [payload: QuizResultViewModel['primaryCta']]
-  singleChange: [value: string | undefined]
-  multiChange: [payload: { value: string, checked: boolean }]
+  singleChange: [payload: { questionId: QuizQuestionDefinition['id'], value: string | undefined }]
+  multiChange: [payload: { questionId: QuizQuestionDefinition['id'], value: string, checked: boolean }]
 }>()
 </script>
 

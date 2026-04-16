@@ -52,8 +52,8 @@ const explainer = computed(() => {
           @advance="quizHost.handleAdvance"
           @cta="quizHost.handleResultCtaClick"
           @reset="quizHost.handleReset"
-          @single-change="quizHost.handleSingleAnswer(quizSession.currentQuestionId.value, $event)"
-          @multi-change="quizHost.handleMultiAnswer(quizSession.currentQuestionId.value, $event)"
+          @single-change="quizHost.handleSingleAnswer($event.questionId, $event.value)"
+          @multi-change="quizHost.handleMultiAnswer($event.questionId, { value: $event.value, checked: $event.checked })"
         />
 
         <QuizExplainer
