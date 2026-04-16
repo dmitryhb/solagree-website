@@ -246,13 +246,16 @@ select {
   width: 100%;
 }
 
+.sol-button--disabled,
 .sol-button:disabled {
   cursor: not-allowed;
   opacity: 0.5;
   box-shadow: none;
   transform: none;
+  pointer-events: none;
 }
 
+.sol-button--disabled:hover,
 .sol-button:disabled:hover {
   transform: none;
 }

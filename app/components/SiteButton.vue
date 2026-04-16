@@ -15,30 +15,42 @@ const props = withDefaults(defineProps<{
   disabled: false
 })
 
+const isDisabledLink = computed(() => Boolean(props.disabled && (props.to || props.href)))
+
 const tag = computed(() => {
-  if (props.to) {
+  if (props.to && !props.disabled) {
     return resolveComponent('NuxtLink')
   }
 
-  if (props.href) {
+  if (props.href && !props.disabled) {
     return 'a'
+  }
+
+  if (isDisabledLink.value) {
+    return 'span'
   }
 
   return 'button'
 })
 
 const linkProps = computed(() => {
-  if (props.to) {
+  if (props.to && !props.disabled) {
     return { to: props.to }
   }
 
-  if (props.href) {
+  if (props.href && !props.disabled) {
     const isExternal = /^https?:\/\//.test(props.href)
 
     return {
       href: props.href,
       target: isExternal ? '_blank' : undefined,
       rel: isExternal ? 'noreferrer' : undefined
+    }
+  }
+
+  if (isDisabledLink.value) {
+    return {
+      'aria-disabled': 'true'
     }
   }
 
@@ -57,7 +69,8 @@ const linkProps = computed(() => {
       'sol-button',
       `sol-button--${variant}`,
       size === 'sm' && 'sol-button--sm',
-      block && 'sol-button--block'
+      block && 'sol-button--block',
+      disabled && 'sol-button--disabled'
     ]"
   >
     <slot />
