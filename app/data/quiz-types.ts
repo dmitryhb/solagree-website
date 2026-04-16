@@ -123,15 +123,97 @@ export interface QuizQuestionDefinition<
 }
 
 export interface QuizPersistedSession {
-  version: 1
-  phase: 'question' | 'complete'
+  version: 2
+  phase: QuizSessionPhase
   currentQuestionId: QuizQuestionId
   answers: QuizAnswerMap
 }
 
+export type QuizOpenPolicyId =
+  | 'missing-spouse-routing-cannot-find'
+  | 'missing-spouse-routing-no-communication'
+  | 'state-specific-result-messaging'
+
 export interface QuizOpenPolicy {
-  id: string
+  id: QuizOpenPolicyId
   title: string
   description: string
   relatedQuestions: readonly QuizQuestionId[]
+  blocksOutcome: boolean
+}
+
+export type QuizSessionPhase = 'question' | 'result'
+
+export type QuizOutcomeId =
+  | 'solagree-fit'
+  | 'attorney-consult-first'
+  | 'not-fit-right-now'
+
+export type QuizInternalTag =
+  | 'parenting'
+  | 'financial'
+  | 'both'
+  | 'financial-complexity'
+  | 'missing-spouse'
+  | 'legal-advice-needed'
+  | 'payment-plan'
+  | 'spouse-resistance'
+  | 'no-spouse-communication'
+
+export interface QuizConsultMetadata {
+  state?: QuizStateCode
+  tags: readonly QuizInternalTag[]
+  parentingTopicIds: readonly QuizParentingDetailAnswer[]
+  financialTopicIds: readonly QuizFinancialDetailAnswer[]
+  spouseContact?: QuizSpouseContactAnswer
+  spouseCooperation?: QuizCooperationAnswer
+  legalAdvice?: QuizLegalAdviceAnswer
+  paymentReadiness?: QuizPaymentReadinessAnswer
+  hasParentingConcerns: boolean
+  hasFinancialConcerns: boolean
+  hasFinancialComplexity: boolean
+  hasMissingSpouse: boolean
+  needsLegalAdvice: boolean
+  deferredPolicyIds: readonly QuizOpenPolicyId[]
+}
+
+export interface QuizResolvedEvaluation {
+  kind: 'resolved'
+  outcome: QuizOutcomeId
+  metadata: QuizConsultMetadata
+}
+
+export interface QuizOpenPolicyEvaluation {
+  kind: 'open-policy'
+  policyId: QuizOpenPolicy['id']
+  metadata: QuizConsultMetadata
+}
+
+export type QuizEvaluation = QuizResolvedEvaluation | QuizOpenPolicyEvaluation
+
+export interface QuizResultCta {
+  label: string
+  href: string
+  note?: string
+  isPlaceholder?: boolean
+}
+
+export interface QuizResultResourceLink {
+  label: string
+  href: string
+  description: string
+}
+
+export interface QuizResultViewModel {
+  eyebrow: string
+  title: string
+  body: string
+  summaryTitle: string
+  summaryItems: readonly string[]
+  primaryCta: QuizResultCta
+  resourceTitle?: string
+  resourceBody?: string
+  resources?: readonly QuizResultResourceLink[]
+  policyNote?: string
+  resetLabel: string
 }

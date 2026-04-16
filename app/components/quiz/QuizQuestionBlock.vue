@@ -31,7 +31,7 @@ const emit = defineEmits<{
       :options="question.options"
       :value="typeof value === 'string' ? value : undefined"
       :placeholder="question.placeholder"
-      @change="emit('singleChange', $event)"
+      @update:value="emit('singleChange', $event)"
     />
 
     <QuizAnswerGroup

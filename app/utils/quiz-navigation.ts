@@ -111,7 +111,7 @@ export function getPreviousQuizQuestionId(
 export function getQuizProgressValue(
   currentQuestionId: QuizQuestionId,
   answers: Readonly<QuizAnswerMap>,
-  phase: 'question' | 'complete'
+  phase: 'question' | 'result'
 ): number {
   const visibleQuestionIds = getVisibleQuizQuestionIds(answers)
 
@@ -119,7 +119,7 @@ export function getQuizProgressValue(
     return 0
   }
 
-  if (phase === 'complete') {
+  if (phase === 'result') {
     return 100
   }
 
