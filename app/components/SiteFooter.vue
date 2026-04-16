@@ -86,6 +86,15 @@ const linkTag = (to: string) => {
             </div>
           </div>
         </div>
+
+        <div class="site-footer__bottom">
+          <p class="site-footer__legal">
+            Terms of Service | Privacy Policy | Accessibility
+          </p>
+          <p class="site-footer__copyright">
+            © 2026 Solagree, LLC. All Rights Reserved.
+          </p>
+        </div>
       </SurfaceCard>
     </div>
   </footer>

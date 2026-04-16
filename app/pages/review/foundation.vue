@@ -1,57 +1,111 @@
 <script setup lang="ts">
-import {
-  reviewButtonPanels,
-  reviewChecklist,
-  reviewColorTokens,
-  reviewFaqPreview,
-  reviewFooterCallout,
-  reviewFooterGroups,
-  reviewNavigation,
-  reviewPricingPreview,
-  reviewRowPreview,
-  reviewTypeSamples,
-  reviewValuePreview
-} from '~/data/foundation-review'
-
 useSeoMeta({
   title: 'Foundation Review | Solagree',
-  description: 'Internal signoff surface for the Solagree foundation layer.',
+  description: 'Internal signoff surface for the live Solagree foundation layer.',
   robots: 'noindex, nofollow'
 })
 
 const resolvedColors = ref<Record<string, string>>({})
 
-const typeSampleTag = (kind: string) => {
-  if (kind === 'display') {
-    return 'h2'
+const reviewColorTokens = [
+  {
+    name: 'Page',
+    variable: '--color-page',
+    usage: 'Main page background.'
+  },
+  {
+    name: 'Hero base',
+    variable: '--color-surface-hero',
+    usage: 'Header surface on the homepage.'
+  },
+  {
+    name: 'Warm surface',
+    variable: '--color-surface-warm',
+    usage: 'Secondary warm section background.'
+  },
+  {
+    name: 'Footer warm',
+    variable: '--color-surface-footer',
+    usage: 'Outer footer band.'
+  },
+  {
+    name: 'Footer inner',
+    variable: '--color-surface-light',
+    usage: 'Inner footer card and light panels.'
+  },
+  {
+    name: 'Dark surface',
+    variable: '--color-surface-dark',
+    usage: 'Dark comparison cards and footer fill.'
+  },
+  {
+    name: 'Accent',
+    variable: '--color-accent',
+    usage: 'CTA fill.'
+  },
+  {
+    name: 'Accent text',
+    variable: '--color-accent-text',
+    usage: 'CTA foreground.'
   }
+] as const
 
-  if (kind === 'title') {
-    return 'h3'
+const reviewTypography = [
+  {
+    label: 'Lora',
+    token: 'Display',
+    preview: 'Shared foundation, exact editorial voice.'
+  },
+  {
+    label: 'Poppins',
+    token: 'Navigation / labels',
+    preview: 'Foundation checkpoint'
+  },
+  {
+    label: 'Open Sans',
+    token: 'Body copy',
+    preview:
+      'The review surface uses the same live tokens as the homepage so the real output can be inspected without a design tool.'
+  },
+  {
+    label: 'DM Sans',
+    token: 'Utility copy',
+    preview: 'Supporting text and small interface notes.'
   }
+] as const
 
-  return 'p'
-}
+const reviewButtons = [
+  { label: 'Primary CTA', text: 'Take the quiz', variant: 'primary' as const },
+  { label: 'Secondary CTA', text: 'See how it works', variant: 'secondary' as const },
+  { label: 'Ghost CTA', text: 'Open notes', variant: 'ghost' as const }
+] as const
 
-const typeSampleClass = (kind: string) => {
-  if (kind === 'display') {
-    return 'editorial-display !text-[2.8rem] sm:!text-[3.6rem]'
+const reviewFooterGroups = [
+  {
+    title: 'Review areas',
+    links: [
+      { label: 'Typography', to: '#typography' },
+      { label: 'Colors', to: '#colors' },
+      { label: 'Buttons', to: '#buttons' }
+    ]
+  },
+  {
+    title: 'Foundation',
+    links: [
+      { label: 'Homepage pass', to: '/' },
+      { label: 'Shared foundation', to: '#top' },
+      { label: 'Project notes', to: '#summary' }
+    ]
+  },
+  {
+    title: 'Project',
+    links: [
+      { label: 'HIR-34', to: '#top' },
+      { label: 'Develop', to: '/' },
+      { label: 'Solagree', to: '/' }
+    ]
   }
-
-  if (kind === 'title') {
-    return 'section-title !text-[2rem]'
-  }
-
-  if (kind === 'copy') {
-    return 'prose-copy !max-w-none'
-  }
-
-  return 'eyebrow !text-[rgba(63,49,84,0.72)]'
-}
-
-const resolveColorValue = (variable: string) => {
-  return resolvedColors.value[variable] || `var(${variable})`
-}
+] as const
 
 onMounted(() => {
   const styles = getComputedStyle(document.documentElement)
@@ -60,6 +114,10 @@ onMounted(() => {
     reviewColorTokens.map(({ variable }) => [variable, styles.getPropertyValue(variable).trim()])
   )
 })
+
+const resolveColorValue = (variable: string) => {
+  return resolvedColors.value[variable] || `var(${variable})`
+}
 </script>
 
 <template>
@@ -67,312 +125,234 @@ onMounted(() => {
     id="top"
     class="page-shell"
   >
-    <div class="section-shell py-6 sm:py-8">
-      <SurfaceCard
-        as="header"
-        class="flex flex-col gap-6 xl:flex-row xl:items-end xl:justify-between"
-      >
-        <div class="space-y-5">
+    <section class="app-section pt-6 sm:pt-8">
+      <div class="section-shell space-y-6">
+        <SurfaceCard
+          as="header"
+          class="surface-card--hero flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between"
+          padding="md"
+        >
           <div class="space-y-4">
             <p class="eyebrow">
               Internal signoff surface
             </p>
             <div class="space-y-3">
-              <h1 class="editorial-display max-w-4xl">
-                Review the Solagree foundation before the quiz begins.
+              <h1 class="editorial-display max-w-3xl">
+                Review the live Solagree foundation before the next route expands it.
               </h1>
-              <p class="prose-copy !max-w-3xl">
-                This route exposes the merged typography, palette, CTA hierarchy, and shared
-                primitives in one place. Every section is composed from the live foundation layer,
-                so stakeholders can approve the actual system instead of reviewing screenshots or
-                raw code.
+              <p class="prose-copy max-w-2xl">
+                This page stays intentionally close to the shared foundation layer so stakeholders can
+                check the actual output, not a parallel presentation model.
               </p>
             </div>
           </div>
 
-          <nav class="flex flex-wrap items-center gap-3">
-            <NuxtLink
-              v-for="link in reviewNavigation"
-              :key="link.label"
-              :to="link.to"
-              class="site-nav-link"
-            >
-              {{ link.label }}
-            </NuxtLink>
-          </nav>
-
           <div class="flex flex-wrap gap-3">
-            <SiteButton to="#buttons">
-              Review CTA treatments
+            <SiteButton to="/">
+              Back to homepage
             </SiteButton>
             <SiteButton
-              to="/"
+              to="#buttons"
               variant="secondary"
             >
-              Back to homepage shell
+              Review CTA treatments
             </SiteButton>
           </div>
-        </div>
+        </SurfaceCard>
+      </div>
+    </section>
 
-        <div class="grid gap-3 sm:grid-cols-2 xl:w-[29rem]">
-          <SurfaceCard
-            tone="muted"
-            padding="md"
-          >
-            <p class="eyebrow">
-              Route
-            </p>
-            <p class="mt-2 text-lg font-extrabold leading-tight text-[var(--color-ink)]">
-              /review/foundation
-            </p>
-            <p class="mt-2 text-sm leading-7 text-[rgba(63,49,84,0.76)]">
-              Static checkpoint for internal review before feature-specific work starts.
-            </p>
-          </SurfaceCard>
-
-          <SurfaceCard
-            tone="dark"
-            padding="md"
-          >
-            <p class="eyebrow !text-white/55">
-              Source
-            </p>
-            <p class="mt-2 text-lg font-extrabold leading-tight text-white">
-              HIR-29 foundation layer
-            </p>
-            <p class="mt-2 text-sm leading-7 text-white/74">
-              Tokens and primitives shown here are the same shared layer already merged into
-              <code class="font-semibold">develop</code>.
-            </p>
-          </SurfaceCard>
-        </div>
-      </SurfaceCard>
-    </div>
-
-    <AppSection
-      id="signoff"
-      eyebrow="Signoff gates"
-      title="Approve the same foundation the product will inherit"
-      intro="The checklist below uses the shared review row pattern to make approval criteria visible and concrete."
-      width="narrow"
+    <section
+      id="summary"
+      class="app-section"
     >
-      <SurfaceCard tone="dark">
-        <ReviewRow
-          v-for="item in reviewChecklist"
-          :key="item.title"
-          v-bind="item"
-          dark
-        />
-      </SurfaceCard>
-    </AppSection>
+      <div class="section-shell grid gap-5 lg:grid-cols-3">
+        <SurfaceCard>
+          <p class="eyebrow">
+            Live tokens
+          </p>
+          <p class="mt-2 text-sm leading-7 text-[rgba(63,49,84,0.76)]">
+            Color, font, and surface values resolve from the same CSS variables used by the homepage.
+          </p>
+        </SurfaceCard>
+        <SurfaceCard tone="dark">
+          <p class="eyebrow !text-white/58">
+            Shared buttons
+          </p>
+          <p class="mt-2 text-sm leading-7 text-white/78">
+            CTA treatments are shown here with the same primitive that the homepage consumes.
+          </p>
+        </SurfaceCard>
+        <SurfaceCard>
+          <p class="eyebrow">
+            Truthful surface
+          </p>
+          <p class="mt-2 text-sm leading-7 text-[rgba(63,49,84,0.76)]">
+            The review route is kept lightweight so it remains a check on the live foundation rather
+            than a second marketing page.
+          </p>
+        </SurfaceCard>
+      </div>
+    </section>
 
-    <AppSection
+    <section
       id="typography"
-      eyebrow="Typography"
-      title="Display, section, and interface hierarchy"
-      intro="These samples use the live foundation classes and font tokens, so visual hierarchy can be reviewed without opening a design file."
-      tone="soft"
+      class="app-section app-section--soft"
     >
-      <div class="grid gap-5 lg:grid-cols-2">
-        <SurfaceCard
-          v-for="sample in reviewTypeSamples"
-          :key="sample.label"
-        >
-          <div class="space-y-4">
-            <div class="space-y-2">
+      <div class="section-shell space-y-8">
+        <header class="section-heading section-heading--center">
+          <p class="eyebrow">
+            Typography
+          </p>
+        </header>
+
+        <div class="grid gap-5 lg:grid-cols-2">
+          <SurfaceCard
+            v-for="sample in reviewTypography"
+            :key="sample.label"
+          >
+            <div class="space-y-3">
               <p class="eyebrow">
                 {{ sample.token }}
               </p>
               <p class="text-sm font-semibold uppercase tracking-[0.16em] text-[rgba(63,49,84,0.54)]">
                 {{ sample.label }}
               </p>
+              <p
+                :class="sample.label === 'Lora'
+                  ? 'font-[var(--font-display)] text-[2rem] leading-tight text-[var(--color-heading)]'
+                  : sample.label === 'Poppins'
+                    ? 'font-[var(--font-nav)] text-[1rem] font-semibold uppercase tracking-[0.14em] text-[var(--color-ink)]'
+                    : 'font-[var(--font-body)] text-[1rem] leading-7 text-[rgba(63,49,84,0.76)]'"
+              >
+                {{ sample.preview }}
+              </p>
             </div>
-
-            <component
-              :is="typeSampleTag(sample.kind)"
-              :class="typeSampleClass(sample.kind)"
-            >
-              {{ sample.preview }}
-            </component>
-          </div>
-        </SurfaceCard>
+          </SurfaceCard>
+        </div>
       </div>
-    </AppSection>
+    </section>
 
-    <AppSection
+    <section
       id="colors"
-      eyebrow="Color tokens"
-      title="Palette swatches are painted from the actual CSS variables"
-      intro="The labels identify the variable names while the swatches themselves resolve against :root, keeping the review route tied to the real token layer."
+      class="app-section"
     >
-      <div class="grid gap-5 xl:grid-cols-[minmax(0,1.4fr)_minmax(320px,0.6fr)]">
-        <div class="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+      <div class="section-shell space-y-8">
+        <header class="section-heading section-heading--center">
+          <p class="eyebrow">
+            Color tokens
+          </p>
+        </header>
+
+        <div class="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
           <SurfaceCard
             v-for="swatch in reviewColorTokens"
             :key="swatch.variable"
             padding="md"
           >
             <div
-              class="h-28 rounded-[22px] border border-black/5"
+              class="h-28 rounded-[22px] border border-[rgba(62,64,89,0.08)]"
               :style="{ backgroundColor: `var(${swatch.variable})` }"
             />
             <div class="mt-4 space-y-2">
-              <p class="text-base font-extrabold text-[var(--color-ink)]">
+              <p class="font-[var(--font-display)] text-[1.2rem] text-[var(--color-heading)]">
                 {{ swatch.name }}
               </p>
-              <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[rgba(63,49,84,0.52)]">
+              <p class="font-[var(--font-nav)] text-xs font-semibold uppercase tracking-[0.14em] text-[rgba(63,49,84,0.54)]">
                 {{ swatch.variable }}
               </p>
-              <p class="text-sm font-semibold text-[rgba(63,49,84,0.68)]">
+              <p class="font-[var(--font-body)] text-sm text-[rgba(63,49,84,0.74)]">
                 {{ resolveColorValue(swatch.variable) }}
               </p>
-              <p class="text-sm leading-7 text-[rgba(63,49,84,0.76)]">
+              <p class="font-[var(--font-body)] text-sm leading-7 text-[rgba(63,49,84,0.76)]">
                 {{ swatch.usage }}
               </p>
             </div>
           </SurfaceCard>
         </div>
-
-        <SurfaceCard tone="dark">
-          <div class="space-y-5">
-            <div class="space-y-3">
-              <p class="eyebrow !text-white/55">
-                Token notes
-              </p>
-              <h3 class="section-title !text-[2rem] !text-white">
-                Accent stays centralized, everything else already supports structure.
-              </h3>
-            </div>
-
-            <p class="prose-copy !max-w-none !text-white/74">
-              The CTA accent now resolves to the exact Figma value, and there is still only one
-              source of truth: <code class="font-semibold">--color-accent</code>,
-              <code class="font-semibold">--color-accent-text</code>, and the related support
-              tokens. Reviewers can approve the system knowing future adjustments won&apos;t require
-              page-by-page edits.
-            </p>
-
-            <ValueBlock v-bind="reviewValuePreview" />
-          </div>
-        </SurfaceCard>
       </div>
-    </AppSection>
+    </section>
 
-    <AppSection
+    <section
       id="buttons"
-      eyebrow="CTA system"
-      title="Variants and states are visible in one place"
-      intro="Each sample is rendered by the shared SiteButton primitive so reviewers can validate actual CTA behavior and hierarchy."
-      tone="soft"
+      class="app-section app-section--soft"
     >
-      <div class="grid gap-5 xl:grid-cols-3">
-        <SurfaceCard
-          v-for="panel in reviewButtonPanels"
-          :key="panel.title"
-          :tone="panel.tone"
-        >
-          <div class="space-y-5">
-            <div class="space-y-3">
-              <p
-                class="eyebrow"
-                :class="panel.tone === 'dark' && '!text-white/55'"
-              >
-                Button review
+      <div class="section-shell space-y-8">
+        <header class="section-heading section-heading--center">
+          <p class="eyebrow">
+            Buttons
+          </p>
+        </header>
+
+        <div class="grid gap-5 lg:grid-cols-3">
+          <SurfaceCard
+            v-for="sample in reviewButtons"
+            :key="sample.label"
+          >
+            <div class="space-y-4">
+              <p class="eyebrow">
+                {{ sample.label }}
               </p>
-              <h3
-                class="section-title !text-[2rem]"
-                :class="panel.tone === 'dark' && '!text-white'"
+              <SiteButton
+                to="#top"
+                :variant="sample.variant"
+                block
               >
-                {{ panel.title }}
-              </h3>
-              <p
-                class="prose-copy !max-w-none"
-                :class="panel.tone === 'dark' && '!text-white/74'"
-              >
-                {{ panel.body }}
+                {{ sample.text }}
+              </SiteButton>
+            </div>
+          </SurfaceCard>
+        </div>
+      </div>
+    </section>
+
+    <section class="app-section">
+      <div class="section-shell">
+        <SurfaceCard>
+          <div class="grid gap-5 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:items-center">
+            <div class="space-y-4">
+              <p class="eyebrow">
+                Live foundation note
+              </p>
+              <h2 class="section-title text-[2.3rem]">
+                The review route should keep reflecting the shared source of truth.
+              </h2>
+              <p class="prose-copy !max-w-none">
+                If the homepage foundation changes, this route should stay aligned and expose the same
+                tokens, fonts, buttons, and surface decisions.
               </p>
             </div>
 
-            <div class="grid gap-4">
-              <div
-                v-for="sample in panel.samples"
-                :key="sample.label"
-                class="space-y-3 rounded-[20px] border p-4"
-                :class="panel.tone === 'dark'
-                  ? 'border-white/10 bg-white/5'
-                  : 'border-[rgba(209,201,191,0.72)] bg-white/72'"
-              >
-                <div class="flex items-center justify-between gap-3">
-                  <p
-                    class="text-sm font-bold uppercase tracking-[0.16em]"
-                    :class="panel.tone === 'dark' ? 'text-white/60' : 'text-[rgba(63,49,84,0.56)]'"
-                  >
-                    {{ sample.label }}
-                  </p>
-                  <span
-                    v-if="sample.disabled"
-                    class="rounded-full border px-2 py-1 text-[0.68rem] font-bold uppercase tracking-[0.14em]"
-                    :class="panel.tone === 'dark'
-                      ? 'border-white/14 text-white/58'
-                      : 'border-[rgba(62,64,89,0.12)] text-[rgba(63,49,84,0.58)]'"
-                  >
-                    disabled
-                  </span>
-                </div>
-
-                <SiteButton
-                  :variant="sample.variant"
-                  :size="sample.size"
-                  :block="sample.block"
-                  :disabled="sample.disabled"
-                >
-                  {{ sample.text }}
-                </SiteButton>
-              </div>
+            <div class="grid gap-3 sm:grid-cols-2">
+              <SurfaceCard tone="dark" padding="md">
+                <p class="eyebrow !text-white/58">
+                  Current check
+                </p>
+                <p class="mt-2 font-[var(--font-display)] text-[1.35rem] text-white">
+                  HIR-34 fidelity pass
+                </p>
+              </SurfaceCard>
+              <SurfaceCard padding="md">
+                <p class="eyebrow">
+                  Status
+                </p>
+                <p class="mt-2 font-[var(--font-display)] text-[1.35rem] text-[var(--color-heading)]">
+                  Shared foundation only
+                </p>
+              </SurfaceCard>
             </div>
           </div>
         </SurfaceCard>
       </div>
-    </AppSection>
+    </section>
 
-    <AppSection
-      id="primitives"
-      eyebrow="Shared primitives"
-      title="Core surfaces and components are shown in context"
-      intro="These previews make it easy to judge whether the shared pieces are ready to support upcoming page and quiz work."
-    >
-      <div class="grid gap-5 xl:grid-cols-2">
-        <SurfaceCard>
-          <ValueBlock v-bind="reviewValuePreview" />
-        </SurfaceCard>
-
-        <SurfaceCard tone="dark">
-          <ReviewRow
-            v-bind="reviewRowPreview"
-            dark
-          />
-        </SurfaceCard>
-
-        <PricingCard v-bind="reviewPricingPreview" />
-
-        <SurfaceCard
-          as="div"
-          class="px-1 sm:px-3"
-        >
-          <FaqRow
-            v-for="item in reviewFaqPreview"
-            :key="item.question"
-            v-bind="item"
-          />
-        </SurfaceCard>
-      </div>
-    </AppSection>
-
-    <div id="footer-preview">
-      <SiteFooter
-        v-bind="reviewFooterCallout"
-        :groups="reviewFooterGroups"
-      />
-    </div>
+    <SiteFooter
+      brand="Solagree review"
+      title="Foundation approved, next route can inherit it."
+      description="This footer mirrors the live site structure so the review page remains a genuine check on the foundation."
+      cta-label="Back to top"
+      cta-to="#top"
+      :groups="reviewFooterGroups"
+    />
   </main>
 </template>
