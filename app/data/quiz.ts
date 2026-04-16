@@ -8,6 +8,7 @@ export interface QuizStaticScreen {
   intro: string
   progress: number
   backLabel: string
+  questionId: string
   question: string
   options: QuizStaticOption[]
   primaryActionLabel: string
@@ -20,6 +21,7 @@ export const solagreeQuizStaticScreen: QuizStaticScreen = {
   intro: 'Answer a few questions and we’ll suggest a plan to fit your unique needs.',
   progress: 20,
   backLabel: 'Back',
+  questionId: 'agreement-level',
   question: 'Do you and your spouse agree on most issues?',
   options: [
     {

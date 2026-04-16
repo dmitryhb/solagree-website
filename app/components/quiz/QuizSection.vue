@@ -8,7 +8,7 @@ defineProps<{
 
 <template>
   <section class="quiz-section">
-    <div class="section-shell quiz-section__layout">
+    <div class="quiz-section__layout">
       <header class="quiz-section__header">
         <h2 class="quiz-section__heading">
           {{ screen.heading }}
@@ -22,6 +22,7 @@ defineProps<{
         <QuizCardShell
           :progress="screen.progress"
           :back-label="screen.backLabel"
+          :question-id="screen.questionId"
           :question="screen.question"
           :options="screen.options"
           :primary-action-label="screen.primaryActionLabel"

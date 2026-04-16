@@ -2,23 +2,21 @@
 import type { QuizStaticOption } from '~/data/quiz'
 
 defineProps<{
+  questionId: string
   question: string
   options: readonly QuizStaticOption[]
 }>()
 </script>
 
 <template>
-  <div class="quiz-question-block">
-    <h3 class="quiz-question-block__title">
+  <fieldset class="quiz-question-block">
+    <legend class="quiz-question-block__title">
       {{ question }}
-    </h3>
+    </legend>
 
-    <div class="quiz-question-block__options">
-      <QuizAnswerOption
-        v-for="option in options"
-        :key="option.id"
-        :label="option.label"
-      />
-    </div>
-  </div>
+    <QuizAnswerGroup
+      :name="questionId"
+      :options="options"
+    />
+  </fieldset>
 </template>

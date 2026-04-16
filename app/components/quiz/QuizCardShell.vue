@@ -4,6 +4,7 @@ import type { QuizStaticOption } from '~/data/quiz'
 defineProps<{
   progress: number
   backLabel: string
+  questionId: string
   question: string
   options: readonly QuizStaticOption[]
   primaryActionLabel: string
@@ -22,6 +23,7 @@ defineProps<{
 
         <QuizQuestionBlock
           class="quiz-card-shell__question"
+          :question-id="questionId"
           :question="question"
           :options="options"
         />
