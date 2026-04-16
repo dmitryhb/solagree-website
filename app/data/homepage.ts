@@ -48,17 +48,6 @@ export const homepagePathCards = [
   }
 ] as const
 
-export const homepageQuizQuestions = [
-  {
-    question: 'Question 1 of 8: Do you have kids under 18?',
-    choices: ['Yes', 'No', 'Shared custody already']
-  },
-  {
-    question: 'Question 2 of 8: Do you own a home together?',
-    choices: ['Yes', 'No', 'Not sure yet']
-  }
-] as const
-
 export const homepagePricingCards = [
   {
     eyebrow: '15-Minute Expert Consult',

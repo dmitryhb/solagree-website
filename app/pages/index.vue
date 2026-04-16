@@ -8,9 +8,9 @@ import {
   homepagePathCards,
   homepagePhaseCards,
   homepagePricingCards,
-  homepageProfessionalBullets,
-  homepageQuizQuestions
+  homepageProfessionalBullets
 } from '~/data/homepage'
+import { solagreeQuizStaticScreen } from '~/data/quiz'
 
 useSeoMeta({
   title: 'Solagree',
@@ -348,72 +348,10 @@ useSeoMeta({
       </div>
     </section>
 
-    <section
+    <QuizSection
       id="quiz"
-      class="app-section app-section--soft"
-    >
-      <div class="section-shell space-y-8">
-        <header class="section-heading section-heading--center">
-          <h2 class="section-title text-[2.35rem]">
-            Find the right Solagree divorce plan in minutes.
-          </h2>
-          <p class="section-intro">
-            Answer a few questions and we’ll suggest a plan to fit your unique needs.
-          </p>
-        </header>
-
-        <SurfaceCard class="mx-auto max-w-4xl">
-          <div class="space-y-6">
-            <div class="flex flex-wrap items-center justify-between gap-3">
-              <p class="eyebrow">
-                Quiz preview
-              </p>
-              <p class="font-[var(--font-nav)] text-xs font-semibold uppercase tracking-[0.14em] text-[rgba(63,49,84,0.55)]">
-                Question 1 of 8
-              </p>
-            </div>
-
-            <div class="space-y-4 rounded-[24px] border border-[rgba(62,64,89,0.08)] bg-[rgba(255,255,255,0.78)] p-5">
-              <p class="font-[var(--font-display)] text-[1.8rem] leading-tight text-[var(--color-heading)]">
-                Do you have kids under 18?
-              </p>
-
-              <div class="grid gap-3 sm:grid-cols-3">
-                <button
-                  v-for="choice in homepageQuizQuestions[0].choices"
-                  :key="choice"
-                  type="button"
-                  class="rounded-full border border-[rgba(62,64,89,0.14)] bg-[var(--color-surface-light)] px-4 py-3 font-[var(--font-nav)] text-sm font-semibold text-[var(--color-ink)]"
-                >
-                  {{ choice }}
-                </button>
-              </div>
-            </div>
-
-            <div class="grid gap-3 sm:grid-cols-2">
-              <SurfaceCard
-                v-for="question in homepageQuizQuestions.slice(1)"
-                :key="question.question"
-                padding="md"
-              >
-                <p class="font-[var(--font-display)] text-xl leading-tight text-[var(--color-heading)]">
-                  {{ question.question }}
-                </p>
-                <div class="mt-4 flex flex-wrap gap-2">
-                  <span
-                    v-for="choice in question.choices"
-                    :key="choice"
-                    class="rounded-full border border-[rgba(62,64,89,0.14)] bg-[rgba(255,255,255,0.7)] px-3 py-2 font-[var(--font-nav)] text-xs font-semibold text-[var(--color-ink)]"
-                  >
-                    {{ choice }}
-                  </span>
-                </div>
-              </SurfaceCard>
-            </div>
-          </div>
-        </SurfaceCard>
-      </div>
-    </section>
+      :screen="solagreeQuizStaticScreen"
+    />
 
     <section
       id="pricing"
