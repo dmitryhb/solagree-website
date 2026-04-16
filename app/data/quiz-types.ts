@@ -129,8 +129,13 @@ export interface QuizPersistedSession {
   answers: QuizAnswerMap
 }
 
+export type QuizOpenPolicyId =
+  | 'missing-spouse-routing-cannot-find'
+  | 'missing-spouse-routing-no-communication'
+  | 'state-specific-result-messaging'
+
 export interface QuizOpenPolicy {
-  id: string
+  id: QuizOpenPolicyId
   title: string
   description: string
   relatedQuestions: readonly QuizQuestionId[]
@@ -169,7 +174,7 @@ export interface QuizConsultMetadata {
   hasFinancialComplexity: boolean
   hasMissingSpouse: boolean
   needsLegalAdvice: boolean
-  deferredPolicyIds: readonly string[]
+  deferredPolicyIds: readonly QuizOpenPolicyId[]
 }
 
 export interface QuizResolvedEvaluation {

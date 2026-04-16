@@ -6,6 +6,7 @@ import type {
   QuizEvaluation,
   QuizInternalTag,
   QuizOpenPolicy,
+  QuizOpenPolicyId,
   QuizResultViewModel
 } from '~/data/quiz-types'
 
@@ -13,9 +14,9 @@ const blockingPolicyMap = Object.fromEntries(
   solagreeQuizOpenPolicies
     .filter(policy => policy.blocksOutcome)
     .map(policy => [policy.id, policy])
-) as Record<string, QuizOpenPolicy>
+) as Partial<Record<QuizOpenPolicyId, QuizOpenPolicy>>
 
-function getBlockingPolicyId(answers: Readonly<QuizAnswerMap>): QuizOpenPolicy['id'] | null {
+function getBlockingPolicyId(answers: Readonly<QuizAnswerMap>): QuizOpenPolicyId | null {
   if (answers.spouseContact === 'know-where-not-communicating') {
     return 'missing-spouse-routing-no-communication'
   }
@@ -190,7 +191,7 @@ function buildSummaryItems(metadata: QuizConsultMetadata): string[] {
   return items
 }
 
-function getOpenPolicyNote(policyId: QuizOpenPolicy['id']): string {
+function getOpenPolicyNote(policyId: QuizOpenPolicyId): string {
   return blockingPolicyMap[policyId]?.description
     ?? 'This answer pattern remains intentionally open until the policy is finalized.'
 }
