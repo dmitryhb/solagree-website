@@ -9,30 +9,24 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  change: [value: string | undefined]
+  'update:value': [value: string | undefined]
 }>()
-
-const normalizedValue = computed(() => props.value ?? '')
 
 function onChange(event: Event) {
   const target = event.target as HTMLSelectElement
-  emit('change', target.value || undefined)
+  emit('update:value', target.value || undefined)
 }
 </script>
 
 <template>
   <div class="quiz-select-field">
     <select
-      :key="normalizedValue"
       :id="id"
       class="quiz-select-field__control"
-      :value="normalizedValue"
+      :value="value ?? ''"
       @change="onChange"
     >
-      <option
-        value=""
-        :selected="normalizedValue === ''"
-      >
+      <option value="">
         {{ placeholder ?? 'Select one' }}
       </option>
 
@@ -40,7 +34,6 @@ function onChange(event: Event) {
         v-for="option in options"
         :key="option.id"
         :value="option.id"
-        :selected="normalizedValue === option.id"
       >
         {{ option.label }}
       </option>

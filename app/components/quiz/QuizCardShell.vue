@@ -1,28 +1,35 @@
 <script setup lang="ts">
-import type { QuizQuestionDefinition, QuizQuestionValue } from '~/data/quiz-types'
+import type {
+  QuizQuestionDefinition,
+  QuizQuestionValue,
+  QuizResultViewModel
+} from '~/data/quiz-types'
 
 defineProps<{
   progress: number
   backLabel: string
   question?: QuizQuestionDefinition
   value?: QuizQuestionValue
+  result?: QuizResultViewModel
   primaryActionLabel: string
   canGoBack?: boolean
   canAdvance?: boolean
-  completionTitle?: string
-  completionBody?: string
 }>()
 
 const emit = defineEmits<{
   back: []
   advance: []
+  reset: []
   singleChange: [value: string | undefined]
   multiChange: [payload: { value: string, checked: boolean }]
 }>()
 </script>
 
 <template>
-  <article class="quiz-card-shell">
+  <article
+    class="quiz-card-shell"
+    :class="{ 'quiz-card-shell--result': !!result }"
+  >
     <div class="quiz-card-shell__inner">
       <div class="quiz-card-shell__frame">
         <QuizProgressMeter :value="progress" />
@@ -44,14 +51,17 @@ const emit = defineEmits<{
           @multi-change="emit('multiChange', $event)"
         />
 
-        <QuizCompletionState
-          v-else
+        <QuizResultState
+          v-else-if="result"
           class="quiz-card-shell__question"
-          :title="completionTitle ?? ''"
-          :body="completionBody ?? ''"
+          :result="result"
+          @reset="emit('reset')"
         />
 
-        <div class="quiz-card-shell__action">
+        <div
+          v-if="question"
+          class="quiz-card-shell__action"
+        >
           <QuizPrimaryAction
             :label="primaryActionLabel"
             :disabled="!canAdvance"

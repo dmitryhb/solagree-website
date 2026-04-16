@@ -1,14 +1,11 @@
-import {
-  solagreeQuizCompletionContent,
-  solagreeQuizLabels,
-  solagreeQuizStorageKey
-} from '~/data/quiz'
+import { solagreeQuizLabels, solagreeQuizStorageKey } from '~/data/quiz'
 import { solagreeQuizQuestionIds } from '~/data/quiz-schema'
 import type {
   QuizAnswerMap,
   QuizPersistedSession,
   QuizQuestionId,
-  QuizQuestionValue
+  QuizQuestionValue,
+  QuizSessionPhase
 } from '~/data/quiz-types'
 import {
   coerceQuizCurrentQuestionId,
@@ -20,55 +17,64 @@ import {
   isQuizAnswerPresent,
   pruneHiddenQuizAnswers
 } from '~/utils/quiz-navigation'
+import { evaluateQuizAnswers, getQuizResultViewModel } from '~/utils/quiz-results'
 
 function isQuizSessionSnapshot(value: unknown): value is QuizPersistedSession {
   if (!value || typeof value !== 'object') {
     return false
   }
 
-  const snapshot = value as Partial<QuizPersistedSession>
+  const snapshot = value as Partial<QuizPersistedSession> & {
+    version?: number
+    phase?: 'question' | 'complete' | 'result'
+  }
 
   return (
-    snapshot.version === 1 &&
-    (snapshot.phase === 'question' || snapshot.phase === 'complete') &&
+    (snapshot.version === 1 || snapshot.version === 2) &&
+    (snapshot.phase === 'question' || snapshot.phase === 'complete' || snapshot.phase === 'result') &&
     typeof snapshot.currentQuestionId === 'string' &&
     !!snapshot.answers &&
     typeof snapshot.answers === 'object'
   )
 }
 
+function normalizeQuizSessionPhase(snapshot: QuizPersistedSession | {
+  version?: number
+  phase?: 'question' | 'complete' | 'result'
+}): QuizSessionPhase {
+  if (snapshot.phase === 'complete') {
+    return 'result'
+  }
+
+  return snapshot.phase === 'result' ? 'result' : 'question'
+}
+
 export function useQuizSession() {
   const initialQuestionId = solagreeQuizQuestionIds[0]
   const answers = ref<QuizAnswerMap>({})
   const currentQuestionId = ref<QuizQuestionId>(initialQuestionId)
-  const phase = ref<'question' | 'complete'>('question')
+  const phase = ref<QuizSessionPhase>('question')
   const hasRestoredPersistedState = ref(false)
 
   const visibleQuestionIds = computed(() => getVisibleQuizQuestionIds(answers.value))
   const currentQuestion = computed(() => getQuizQuestionById(currentQuestionId.value))
   const currentValue = computed(() => answers.value[currentQuestionId.value])
   const canGoBack = computed(() => {
-    if (phase.value === 'complete') {
-      return false
+    if (phase.value === 'result') {
+      return visibleQuestionIds.value.length > 0
     }
 
     return getPreviousQuizQuestionId(currentQuestionId.value, answers.value) !== null
   })
   const canAdvance = computed(() => {
-    if (phase.value === 'complete') {
-      return true
-    }
-
     return isQuizAnswerPresent(currentQuestionId.value, currentValue.value as QuizQuestionValue | undefined)
   })
+  const evaluation = computed(() => evaluateQuizAnswers(answers.value))
+  const resultView = computed(() => getQuizResultViewModel(evaluation.value))
   const progressValue = computed(() =>
     getQuizProgressValue(currentQuestionId.value, answers.value, phase.value)
   )
   const primaryActionLabel = computed(() => {
-    if (phase.value === 'complete') {
-      return solagreeQuizCompletionContent.actionLabel
-    }
-
     const nextQuestionId = getNextQuizQuestionId(currentQuestionId.value, answers.value)
     return nextQuestionId ? solagreeQuizLabels.next : solagreeQuizLabels.finish
   })
@@ -112,11 +118,6 @@ export function useQuizSession() {
   }
 
   function goNext() {
-    if (phase.value === 'complete') {
-      reset()
-      return
-    }
-
     if (!canAdvance.value) {
       return
     }
@@ -124,7 +125,7 @@ export function useQuizSession() {
     const nextQuestionId = getNextQuizQuestionId(currentQuestionId.value, answers.value)
 
     if (!nextQuestionId) {
-      phase.value = 'complete'
+      phase.value = 'result'
       return
     }
 
@@ -132,9 +133,9 @@ export function useQuizSession() {
   }
 
   function goBack() {
-    if (phase.value === 'complete') {
+    if (phase.value === 'result') {
       phase.value = 'question'
-      currentQuestionId.value = coerceQuizCurrentQuestionId(answers.value, currentQuestionId.value)
+      currentQuestionId.value = visibleQuestionIds.value.at(-1) ?? initialQuestionId
       return
     }
 
@@ -173,7 +174,7 @@ export function useQuizSession() {
         const prunedAnswers = pruneHiddenQuizAnswers(parsedSnapshot.answers)
         answers.value = prunedAnswers
         currentQuestionId.value = coerceQuizCurrentQuestionId(prunedAnswers, parsedSnapshot.currentQuestionId)
-        phase.value = parsedSnapshot.phase
+        phase.value = normalizeQuizSessionPhase(parsedSnapshot)
       } catch {
         window.localStorage.removeItem(solagreeQuizStorageKey)
       } finally {
@@ -189,7 +190,7 @@ export function useQuizSession() {
         }
 
         const snapshot: QuizPersistedSession = {
-          version: 1,
+          version: 2,
           phase: phase.value,
           currentQuestionId: currentQuestionId.value,
           answers: answers.value
@@ -209,10 +210,11 @@ export function useQuizSession() {
     phase: readonly(phase),
     visibleQuestionIds,
     progressValue,
+    evaluation,
+    resultView,
     canGoBack,
     canAdvance,
     primaryActionLabel,
-    completionContent: solagreeQuizCompletionContent,
     labels: solagreeQuizLabels,
     setSingleAnswer,
     toggleMultiAnswer,

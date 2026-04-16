@@ -1,4 +1,16 @@
-import type { QuizOpenPolicy } from '~/data/quiz-types'
+import type { QuizOpenPolicy, QuizOutcomeId } from '~/data/quiz-types'
+
+export const solagreeQuizResolvedPolicy = {
+  legalAdviceYesOutcome: 'attorney-consult-first',
+  legalAdviceNotSureOutcome: 'attorney-consult-first',
+  paymentPlanEligibleOutcome: 'solagree-fit',
+  genericFallbackResources: true
+} as const satisfies {
+  legalAdviceYesOutcome: QuizOutcomeId
+  legalAdviceNotSureOutcome: QuizOutcomeId
+  paymentPlanEligibleOutcome: QuizOutcomeId
+  genericFallbackResources: boolean
+}
 
 export const solagreeQuizOpenPolicies: readonly QuizOpenPolicy[] = [
   {
@@ -6,27 +18,23 @@ export const solagreeQuizOpenPolicies: readonly QuizOpenPolicy[] = [
     title: 'Missing spouse routing when the user cannot find their spouse',
     description:
       'Outcome policy remains unresolved for the branch where the user cannot find their spouse. HIR-39 should keep this explicit in the result engine.',
-    relatedQuestions: ['spouseContact']
+    relatedQuestions: ['spouseContact'],
+    blocksOutcome: true
   },
   {
     id: 'missing-spouse-routing-no-communication',
     title: 'Missing spouse routing when the user knows where their spouse is but communication is broken',
     description:
       'Outcome policy remains unresolved for the branch where the spouse is known but not communicating. HIR-39 should not silently collapse this branch.',
-    relatedQuestions: ['spouseContact']
+    relatedQuestions: ['spouseContact'],
+    blocksOutcome: true
   },
   {
-    id: 'legal-advice-not-sure-routing',
-    title: 'Legal-advice routing when the user is not sure',
+    id: 'state-specific-result-messaging',
+    title: 'State selection may affect future result messaging or resource links',
     description:
-      'Result policy remains unresolved for legal-advice = not-sure. Keep the branch explicit until routing rules are finalized.',
-    relatedQuestions: ['legalAdvice']
-  },
-  {
-    id: 'payment-plan-eligibility',
-    title: 'Payment-plan treatment in final qualification logic',
-    description:
-      'Payment-plan readiness must remain explicit until the final outcome policy defines whether it qualifies as a standard Solagree fit or a softer branch.',
-    relatedQuestions: ['paymentReadiness']
+      'Phase one intentionally keeps the result messaging generic. State-aware result copy and richer resource links remain a follow-up policy/configuration topic.',
+    relatedQuestions: ['state'],
+    blocksOutcome: false
   }
 ]
