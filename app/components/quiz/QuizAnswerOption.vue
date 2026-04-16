@@ -8,7 +8,6 @@ defineProps<{
   <button
     type="button"
     class="quiz-answer-option"
-    :aria-pressed="false"
   >
     {{ label }}
   </button>
