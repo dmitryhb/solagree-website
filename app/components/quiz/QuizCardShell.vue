@@ -20,6 +20,7 @@ const emit = defineEmits<{
   back: []
   advance: []
   reset: []
+  cta: [payload: QuizResultViewModel['primaryCta']]
   singleChange: [value: string | undefined]
   multiChange: [payload: { value: string, checked: boolean }]
 }>()
@@ -55,6 +56,7 @@ const emit = defineEmits<{
           v-else-if="result"
           class="quiz-card-shell__question"
           :result="result"
+          @cta="emit('cta', $event)"
           @reset="emit('reset')"
         />
 

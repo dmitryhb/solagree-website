@@ -28,6 +28,7 @@ export const solagreeQuizResultContent = {
       'Your answers suggest a guided Solagree path may be appropriate. We will still carry your flagged topics into the consult so the right specialist can prepare.',
     summaryTitle: 'What we will carry into the consult',
     primaryCta: {
+      actionId: 'solagree-consult',
       label: 'Book a Solagree consult',
       href: '#solagree-consult-placeholder',
       note: 'Placeholder destination until production booking links are wired.',
@@ -42,6 +43,7 @@ export const solagreeQuizResultContent = {
       'Your answers point to questions or risk factors that should be clarified with an attorney before choosing the next Solagree step.',
     summaryTitle: 'Why this route was flagged',
     primaryCta: {
+      actionId: 'attorney-consult',
       label: 'Book an attorney consult',
       href: '#attorney-consult-placeholder',
       note: 'Placeholder destination until production booking links are wired.',
@@ -60,6 +62,7 @@ export const solagreeQuizResultContent = {
       'Based on your answers, the best next step is to pause the Solagree path and use a broader legal-help resource while your situation changes.',
     summaryTitle: 'What shaped this recommendation',
     primaryCta: {
+      actionId: 'fallback-resources',
       label: 'Review general legal-help resources',
       href: '#fallback-resources',
       note: 'Placeholder destination for the generic fallback resource block.',
@@ -81,6 +84,7 @@ export const solagreeQuizOpenPolicyContent = {
       'Your spouse-contact answers fall into a policy branch that is intentionally left open. The result engine surfaces it explicitly instead of guessing the final recommendation.',
     summaryTitle: 'What triggered the open-policy branch',
     primaryCta: {
+      actionId: 'fallback-resources',
       label: 'Review generic legal-help resources',
       href: '#fallback-resources',
       note: 'Placeholder destination while the final missing-spouse routing is unresolved.',
@@ -99,6 +103,7 @@ export const solagreeQuizOpenPolicyContent = {
       'Your spouse-contact answers fall into a policy branch that is intentionally left open. The result engine surfaces it explicitly instead of guessing the final recommendation.',
     summaryTitle: 'What triggered the open-policy branch',
     primaryCta: {
+      actionId: 'fallback-resources',
       label: 'Review generic legal-help resources',
       href: '#fallback-resources',
       note: 'Placeholder destination while the final missing-spouse routing is unresolved.',
