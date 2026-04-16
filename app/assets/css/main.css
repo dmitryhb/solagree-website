@@ -572,13 +572,17 @@ select {
 
 .quiz-section__layout {
   display: grid;
-  width: min(calc(100% - 2.5rem), var(--site-max-width));
+  width: min(100%, var(--site-max-width));
+  max-width: var(--site-max-width);
+  box-sizing: border-box;
+  padding-inline: 1.25rem;
   margin-inline: auto;
   gap: clamp(2.5rem, 5vw, 4.1rem);
 }
 
 .quiz-section__header {
   display: grid;
+  min-width: 0;
   justify-items: center;
   gap: 2.45rem;
   text-align: center;
@@ -586,16 +590,20 @@ select {
 
 .quiz-section__heading {
   margin: 0;
+  width: 100%;
+  min-width: 0;
   max-width: 878px;
   font-family: var(--font-display);
   font-size: clamp(2.625rem, 5vw, 54px);
   font-weight: 500;
   line-height: 74px;
   color: var(--color-ink);
+  text-wrap: balance;
 }
 
 .quiz-section__intro {
   margin: 0;
+  min-width: 0;
   max-width: 627px;
   font-family: var(--font-body);
   font-size: 18.4px;
@@ -605,32 +613,47 @@ select {
 
 .quiz-section__body {
   display: grid;
-  gap: 1.2rem;
-  width: min(100%, 1076px);
+  gap: 19px;
+  width: 100%;
+  min-width: 0;
+  max-width: 1076px;
+  box-sizing: border-box;
   margin-inline: auto;
 }
 
 .quiz-card-shell {
-  min-height: 616px;
+  width: 100%;
+  min-width: 0;
+  max-width: 1076px;
+  box-sizing: border-box;
+  height: 616px;
   padding: 90px 218px 24px;
   border-radius: 16px;
   background: var(--color-surface-quiz);
 }
 
 .quiz-card-shell__inner {
-  width: min(100%, 640px);
+  width: 640px;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
   margin-inline: auto;
   padding-top: 25px;
 }
 
 .quiz-card-shell__frame {
-  display: grid;
-  width: min(100%, 500px);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 500px;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
   margin-inline: auto;
+  padding-bottom: 48px;
 }
 
 .quiz-card-shell__back {
-  padding-top: 12px;
   padding-bottom: 7px;
 }
 
@@ -709,7 +732,8 @@ select {
 
 .quiz-question-block__title {
   margin: 0;
-  max-width: 497px;
+  width: 497px;
+  max-width: 100%;
   font-family: var(--font-display);
   font-size: 33.6px;
   font-weight: 600;
@@ -721,6 +745,7 @@ select {
 .quiz-question-block__options {
   display: grid;
   gap: 12px;
+  padding-top: 12px;
 }
 
 .quiz-answer-option {
@@ -754,16 +779,12 @@ select {
   cursor: pointer;
 }
 
-.quiz-answer-option__control:checked + .quiz-answer-option__label {
-  box-shadow: inset 0 0 0 2px var(--color-ink);
-}
-
 .quiz-primary-action {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   width: 100%;
-  min-height: 56px;
+  height: 56px;
   border: 1px solid var(--color-ink);
   border-radius: 8px;
   padding: 16px 21px;
@@ -779,7 +800,10 @@ select {
 }
 
 .quiz-explainer {
-  width: min(100%, 800px);
+  width: 800px;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
   margin-inline: auto;
   display: grid;
   gap: 0;
@@ -805,6 +829,43 @@ select {
   color: #171717;
 }
 
+@media (max-width: 1024px) {
+  .quiz-section {
+    padding-inline: 1rem;
+  }
+
+  .quiz-section__layout {
+    width: 100%;
+    padding-inline: 0;
+    gap: 2.5rem;
+  }
+
+  .quiz-section__header {
+    gap: 2rem;
+  }
+
+  .quiz-section__heading {
+    max-width: none;
+    font-size: clamp(3rem, 7vw, 4.25rem);
+    line-height: 1.08;
+  }
+
+  .quiz-section__intro {
+    max-width: 42rem;
+  }
+
+  .quiz-card-shell {
+    height: auto;
+    padding: 4rem 4.5rem 2rem;
+  }
+
+  .quiz-card-shell__inner,
+  .quiz-card-shell__frame,
+  .quiz-explainer {
+    width: 100%;
+  }
+}
+
 @media (max-width: 767px) {
   .section-shell,
   .section-shell--narrow {
@@ -819,10 +880,12 @@ select {
   /* Derived mobile collapse approved by the user because no mobile Figma frame exists. */
   .quiz-section {
     padding-block: 3.5rem 4.5rem;
+    padding-inline: 0.75rem;
   }
 
   .quiz-section__layout {
-    width: min(calc(100% - 1.5rem), var(--site-max-width));
+    width: 100%;
+    padding-inline: 0;
     gap: 2rem;
   }
 
@@ -831,9 +894,9 @@ select {
   }
 
   .quiz-section__heading {
-    max-width: 12ch;
-    font-size: clamp(2.25rem, 9vw, 2.625rem);
-    line-height: 1.2;
+    max-width: none;
+    font-size: clamp(2rem, 8vw, 2.5rem);
+    line-height: 1.12;
   }
 
   .quiz-section__intro {
@@ -842,7 +905,8 @@ select {
   }
 
   .quiz-card-shell {
-    min-height: auto;
+    width: 100%;
+    height: auto;
     padding: 2rem 1rem 1rem;
   }
 
@@ -861,8 +925,8 @@ select {
 
   .quiz-question-block__title {
     max-width: 100%;
-    font-size: clamp(1.875rem, 7.5vw, 2rem);
-    line-height: 1.24;
+    font-size: clamp(1.625rem, 6.5vw, 1.875rem);
+    line-height: 1.18;
     letter-spacing: -0.04px;
   }
 
