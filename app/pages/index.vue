@@ -1,183 +1,21 @@
 <script setup lang="ts">
+import {
+  homepageAssets,
+  homepageBenefitCards,
+  homepageFaqItems,
+  homepageFooterGroups,
+  homepageNavLinks,
+  homepagePathCards,
+  homepagePhaseCards,
+  homepagePricingCards,
+  homepageProfessionalBullets,
+  homepageQuizQuestions
+} from '~/data/homepage'
+
 useSeoMeta({
   title: 'Solagree',
   description: 'Solagree homepage rebuilt from the corrected Figma foundation.'
 })
-
-const navLinks = [
-  { label: 'What you get', to: '#benefits' },
-  { label: 'How it works', to: '#how-it-works' },
-  { label: 'Pricing', to: '#pricing' },
-  { label: 'FAQ', to: '#faq' }
-] as const
-
-const benefitCards = [
-  {
-    title: 'Faster Resolution',
-    body: 'A structured process keeps couples moving toward a binding outcome without the drag of court.'
-  },
-  {
-    title: 'Flat-Fee Pricing',
-    body: 'The pricing model stays clear up front so the conversation can stay on the decision, not the meter.'
-  },
-  {
-    title: 'Binding Commitment',
-    body: 'Decisions are designed to be final, with mediation and arbitration as part of the same path.'
-  }
-] as const
-
-const phaseCards = [
-  {
-    title: 'Phase 1: Assessment',
-    body: 'Gather the facts, constraints, and the decisions that need structure before anything escalates.'
-  },
-  {
-    title: 'Phase 2: Mediation',
-    body: 'Work through the unresolved parts with a guided process built to reduce friction.'
-  },
-  {
-    title: 'Phase 3: Arbitration',
-    body: 'Close the loop with a binding decision so the path does not drift back into conflict.'
-  }
-] as const
-
-const pathCards = [
-  {
-    title: 'Expedited',
-    body: 'Best for couples who want a tighter process and fewer moving parts.',
-    features: ['Structured mediation sessions', 'Binding arbitration award', 'Clear next steps']
-  },
-  {
-    title: 'Traditional',
-    body: 'Best for more complex cases that need broader support and extra review.',
-    features: ['Extended mediation and support', 'CDFA® financial expertise', 'Optional attorney representation']
-  }
-] as const
-
-const quizQuestions = [
-  {
-    question: 'Question 1 of 8: Do you have kids under 18?',
-    choices: ['Yes', 'No', 'Shared custody already']
-  },
-  {
-    question: 'Question 2 of 8: Do you own a home together?',
-    choices: ['Yes', 'No', 'Not sure yet']
-  }
-] as const
-
-const pricingCards = [
-  {
-    eyebrow: '15-Minute Expert Consult',
-    price: '$50',
-    cadence: '/ one time',
-    body: 'A short consult to understand your situation before you commit to a path.',
-    features: [
-      '15-minute call with expert',
-      'Initial situation assement',
-      'Flat-Fee price quote'
-    ],
-    cta: 'Book a Consultation',
-    footnote: 'Get clarity about your options',
-    featured: false
-  },
-  {
-    eyebrow: 'Solagree EXPEDITED',
-    badge: 'Best value',
-    price: '$5,400',
-    cadence: '/ PER couple',
-    body: 'For couples who want a tighter process and a faster path to resolution.',
-    features: [
-      'CDFA® financial analysis',
-      'Structured mediation sessions',
-      'Binding arbitration award'
-    ],
-    cta: 'Get started with Expedited',
-    footnote: 'Best for couples that mostly agree',
-    featured: true
-  },
-  {
-    eyebrow: 'Solagree Traditional',
-    badge: 'For Complex Cases',
-    price: '$11,500',
-    cadence: '/ PER Couple',
-    body: 'For cases that need deeper support, more review, and broader professional involvement.',
-    features: [
-      'Extended mediation & support',
-      'CDFA® financial expertise',
-      'Optional attorney representation'
-    ],
-    cta: 'Get started with Traditional',
-    footnote: 'Best for complex finances, custody or business owners',
-    featured: false
-  }
-] as const
-
-const faqItems = [
-  {
-    question: 'What does binding arbitration mean?',
-    answer:
-      'It means a neutral third party makes the final decision, and both sides agree to follow it.'
-  },
-  {
-    question: 'Do we need attorneys?',
-    answer:
-      'Not always. The Traditional path supports attorney involvement, while the expedited path is designed to move with less overhead.'
-  },
-  {
-    question: 'What if we disagree on the kids?',
-    answer:
-      'The process is designed to surface custody and support decisions early so they can be handled inside the same structure.'
-  },
-  {
-    question: 'How fast does it move?',
-    answer:
-      'The expedited path is built for speed, while the traditional path allows more room for complex cases and review.'
-  },
-  {
-    question: 'Is the pricing fixed?',
-    answer:
-      'Yes. The pricing model is shown as flat-fee rather than open-ended hourly billing.'
-  }
-] as const
-
-const professionalBullets = [
-  'Attorneys & Legal Professionals',
-  'CDFAs & Financial Advisors',
-  'Counselors & Certified Coaches'
-] as const
-
-const footerGroups = [
-  {
-    title: 'FOR COUPLES',
-    links: [
-      { label: 'How It Works', to: '#how-it-works' },
-      { label: 'Quiz: Will it Work for us?', to: '#quiz' },
-      { label: 'Solagree vs Traditional', to: '#paths' },
-      { label: 'Pricing', to: '#pricing' },
-      { label: 'FAQs', to: '#faq' }
-    ]
-  },
-  {
-    title: 'FOR PROFESSIONALS',
-    links: [
-      { label: 'Attorneys', to: '#professionals' },
-      { label: 'Financial Advisors', to: '#professionals' },
-      { label: 'Counselors', to: '#professionals' },
-      { label: 'Employers/EAP', to: '#professionals' },
-      { label: 'Join the Network', to: '#professionals' }
-    ]
-  },
-  {
-    title: 'COMPANY',
-    links: [
-      { label: 'About Us', to: '#top' },
-      { label: 'FAQ', to: '#faq' },
-      { label: 'Contact Us', to: 'mailto:hello@solagree.test' },
-      { label: 'Learn', to: '#how-it-works' },
-      { label: 'Account Login', to: '#top' }
-    ]
-  }
-] as const
 </script>
 
 <template>
@@ -193,9 +31,6 @@ const footerGroups = [
           padding="md"
         >
           <div class="flex items-center gap-4">
-            <div class="flex h-12 w-12 items-center justify-center rounded-full border border-[rgba(62,64,89,0.15)] bg-[rgba(255,255,255,0.25)] font-[var(--font-nav)] text-sm font-semibold tracking-[0.18em] text-[var(--color-ink)]">
-              S
-            </div>
             <div>
               <p class="eyebrow">
                 Solagree
@@ -209,7 +44,7 @@ const footerGroups = [
           <div class="flex flex-wrap items-center gap-4">
             <nav class="flex flex-wrap items-center gap-4">
               <NuxtLink
-                v-for="link in navLinks"
+                v-for="link in homepageNavLinks"
                 :key="link.label"
                 :to="link.to"
                 class="site-nav-link"
@@ -224,7 +59,7 @@ const footerGroups = [
           </div>
         </SurfaceCard>
 
-        <div class="grid gap-6 lg:grid-cols-[minmax(0,1.15fr)_minmax(320px,0.85fr)] lg:items-center">
+        <div class="grid gap-6 lg:grid-cols-[minmax(0,1.05fr)_minmax(320px,0.95fr)] lg:items-center">
           <div class="space-y-6">
             <p class="eyebrow">
               Solagree
@@ -252,41 +87,22 @@ const footerGroups = [
             </div>
           </div>
 
-          <SurfaceCard
-            tone="muted"
-            class="overflow-hidden"
-          >
-            <div class="relative min-h-[25rem] overflow-hidden rounded-[24px] border border-[rgba(62,64,89,0.08)] bg-[linear-gradient(180deg,rgba(245,238,225,0.92)_0%,rgba(249,246,239,0.86)_42%,rgba(209,201,191,0.55)_100%)] p-6">
-              <div class="absolute inset-x-6 top-6 flex items-center justify-between">
-                <p class="rounded-full bg-[var(--color-accent)] px-3 py-1 font-[var(--font-nav)] text-xs font-semibold uppercase tracking-[0.14em] text-[var(--color-accent-text)]">
-                  Calm process
-                </p>
-                <p class="font-[var(--font-nav)] text-xs font-semibold uppercase tracking-[0.14em] text-[rgba(62,64,89,0.62)]">
-                  Binding outcome
-                </p>
-              </div>
-
-              <div class="absolute inset-x-0 bottom-0 top-0 flex items-end justify-center">
-                <div class="relative h-[18rem] w-[12rem]">
-                  <div class="absolute bottom-0 left-1/2 h-[14rem] w-[1.25rem] -translate-x-1/2 rounded-t-full bg-[rgba(62,64,89,0.72)]" />
-                  <div class="absolute bottom-[1.9rem] left-1/2 h-[11rem] w-[5rem] -translate-x-1/2 rounded-[999px_999px_22px_22px] bg-[rgba(255,255,255,0.52)] shadow-[0_18px_40px_rgba(62,64,89,0.12)]" />
-                  <div class="absolute bottom-[6.6rem] left-1/2 h-[4rem] w-[4rem] -translate-x-1/2 rounded-full bg-[rgba(62,64,89,0.46)] blur-[1px]" />
+          <SurfaceCard tone="muted">
+            <div class="space-y-4">
+              <img
+                :src="homepageAssets.hero"
+                alt=""
+                class="block w-full rounded-[22px] object-cover"
+              />
+              <div class="grid gap-3 sm:grid-cols-2">
+                <div class="rounded-[22px] border border-[rgba(62,64,89,0.08)] bg-[rgba(255,255,255,0.76)] px-4 py-3">
+                  <p class="font-[var(--font-nav)] text-xs font-semibold uppercase tracking-[0.14em] text-[rgba(62,64,89,0.52)]">
+                    Guided path
+                  </p>
+                  <p class="mt-1 font-[var(--font-display)] text-[1.35rem] leading-none text-[var(--color-heading)]">
+                    Three phases
+                  </p>
                 </div>
-              </div>
-
-              <div class="absolute bottom-6 left-6 right-6 grid gap-3">
-                <div class="flex items-center justify-between rounded-[22px] border border-[rgba(62,64,89,0.08)] bg-[rgba(255,255,255,0.74)] px-4 py-3">
-                  <div>
-                    <p class="font-[var(--font-nav)] text-xs font-semibold uppercase tracking-[0.14em] text-[rgba(62,64,89,0.5)]">
-                      Guided path
-                    </p>
-                    <p class="mt-1 font-[var(--font-display)] text-[1.35rem] leading-none text-[var(--color-heading)]">
-                      Three phases
-                    </p>
-                  </div>
-                  <div class="h-12 w-12 rounded-full border border-[rgba(62,64,89,0.08)] bg-[var(--color-accent)]" />
-                </div>
-
                 <div class="rounded-[22px] border border-[rgba(62,64,89,0.08)] bg-[rgba(62,64,89,0.92)] px-4 py-3 text-white">
                   <p class="font-[var(--font-nav)] text-xs font-semibold uppercase tracking-[0.14em] text-white/62">
                     Designed for clarity
@@ -315,7 +131,7 @@ const footerGroups = [
 
         <div class="grid gap-5 md:grid-cols-3">
           <SurfaceCard
-            v-for="card in benefitCards"
+            v-for="card in homepageBenefitCards"
             :key="card.title"
           >
             <div class="space-y-3">
@@ -403,7 +219,7 @@ const footerGroups = [
 
           <div class="grid gap-4">
             <SurfaceCard
-              v-for="card in phaseCards"
+              v-for="card in homepagePhaseCards"
               :key="card.title"
             >
               <div class="space-y-3">
@@ -426,20 +242,11 @@ const footerGroups = [
     >
       <div class="section-shell grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-center">
         <SurfaceCard tone="muted">
-          <div class="relative min-h-[22rem] overflow-hidden rounded-[22px] border border-[rgba(62,64,89,0.08)] bg-[linear-gradient(180deg,rgba(255,255,255,0.7)_0%,rgba(245,238,225,0.92)_45%,rgba(209,201,191,0.78)_100%)]">
-            <div class="absolute inset-x-6 top-6 flex justify-between">
-              <p class="rounded-full bg-[var(--color-accent)] px-3 py-1 font-[var(--font-nav)] text-xs font-semibold uppercase tracking-[0.14em] text-[var(--color-accent-text)]">
-                What about the kids?
-              </p>
-              <p class="font-[var(--font-nav)] text-xs font-semibold uppercase tracking-[0.14em] text-[rgba(62,64,89,0.6)]">
-                Trust and custody
-              </p>
-            </div>
-
-            <div class="absolute inset-0 flex items-end justify-center p-6">
-              <div class="h-[16rem] w-[12rem] rounded-[24px] border border-[rgba(62,64,89,0.08)] bg-[linear-gradient(180deg,rgba(62,64,89,0.18)_0%,rgba(255,255,255,0.8)_100%)] shadow-[0_22px_44px_rgba(62,64,89,0.12)]" />
-            </div>
-          </div>
+          <img
+            :src="homepageAssets.kids"
+            alt=""
+            class="block w-full rounded-[22px] object-cover"
+          />
         </SurfaceCard>
 
         <div class="space-y-6">
@@ -498,7 +305,7 @@ const footerGroups = [
 
         <div class="grid gap-5 lg:grid-cols-2">
           <SurfaceCard
-            v-for="card in pathCards"
+            v-for="card in homepagePathCards"
             :key="card.title"
             tone="muted"
           >
@@ -569,7 +376,7 @@ const footerGroups = [
 
               <div class="grid gap-3 sm:grid-cols-3">
                 <button
-                  v-for="choice in quizQuestions[0].choices"
+                  v-for="choice in homepageQuizQuestions[0].choices"
                   :key="choice"
                   type="button"
                   class="rounded-full border border-[rgba(62,64,89,0.14)] bg-[var(--color-surface-light)] px-4 py-3 font-[var(--font-nav)] text-sm font-semibold text-[var(--color-ink)]"
@@ -581,7 +388,7 @@ const footerGroups = [
 
             <div class="grid gap-3 sm:grid-cols-2">
               <SurfaceCard
-                v-for="question in quizQuestions.slice(1)"
+                v-for="question in homepageQuizQuestions.slice(1)"
                 :key="question.question"
                 padding="md"
               >
@@ -620,7 +427,7 @@ const footerGroups = [
 
         <div class="grid gap-5 lg:grid-cols-3">
           <SurfaceCard
-            v-for="card in pricingCards"
+            v-for="card in homepagePricingCards"
             :key="card.eyebrow"
             :tone="card.featured ? 'dark' : 'light'"
             class="h-full"
@@ -697,7 +504,7 @@ const footerGroups = [
         <SurfaceCard class="mx-auto max-w-4xl">
           <div class="divide-y divide-[rgba(62,64,89,0.12)]">
             <details
-              v-for="(item, index) in faqItems"
+              v-for="(item, index) in homepageFaqItems"
               :key="item.question"
               :open="index === 0"
               class="group py-5"
@@ -737,7 +544,7 @@ const footerGroups = [
 
           <div class="grid gap-3 sm:grid-cols-3">
             <SurfaceCard
-              v-for="bullet in professionalBullets"
+              v-for="bullet in homepageProfessionalBullets"
               :key="bullet"
               padding="md"
             >
@@ -753,20 +560,11 @@ const footerGroups = [
         </div>
 
         <SurfaceCard>
-          <div class="relative min-h-[24rem] overflow-hidden rounded-[24px] border border-[rgba(62,64,89,0.08)] bg-[linear-gradient(180deg,rgba(245,238,225,0.8)_0%,rgba(255,255,255,0.8)_38%,rgba(62,64,89,0.18)_100%)]">
-            <div class="absolute inset-x-6 top-6 flex items-center justify-between">
-              <p class="rounded-full bg-[var(--color-accent)] px-3 py-1 font-[var(--font-nav)] text-xs font-semibold uppercase tracking-[0.14em] text-[var(--color-accent-text)]">
-                Network
-              </p>
-              <p class="font-[var(--font-nav)] text-xs font-semibold uppercase tracking-[0.14em] text-[rgba(62,64,89,0.58)]">
-                Professionals
-              </p>
-            </div>
-
-            <div class="absolute inset-0 flex items-center justify-center">
-              <div class="h-[18rem] w-[12rem] rounded-[28px] border border-[rgba(62,64,89,0.08)] bg-[linear-gradient(180deg,rgba(255,255,255,0.92)_0%,rgba(245,238,225,0.7)_100%)] shadow-[0_22px_44px_rgba(62,64,89,0.14)]" />
-            </div>
-          </div>
+          <img
+            :src="homepageAssets.professionals"
+            alt=""
+            class="block w-full rounded-[24px] object-cover"
+          />
         </SurfaceCard>
       </div>
     </section>
@@ -777,7 +575,7 @@ const footerGroups = [
       description="The footer keeps the shared structure visible at the end of the page so the live foundation remains consistent all the way through."
       cta-label="Is Solagree right for you?"
       cta-to="#quiz"
-      :groups="footerGroups"
+      :groups="homepageFooterGroups"
     />
   </main>
 </template>
