@@ -110,11 +110,6 @@ export const reviewColorTokens = [
     usage: 'Primary CTA foreground color.'
   },
   {
-    name: 'Accent strong',
-    variable: '--color-accent-strong',
-    usage: 'Deeper accent support for markers and emphasis.'
-  },
-  {
     name: 'Accent soft',
     variable: '--color-accent-soft',
     usage: 'Low-contrast highlight used behind badges and expanded FAQ state.'
