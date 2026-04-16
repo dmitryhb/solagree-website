@@ -1,6 +1,7 @@
 <script setup lang="ts">
 defineProps<{
   label: string
+  disabled?: boolean
 }>()
 </script>
 
@@ -8,6 +9,7 @@ defineProps<{
   <button
     type="button"
     class="quiz-primary-action"
+    :disabled="disabled"
   >
     {{ label }}
   </button>
