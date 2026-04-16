@@ -7,7 +7,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  singleChange: [value: string]
+  singleChange: [value: string | undefined]
   multiChange: [payload: { value: string, checked: boolean }]
 }>()
 </script>

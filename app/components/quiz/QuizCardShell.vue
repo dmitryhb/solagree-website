@@ -16,7 +16,7 @@ defineProps<{
 const emit = defineEmits<{
   back: []
   advance: []
-  singleChange: [value: string]
+  singleChange: [value: string | undefined]
   multiChange: [payload: { value: string, checked: boolean }]
 }>()
 </script>

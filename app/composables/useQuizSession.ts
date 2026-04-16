@@ -97,8 +97,8 @@ export function useQuizSession() {
     syncQuestionPosition(nextAnswers, questionId)
   }
 
-  function setSingleAnswer(questionId: QuizQuestionId, value: string) {
-    setAnswer(questionId, value as QuizQuestionValue)
+  function setSingleAnswer(questionId: QuizQuestionId, value: string | undefined) {
+    setAnswer(questionId, value as QuizQuestionValue | undefined)
   }
 
   function toggleMultiAnswer(questionId: QuizQuestionId, optionId: string, checked: boolean) {

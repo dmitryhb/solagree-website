@@ -9,12 +9,12 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  change: [value: string]
+  change: [value: string | undefined]
 }>()
 
 function onChange(event: Event) {
   const target = event.target as HTMLSelectElement
-  emit('change', target.value)
+  emit('change', target.value || undefined)
 }
 </script>
 
@@ -28,7 +28,6 @@ function onChange(event: Event) {
     >
       <option
         value=""
-        disabled
       >
         {{ placeholder ?? 'Select one' }}
       </option>
