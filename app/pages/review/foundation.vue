@@ -46,7 +46,7 @@ const typeSampleClass = (kind: string) => {
     return 'prose-copy !max-w-none'
   }
 
-  return 'eyebrow !text-[rgba(51,51,51,0.72)]'
+  return 'eyebrow !text-[rgba(63,49,84,0.72)]'
 }
 
 const resolveColorValue = (variable: string) => {
@@ -90,11 +90,12 @@ onMounted(() => {
             </div>
           </div>
 
-          <nav class="flex flex-wrap items-center gap-3 text-sm font-semibold text-[rgba(51,51,51,0.72)]">
+          <nav class="flex flex-wrap items-center gap-3">
             <NuxtLink
               v-for="link in reviewNavigation"
               :key="link.label"
               :to="link.to"
+              class="site-nav-link"
             >
               {{ link.label }}
             </NuxtLink>
@@ -124,7 +125,7 @@ onMounted(() => {
             <p class="mt-2 text-lg font-extrabold leading-tight text-[var(--color-ink)]">
               /review/foundation
             </p>
-            <p class="mt-2 text-sm leading-7 text-[rgba(51,51,51,0.76)]">
+            <p class="mt-2 text-sm leading-7 text-[rgba(63,49,84,0.76)]">
               Static checkpoint for internal review before feature-specific work starts.
             </p>
           </SurfaceCard>
@@ -182,7 +183,7 @@ onMounted(() => {
               <p class="eyebrow">
                 {{ sample.token }}
               </p>
-              <p class="text-sm font-semibold uppercase tracking-[0.16em] text-[rgba(51,51,51,0.54)]">
+              <p class="text-sm font-semibold uppercase tracking-[0.16em] text-[rgba(63,49,84,0.54)]">
                 {{ sample.label }}
               </p>
             </div>
@@ -219,13 +220,13 @@ onMounted(() => {
               <p class="text-base font-extrabold text-[var(--color-ink)]">
                 {{ swatch.name }}
               </p>
-              <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[rgba(51,51,51,0.52)]">
+              <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[rgba(63,49,84,0.52)]">
                 {{ swatch.variable }}
               </p>
-              <p class="text-sm font-semibold text-[rgba(51,51,51,0.68)]">
+              <p class="text-sm font-semibold text-[rgba(63,49,84,0.68)]">
                 {{ resolveColorValue(swatch.variable) }}
               </p>
-              <p class="text-sm leading-7 text-[rgba(51,51,51,0.76)]">
+              <p class="text-sm leading-7 text-[rgba(63,49,84,0.76)]">
                 {{ swatch.usage }}
               </p>
             </div>
@@ -244,8 +245,9 @@ onMounted(() => {
             </div>
 
             <p class="prose-copy !max-w-none !text-white/74">
-              The CTA yellow remains intentionally provisional, but there is still only one source
-              of truth: <code class="font-semibold">--color-accent</code> and its related support
+              The CTA accent now resolves to the exact Figma value, and there is still only one
+              source of truth: <code class="font-semibold">--color-accent</code>,
+              <code class="font-semibold">--color-accent-text</code>, and the related support
               tokens. Reviewers can approve the system knowing future adjustments won&apos;t require
               page-by-page edits.
             </p>
@@ -303,7 +305,7 @@ onMounted(() => {
                 <div class="flex items-center justify-between gap-3">
                   <p
                     class="text-sm font-bold uppercase tracking-[0.16em]"
-                    :class="panel.tone === 'dark' ? 'text-white/60' : 'text-[rgba(51,51,51,0.56)]'"
+                    :class="panel.tone === 'dark' ? 'text-white/60' : 'text-[rgba(63,49,84,0.56)]'"
                   >
                     {{ sample.label }}
                   </p>
@@ -312,7 +314,7 @@ onMounted(() => {
                     class="rounded-full border px-2 py-1 text-[0.68rem] font-bold uppercase tracking-[0.14em]"
                     :class="panel.tone === 'dark'
                       ? 'border-white/14 text-white/58'
-                      : 'border-[rgba(42,43,47,0.12)] text-[rgba(51,51,51,0.58)]'"
+                      : 'border-[rgba(62,64,89,0.12)] text-[rgba(63,49,84,0.58)]'"
                   >
                     disabled
                   </span>

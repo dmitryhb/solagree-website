@@ -16,23 +16,24 @@ import {
     <div class="section-shell py-6 sm:py-8">
       <SurfaceCard
         as="header"
-        class="flex flex-col gap-5 md:flex-row md:items-center md:justify-between"
+        class="surface-card--hero flex flex-col gap-5 md:flex-row md:items-center md:justify-between"
         padding="md"
       >
         <div>
           <p class="eyebrow">
             Solagree
           </p>
-          <p class="mt-2 text-sm text-[rgba(51,51,51,0.68)]">
+          <p class="mt-2 text-sm text-[rgba(63,49,84,0.68)]">
             Global foundation preview
           </p>
         </div>
 
-        <nav class="flex flex-wrap items-center gap-4 text-sm font-semibold text-[rgba(51,51,51,0.72)]">
+        <nav class="flex flex-wrap items-center gap-4">
           <NuxtLink
             v-for="link in navigationLinks"
             :key="link.label"
             :to="link.to"
+            class="site-nav-link"
           >
             {{ link.label }}
           </NuxtLink>
@@ -86,12 +87,12 @@ import {
               </div>
               <div class="grid gap-3">
                 <SurfaceCard padding="md">
-                  <p class="text-sm font-bold uppercase tracking-[0.18em] text-[rgba(51,51,51,0.5)]">
+                  <p class="text-sm font-bold uppercase tracking-[0.18em] text-[rgba(63,49,84,0.5)]">
                     Palette
                   </p>
-                  <p class="mt-2 text-sm leading-7 text-[rgba(51,51,51,0.76)]">
-                    `#FEF9EF`, `#333333`, `#2A2B2F`, warm neutrals, white, and an easily swappable
-                    CTA yellow.
+                  <p class="mt-2 text-sm leading-7 text-[rgba(63,49,84,0.76)]">
+                    `#FFFDF9`, `#F5EEE1`, `#FEF9EF`, `#F7F3EC`, `#D1C9BF`, `#3F3154`, `#3E4059`, and
+                    the approved CTA yellow `#FAFF81`.
                   </p>
                 </SurfaceCard>
                 <SurfaceCard
@@ -102,7 +103,8 @@ import {
                     Typography
                   </p>
                   <p class="mt-2 text-sm leading-7 text-white/74">
-                    Editorial serif for display hierarchy and a clean sans-serif for interface copy.
+                    Lora, Poppins, Open Sans, and DM Sans work together across display, labels,
+                    body copy, and CTA text.
                   </p>
                 </SurfaceCard>
               </div>

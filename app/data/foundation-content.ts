@@ -119,9 +119,9 @@ export const faqItems = [
       'No. The naming and composition are intentionally generic so the same components can be reused on quiz, pricing, and informational routes.'
   },
   {
-    question: 'What is still provisional at this stage?',
+    question: 'What is fixed by the foundation?',
     answer:
-      'The yellow CTA accent remains easy to change, and image-heavy modules can be refined later once stakeholder review confirms the foundation direction.'
+      'The CTA accent and supporting surfaces are fixed to the approved Figma values, while image-heavy modules can be refined later once stakeholder review confirms the foundation direction.'
   },
   {
     question: 'How does this help HIR-30?',

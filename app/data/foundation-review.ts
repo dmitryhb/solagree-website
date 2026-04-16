@@ -19,7 +19,7 @@ export const reviewChecklist = [
     title: 'Color tokens are shown through the live CSS variables',
     body:
       'Swatches are painted from the shared variables on :root, so reviewers are seeing the real palette instead of a copied hex sheet.',
-    meta: 'Keeps the provisional CTA yellow in one centralized token.'
+    meta: 'Keeps the approved CTA accent and surface palette centralized.'
   },
   {
     label: 'Gate 03',
@@ -32,27 +32,27 @@ export const reviewChecklist = [
 
 export const reviewTypeSamples = [
   {
-    token: '--font-serif',
-    label: 'Editorial display',
+    token: '--font-display',
+    label: 'Lora / display',
     kind: 'display',
     preview: 'Calm structure. Clear next steps.'
   },
   {
-    token: '--font-serif',
-    label: 'Section title',
+    token: '--font-display',
+    label: 'Lora / section title',
     kind: 'title',
     preview: 'Shared sections carry the core narrative.'
   },
   {
-    token: '--font-sans',
-    label: 'Body copy',
+    token: '--font-body',
+    label: 'Open Sans / body',
     kind: 'copy',
     preview:
       'Readable interface copy keeps the internal review practical and gives the quiz flow a solid default for guidance text, helper notes, and confirmations.'
   },
   {
-    token: '--font-sans',
-    label: 'Eyebrow label',
+    token: '--font-nav',
+    label: 'Poppins / eyebrow',
     kind: 'eyebrow',
     preview: 'Foundation checkpoint'
   }
@@ -62,27 +62,37 @@ export const reviewColorTokens = [
   {
     name: 'Page',
     variable: '--color-page',
-    usage: 'Warm canvas tone used beneath the shared section rhythm.'
+    usage: 'Main page background shown behind the full foundation shell.'
+  },
+  {
+    name: 'Hero base',
+    variable: '--color-surface-hero',
+    usage: 'Warm header surface used in the hero shell.'
+  },
+  {
+    name: 'Warm surface',
+    variable: '--color-surface-warm',
+    usage: 'Secondary warm panel surface used for lighter sections.'
+  },
+  {
+    name: 'Footer warm',
+    variable: '--color-surface-footer',
+    usage: 'Warm footer band that wraps the lower page section.'
+  },
+  {
+    name: 'Footer inner',
+    variable: '--color-surface-light',
+    usage: 'Light inner footer surface used inside the warm footer band.'
   },
   {
     name: 'Text',
     variable: '--color-text',
-    usage: 'Default reading color for interface copy.'
+    usage: 'Body and supporting text color across light surfaces.'
   },
   {
     name: 'Ink',
     variable: '--color-ink',
-    usage: 'Deep neutral used for headings, dark surfaces, and focus outlines.'
-  },
-  {
-    name: 'Neutral 200',
-    variable: '--color-neutral-200',
-    usage: 'Muted surface treatment for secondary panels.'
-  },
-  {
-    name: 'Neutral 300',
-    variable: '--color-neutral-300',
-    usage: 'Border and divider support in light contexts.'
+    usage: 'Navigation, CTA foreground support, and dark-surface text.'
   },
   {
     name: 'White',
@@ -92,7 +102,12 @@ export const reviewColorTokens = [
   {
     name: 'Accent',
     variable: '--color-accent',
-    usage: 'Primary CTA fill. This stays provisional but centralized.'
+    usage: 'Primary CTA fill resolved directly from the Figma extraction.'
+  },
+  {
+    name: 'Accent text',
+    variable: '--color-accent-text',
+    usage: 'Primary CTA foreground color.'
   },
   {
     name: 'Accent strong',
@@ -111,7 +126,7 @@ export const reviewButtonPanels = [
     title: 'Primary and secondary CTA',
     tone: 'light',
     body:
-      'The main action stays bright and high-contrast, while the secondary button keeps the softer neutral framing.',
+      'The primary action uses the exact Figma CTA treatment, while the secondary button stays anchored to the same shared primitive.',
     samples: [
       {
         label: 'Primary / medium',
