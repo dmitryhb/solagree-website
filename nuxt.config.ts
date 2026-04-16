@@ -5,6 +5,37 @@ export default defineNuxtConfig({
   ssr: true,
   modules: ['@nuxt/ui'],
   css: ['~/assets/css/main.css'],
+  runtimeConfig: {
+    public: {
+      solagreeQuiz: {
+        hostId: 'solagree-quiz',
+        mode: 'standalone',
+        display: {
+          showShellHeader: true,
+          showExplainer: true
+        },
+        analytics: {
+          enabled: false,
+          namespace: 'solagree.quiz'
+        },
+        bridge: {
+          postMessage: false,
+          targetOrigin: '*'
+        },
+        ctas: {
+          'solagree-consult': {
+            href: '#solagree-consult-placeholder'
+          },
+          'attorney-consult': {
+            href: '#attorney-consult-placeholder'
+          },
+          'fallback-resources': {
+            href: '#fallback-resources'
+          }
+        }
+      }
+    }
+  },
   devServer: {
     port: 3003
   }

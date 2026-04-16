@@ -149,6 +149,11 @@ export type QuizOutcomeId =
   | 'attorney-consult-first'
   | 'not-fit-right-now'
 
+export type QuizCtaActionId =
+  | 'solagree-consult'
+  | 'attorney-consult'
+  | 'fallback-resources'
+
 export type QuizInternalTag =
   | 'parenting'
   | 'financial'
@@ -192,10 +197,14 @@ export interface QuizOpenPolicyEvaluation {
 export type QuizEvaluation = QuizResolvedEvaluation | QuizOpenPolicyEvaluation
 
 export interface QuizResultCta {
+  actionId: QuizCtaActionId
   label: string
   href: string
   note?: string
   isPlaceholder?: boolean
+  target?: '_self' | '_blank'
+  rel?: string
+  trackingId?: string
 }
 
 export interface QuizResultResourceLink {
@@ -217,3 +226,103 @@ export interface QuizResultViewModel {
   policyNote?: string
   resetLabel: string
 }
+
+export type QuizHostMode = 'standalone' | 'embedded'
+
+export interface QuizHostDisplayOptions {
+  showShellHeader: boolean
+  showExplainer: boolean
+}
+
+export interface QuizHostAnalyticsOptions {
+  enabled: boolean
+  namespace: string
+  trackingId?: string
+}
+
+export interface QuizHostBridgeOptions {
+  postMessage: boolean
+  targetOrigin: string
+}
+
+export interface QuizCtaTargetConfig {
+  href: string
+  trackingId?: string
+  target?: '_self' | '_blank'
+  rel?: string
+}
+
+export interface QuizHostRuntimeConfig {
+  hostId: string
+  mode: QuizHostMode
+  display: QuizHostDisplayOptions
+  analytics: QuizHostAnalyticsOptions
+  bridge: QuizHostBridgeOptions
+  ctas: Partial<Record<QuizCtaActionId, QuizCtaTargetConfig>>
+}
+
+export interface QuizHostConfigInput {
+  hostId?: string
+  mode?: QuizHostMode
+  display?: Partial<QuizHostDisplayOptions>
+  analytics?: Partial<QuizHostAnalyticsOptions>
+  bridge?: Partial<QuizHostBridgeOptions>
+  ctas?: Partial<Record<QuizCtaActionId, Partial<QuizCtaTargetConfig>>>
+}
+
+interface QuizHostEventBase {
+  hostId: string
+  mode: QuizHostMode
+  sessionId: string
+  trackingId?: string
+  timestamp: string
+}
+
+export interface QuizQuestionViewedEvent extends QuizHostEventBase {
+  type: 'question_viewed'
+  questionId: QuizQuestionId
+  progress: number
+}
+
+export interface QuizQuestionAnsweredEvent extends QuizHostEventBase {
+  type: 'question_answered'
+  questionId: QuizQuestionId
+  value: QuizQuestionValue
+  progress: number
+}
+
+export interface QuizProgressedEvent extends QuizHostEventBase {
+  type: 'progressed'
+  fromQuestionId: QuizQuestionId
+  toQuestionId: QuizQuestionId | 'result'
+  progress: number
+}
+
+export interface QuizCompletedEvent extends QuizHostEventBase {
+  type: 'completed'
+  outcome: QuizOutcomeId | 'open-policy'
+  policyId?: QuizOpenPolicyId
+  tags: readonly QuizInternalTag[]
+  progress: number
+}
+
+export interface QuizCtaClickedEvent extends QuizHostEventBase {
+  type: 'cta_clicked'
+  actionId: QuizCtaActionId
+  href: string
+  ctaTrackingId?: string
+  outcome: QuizOutcomeId | 'open-policy'
+  policyId?: QuizOpenPolicyId
+}
+
+export interface QuizResetEvent extends QuizHostEventBase {
+  type: 'reset'
+}
+
+export type QuizHostEvent =
+  | QuizQuestionViewedEvent
+  | QuizQuestionAnsweredEvent
+  | QuizProgressedEvent
+  | QuizCompletedEvent
+  | QuizCtaClickedEvent
+  | QuizResetEvent

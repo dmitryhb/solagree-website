@@ -1,7 +1,20 @@
 <script setup lang="ts">
+import type { QuizHostConfigInput, QuizHostEvent } from '~/data/quiz-types'
 import { solagreeQuizShellContent } from '~/data/quiz'
 
+const props = defineProps<{
+  hostConfig?: QuizHostConfigInput
+}>()
+
+const emit = defineEmits<{
+  hostEvent: [event: QuizHostEvent]
+}>()
+
 const quizSession = useQuizSession()
+const quizHost = useQuizHost(quizSession, {
+  hostConfig: toRef(props, 'hostConfig'),
+  onEvent: event => emit('hostEvent', event)
+})
 const explainer = computed(() => {
   return {
     title: quizSession.currentQuestion.value.explainerTitle,
@@ -13,7 +26,10 @@ const explainer = computed(() => {
 <template>
   <section class="quiz-section">
     <div class="quiz-section__layout">
-      <header class="quiz-section__header">
+      <header
+        v-if="quizHost.hostConfig.value.display.showShellHeader"
+        class="quiz-section__header"
+      >
         <h2 class="quiz-section__heading">
           {{ solagreeQuizShellContent.heading }}
         </h2>
@@ -27,20 +43,21 @@ const explainer = computed(() => {
           :progress="quizSession.progressValue.value"
           :back-label="quizSession.labels.backLabel"
           :question="quizSession.phase.value === 'result' ? undefined : quizSession.currentQuestion.value"
-          :result="quizSession.phase.value === 'result' ? quizSession.resultView.value : undefined"
+          :result="quizSession.phase.value === 'result' ? quizHost.resolvedResultView.value : undefined"
           :value="quizSession.currentValue.value"
           :primary-action-label="quizSession.primaryActionLabel.value"
           :can-go-back="quizSession.canGoBack.value"
           :can-advance="quizSession.canAdvance.value"
-          @back="quizSession.goBack"
-          @advance="quizSession.goNext"
-          @reset="quizSession.reset"
-          @single-change="quizSession.setSingleAnswer(quizSession.currentQuestionId.value, $event)"
-          @multi-change="quizSession.toggleMultiAnswer(quizSession.currentQuestionId.value, $event.value, $event.checked)"
+          @back="quizHost.handleBack"
+          @advance="quizHost.handleAdvance"
+          @cta="quizHost.handleResultCtaClick"
+          @reset="quizHost.handleReset"
+          @single-change="quizHost.handleSingleAnswer($event.questionId, $event.value)"
+          @multi-change="quizHost.handleMultiAnswer($event.questionId, { value: $event.value, checked: $event.checked })"
         />
 
         <QuizExplainer
-          v-if="quizSession.phase.value === 'question'"
+          v-if="quizSession.phase.value === 'question' && quizHost.hostConfig.value.display.showExplainer"
           :title="explainer.title"
           :body="explainer.body"
         />

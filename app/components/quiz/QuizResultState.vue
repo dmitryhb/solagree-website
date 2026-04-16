@@ -7,6 +7,7 @@ defineProps<{
 
 const emit = defineEmits<{
   reset: []
+  cta: [payload: QuizResultViewModel['primaryCta']]
 }>()
 </script>
 
@@ -51,6 +52,9 @@ const emit = defineEmits<{
       <a
         class="quiz-result-state__cta quiz-result-state__cta--primary"
         :href="result.primaryCta.href"
+        :target="result.primaryCta.target"
+        :rel="result.primaryCta.rel"
+        @click="emit('cta', result.primaryCta)"
       >
         {{ result.primaryCta.label }}
       </a>

@@ -7,8 +7,8 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  singleChange: [value: string | undefined]
-  multiChange: [payload: { value: string, checked: boolean }]
+  singleChange: [payload: { questionId: QuizQuestionDefinition['id'], value: string | undefined }]
+  multiChange: [payload: { questionId: QuizQuestionDefinition['id'], value: string, checked: boolean }]
 }>()
 </script>
 
@@ -31,7 +31,7 @@ const emit = defineEmits<{
       :options="question.options"
       :value="typeof value === 'string' ? value : undefined"
       :placeholder="question.placeholder"
-      @update:value="emit('singleChange', $event)"
+      @update:value="emit('singleChange', { questionId: question.id, value: $event })"
     />
 
     <QuizAnswerGroup
@@ -41,8 +41,8 @@ const emit = defineEmits<{
       :options="question.options"
       :value="value"
       @change="question.kind === 'multi-select'
-        ? emit('multiChange', $event)
-        : emit('singleChange', $event.value)"
+        ? emit('multiChange', { questionId: question.id, ...$event })
+        : emit('singleChange', { questionId: question.id, value: $event.value })"
     />
   </fieldset>
 </template>
