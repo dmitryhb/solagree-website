@@ -5,9 +5,12 @@ import type {
   QuizResultViewModel
 } from '~/data/quiz-types'
 
-defineProps<{
+const props = defineProps<{
   progress: number
   backLabel: string
+  currentStepNumber?: number
+  totalStepCount?: number
+  showStepCounter?: boolean
   question?: QuizQuestionDefinition
   value?: QuizQuestionValue
   result?: QuizResultViewModel
@@ -15,6 +18,18 @@ defineProps<{
   canGoBack?: boolean
   canAdvance?: boolean
 }>()
+
+const shouldShowBackButton = computed(() => {
+  return !!props.result || !props.showStepCounter
+})
+
+const stepCounterLabel = computed(() => {
+  if (!props.currentStepNumber || !props.totalStepCount) {
+    return ''
+  }
+
+  return `${props.currentStepNumber} of ${props.totalStepCount}`
+})
 
 const emit = defineEmits<{
   back: []
@@ -35,12 +50,22 @@ const emit = defineEmits<{
       <div class="quiz-card-shell__frame">
         <QuizProgressMeter :value="progress" />
 
-        <div class="quiz-card-shell__back">
+        <div class="quiz-card-shell__header">
           <QuizBackButton
+            v-if="shouldShowBackButton"
+            class="quiz-card-shell__back"
             :label="backLabel"
             :disabled="!canGoBack"
             @click="emit('back')"
           />
+
+          <p
+            v-else-if="showStepCounter"
+            class="quiz-card-shell__step-counter"
+            aria-live="polite"
+          >
+            {{ stepCounterLabel }}
+          </p>
         </div>
 
         <Transition

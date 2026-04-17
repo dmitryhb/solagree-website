@@ -22,6 +22,22 @@ const explainer = computed(() => {
     body: quizSession.currentQuestion.value.explainerBody
   }
 })
+const currentStepNumber = computed(() => {
+  if (quizSession.phase.value !== 'question') {
+    return undefined
+  }
+
+  const currentQuestionId = quizSession.currentQuestionId.value
+  const questionIndex = quizSession.visibleQuestionIds.value.findIndex(questionId => questionId === currentQuestionId)
+
+  return questionIndex >= 0 ? questionIndex + 1 : undefined
+})
+const totalStepCount = computed(() => {
+  return quizSession.phase.value === 'question' ? quizSession.visibleQuestionIds.value.length : undefined
+})
+const showStepCounter = computed(() => {
+  return currentStepNumber.value === 1 && (totalStepCount.value ?? 0) > 0
+})
 
 function getQuizScrollBehavior(): ScrollBehavior {
   if (!import.meta.client) {
@@ -93,6 +109,9 @@ function handleBack() {
         <QuizCardShell
           :progress="quizSession.progressValue.value"
           :back-label="quizSession.labels.backLabel"
+          :current-step-number="currentStepNumber"
+          :total-step-count="totalStepCount"
+          :show-step-counter="showStepCounter"
           :question="quizSession.phase.value === 'result' ? undefined : quizSession.currentQuestion.value"
           :result="quizSession.phase.value === 'result' ? quizHost.resolvedResultView.value : undefined"
           :value="quizSession.currentValue.value"
