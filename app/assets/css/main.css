@@ -661,6 +661,8 @@ select {
 .quiz-card-shell__header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
   min-height: 31px;
   padding-bottom: 7px;
 }
@@ -671,14 +673,11 @@ select {
 
 .quiz-card-shell__step-counter {
   margin: 0 0 0 auto;
-  padding: 3px 12px;
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--color-quiz-progress) 14%, white);
-  color: var(--color-quiz-progress);
   font-family: var(--font-control);
   font-size: 17.3px;
   font-weight: 500;
   line-height: 24px;
+  color: rgba(0, 0, 0, 0.6);
 }
 
 .quiz-card-shell__step {
@@ -724,12 +723,6 @@ select {
 @media (prefers-reduced-motion: reduce) {
   .quiz-progress-meter__fill {
     transition: none;
-  }
-}
-
-@supports not (background: color-mix(in srgb, white 50%, black)) {
-  .quiz-card-shell__step-counter {
-    background: rgba(155, 96, 75, 0.14);
   }
 }
 

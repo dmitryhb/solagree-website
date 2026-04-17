@@ -20,7 +20,7 @@ const props = defineProps<{
 }>()
 
 const shouldShowBackButton = computed(() => {
-  return !!props.result || !props.showStepCounter
+  return !!props.result || !!props.canGoBack
 })
 
 const stepCounterLabel = computed(() => {
@@ -60,7 +60,7 @@ const emit = defineEmits<{
           />
 
           <p
-            v-else-if="showStepCounter"
+            v-if="showStepCounter"
             class="quiz-card-shell__step-counter"
             aria-live="polite"
           >

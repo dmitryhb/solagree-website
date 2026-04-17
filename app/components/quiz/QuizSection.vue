@@ -36,7 +36,7 @@ const totalStepCount = computed(() => {
   return quizSession.phase.value === 'question' ? quizSession.visibleQuestionIds.value.length : undefined
 })
 const showStepCounter = computed(() => {
-  return currentStepNumber.value === 1 && (totalStepCount.value ?? 0) > 0
+  return quizSession.phase.value === 'question' && (totalStepCount.value ?? 0) > 0
 })
 
 function getQuizScrollBehavior(): ScrollBehavior {
