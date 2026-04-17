@@ -43,33 +43,43 @@ const emit = defineEmits<{
           />
         </div>
 
-        <QuizQuestionBlock
-          v-if="question"
-          class="quiz-card-shell__question"
-          :question="question"
-          :value="value"
-          @single-change="emit('singleChange', $event)"
-          @multi-change="emit('multiChange', $event)"
-        />
-
-        <QuizResultState
-          v-else-if="result"
-          class="quiz-card-shell__question"
-          :result="result"
-          @cta="emit('cta', $event)"
-          @reset="emit('reset')"
-        />
-
-        <div
-          v-if="question"
-          class="quiz-card-shell__action"
+        <Transition
+          name="quiz-card-shell-step"
+          mode="out-in"
         >
-          <QuizPrimaryAction
-            :label="primaryActionLabel"
-            :disabled="!canAdvance"
-            @click="emit('advance')"
-          />
-        </div>
+          <div
+            :key="question ? question.id : result ? `result-${result.title}` : 'quiz-step'"
+            class="quiz-card-shell__step"
+          >
+            <QuizQuestionBlock
+              v-if="question"
+              class="quiz-card-shell__question"
+              :question="question"
+              :value="value"
+              @single-change="emit('singleChange', $event)"
+              @multi-change="emit('multiChange', $event)"
+            />
+
+            <QuizResultState
+              v-else-if="result"
+              class="quiz-card-shell__question"
+              :result="result"
+              @cta="emit('cta', $event)"
+              @reset="emit('reset')"
+            />
+
+            <div
+              v-if="question"
+              class="quiz-card-shell__action"
+            >
+              <QuizPrimaryAction
+                :label="primaryActionLabel"
+                :disabled="!canAdvance"
+                @click="emit('advance')"
+              />
+            </div>
+          </div>
+        </Transition>
       </div>
     </div>
   </article>
