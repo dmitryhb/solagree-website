@@ -10,22 +10,17 @@ import type {
   QuizResultViewModel
 } from '~/data/quiz-types'
 
-const blockingPolicyMap = Object.fromEntries(
-  solagreeQuizOpenPolicies
-    .filter(policy => policy.blocksOutcome)
-    .map(policy => [policy.id, policy])
-) as Partial<Record<QuizOpenPolicyId, QuizOpenPolicy>>
-
-function getBlockingPolicyId(answers: Readonly<QuizAnswerMap>): QuizOpenPolicyId | null {
-  if (answers.spouseContact === 'know-where-not-communicating') {
-    return 'missing-spouse-routing-no-communication'
+function getResolvedSpouseContactOutcome(answers: Readonly<QuizAnswerMap>) {
+  if (!answers.spouseContact) {
+    return null
   }
 
-  if (answers.spouseContact === 'cannot-find' || answers.spouseContact === 'unknown-whereabouts') {
-    return 'missing-spouse-routing-cannot-find'
-  }
+  return solagreeQuizResolvedPolicy.spouseContactOutcomes[answers.spouseContact] ?? null
+}
 
-  return null
+function getOpenPolicyNote(policyId: QuizOpenPolicyId): string {
+  return solagreeQuizOpenPolicies.find(policy => policy.id === policyId)?.description
+    ?? 'This answer pattern remains intentionally open until the policy is finalized.'
 }
 
 export function buildQuizConsultMetadata(answers: Readonly<QuizAnswerMap>): QuizConsultMetadata {
@@ -97,12 +92,12 @@ export function buildQuizConsultMetadata(answers: Readonly<QuizAnswerMap>): Quiz
 
 export function evaluateQuizAnswers(answers: Readonly<QuizAnswerMap>): QuizEvaluation {
   const metadata = buildQuizConsultMetadata(answers)
-  const blockingPolicyId = getBlockingPolicyId(answers)
+  const resolvedSpouseContactOutcome = getResolvedSpouseContactOutcome(answers)
 
-  if (blockingPolicyId) {
+  if (resolvedSpouseContactOutcome) {
     return {
-      kind: 'open-policy',
-      policyId: blockingPolicyId,
+      kind: 'resolved',
+      outcome: resolvedSpouseContactOutcome,
       metadata
     }
   }
@@ -177,11 +172,11 @@ function buildSummaryItems(metadata: QuizConsultMetadata): string[] {
   }
 
   if (metadata.hasMissingSpouse) {
-    items.push('Missing-spouse handling remains an explicit policy review branch.')
+    items.push('Current policy routes missing-spouse cases to not a fit right now.')
   }
 
   if (metadata.spouseContact === 'know-where-not-communicating') {
-    items.push('Broken spouse communication remains an explicit policy review branch.')
+    items.push('Current policy routes non-communicating spouse cases to not a fit right now.')
   }
 
   if (!items.length) {
@@ -189,11 +184,6 @@ function buildSummaryItems(metadata: QuizConsultMetadata): string[] {
   }
 
   return items
-}
-
-function getOpenPolicyNote(policyId: QuizOpenPolicyId): string {
-  return blockingPolicyMap[policyId]?.description
-    ?? 'This answer pattern remains intentionally open until the policy is finalized.'
 }
 
 export function getQuizResultViewModel(evaluation: QuizEvaluation): QuizResultViewModel {

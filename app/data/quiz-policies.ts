@@ -1,34 +1,25 @@
-import type { QuizOpenPolicy, QuizOutcomeId } from '~/data/quiz-types'
+import type { QuizOpenPolicy, QuizOutcomeId, QuizSpouseContactAnswer } from '~/data/quiz-types'
 
 export const solagreeQuizResolvedPolicy = {
   legalAdviceYesOutcome: 'attorney-consult-first',
   legalAdviceNotSureOutcome: 'attorney-consult-first',
   paymentPlanEligibleOutcome: 'solagree-fit',
+  spouseContactOutcomes: {
+    'direct-contact': null,
+    'cannot-find': 'not-fit-right-now',
+    'unknown-whereabouts': 'not-fit-right-now',
+    'know-where-not-communicating': 'not-fit-right-now'
+  },
   genericFallbackResources: true
 } as const satisfies {
   legalAdviceYesOutcome: QuizOutcomeId
   legalAdviceNotSureOutcome: QuizOutcomeId
   paymentPlanEligibleOutcome: QuizOutcomeId
+  spouseContactOutcomes: Record<QuizSpouseContactAnswer, QuizOutcomeId | null>
   genericFallbackResources: boolean
 }
 
 export const solagreeQuizOpenPolicies: readonly QuizOpenPolicy[] = [
-  {
-    id: 'missing-spouse-routing-cannot-find',
-    title: 'Missing spouse routing when the user cannot find their spouse',
-    description:
-      'Your answers suggest your situation may need additional review before we can recommend the best next step.',
-    relatedQuestions: ['spouseContact'],
-    blocksOutcome: true
-  },
-  {
-    id: 'missing-spouse-routing-no-communication',
-    title: 'Missing spouse routing when the user knows where their spouse is but communication is broken',
-    description:
-      'Your answers suggest your situation may need additional review before we can recommend the best next step.',
-    relatedQuestions: ['spouseContact'],
-    blocksOutcome: true
-  },
   {
     id: 'state-specific-result-messaging',
     title: 'State selection may affect future result messaging or resource links',
