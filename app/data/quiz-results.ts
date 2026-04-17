@@ -77,45 +77,23 @@ export const solagreeQuizResultContent = {
 } as const satisfies Record<QuizOutcomeId, QuizResultContentDefinition>
 
 export const solagreeQuizOpenPolicyContent = {
-  'missing-spouse-routing-cannot-find': {
-    eyebrow: 'Policy review still open',
-    title: 'This branch still needs a manual routing decision.',
+  'state-specific-result-messaging': {
+    eyebrow: 'Policy configuration deferred',
+    title: 'State-specific result messaging is still generic in phase one.',
     body:
-      'Your spouse-contact answers fall into a policy branch that is intentionally left open. The result engine surfaces it explicitly instead of guessing the final recommendation.',
-    summaryTitle: 'What triggered the open-policy branch',
+      'The evaluator is intentionally not using state-specific copy or resource links yet. That policy question stays documented separately from the resolved quiz routing decisions.',
+    summaryTitle: 'What remains deferred',
     primaryCta: {
       actionId: 'fallback-resources',
-      label: 'Review generic legal-help resources',
+      label: 'Review general legal-help resources',
       href: '#fallback-resources',
-      note: 'Placeholder destination while the final missing-spouse routing is unresolved.',
+      note: 'Placeholder destination while state-specific referrals remain deferred.',
       isPlaceholder: true
     },
     resetLabel: 'Start again',
     resourceTitle: 'Phase-one fallback resources',
     resourceBody:
-      'Until the missing-spouse outcome is finalized, this branch stays paired with the same generic fallback resource block used elsewhere in phase one.',
-    resources: phaseOneFallbackResources
-  },
-  'missing-spouse-routing-no-communication': {
-    eyebrow: 'Policy review still open',
-    title: 'This branch still needs a manual routing decision.',
-    body:
-      'Your spouse-contact answers fall into a policy branch that is intentionally left open. The result engine surfaces it explicitly instead of guessing the final recommendation.',
-    summaryTitle: 'What triggered the open-policy branch',
-    primaryCta: {
-      actionId: 'fallback-resources',
-      label: 'Review generic legal-help resources',
-      href: '#fallback-resources',
-      note: 'Placeholder destination while the final missing-spouse routing is unresolved.',
-      isPlaceholder: true
-    },
-    resetLabel: 'Start again',
-    resourceTitle: 'Phase-one fallback resources',
-    resourceBody:
-      'Until the missing-spouse outcome is finalized, this branch stays paired with the same generic fallback resource block used elsewhere in phase one.',
+      'Phase one keeps fallback resources generic until state-specific messaging is explicitly configured.',
     resources: phaseOneFallbackResources
   }
-} as const satisfies Record<
-  Extract<QuizOpenPolicy['id'], 'missing-spouse-routing-cannot-find' | 'missing-spouse-routing-no-communication'>,
-  QuizResultContentDefinition
->
+} as const satisfies Record<QuizOpenPolicy['id'], QuizResultContentDefinition>

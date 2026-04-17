@@ -129,10 +129,7 @@ export interface QuizPersistedSession {
   answers: QuizAnswerMap
 }
 
-export type QuizOpenPolicyId =
-  | 'missing-spouse-routing-cannot-find'
-  | 'missing-spouse-routing-no-communication'
-  | 'state-specific-result-messaging'
+export type QuizOpenPolicyId = 'state-specific-result-messaging'
 
 export interface QuizOpenPolicy {
   id: QuizOpenPolicyId
