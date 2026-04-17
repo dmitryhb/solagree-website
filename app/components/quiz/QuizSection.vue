@@ -66,7 +66,7 @@ async function handleAdvance() {
   await scrollQuizToTop()
 }
 
-async function handleBack() {
+function handleBack() {
   quizHost.handleBack()
 }
 </script>
