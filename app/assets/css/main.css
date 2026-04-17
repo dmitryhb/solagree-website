@@ -975,7 +975,6 @@ select {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.55rem;
   width: 100%;
   min-height: 56px;
   border-radius: 8px;
@@ -1003,6 +1002,7 @@ select {
 }
 
 .quiz-result-state__cta--secondary {
+  gap: 0.55rem;
   border: 1px solid rgba(62, 64, 89, 0.16);
   background: transparent;
   color: rgba(39, 39, 39, 0.92);
