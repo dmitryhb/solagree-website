@@ -5,6 +5,7 @@
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev --port 3003",
+    "deploy:staging": "./scripts/deploy-staging.sh",
     "generate": "nuxt generate",
     "preview": "nuxt preview --port 3003",
     "postinstall": "nuxt prepare"
