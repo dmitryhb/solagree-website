@@ -658,8 +658,27 @@ select {
   padding-bottom: 48px;
 }
 
-.quiz-card-shell__back {
+.quiz-card-shell__header {
+  display: flex;
+  align-items: center;
+  min-height: 31px;
   padding-bottom: 7px;
+}
+
+.quiz-card-shell__back {
+  flex: 0 0 auto;
+}
+
+.quiz-card-shell__step-counter {
+  margin: 0 0 0 auto;
+  padding: 3px 12px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-quiz-progress) 14%, white);
+  color: var(--color-quiz-progress);
+  font-family: var(--font-control);
+  font-size: 17.3px;
+  font-weight: 500;
+  line-height: 24px;
 }
 
 .quiz-card-shell__step {
@@ -705,6 +724,12 @@ select {
 @media (prefers-reduced-motion: reduce) {
   .quiz-progress-meter__fill {
     transition: none;
+  }
+}
+
+@supports not (background: color-mix(in srgb, white 50%, black)) {
+  .quiz-card-shell__step-counter {
+    background: rgba(155, 96, 75, 0.14);
   }
 }
 
