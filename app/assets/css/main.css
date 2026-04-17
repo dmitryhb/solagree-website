@@ -1311,7 +1311,7 @@ select {
   }
 
   .quiz-question-block {
-    gap: 1.25rem;
+    gap: 1.5rem;
   }
 
   .quiz-question-block__title {
@@ -1321,7 +1321,7 @@ select {
   }
 
   .quiz-question-block__description {
-    margin-top: -12px;
+    margin-top: 0;
     font-size: 0.94rem;
     line-height: 1.45;
   }
