@@ -58,6 +58,9 @@ const solagreeStateOptions = [
   ['WY', 'Wyoming']
 ] as const satisfies ReadonlyArray<readonly [QuizStateCode, string]>
 
+const solagreeQuizExplainerBody =
+  'Understanding your level of agreement helps us recommend whether Solagree Expedited or Traditional is the best fit for your situation.'
+
 export const solagreeQuizQuestions = [
   {
     id: 'state',
@@ -67,8 +70,7 @@ export const solagreeQuizQuestions = [
     placeholder: 'Choose a state',
     options: solagreeStateOptions.map(([id, label]) => ({ id, label })),
     explainerTitle: 'Why are we asking this?',
-    explainerBody:
-      'Divorce rules and next steps differ by state, so we need the filing jurisdiction before we guide the rest of the flow.'
+    explainerBody: solagreeQuizExplainerBody
   },
   {
     id: 'children',
@@ -79,8 +81,7 @@ export const solagreeQuizQuestions = [
       { id: 'no', label: 'No' }
     ],
     explainerTitle: 'Why are we asking this?',
-    explainerBody:
-      'Children can introduce parenting, custody, and support questions that affect which Solagree path is most appropriate.'
+    explainerBody: solagreeQuizExplainerBody
   },
   {
     id: 'parentingScreener',
@@ -91,8 +92,7 @@ export const solagreeQuizQuestions = [
       { id: 'no', label: 'No' }
     ],
     explainerTitle: 'Why are we asking this?',
-    explainerBody:
-      'This tells us whether parenting-related topics need to stay visible in the flow instead of assuming a simpler filing path.',
+    explainerBody: solagreeQuizExplainerBody,
     isVisible: answers => answers.children === 'yes'
   },
   {
@@ -107,8 +107,7 @@ export const solagreeQuizQuestions = [
       { id: 'communication-conflict', label: 'Co-parenting communication or conflict' }
     ],
     explainerTitle: 'Why are we asking this?',
-    explainerBody:
-      'These details stay separate from the UI so later policy and internal tags can reason about the parenting branch cleanly.',
+    explainerBody: solagreeQuizExplainerBody,
     isVisible: answers => answers.children === 'yes' && answers.parentingScreener === 'yes'
   },
   {
@@ -120,8 +119,7 @@ export const solagreeQuizQuestions = [
       { id: 'no', label: 'No' }
     ],
     explainerTitle: 'Why are we asking this?',
-    explainerBody:
-      'Financial complexity often changes the level of support a couple needs, so we keep that branch explicit in the schema.'
+    explainerBody: solagreeQuizExplainerBody
   },
   {
     id: 'financialDetails',
@@ -136,8 +134,7 @@ export const solagreeQuizQuestions = [
       { id: 'debts-assets', label: 'Debt, asset division, or other complex finances' }
     ],
     explainerTitle: 'Why are we asking this?',
-    explainerBody:
-      'The detailed financial branch is stored separately so future evaluation and internal flags can identify complexity without reading UI state.',
+    explainerBody: solagreeQuizExplainerBody,
     isVisible: answers => answers.financialScreener === 'yes'
   },
   {
@@ -151,8 +148,7 @@ export const solagreeQuizQuestions = [
       { id: 'unknown-whereabouts', label: 'I do not know where they are or what to expect' }
     ],
     explainerTitle: 'Why are we asking this?',
-    explainerBody:
-      'Spouse availability affects which later questions are relevant and keeps unresolved missing-spouse policy branches explicit for the result engine.'
+    explainerBody: solagreeQuizExplainerBody
   },
   {
     id: 'spouseCooperation',
@@ -164,8 +160,7 @@ export const solagreeQuizQuestions = [
       { id: 'not-sure', label: 'I am not sure yet' }
     ],
     explainerTitle: 'Why are we asking this?',
-    explainerBody:
-      'Cooperation only matters when the spouses are in contact, so this branch stays conditional instead of being baked into presentation logic.',
+    explainerBody: solagreeQuizExplainerBody,
     isVisible: answers => answers.spouseContact === 'direct-contact'
   },
   {
@@ -178,8 +173,7 @@ export const solagreeQuizQuestions = [
       { id: 'not-sure', label: 'I am not sure' }
     ],
     explainerTitle: 'Why are we asking this?',
-    explainerBody:
-      'This branch is important for final routing later, but the policy itself stays outside the UI and remains explicit until HIR-39.'
+    explainerBody: solagreeQuizExplainerBody
   },
   {
     id: 'paymentReadiness',
@@ -191,8 +185,7 @@ export const solagreeQuizQuestions = [
       { id: 'not-ready', label: 'No, not right now' }
     ],
     explainerTitle: 'Why are we asking this?',
-    explainerBody:
-      'Payment readiness is part of the quiz model so later policy can handle it explicitly without mixing qualification logic into the components.'
+    explainerBody: solagreeQuizExplainerBody
   }
 ] as const satisfies readonly QuizQuestionDefinition[]
 

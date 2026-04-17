@@ -17,7 +17,7 @@ export const solagreeQuizOpenPolicies: readonly QuizOpenPolicy[] = [
     id: 'missing-spouse-routing-cannot-find',
     title: 'Missing spouse routing when the user cannot find their spouse',
     description:
-      'Outcome policy remains unresolved for the branch where the user cannot find their spouse. HIR-39 should keep this explicit in the result engine.',
+      'Your answers suggest your situation may need additional review before we can recommend the best next step.',
     relatedQuestions: ['spouseContact'],
     blocksOutcome: true
   },
@@ -25,7 +25,7 @@ export const solagreeQuizOpenPolicies: readonly QuizOpenPolicy[] = [
     id: 'missing-spouse-routing-no-communication',
     title: 'Missing spouse routing when the user knows where their spouse is but communication is broken',
     description:
-      'Outcome policy remains unresolved for the branch where the spouse is known but not communicating. HIR-39 should not silently collapse this branch.',
+      'Your answers suggest your situation may need additional review before we can recommend the best next step.',
     relatedQuestions: ['spouseContact'],
     blocksOutcome: true
   },
