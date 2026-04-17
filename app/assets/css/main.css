@@ -1138,6 +1138,11 @@ select {
   .quiz-result-state__cta--secondary:hover .quiz-result-state__cta-icon {
     transform: none;
   }
+
+  .quiz-card-shell-step-enter-from,
+  .quiz-card-shell-step-leave-to {
+    opacity: 1;
+  }
 }
 
 .quiz-result-state__resources {
