@@ -984,6 +984,12 @@ select {
   box-sizing: border-box;
 }
 
+.quiz-result-state__cta-icon {
+  width: 1.125rem;
+  height: 1.125rem;
+  flex: 0 0 auto;
+}
+
 .quiz-result-state__cta--primary {
   border: 1px solid var(--color-ink);
   background: var(--color-ink);
@@ -996,6 +1002,7 @@ select {
 }
 
 .quiz-result-state__cta--secondary {
+  gap: 0.55rem;
   border: 1px solid rgba(62, 64, 89, 0.16);
   background: transparent;
   color: rgba(39, 39, 39, 0.92);
