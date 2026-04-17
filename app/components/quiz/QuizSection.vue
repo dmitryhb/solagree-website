@@ -50,36 +50,30 @@ async function scrollQuizToTop() {
   })
 }
 
-async function handleAdvance() {
+function hasQuizPositionChanged(previousQuestionId: typeof quizSession.currentQuestionId.value, previousPhase: typeof quizSession.phase.value) {
+  return previousQuestionId !== quizSession.currentQuestionId.value
+    || previousPhase !== quizSession.phase.value
+}
+
+async function navigateQuizWithScroll(navigate: () => void) {
   const previousQuestionId = quizSession.currentQuestionId.value
   const previousPhase = quizSession.phase.value
 
-  quizHost.handleAdvance()
+  navigate()
 
-  if (
-    previousQuestionId === quizSession.currentQuestionId.value
-    && previousPhase === quizSession.phase.value
-  ) {
+  if (!hasQuizPositionChanged(previousQuestionId, previousPhase)) {
     return
   }
 
   await scrollQuizToTop()
 }
 
+async function handleAdvance() {
+  await navigateQuizWithScroll(() => quizHost.handleAdvance())
+}
+
 async function handleBack() {
-  const previousQuestionId = quizSession.currentQuestionId.value
-  const previousPhase = quizSession.phase.value
-
-  quizHost.handleBack()
-
-  if (
-    previousQuestionId === quizSession.currentQuestionId.value
-    && previousPhase === quizSession.phase.value
-  ) {
-    return
-  }
-
-  await scrollQuizToTop()
+  await navigateQuizWithScroll(() => quizHost.handleBack())
 }
 </script>
 
