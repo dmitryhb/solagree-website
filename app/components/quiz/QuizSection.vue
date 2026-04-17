@@ -15,12 +15,72 @@ const quizHost = useQuizHost(quizSession, {
   hostConfig: toRef(props, 'hostConfig'),
   onEvent: event => emit('hostEvent', event)
 })
+const quizBodyRef = ref<HTMLElement | null>(null)
 const explainer = computed(() => {
   return {
     title: quizSession.currentQuestion.value.explainerTitle,
     body: quizSession.currentQuestion.value.explainerBody
   }
 })
+
+function getQuizScrollBehavior(): ScrollBehavior {
+  if (!import.meta.client) {
+    return 'auto'
+  }
+
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
+}
+
+async function scrollQuizToTop() {
+  if (!import.meta.client) {
+    return
+  }
+
+  await nextTick()
+
+  const quizBody = quizBodyRef.value
+  if (!quizBody) {
+    return
+  }
+
+  const top = Math.max(window.scrollY + quizBody.getBoundingClientRect().top - 24, 0)
+  window.scrollTo({
+    top,
+    behavior: getQuizScrollBehavior()
+  })
+}
+
+async function handleAdvance() {
+  const previousQuestionId = quizSession.currentQuestionId.value
+  const previousPhase = quizSession.phase.value
+
+  quizHost.handleAdvance()
+
+  if (
+    previousQuestionId === quizSession.currentQuestionId.value
+    && previousPhase === quizSession.phase.value
+  ) {
+    return
+  }
+
+  await scrollQuizToTop()
+}
+
+async function handleBack() {
+  const previousQuestionId = quizSession.currentQuestionId.value
+  const previousPhase = quizSession.phase.value
+
+  quizHost.handleBack()
+
+  if (
+    previousQuestionId === quizSession.currentQuestionId.value
+    && previousPhase === quizSession.phase.value
+  ) {
+    return
+  }
+
+  await scrollQuizToTop()
+}
 </script>
 
 <template>
@@ -38,7 +98,10 @@ const explainer = computed(() => {
         </p>
       </header>
 
-      <div class="quiz-section__body">
+      <div
+        ref="quizBodyRef"
+        class="quiz-section__body"
+      >
         <QuizCardShell
           :progress="quizSession.progressValue.value"
           :back-label="quizSession.labels.backLabel"
@@ -48,8 +111,8 @@ const explainer = computed(() => {
           :primary-action-label="quizSession.primaryActionLabel.value"
           :can-go-back="quizSession.canGoBack.value"
           :can-advance="quizSession.canAdvance.value"
-          @back="quizHost.handleBack"
-          @advance="quizHost.handleAdvance"
+          @back="handleBack"
+          @advance="handleAdvance"
           @cta="quizHost.handleResultCtaClick"
           @reset="quizHost.handleReset"
           @single-change="quizHost.handleSingleAnswer($event.questionId, $event.value)"
