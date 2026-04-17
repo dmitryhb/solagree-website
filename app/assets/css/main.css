@@ -740,9 +740,9 @@ select {
   width: 497px;
   max-width: 100%;
   font-family: var(--font-display);
-  font-size: 33.6px;
+  font-size: 30px;
   font-weight: 600;
-  line-height: 44px;
+  line-height: 40px;
   letter-spacing: -0.11px;
   color: rgba(0, 0, 0, 0.85);
 }
@@ -1157,8 +1157,8 @@ select {
 
   .quiz-question-block__title {
     max-width: 100%;
-    font-size: clamp(1.625rem, 6.5vw, 1.875rem);
-    line-height: 1.18;
+    font-size: clamp(1.5rem, 5.8vw, 1.75rem);
+    line-height: 1.22;
     letter-spacing: -0.04px;
   }
 
