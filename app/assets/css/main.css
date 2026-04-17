@@ -975,6 +975,7 @@ select {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 0.55rem;
   width: 100%;
   min-height: 56px;
   border-radius: 8px;
@@ -982,6 +983,12 @@ select {
   text-align: center;
   text-decoration: none;
   box-sizing: border-box;
+}
+
+.quiz-result-state__cta-icon {
+  width: 1.125rem;
+  height: 1.125rem;
+  flex: 0 0 auto;
 }
 
 .quiz-result-state__cta--primary {
