@@ -7,9 +7,9 @@ useSeoMeta({
 
 <template>
   <main class="min-h-screen bg-[var(--color-surface-footer)]">
-    <KidsSection />
     <HowItWorksSection />
     <GetStartedSection />
+    <KidsSection />
     <ChoosePathSection />
     <HomeQuizSection />
     <PricingSection />
