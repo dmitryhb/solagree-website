@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { solagreeSocialLinksByIcon } from '~/data/social-links'
 import type { QuizHostConfigInput, QuizHostEvent } from '~/data/quiz-types'
 
 const props = defineProps<{
@@ -15,6 +16,7 @@ const quizHost = useQuizHost(quizSession, {
   onEvent: event => emit('hostEvent', event)
 })
 const quizBodyRef = ref<HTMLElement | null>(null)
+const linkedInSocialLink = solagreeSocialLinksByIcon.linkedin
 const currentStepNumber = computed(() => {
   if (quizSession.phase.value !== 'question') {
     return undefined
@@ -109,7 +111,8 @@ function handleBack() {
         </NuxtLink>
         <a
           class="quiz-section__contact-link"
-          href="https://www.linkedin.com/company/solagree"
+          :href="linkedInSocialLink.href"
+          :aria-label="linkedInSocialLink.ariaLabel"
           target="_blank"
           rel="noopener noreferrer"
         >

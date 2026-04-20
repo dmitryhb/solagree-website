@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { solagreeSocialLinks } from '~/data/social-links'
+import type { SocialLinkIcon } from '~/data/social-links'
+
 interface FooterLink {
   label: string
   to?: string
@@ -12,7 +15,7 @@ interface FooterGroup {
 }
 
 interface FooterSocialLink extends FooterLink {
-  icon: 'facebook' | 'instagram' | 'linkedin'
+  icon: SocialLinkIcon
 }
 
 const defaultFooterGroups = [
@@ -47,27 +50,6 @@ const defaultFooterGroups = [
     ]
   }
 ] as const satisfies readonly FooterGroup[]
-
-const defaultSocialLinks = [
-  {
-    label: 'Facebook',
-    ariaLabel: 'Visit Solagree on Facebook',
-    href: 'https://www.facebook.com/',
-    icon: 'facebook'
-  },
-  {
-    label: 'Instagram',
-    ariaLabel: 'Visit Solagree on Instagram',
-    href: 'https://www.instagram.com/',
-    icon: 'instagram'
-  },
-  {
-    label: 'LinkedIn',
-    ariaLabel: 'Visit Solagree on LinkedIn',
-    href: 'https://www.linkedin.com/company/solagree',
-    icon: 'linkedin'
-  }
-] as const satisfies readonly FooterSocialLink[]
 
 const defaultLegalLinks = [
   { label: 'Terms of Service', to: '/' },
@@ -110,7 +92,7 @@ const resolvedGroups = computed(() => {
 })
 
 const resolvedSocialLinks = computed(() => {
-  return props.socialLinks ?? defaultSocialLinks
+  return props.socialLinks ?? solagreeSocialLinks
 })
 
 const resolvedLegalLinks = computed(() => {
