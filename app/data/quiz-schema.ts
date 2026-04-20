@@ -94,7 +94,7 @@ export const solagreeQuizQuestions = [
     id: 'parentingDetails',
     kind: 'multi-select',
     title: 'Which parenting topics apply to your situation?',
-    description: 'Select all that apply.',
+    description: 'Select one or more answers:',
     options: [
       { id: 'custody-schedule', label: 'Custody or parenting-time schedule' },
       { id: 'decision-making', label: 'Decision-making responsibilities' },
@@ -118,7 +118,7 @@ export const solagreeQuizQuestions = [
     id: 'financialDetails',
     kind: 'multi-select',
     title: 'Which financial topics apply to your situation?',
-    description: 'Select all that apply.',
+    description: 'Select one or more answers:',
     options: [
       { id: 'real-estate', label: 'A home, real estate, or major property' },
       { id: 'retirement-assets', label: 'Retirement accounts or investments' },

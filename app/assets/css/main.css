@@ -860,11 +860,15 @@ select {
 }
 
 .quiz-question-block__description {
-  margin: 0;
+  margin: 12px 0 0;
   font-family: var(--font-body);
   font-size: 15px;
   line-height: 22px;
   color: rgba(39, 39, 39, 0.72);
+}
+
+.quiz-question-block__description + .quiz-question-block__options {
+  margin-top: -12px;
 }
 
 .quiz-question-block__options {
@@ -1395,7 +1399,7 @@ select {
   }
 
   .quiz-question-block__description {
-    margin-top: 0;
+    margin-top: 10px;
     font-size: 0.94rem;
     line-height: 1.45;
   }
