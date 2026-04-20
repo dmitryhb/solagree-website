@@ -13,7 +13,7 @@ export const pricingPlans: PricingPlan[] = [
       'Flat-fee price quote'
     ],
     ctaLabel: 'Book a Consultation',
-    ctaTo: '/quiz',
+    ctaTo: '#quiz',
     note: 'Get clarity about your options'
   },
   {
@@ -28,7 +28,7 @@ export const pricingPlans: PricingPlan[] = [
       'Binding arbitration award'
     ],
     ctaLabel: 'Get started with Expedited',
-    ctaTo: '/quiz',
+    ctaTo: '#quiz',
     note: 'Best for couples that mostly agree',
     badge: 'Best value'
   },
@@ -45,7 +45,7 @@ export const pricingPlans: PricingPlan[] = [
       'Optional attorney representation'
     ],
     ctaLabel: 'Get started with Traditional',
-    ctaTo: '/quiz',
+    ctaTo: '#quiz',
     note: 'Best for complex finances, custody or business owners',
     badge: 'For complex cases',
     featured: true

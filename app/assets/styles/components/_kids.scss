@@ -1,0 +1,120 @@
+.kids-section {
+  background: var(--color-page);
+  padding: 64px 2rem;
+}
+
+.kids-section__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 525px) minmax(0, 500px);
+  gap: 50px;
+  align-items: start;
+  justify-content: center;
+  width: min(100%, 1076px);
+  margin-inline: auto;
+}
+
+.kids-section__media {
+  overflow: hidden;
+  margin: 0;
+  border-radius: 16px;
+  background: var(--color-surface-stone);
+}
+
+.kids-section__media img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 525 / 644;
+  object-fit: cover;
+}
+
+.kids-section__content {
+  display: flex;
+  min-height: 644px;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding-top: 31px;
+}
+
+.kids-section__copy {
+  display: grid;
+  gap: 24px;
+}
+
+.kids-section__title {
+  margin: 0;
+  color: var(--color-heading);
+  font-family: var(--font-display);
+  font-size: 54px;
+  font-weight: 500;
+  line-height: 1.011;
+}
+
+.kids-section__body {
+  display: grid;
+  gap: 26px;
+  color: var(--color-heading);
+  font-family: var(--font-body);
+  font-size: 18px;
+  line-height: 1.431;
+}
+
+.kids-section__body p {
+  margin: 0;
+}
+
+.kids-section__cta.sol-button {
+  min-width: 235px;
+  margin-top: 40px;
+  padding: 15px 24px;
+  color: var(--color-ink);
+  font-size: 18px;
+  line-height: 1;
+}
+
+@media (max-width: 1024px) {
+  .kids-section {
+    padding: 64px 1.5rem;
+  }
+
+  .kids-section__inner {
+    grid-template-columns: 1fr;
+    max-width: 640px;
+    gap: 40px;
+  }
+
+  .kids-section__content {
+    min-height: 0;
+    padding-top: 0;
+  }
+
+  .kids-section__title {
+    font-size: 48px;
+    line-height: 1.15;
+  }
+}
+
+@media (max-width: 767px) {
+  .kids-section {
+    padding: 56px 1.25rem;
+  }
+
+  .kids-section__inner {
+    gap: 32px;
+  }
+
+  .kids-section__title {
+    font-size: 40px;
+  }
+
+  .kids-section__body {
+    gap: 20px;
+    font-size: 16.5px;
+  }
+
+  .kids-section__cta.sol-button {
+    width: 100%;
+    min-width: 0;
+    margin-top: 32px;
+  }
+}

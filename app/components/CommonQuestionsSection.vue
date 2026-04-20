@@ -63,7 +63,7 @@ const commonQuestionItems: AccordionItem[] = [
 
         <SiteButton
           class="common-questions-section__cta"
-          to="/quiz"
+          to="#quiz"
           size="sm"
         >
           Is Solagree right for you?

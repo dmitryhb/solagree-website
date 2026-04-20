@@ -11,7 +11,7 @@ export const choosePathOptions: ChoosePathOption[] = [
       'Most affordable option'
     ],
     ctaLabel: 'Get Started',
-    ctaTo: '/quiz'
+    ctaTo: '#quiz'
   },
   {
     title: 'Traditional',
@@ -23,6 +23,6 @@ export const choosePathOptions: ChoosePathOption[] = [
       'Optional attorney representation'
     ],
     ctaLabel: 'Get Started',
-    ctaTo: '/quiz'
+    ctaTo: '#quiz'
   }
 ]
