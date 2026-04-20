@@ -1,0 +1,231 @@
+.how-it-works-section,
+.get-started-section {
+  background: var(--color-page);
+}
+
+.how-it-works-section {
+  padding: 46px 2rem 36px;
+}
+
+.how-it-works-section__inner {
+  display: grid;
+  gap: 64px;
+  width: min(100%, 1076px);
+  margin-inline: auto;
+}
+
+.how-it-works-section__intro-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 481px) minmax(0, 531px);
+  gap: 64px;
+  align-items: start;
+}
+
+.how-it-works-section__copy {
+  display: grid;
+  justify-items: start;
+  gap: 22px;
+  padding-top: 20px;
+}
+
+.how-it-works-section__title {
+  margin: 0;
+  color: var(--color-heading);
+  font-family: var(--font-display);
+  font-size: 54px;
+  font-weight: 500;
+  line-height: 1.011;
+}
+
+.how-it-works-section__intro {
+  max-width: 481px;
+  margin: 0;
+  color: var(--color-accent-text);
+  font-family: var(--font-body);
+  font-size: 18px;
+  line-height: 1.431;
+}
+
+.how-it-works-section__intro strong {
+  font-weight: 700;
+}
+
+.how-it-works-section__cta.sol-button {
+  min-width: 279px;
+  margin-top: 20px;
+  padding: 15px 24px;
+  color: var(--color-heading);
+  font-size: 18px;
+  line-height: 1;
+}
+
+.how-it-works-section__phases {
+  display: grid;
+  padding: 10px 0 0;
+  margin: 0;
+  list-style: none;
+}
+
+.how-it-works-section__phase {
+  display: grid;
+  gap: 9px;
+  min-height: 92px;
+  border-bottom: 2px solid #c7beb3;
+  padding: 0 0 18px;
+}
+
+.how-it-works-section__phase + .how-it-works-section__phase {
+  padding-top: 10px;
+}
+
+.how-it-works-section__phase:last-child {
+  min-height: 0;
+  border-bottom: 0;
+}
+
+.how-it-works-section__phase-title {
+  margin: 0;
+  color: #181716;
+  font-family: var(--font-nav);
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.how-it-works-section__phase-title span {
+  color: var(--color-badge-warm);
+}
+
+.how-it-works-section__phase-description {
+  margin: 0;
+  color: var(--color-accent-text);
+  font-family: var(--font-ui);
+  font-size: 18.4px;
+  line-height: 1.4;
+}
+
+.how-it-works-section__video {
+  overflow: hidden;
+  margin: 0;
+  border-radius: 16px;
+  background: var(--color-surface-stone);
+}
+
+.how-it-works-section__video img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1076 / 605;
+  object-fit: cover;
+}
+
+.get-started-section {
+  padding: 36px 2rem 72px;
+}
+
+.get-started-section__inner {
+  display: grid;
+  justify-items: center;
+  gap: 34px;
+  width: min(100%, 880px);
+  margin-inline: auto;
+  text-align: center;
+}
+
+.get-started-section__title {
+  margin: 0;
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  font-size: 54px;
+  font-weight: 600;
+  line-height: 1.54;
+}
+
+.get-started-section__intro {
+  margin: 0;
+  color: var(--color-accent-text);
+  font-family: var(--font-ui);
+  font-size: 18px;
+  line-height: 1.431;
+}
+
+.get-started-section__intro span {
+  display: block;
+}
+
+.get-started-section__cta.sol-button {
+  min-width: 175px;
+  padding: 15px 24px;
+  color: var(--color-ink);
+  font-size: 18px;
+  line-height: 1;
+}
+
+@media (max-width: 1024px) {
+  .how-it-works-section {
+    padding: 56px 1.5rem 32px;
+  }
+
+  .how-it-works-section__inner {
+    gap: 48px;
+  }
+
+  .how-it-works-section__intro-grid {
+    grid-template-columns: 1fr;
+    max-width: 720px;
+    margin-inline: auto;
+    gap: 40px;
+  }
+
+  .how-it-works-section__copy {
+    padding-top: 0;
+  }
+
+  .how-it-works-section__title,
+  .get-started-section__title {
+    font-size: 48px;
+    line-height: 1.15;
+  }
+
+  .get-started-section {
+    padding: 32px 1.5rem 64px;
+  }
+}
+
+@media (max-width: 767px) {
+  .how-it-works-section {
+    padding: 56px 1.25rem 28px;
+  }
+
+  .how-it-works-section__inner {
+    gap: 40px;
+  }
+
+  .how-it-works-section__title,
+  .get-started-section__title {
+    font-size: 40px;
+  }
+
+  .how-it-works-section__intro,
+  .how-it-works-section__phase-title,
+  .get-started-section__intro {
+    font-size: 16.5px;
+  }
+
+  .how-it-works-section__phase-description {
+    font-size: 16.5px;
+  }
+
+  .how-it-works-section__cta.sol-button,
+  .get-started-section__cta.sol-button {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .get-started-section {
+    padding: 28px 1.25rem 56px;
+  }
+
+  .get-started-section__inner {
+    gap: 28px;
+  }
+}
