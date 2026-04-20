@@ -26,28 +26,6 @@ const emit = defineEmits<{
       </p>
     </div>
 
-    <div class="quiz-result-state__summary">
-      <h4 class="quiz-result-state__summary-title">
-        {{ result.summaryTitle }}
-      </h4>
-      <ul class="quiz-result-state__summary-list">
-        <li
-          v-for="item in result.summaryItems"
-          :key="item"
-          class="quiz-result-state__summary-item"
-        >
-          {{ item }}
-        </li>
-      </ul>
-    </div>
-
-    <p
-      v-if="result.policyNote"
-      class="quiz-result-state__policy-note"
-    >
-      {{ result.policyNote }}
-    </p>
-
     <div class="quiz-result-state__actions">
       <a
         class="quiz-result-state__cta quiz-result-state__cta--primary"

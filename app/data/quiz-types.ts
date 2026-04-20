@@ -214,13 +214,10 @@ export interface QuizResultViewModel {
   eyebrow: string
   title: string
   body: string
-  summaryTitle: string
-  summaryItems: readonly string[]
   primaryCta: QuizResultCta
   resourceTitle?: string
   resourceBody?: string
   resources?: readonly QuizResultResourceLink[]
-  policyNote?: string
   resetLabel: string
 }
 

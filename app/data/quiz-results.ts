@@ -5,7 +5,7 @@ import type {
   QuizResultViewModel
 } from '~/data/quiz-types'
 
-type QuizResultContentDefinition = Omit<QuizResultViewModel, 'summaryItems'>
+type QuizResultContentDefinition = QuizResultViewModel
 
 const phaseOneFallbackResources = [
   {
@@ -26,7 +26,6 @@ export const solagreeQuizResultContent = {
     title: 'You look like a fit for a Solagree consult.',
     body:
       'Your answers suggest a guided Solagree path may be appropriate. We will still carry your flagged topics into the consult so the right specialist can prepare.',
-    summaryTitle: 'What we will carry into the consult',
     primaryCta: {
       actionId: 'solagree-consult',
       label: 'Book a Solagree consult',
@@ -41,7 +40,6 @@ export const solagreeQuizResultContent = {
     title: 'An attorney consult should happen first.',
     body:
       'Your answers point to questions or risk factors that should be clarified with an attorney before choosing the next Solagree step.',
-    summaryTitle: 'Why this route was flagged',
     primaryCta: {
       actionId: 'attorney-consult',
       label: 'Book an attorney consult',
@@ -50,9 +48,9 @@ export const solagreeQuizResultContent = {
       isPlaceholder: true
     },
     resetLabel: 'Start again',
-    resourceTitle: 'Phase-one fallback resources',
+    resourceTitle: 'General legal-help resources',
     resourceBody:
-      'State-specific legal-resource links are deferred for now, so phase one uses a generic fallback resource block.',
+      'These national resources can help you explore legal aid and self-help options while you prepare for the right next step.',
     resources: phaseOneFallbackResources
   },
   'not-fit-right-now': {
@@ -60,7 +58,6 @@ export const solagreeQuizResultContent = {
     title: 'Solagree may not be the right fit right now.',
     body:
       'Based on your answers, the best next step is to pause the Solagree path and use a broader legal-help resource while your situation changes.',
-    summaryTitle: 'What shaped this recommendation',
     primaryCta: {
       actionId: 'fallback-resources',
       label: 'Review general legal-help resources',
@@ -69,20 +66,19 @@ export const solagreeQuizResultContent = {
       isPlaceholder: true
     },
     resetLabel: 'Start again',
-    resourceTitle: 'Phase-one fallback resources',
+    resourceTitle: 'General legal-help resources',
     resourceBody:
-      'These links stay generic for phase one. State-specific referrals can be layered in later without changing the evaluator.',
+      'These national resources can help you explore legal aid and self-help options while your situation changes.',
     resources: phaseOneFallbackResources
   }
 } as const satisfies Record<QuizOutcomeId, QuizResultContentDefinition>
 
 export const solagreeQuizOpenPolicyContent = {
   'state-specific-result-messaging': {
-    eyebrow: 'Policy configuration deferred',
-    title: 'State-specific result messaging is still generic in phase one.',
+    eyebrow: 'Recommended next step',
+    title: 'General legal-help resources may be the best next step.',
     body:
-      'The evaluator is intentionally not using state-specific copy or resource links yet. That policy question stays documented separately from the resolved quiz routing decisions.',
-    summaryTitle: 'What remains deferred',
+      'Based on your answers, broader legal-help resources may be more useful before choosing a Solagree path.',
     primaryCta: {
       actionId: 'fallback-resources',
       label: 'Review general legal-help resources',
@@ -91,9 +87,9 @@ export const solagreeQuizOpenPolicyContent = {
       isPlaceholder: true
     },
     resetLabel: 'Start again',
-    resourceTitle: 'Phase-one fallback resources',
+    resourceTitle: 'General legal-help resources',
     resourceBody:
-      'Phase one keeps fallback resources generic until state-specific messaging is explicitly configured.',
+      'These national resources can help you explore legal aid and self-help options while you decide your next step.',
     resources: phaseOneFallbackResources
   }
 } as const satisfies Record<QuizOpenPolicy['id'], QuizResultContentDefinition>

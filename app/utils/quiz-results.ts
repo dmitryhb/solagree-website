@@ -6,7 +6,6 @@ import type {
   QuizEvaluation,
   QuizInternalTag,
   QuizOpenPolicy,
-  QuizOpenPolicyId,
   QuizResultViewModel
 } from '~/data/quiz-types'
 
@@ -16,11 +15,6 @@ function getResolvedSpouseContactOutcome(answers: Readonly<QuizAnswerMap>) {
   }
 
   return solagreeQuizResolvedPolicy.spouseContactOutcomes[answers.spouseContact] ?? null
-}
-
-function getOpenPolicyNote(policyId: QuizOpenPolicyId): string {
-  return solagreeQuizOpenPolicies.find(policy => policy.id === policyId)?.description
-    ?? 'This answer pattern remains intentionally open until the policy is finalized.'
 }
 
 export function buildQuizConsultMetadata(answers: Readonly<QuizAnswerMap>): QuizConsultMetadata {
@@ -144,57 +138,13 @@ export function evaluateQuizAnswers(answers: Readonly<QuizAnswerMap>): QuizEvalu
   }
 }
 
-function buildSummaryItems(metadata: QuizConsultMetadata): string[] {
-  const items: string[] = []
-
-  if (metadata.hasParentingConcerns) {
-    items.push('Parenting topics were flagged for the follow-up conversation.')
-  }
-
-  if (metadata.hasFinancialConcerns) {
-    items.push('Financial topics were flagged for the follow-up conversation.')
-  }
-
-  if (metadata.hasFinancialComplexity) {
-    items.push('Financial complexity was marked so the next conversation can prepare accordingly.')
-  }
-
-  if (metadata.needsLegalAdvice) {
-    items.push('Legal-advice needs were explicitly flagged in the quiz answers.')
-  }
-
-  if (metadata.spouseCooperation === 'no') {
-    items.push('Expected spouse resistance was flagged as part of the recommendation.')
-  }
-
-  if (metadata.paymentReadiness === 'need-payment-plan') {
-    items.push('Payment-plan eligibility stays in scope for phase one.')
-  }
-
-  if (metadata.hasMissingSpouse) {
-    items.push('Current policy routes missing-spouse cases to not a fit right now.')
-  }
-
-  if (metadata.spouseContact === 'know-where-not-communicating') {
-    items.push('Current policy routes non-communicating spouse cases to not a fit right now.')
-  }
-
-  if (!items.length) {
-    items.push('No extra risk flags were raised beyond the standard Solagree intake path.')
-  }
-
-  return items
-}
-
 export function getQuizResultViewModel(evaluation: QuizEvaluation): QuizResultViewModel {
   const content = evaluation.kind === 'resolved'
     ? solagreeQuizResultContent[evaluation.outcome]
     : solagreeQuizOpenPolicyContent[evaluation.policyId]
 
   return {
-    ...content,
-    summaryItems: buildSummaryItems(evaluation.metadata),
-    policyNote: evaluation.kind === 'open-policy' ? getOpenPolicyNote(evaluation.policyId) : undefined
+    ...content
   }
 }
 
