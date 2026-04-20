@@ -1,0 +1,199 @@
+.splash-section {
+  position: relative;
+  display: flex;
+  min-height: min(900px, calc(100svh - 32px));
+  align-items: flex-end;
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 253, 249, 0.04) 0%,
+      rgba(255, 253, 249, 0) 42%,
+      rgba(42, 43, 47, 0.32) 100%
+    ),
+    url("/images/splash-bg.jpg") center / cover no-repeat;
+  color: var(--color-heading);
+  padding: 140px 2rem 78px;
+}
+
+.splash-section__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 650px) minmax(0, 1fr);
+  align-items: end;
+  gap: clamp(2.5rem, 7vw, 7rem);
+  width: min(100%, 1192px);
+  margin-inline: auto;
+}
+
+.splash-section__content {
+  display: grid;
+  justify-items: start;
+}
+
+.splash-section__title {
+  margin: 0;
+  color: var(--color-heading);
+  font-family: var(--font-display);
+  font-size: clamp(4rem, 5.15vw, 4.625rem);
+  font-weight: 400;
+  line-height: 1.08;
+}
+
+.splash-section__title span {
+  display: block;
+}
+
+.splash-section__intro {
+  max-width: 570px;
+  margin: 20px 0 0;
+  color: rgba(42, 43, 47, 0.78);
+  font-family: var(--font-nav);
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.splash-section__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin-top: 29px;
+}
+
+.splash-section__primary.sol-button,
+.splash-section__secondary.sol-button {
+  min-width: 214px;
+  padding: 18px 28px;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.splash-section__secondary.sol-button {
+  border-color: rgba(250, 255, 129, 0.92);
+  background: rgba(255, 253, 249, 0.12);
+  color: var(--color-ink);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+.splash-section__secondary.sol-button:hover {
+  border-color: var(--color-accent);
+  background: rgba(250, 255, 129, 0.16);
+}
+
+.splash-section__features {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0;
+  margin: 0 0 3px;
+  list-style: none;
+}
+
+.splash-section__feature {
+  display: inline-flex;
+  min-height: 56px;
+  align-items: center;
+  padding-inline: 31px;
+  color: var(--color-white);
+  font-family: var(--font-nav);
+  font-size: clamp(1.375rem, 1.95vw, 1.75rem);
+  font-weight: 700;
+  line-height: 1.1;
+  text-shadow: 0 1px 12px rgba(42, 43, 47, 0.22);
+  white-space: nowrap;
+}
+
+.splash-section__feature + .splash-section__feature {
+  border-left: 1px solid rgba(255, 255, 255, 0.34);
+}
+
+@media (max-width: 1180px) {
+  .splash-section {
+    min-height: min(820px, calc(100svh - 32px));
+    background-position: 55% center;
+  }
+
+  .splash-section__inner {
+    grid-template-columns: 1fr;
+    gap: 42px;
+  }
+
+  .splash-section__features {
+    justify-content: flex-start;
+  }
+
+  .splash-section__feature:first-child {
+    padding-left: 0;
+  }
+}
+
+@media (max-width: 767px) {
+  .splash-section {
+    min-height: min(760px, calc(100svh - 28px));
+    background-position: 60% center;
+    padding: 118px 1.25rem 46px;
+  }
+
+  .splash-section__inner {
+    gap: 30px;
+  }
+
+  .splash-section__title {
+    max-width: 9ch;
+    font-size: clamp(3.125rem, 13.2vw, 4rem);
+  }
+
+  .splash-section__intro {
+    max-width: 24rem;
+    margin-top: 18px;
+    font-size: 1rem;
+  }
+
+  .splash-section__actions {
+    width: 100%;
+    gap: 12px;
+    margin-top: 24px;
+  }
+
+  .splash-section__primary.sol-button,
+  .splash-section__secondary.sol-button {
+    min-width: min(100%, 220px);
+    padding: 15px 22px;
+    font-size: 1rem;
+  }
+
+  .splash-section__features {
+    display: grid;
+    gap: 8px;
+    width: min(100%, 320px);
+  }
+
+  .splash-section__feature {
+    min-height: 0;
+    padding: 0;
+    font-size: 1.1rem;
+  }
+
+  .splash-section__feature + .splash-section__feature {
+    border-left: 0;
+  }
+}
+
+@media (max-width: 420px) {
+  .splash-section {
+    min-height: min(700px, calc(100svh - 24px));
+    background-position: 62% center;
+  }
+
+  .splash-section__actions {
+    display: grid;
+  }
+
+  .splash-section__primary.sol-button,
+  .splash-section__secondary.sol-button {
+    width: 100%;
+  }
+}
