@@ -619,7 +619,7 @@ select {
 }
 
 .quiz-section__contact-link:hover {
-  color: var(--color-brand);
+  color: var(--color-heading);
 }
 
 .quiz-section__logo-link:focus-visible,
