@@ -1,10 +1,13 @@
 <script setup lang="ts">
 useSeoMeta({
-  title: 'Solagree',
-  description: 'Blank homepage.'
+  title: 'Solagree for Professionals',
+  description: 'Help couples reach resolution faster while expanding your professional practice with Solagree.'
 })
 </script>
 
 <template>
-  <main class="min-h-screen bg-white" />
+  <main class="min-h-screen bg-[var(--color-surface-footer)]">
+    <ForProfessionalsSection />
+    <SiteFooter />
+  </main>
 </template>
