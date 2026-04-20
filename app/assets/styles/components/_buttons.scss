@@ -11,15 +11,10 @@
   font-weight: 600;
   line-height: 1.15;
   transition:
-    transform 160ms ease,
     border-color 160ms ease,
     background-color 160ms ease,
     color 160ms ease,
     box-shadow 160ms ease;
-}
-
-.sol-button:hover {
-  transform: translateY(-1px);
 }
 
 .sol-button:focus-visible {

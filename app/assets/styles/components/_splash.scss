@@ -19,7 +19,7 @@
 
 .splash-section__inner {
   display: grid;
-  grid-template-columns: minmax(0, 650px) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 720px) minmax(0, 1fr);
   align-items: end;
   gap: clamp(2.5rem, 7vw, 7rem);
   width: min(100%, 1192px);
@@ -35,9 +35,9 @@
   margin: 0;
   color: var(--color-heading);
   font-family: var(--font-display);
-  font-size: clamp(4rem, 5.15vw, 4.625rem);
+  font-size: clamp(3rem, 3.9vw, 3.5rem);
   font-weight: 400;
-  line-height: 1.08;
+  line-height: 1.12;
 }
 
 .splash-section__title span {
@@ -49,7 +49,7 @@
   margin: 20px 0 0;
   color: rgba(42, 43, 47, 0.78);
   font-family: var(--font-nav);
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 400;
   line-height: 1.5;
 }
@@ -63,9 +63,9 @@
 
 .splash-section__primary.sol-button,
 .splash-section__secondary.sol-button {
-  min-width: 214px;
-  padding: 18px 28px;
-  font-size: 20px;
+  min-width: 202px;
+  padding: 16px 26px;
+  font-size: 18px;
   font-weight: 700;
   line-height: 1;
 }
@@ -99,7 +99,7 @@
   padding-inline: 31px;
   color: var(--color-white);
   font-family: var(--font-nav);
-  font-size: clamp(1.375rem, 1.95vw, 1.75rem);
+  font-size: clamp(1.125rem, 1.65vw, 1.5rem);
   font-weight: 700;
   line-height: 1.1;
   text-shadow: 0 1px 12px rgba(42, 43, 47, 0.22);
@@ -142,8 +142,8 @@
   }
 
   .splash-section__title {
-    max-width: 9ch;
-    font-size: clamp(3.125rem, 13.2vw, 4rem);
+    max-width: 10ch;
+    font-size: clamp(2.75rem, 11vw, 3.5rem);
   }
 
   .splash-section__intro {
