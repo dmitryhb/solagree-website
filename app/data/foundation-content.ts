@@ -132,36 +132,43 @@ export const faqItems = [
 
 export const footerGroups = [
   {
-    title: 'Foundation',
+    title: 'For couples',
     links: [
-      { label: 'Tokens', to: '#foundation' },
-      { label: 'Patterns', to: '#how-it-works' },
-      { label: 'Pricing cards', to: '#pricing' }
+      { label: 'How It Works', to: '#how-it-works' },
+      { label: 'Quiz: Will it Work for us?', to: '/quiz' },
+      { label: 'Solagree vs Traditional', to: '#pricing' },
+      { label: 'Pricing', to: '#pricing' },
+      { label: 'FAQs', to: '#faq' }
     ]
   },
   {
-    title: 'Next steps',
+    title: 'For professionals',
     links: [
-      { label: 'Review page', to: '#faq' },
-      { label: 'Quiz route', to: '#pricing' },
-      { label: 'Static page expansion', to: '#foundation' }
+      { label: 'Attorneys', to: '#foundation' },
+      { label: 'Financial Advisors', to: '#foundation' },
+      { label: 'Counselors', to: '#foundation' },
+      { label: 'Employers/EAP', to: '#foundation' },
+      { label: 'Join the Network', to: '#foundation' }
     ]
   },
   {
-    title: 'Contact',
+    title: 'Company',
     links: [
-      { label: 'hello@solagree.test', to: 'mailto:hello@solagree.test' },
-      { label: '+31 (0)20 000 0000', to: 'tel:+31200000000' },
-      { label: 'Amsterdam, NL', to: '/' }
+      { label: 'About Us', to: '#foundation' },
+      { label: 'FAQ', to: '#faq' },
+      { label: 'Contact Us', to: '#foundation' },
+      { label: 'Learn', to: '#foundation' },
+      { label: 'Account Login', to: '#foundation' }
     ]
   }
 ] as const
 
 export const footerCallout = {
   brand: 'Solagree',
-  title: 'Foundation-ready for the next page builds.',
+  title:
+    'A next-generation divorce platform designed to reduce conflict and cost through binding mediation and arbitration.',
   description:
-    'The footer is established as a reusable structure so future static pages inherit the same brand rhythm, hierarchy, and action area.',
-  ctaLabel: 'Start your plan',
-  ctaTo: '/'
+    'A next-generation divorce platform designed to reduce conflict and cost through binding mediation and arbitration.',
+  ctaLabel: 'Is Solagree right for you?',
+  ctaTo: '/quiz'
 } as const

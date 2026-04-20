@@ -82,27 +82,33 @@ const reviewButtons = [
 
 const reviewFooterGroups = [
   {
-    title: 'Review areas',
+    title: 'For couples',
     links: [
-      { label: 'Typography', to: '#typography' },
-      { label: 'Colors', to: '#colors' },
-      { label: 'Buttons', to: '#buttons' }
+      { label: 'How It Works', to: '#how-it-works' },
+      { label: 'Quiz: Will it Work for us?', to: '/quiz' },
+      { label: 'Solagree vs Traditional', to: '#pricing' },
+      { label: 'Pricing', to: '#pricing' },
+      { label: 'FAQs', to: '#faq' }
     ]
   },
   {
-    title: 'Foundation',
+    title: 'For professionals',
     links: [
-      { label: 'Homepage pass', to: '/' },
-      { label: 'Shared foundation', to: '#top' },
-      { label: 'Project notes', to: '#summary' }
+      { label: 'Attorneys', to: '#top' },
+      { label: 'Financial Advisors', to: '#top' },
+      { label: 'Counselors', to: '#top' },
+      { label: 'Employers/EAP', to: '#top' },
+      { label: 'Join the Network', to: '#top' }
     ]
   },
   {
-    title: 'Project',
+    title: 'Company',
     links: [
-      { label: 'HIR-34', to: '#top' },
-      { label: 'Develop', to: '/' },
-      { label: 'Solagree', to: '/' }
+      { label: 'About Us', to: '#top' },
+      { label: 'FAQ', to: '#faq' },
+      { label: 'Contact Us', to: '#top' },
+      { label: 'Learn', to: '#top' },
+      { label: 'Account Login', to: '#top' }
     ]
   }
 ] as const
@@ -347,11 +353,9 @@ const resolveColorValue = (variable: string) => {
     </section>
 
     <SiteFooter
-      brand="Solagree review"
-      title="Foundation approved, next route can inherit it."
-      description="This footer mirrors the live site structure so the review page remains a genuine check on the foundation."
-      cta-label="Back to top"
-      cta-to="#top"
+      description="A next-generation divorce platform designed to reduce conflict and cost through binding mediation and arbitration."
+      cta-label="Is Solagree right for you?"
+      cta-to="/quiz"
       :groups="reviewFooterGroups"
     />
   </main>
