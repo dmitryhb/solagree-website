@@ -48,6 +48,15 @@
   background: var(--color-white);
 }
 
+.sol-button--muted {
+  background: var(--color-surface-muted-dark);
+  color: var(--color-white);
+}
+
+.sol-button--muted:hover {
+  background: var(--color-ink);
+}
+
 .sol-button--ghost {
   border-color: rgba(255, 255, 255, 0.18);
   background: transparent;

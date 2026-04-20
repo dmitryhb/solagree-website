@@ -6,12 +6,12 @@
   >
     <div class="for-professionals-section__inner">
       <header class="for-professionals-section__header">
-        <h1
+        <h2
           id="for-professionals-title"
           class="for-professionals-section__title"
         >
           Solagree for Professionals
-        </h1>
+        </h2>
         <p class="for-professionals-section__intro">
           Help couples reach resolution faster while expanding your practice. Join our network of attorneys,
           CDFAs, and counselors nationwide.
@@ -21,9 +21,9 @@
       <div class="for-professionals-section__content">
         <div class="for-professionals-section__panel">
           <div class="for-professionals-section__copy">
-            <h2 class="for-professionals-section__panel-title">
+            <h3 class="for-professionals-section__panel-title">
               Scalable solutions for forward-thinking advisors
-            </h2>
+            </h3>
             <p class="for-professionals-section__description">
               Provide structured, expert-guided support while earning competitive fees on your terms.
             </p>

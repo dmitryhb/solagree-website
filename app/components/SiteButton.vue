@@ -5,7 +5,7 @@ const props = withDefaults(defineProps<{
   to?: string
   href?: string
   type?: 'button' | 'submit' | 'reset'
-  variant?: 'primary' | 'secondary' | 'ghost'
+  variant?: 'primary' | 'secondary' | 'muted' | 'ghost'
   size?: 'sm' | 'md'
   block?: boolean
   disabled?: boolean
