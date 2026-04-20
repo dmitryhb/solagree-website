@@ -270,6 +270,6 @@ export const reviewFooterCallout = {
   title: 'Foundation approved, quiz implementation can start next.',
   description:
     'This footer preview closes the route with the same shared structure used elsewhere, proving the signoff surface is built from reusable pieces rather than one-off review markup.',
-  ctaLabel: 'Back to top',
-  ctaTo: '#top'
+  ctaLabel: 'Is Solagree right for you?',
+  ctaTo: '/quiz'
 } as const
