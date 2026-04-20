@@ -1,10 +1,10 @@
 <script setup lang="ts">
 interface FooterGroup {
   title: string
-  links: Array<{
+  links: readonly {
     label: string
     to: string
-  }>
+  }[]
 }
 
 withDefaults(defineProps<{
@@ -13,7 +13,7 @@ withDefaults(defineProps<{
   description?: string
   ctaLabel?: string
   ctaTo?: string
-  groups: FooterGroup[]
+  groups: readonly FooterGroup[]
 }>(), {
   brand: 'Solagree',
   title: 'Foundation-ready for the next page builds.',

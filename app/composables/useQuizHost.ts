@@ -102,18 +102,31 @@ export function useQuizHost(
     dispatchEvent(event)
   }
 
+  function getTrackedAnswerValue(questionId: QuizQuestionId): QuizQuestionAnsweredEvent['value'] | undefined {
+    const value = quizSession.answers.value[questionId]
+
+    if (value === undefined) {
+      return undefined
+    }
+
+    return Array.isArray(value)
+      ? [...value] as QuizQuestionAnsweredEvent['value']
+      : value as QuizQuestionAnsweredEvent['value']
+  }
+
   function handleSingleAnswer(questionId: QuizQuestionId, value: string | undefined) {
     quizSession.setSingleAnswer(questionId, value)
 
-    if (value !== undefined) {
-      trackQuestionAnswered(questionId, value)
+    const nextValue = getTrackedAnswerValue(questionId)
+    if (nextValue !== undefined) {
+      trackQuestionAnswered(questionId, nextValue)
     }
   }
 
   function handleMultiAnswer(questionId: QuizQuestionId, payload: { value: string, checked: boolean }) {
     quizSession.toggleMultiAnswer(questionId, payload.value, payload.checked)
 
-    const nextValue = quizSession.answers.value[questionId]
+    const nextValue = getTrackedAnswerValue(questionId)
     if (nextValue !== undefined) {
       trackQuestionAnswered(questionId, nextValue)
     }

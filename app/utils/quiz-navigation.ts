@@ -77,7 +77,7 @@ export function coerceQuizCurrentQuestionId(
     return currentQuestionId
   }
 
-  return visibleQuestionIds[0] ?? solagreeQuizQuestionIds[0]
+  return visibleQuestionIds[0] ?? solagreeQuizQuestionIds[0] ?? 'state'
 }
 
 export function getNextQuizQuestionId(
