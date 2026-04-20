@@ -3,15 +3,36 @@ import { headerLoginLink, headerPrimaryLinks, headerQuizLink } from '~/data/head
 
 const route = useRoute()
 const isMobileMenuOpen = ref(false)
-const isSolidHeader = computed(() => route.path !== '/')
+const isScrolled = ref(false)
+const isHomeRoute = computed(() => route.path === '/')
+const isSolidHeader = computed(() => !isHomeRoute.value)
+
+function updateScrolledState() {
+  isScrolled.value = window.scrollY > 8
+}
 
 function closeMobileMenu() {
   isMobileMenuOpen.value = false
 }
 
+onMounted(() => {
+  updateScrolledState()
+  window.addEventListener('scroll', updateScrolledState, { passive: true })
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', updateScrolledState)
+})
+
 watch(
   () => route.fullPath,
-  closeMobileMenu
+  () => {
+    closeMobileMenu()
+
+    if (import.meta.client) {
+      nextTick(updateScrolledState)
+    }
+  }
 )
 </script>
 
@@ -20,6 +41,7 @@ watch(
     class="site-header"
     :class="{
       'site-header--solid': isSolidHeader,
+      'site-header--scrolled': isHomeRoute && isScrolled,
       'site-header--menu-open': isMobileMenuOpen
     }"
   >
