@@ -8,6 +8,7 @@ useSeoMeta({
 <template>
   <main class="min-h-screen bg-[var(--color-surface-footer)]">
     <HomeQuizSection />
+    <ChoosePathSection />
     <PricingSection />
     <CommonQuestionsSection />
     <ForProfessionalsSection />
