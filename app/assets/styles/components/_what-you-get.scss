@@ -1,0 +1,119 @@
+.what-you-get-section {
+  background: var(--color-white);
+  padding: 99px 2rem 68px;
+}
+
+.what-you-get-section__inner {
+  display: grid;
+  gap: 64px;
+  width: min(100%, 1074px);
+  margin-inline: auto;
+}
+
+.what-you-get-section__header {
+  display: grid;
+  justify-items: center;
+  text-align: center;
+}
+
+.what-you-get-section__title {
+  margin: 0;
+  color: var(--color-heading);
+  font-family: var(--font-display);
+  font-size: 54px;
+  font-weight: 500;
+  line-height: 1.067;
+}
+
+.what-you-get-section__title span {
+  color: var(--color-badge-warm);
+  font-weight: 400;
+}
+
+.what-you-get-section__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.what-you-get-card {
+  display: grid;
+  min-height: 308px;
+  justify-items: center;
+  align-content: start;
+  padding: 49px 24px 40px;
+  border-radius: 6px;
+  background: var(--color-surface-footer);
+  text-align: center;
+}
+
+.what-you-get-card__icon {
+  display: block;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+}
+
+.what-you-get-card__title {
+  margin: 27px 0 0;
+  color: var(--color-heading);
+  font-family: var(--font-nav);
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.68;
+}
+
+.what-you-get-card__description {
+  max-width: 302px;
+  margin: 8px 0 0;
+  color: #222222;
+  font-family: var(--font-body);
+  font-size: 20px;
+  line-height: 1.2;
+}
+
+@media (max-width: 1024px) {
+  .what-you-get-section {
+    padding: 72px 1.5rem 56px;
+  }
+
+  .what-you-get-section__inner {
+    gap: 48px;
+  }
+
+  .what-you-get-section__title {
+    font-size: 48px;
+    line-height: 1.15;
+  }
+
+  .what-you-get-section__grid {
+    grid-template-columns: 1fr;
+    max-width: 520px;
+    margin-inline: auto;
+  }
+
+  .what-you-get-card {
+    min-height: 0;
+    padding: 42px 24px;
+  }
+}
+
+@media (max-width: 767px) {
+  .what-you-get-section {
+    padding: 56px 1.25rem 48px;
+  }
+
+  .what-you-get-section__inner {
+    gap: 36px;
+  }
+
+  .what-you-get-section__title {
+    font-size: 40px;
+  }
+
+  .what-you-get-card__description {
+    font-size: 18px;
+  }
+}
