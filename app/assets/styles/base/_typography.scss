@@ -1,0 +1,62 @@
+.eyebrow {
+  margin: 0;
+  font-family: var(--font-nav);
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1.5rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-ink);
+}
+
+.site-nav-link {
+  font-family: var(--font-nav);
+  font-size: 0.9875rem;
+  font-weight: 600;
+  line-height: 1.5rem;
+  color: var(--color-ink);
+}
+
+.site-nav-link:hover {
+  color: var(--color-heading);
+}
+
+.section-title,
+.editorial-display {
+  margin: 0;
+  font-family: var(--font-display);
+  color: var(--color-heading);
+}
+
+.section-title {
+  font-size: clamp(2.5rem, 4.8vw, 3.375rem);
+  font-weight: 500;
+  line-height: 1.011111;
+  letter-spacing: -0.02em;
+}
+
+.editorial-display {
+  font-size: clamp(2.75rem, 4.9vw, 3.25rem);
+  font-weight: 400;
+  line-height: 1.25;
+  letter-spacing: -0.024em;
+}
+
+.app-section--dark .section-title,
+.app-section--dark .editorial-display {
+  color: var(--color-white);
+}
+
+.section-intro,
+.prose-copy {
+  margin: 0;
+  max-width: 62ch;
+  font-family: var(--font-body);
+  font-size: clamp(1rem, 1.25vw, 1.15rem);
+  line-height: 1.72;
+  color: rgba(63, 49, 84, 0.76);
+}
+
+.app-section--dark .prose-copy {
+  color: rgba(255, 255, 255, 0.78);
+}

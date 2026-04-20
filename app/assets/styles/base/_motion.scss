@@ -1,0 +1,33 @@
+@media (prefers-reduced-motion: reduce) {
+  .quiz-card-shell-step-enter-active,
+  .quiz-card-shell-step-leave-active,
+  .quiz-back-button,
+  .quiz-back-button__icon,
+  .quiz-answer-option__label,
+  .quiz-answer-option__description,
+  .site-footer__social-link,
+  .quiz-primary-action,
+  .quiz-result-state__cta,
+  .quiz-result-state__cta-icon {
+    transition: none;
+  }
+
+  .quiz-card-shell-step-enter-from,
+  .quiz-card-shell-step-leave-to,
+  .quiz-back-button:not(:disabled):hover,
+  .quiz-back-button:not(:disabled):hover .quiz-back-button__icon,
+  .quiz-answer-option:hover .quiz-answer-option__label,
+  .site-footer__social-link:hover,
+  .quiz-primary-action:not(:disabled):hover,
+  .quiz-primary-action:not(:disabled):active,
+  .quiz-result-state__cta--primary:hover,
+  .quiz-result-state__cta--secondary:hover,
+  .quiz-result-state__cta--secondary:hover .quiz-result-state__cta-icon {
+    transform: none;
+  }
+
+  .quiz-card-shell-step-enter-from,
+  .quiz-card-shell-step-leave-to {
+    opacity: 1;
+  }
+}

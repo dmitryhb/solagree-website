@@ -1,0 +1,11 @@
+@media (max-width: 767px) {
+  .section-shell,
+  .section-shell--narrow {
+    width: min(calc(100% - 1.5rem), var(--site-max-width));
+  }
+
+  .surface-card--padded-lg,
+  .surface-card--padded-md {
+    padding: 1.25rem;
+  }
+}

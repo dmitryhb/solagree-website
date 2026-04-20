@@ -1,0 +1,43 @@
+.surface-card {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  background: var(--color-surface-light);
+  box-shadow: var(--shadow-soft);
+}
+
+.surface-card--hero {
+  border-color: rgba(255, 255, 255, 0.18);
+  background: var(--color-surface-hero);
+  box-shadow: none;
+}
+
+.surface-card--muted {
+  background: var(--color-surface-warm);
+}
+
+.surface-card--dark {
+  border-color: var(--color-border-dark);
+  background: var(--color-surface-dark);
+  color: var(--color-white);
+  box-shadow: var(--shadow-card);
+}
+
+.surface-card--dark .eyebrow,
+.surface-card--dark .prose-copy,
+.surface-card--dark .section-title,
+.surface-card--dark .value-block__title {
+  color: var(--color-white);
+}
+
+.surface-card--dark .prose-copy,
+.surface-card--dark .value-block__body {
+  color: rgba(255, 255, 255, 0.74);
+}
+
+.surface-card--padded-md {
+  padding: 1.5rem;
+}
+
+.surface-card--padded-lg {
+  padding: clamp(1.5rem, 3vw, 2rem);
+}

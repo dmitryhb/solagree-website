@@ -1,0 +1,38 @@
+.section-shell {
+  width: min(calc(100% - 2.5rem), var(--site-max-width));
+  margin-inline: auto;
+}
+
+.section-shell--narrow {
+  width: min(calc(100% - 2.5rem), 880px);
+}
+
+.app-section {
+  position: relative;
+  padding-block: clamp(4rem, 7vw, 6rem);
+}
+
+.app-section--soft {
+  background-color: var(--color-surface-warm);
+}
+
+.app-section--dark {
+  background-color: var(--color-surface-dark);
+  color: var(--color-white);
+}
+
+.app-section--dark .eyebrow,
+.app-section--dark .section-intro {
+  color: rgba(255, 255, 255, 0.74);
+}
+
+.section-heading {
+  display: grid;
+  gap: 0.875rem;
+  margin-bottom: clamp(2rem, 4vw, 3rem);
+}
+
+.section-heading--center {
+  justify-items: center;
+  text-align: center;
+}

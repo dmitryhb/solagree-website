@@ -19,7 +19,7 @@ export default defineNuxtConfig({
   },
   ssr: true,
   modules: ['@nuxt/ui'],
-  css: ['~/assets/css/main.css'],
+  css: ['~/assets/styles/vendor.css', '~/assets/styles/main.scss'],
   runtimeConfig: {
     public: {
       solagreeQuiz: {
