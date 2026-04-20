@@ -37,6 +37,12 @@ const totalStepCount = computed(() => {
 const showStepCounter = computed(() => {
   return quizSession.phase.value === 'question' && (totalStepCount.value ?? 0) > 0
 })
+const sectionClasses = computed(() => {
+  return {
+    'quiz-section--standalone': quizHost.hostConfig.value.mode === 'standalone',
+    'quiz-section--embedded': quizHost.hostConfig.value.mode === 'embedded'
+  }
+})
 
 function getQuizScrollBehavior(): ScrollBehavior {
   if (!import.meta.client) {
@@ -87,7 +93,10 @@ function handleBack() {
 </script>
 
 <template>
-  <section class="quiz-section">
+  <section
+    class="quiz-section"
+    :class="sectionClasses"
+  >
     <div class="quiz-section__layout">
       <header
         v-if="quizHost.hostConfig.value.display.showShellHeader"
