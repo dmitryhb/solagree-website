@@ -117,8 +117,8 @@ export interface QuizQuestionDefinition<
   description?: string
   placeholder?: string
   options: readonly QuizOption<TValue>[]
-  explainerTitle: string
-  explainerBody: string
+  explainerTitle?: string
+  explainerBody?: string
   isVisible?: (answers: Readonly<QuizAnswerMap>) => boolean
 }
 

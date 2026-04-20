@@ -58,8 +58,7 @@ const solagreeStateOptions = [
   ['WY', 'Wyoming']
 ] as const satisfies ReadonlyArray<readonly [QuizStateCode, string]>
 
-const solagreeQuizExplainerBody =
-  'Understanding your level of agreement helps us recommend whether Solagree Expedited or Traditional is the best fit for your situation.'
+const solagreeQuizExplainerTitle = 'Why are we asking this?'
 
 export const solagreeQuizQuestions = [
   {
@@ -68,9 +67,7 @@ export const solagreeQuizQuestions = [
     title: 'Which state will your divorce be filed in?',
     description: 'Select the U.S. state or district connected to your divorce filing.',
     placeholder: 'Choose a state',
-    options: solagreeStateOptions.map(([id, label]) => ({ id, label })),
-    explainerTitle: 'Why are we asking this?',
-    explainerBody: solagreeQuizExplainerBody
+    options: solagreeStateOptions.map(([id, label]) => ({ id, label }))
   },
   {
     id: 'children',
@@ -79,9 +76,7 @@ export const solagreeQuizQuestions = [
     options: [
       { id: 'yes', label: 'Yes' },
       { id: 'no', label: 'No' }
-    ],
-    explainerTitle: 'Why are we asking this?',
-    explainerBody: solagreeQuizExplainerBody
+    ]
   },
   {
     id: 'parentingScreener',
@@ -91,8 +86,8 @@ export const solagreeQuizQuestions = [
       { id: 'yes', label: 'Yes' },
       { id: 'no', label: 'No' }
     ],
-    explainerTitle: 'Why are we asking this?',
-    explainerBody: solagreeQuizExplainerBody,
+    explainerTitle: solagreeQuizExplainerTitle,
+    explainerBody: 'Examples: custody, parenting time, visitation, child support, or decision-making for the children.',
     isVisible: answers => answers.children === 'yes'
   },
   {
@@ -106,8 +101,6 @@ export const solagreeQuizQuestions = [
       { id: 'child-support', label: 'Child support' },
       { id: 'communication-conflict', label: 'Co-parenting communication or conflict' }
     ],
-    explainerTitle: 'Why are we asking this?',
-    explainerBody: solagreeQuizExplainerBody,
     isVisible: answers => answers.children === 'yes' && answers.parentingScreener === 'yes'
   },
   {
@@ -118,8 +111,8 @@ export const solagreeQuizQuestions = [
       { id: 'yes', label: 'Yes' },
       { id: 'no', label: 'No' }
     ],
-    explainerTitle: 'Why are we asking this?',
-    explainerBody: solagreeQuizExplainerBody
+    explainerTitle: solagreeQuizExplainerTitle,
+    explainerBody: 'Examples: your home, bank accounts, retirement accounts, debts, spousal support, or who keeps what.'
   },
   {
     id: 'financialDetails',
@@ -133,8 +126,6 @@ export const solagreeQuizQuestions = [
       { id: 'spousal-support', label: 'Spousal support or alimony' },
       { id: 'debts-assets', label: 'Debt, asset division, or other complex finances' }
     ],
-    explainerTitle: 'Why are we asking this?',
-    explainerBody: solagreeQuizExplainerBody,
     isVisible: answers => answers.financialScreener === 'yes'
   },
   {
@@ -146,9 +137,7 @@ export const solagreeQuizQuestions = [
       { id: 'know-where-not-communicating', label: 'I know where they are, but we are not communicating' },
       { id: 'cannot-find', label: 'I cannot find them' },
       { id: 'unknown-whereabouts', label: 'I do not know where they are or what to expect' }
-    ],
-    explainerTitle: 'Why are we asking this?',
-    explainerBody: solagreeQuizExplainerBody
+    ]
   },
   {
     id: 'spouseCooperation',
@@ -159,8 +148,6 @@ export const solagreeQuizQuestions = [
       { id: 'no', label: 'No, I expect resistance' },
       { id: 'not-sure', label: 'I am not sure yet' }
     ],
-    explainerTitle: 'Why are we asking this?',
-    explainerBody: solagreeQuizExplainerBody,
     isVisible: answers => answers.spouseContact === 'direct-contact'
   },
   {
@@ -171,9 +158,7 @@ export const solagreeQuizQuestions = [
       { id: 'yes', label: 'Yes' },
       { id: 'no', label: 'No' },
       { id: 'not-sure', label: 'I am not sure' }
-    ],
-    explainerTitle: 'Why are we asking this?',
-    explainerBody: solagreeQuizExplainerBody
+    ]
   },
   {
     id: 'paymentReadiness',
@@ -183,9 +168,7 @@ export const solagreeQuizQuestions = [
       { id: 'ready-now', label: 'Yes, I am ready now' },
       { id: 'need-payment-plan', label: 'I would need a payment plan' },
       { id: 'not-ready', label: 'No, not right now' }
-    ],
-    explainerTitle: 'Why are we asking this?',
-    explainerBody: solagreeQuizExplainerBody
+    ]
   }
 ] as const satisfies readonly QuizQuestionDefinition[]
 
