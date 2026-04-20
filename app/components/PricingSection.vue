@@ -10,12 +10,12 @@ import { pricingPlans } from '~/data/pricing-plans'
   >
     <div class="pricing-section__inner">
       <header class="pricing-section__header">
-        <h1
+        <h2
           id="pricing-title"
           class="pricing-section__title"
         >
           Transparent flat-fee pricing.
-        </h1>
+        </h2>
       </header>
 
       <div class="pricing-section__grid">
