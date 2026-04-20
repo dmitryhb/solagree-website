@@ -5,6 +5,18 @@
   align-items: flex-end;
   overflow: hidden;
   isolation: isolate;
+  background: var(--color-surface-footer);
+  color: var(--color-heading);
+  padding: 140px 2rem 78px;
+}
+
+.splash-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: min(100%, 1500px);
+  margin-inline: auto;
   background:
     linear-gradient(
       180deg,
@@ -13,8 +25,6 @@
       rgba(42, 43, 47, 0.32) 100%
     ),
     url("/images/splash-bg.jpg") center / cover no-repeat;
-  color: var(--color-heading);
-  padding: 140px 2rem 78px;
 }
 
 .splash-section__inner {
@@ -111,6 +121,9 @@
 @media (max-width: 1180px) {
   .splash-section {
     min-height: min(820px, calc(100svh - 32px));
+  }
+
+  .splash-section::before {
     background-position: 55% center;
   }
 
@@ -130,8 +143,11 @@
 @media (max-width: 767px) {
   .splash-section {
     min-height: min(760px, calc(100svh - 28px));
-    background-position: 60% center;
     padding: 118px 1.25rem 46px;
+  }
+
+  .splash-section::before {
+    background-position: 60% center;
   }
 
   .splash-section__inner {
@@ -182,6 +198,9 @@
 @media (max-width: 420px) {
   .splash-section {
     min-height: min(700px, calc(100svh - 24px));
+  }
+
+  .splash-section::before {
     background-position: 62% center;
   }
 
