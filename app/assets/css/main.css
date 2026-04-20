@@ -584,7 +584,8 @@ select {
   display: flex;
   min-width: 0;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
 }
 
 .quiz-section__logo-link {
@@ -599,6 +600,32 @@ select {
   width: clamp(10.5rem, 23vw, 20.75rem);
   max-width: 100%;
   height: auto;
+}
+
+.quiz-section__contact-link {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  padding: 0.625rem 0.875rem;
+  border-radius: 999px;
+  color: var(--color-text);
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.quiz-section__contact-link:hover {
+  color: var(--color-brand);
+}
+
+.quiz-section__logo-link:focus-visible,
+.quiz-section__contact-link:focus-visible {
+  outline: 3px solid rgba(155, 96, 75, 0.44);
+  outline-offset: 4px;
 }
 
 .quiz-section__body {
@@ -1216,6 +1243,16 @@ select {
     width: 100%;
     padding-inline: 0;
     gap: 2rem;
+  }
+
+  .quiz-section__logo {
+    width: clamp(8.75rem, 45vw, 10.5rem);
+  }
+
+  .quiz-section__contact-link {
+    min-height: 2.5rem;
+    padding-inline: 0.75rem;
+    font-size: 0.875rem;
   }
 
   .quiz-card-shell {

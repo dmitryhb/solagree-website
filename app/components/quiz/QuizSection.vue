@@ -104,6 +104,14 @@ function handleBack() {
             alt="Solagree"
           >
         </NuxtLink>
+        <a
+          class="quiz-section__contact-link"
+          href="https://www.linkedin.com/company/solagree"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Contact Us
+        </a>
       </header>
 
       <div
