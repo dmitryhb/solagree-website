@@ -131,12 +131,12 @@ export const solagreeQuizQuestions = [
   {
     id: 'spouseContact',
     kind: 'single-select',
-    title: 'What best describes your current contact with your spouse?',
+    title: 'Can you contact your spouse right now?',
     options: [
-      { id: 'direct-contact', label: 'We are in direct contact' },
-      { id: 'know-where-not-communicating', label: 'I know where they are, but we are not communicating' },
-      { id: 'cannot-find', label: 'I cannot find them' },
-      { id: 'unknown-whereabouts', label: 'I do not know where they are or what to expect' }
+      { id: 'direct-contact', label: 'Yes' },
+      { id: 'cannot-find', label: 'No, I can’t find them' },
+      { id: 'know-where-not-communicating', label: 'No, we have no contact' },
+      { id: 'unknown-whereabouts', label: 'Not sure' }
     ]
   },
   {
