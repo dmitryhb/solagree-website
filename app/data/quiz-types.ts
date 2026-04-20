@@ -127,6 +127,7 @@ export interface QuizPersistedSession {
   phase: QuizSessionPhase
   currentQuestionId: QuizQuestionId
   answers: QuizAnswerMap
+  maxProgressValue?: number
 }
 
 export type QuizOpenPolicyId = 'state-specific-result-messaging'

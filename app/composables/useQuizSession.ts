@@ -49,11 +49,20 @@ function normalizeQuizSessionPhase(snapshot: QuizPersistedSession | {
   return snapshot.phase === 'result' ? 'result' : 'question'
 }
 
+function normalizeProgressValue(value: unknown): number | undefined {
+  if (typeof value !== 'number' || !Number.isFinite(value)) {
+    return undefined
+  }
+
+  return Math.min(Math.max(Math.round(value), 0), 100)
+}
+
 export function useQuizSession() {
   const initialQuestionId = solagreeQuizQuestionIds[0]
   const answers = ref<QuizAnswerMap>({})
   const currentQuestionId = ref<QuizQuestionId>(initialQuestionId)
   const phase = ref<QuizSessionPhase>('question')
+  const maxForwardProgressValue = ref(getQuizProgressValue(initialQuestionId, {}, 'question'))
   const hasRestoredPersistedState = ref(false)
 
   const visibleQuestionIds = computed(() => getVisibleQuizQuestionIds(answers.value))
@@ -71,19 +80,38 @@ export function useQuizSession() {
   })
   const evaluation = computed(() => evaluateQuizAnswers(answers.value))
   const resultView = computed(() => getQuizResultViewModel(evaluation.value))
-  const progressValue = computed(() =>
-    getQuizProgressValue(currentQuestionId.value, answers.value, phase.value)
-  )
+  const branchProgressValue = computed(() => {
+    return getQuizProgressValue(currentQuestionId.value, answers.value, phase.value)
+  })
+  const progressValue = computed(() => {
+    if (phase.value === 'result') {
+      return 100
+    }
+
+    return Math.max(branchProgressValue.value, maxForwardProgressValue.value)
+  })
   const primaryActionLabel = computed(() => {
     const nextQuestionId = getNextQuizQuestionId(currentQuestionId.value, answers.value)
     return nextQuestionId ? solagreeQuizLabels.next : solagreeQuizLabels.finish
   })
+
+  function raiseForwardProgressFloor() {
+    maxForwardProgressValue.value = Math.max(
+      maxForwardProgressValue.value,
+      branchProgressValue.value
+    )
+  }
+
+  function resetProgressFloorToCurrentBranch() {
+    maxForwardProgressValue.value = branchProgressValue.value
+  }
 
   function syncQuestionPosition(nextAnswers: QuizAnswerMap, preferredQuestionId?: QuizQuestionId) {
     const prunedAnswers = pruneHiddenQuizAnswers(nextAnswers)
     answers.value = prunedAnswers
     currentQuestionId.value = coerceQuizCurrentQuestionId(prunedAnswers, preferredQuestionId ?? currentQuestionId.value)
     phase.value = 'question'
+    raiseForwardProgressFloor()
   }
 
   function setAnswer<TQuestionId extends QuizQuestionId>(
@@ -126,22 +154,26 @@ export function useQuizSession() {
 
     if (!nextQuestionId) {
       phase.value = 'result'
+      raiseForwardProgressFloor()
       return
     }
 
     currentQuestionId.value = nextQuestionId
+    raiseForwardProgressFloor()
   }
 
   function goBack() {
     if (phase.value === 'result') {
       phase.value = 'question'
       currentQuestionId.value = visibleQuestionIds.value.at(-1) ?? initialQuestionId
+      resetProgressFloorToCurrentBranch()
       return
     }
 
     const previousQuestionId = getPreviousQuizQuestionId(currentQuestionId.value, answers.value)
     if (previousQuestionId) {
       currentQuestionId.value = previousQuestionId
+      resetProgressFloorToCurrentBranch()
     }
   }
 
@@ -149,6 +181,7 @@ export function useQuizSession() {
     answers.value = {}
     currentQuestionId.value = initialQuestionId
     phase.value = 'question'
+    resetProgressFloorToCurrentBranch()
 
     if (import.meta.client) {
       window.localStorage.removeItem(solagreeQuizStorageKey)
@@ -175,6 +208,9 @@ export function useQuizSession() {
         answers.value = prunedAnswers
         currentQuestionId.value = coerceQuizCurrentQuestionId(prunedAnswers, parsedSnapshot.currentQuestionId)
         phase.value = normalizeQuizSessionPhase(parsedSnapshot)
+        maxForwardProgressValue.value = normalizeProgressValue(parsedSnapshot.maxProgressValue)
+          ?? branchProgressValue.value
+        raiseForwardProgressFloor()
       } catch {
         window.localStorage.removeItem(solagreeQuizStorageKey)
       } finally {
@@ -193,7 +229,8 @@ export function useQuizSession() {
           version: 2,
           phase: phase.value,
           currentQuestionId: currentQuestionId.value,
-          answers: answers.value
+          answers: answers.value,
+          maxProgressValue: progressValue.value
         }
 
         window.localStorage.setItem(solagreeQuizStorageKey, JSON.stringify(snapshot))
