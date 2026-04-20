@@ -24,9 +24,11 @@ function isQuizSessionSnapshot(value: unknown): value is QuizPersistedSession {
     return false
   }
 
-  const snapshot = value as Partial<QuizPersistedSession> & {
-    version?: number
-    phase?: 'question' | 'complete' | 'result'
+  const snapshot = value as {
+    version?: unknown
+    phase?: unknown
+    currentQuestionId?: unknown
+    answers?: unknown
   }
 
   return (
@@ -38,10 +40,7 @@ function isQuizSessionSnapshot(value: unknown): value is QuizPersistedSession {
   )
 }
 
-function normalizeQuizSessionPhase(snapshot: QuizPersistedSession | {
-  version?: number
-  phase?: 'question' | 'complete' | 'result'
-}): QuizSessionPhase {
+function normalizeQuizSessionPhase(snapshot: { phase?: unknown }): QuizSessionPhase {
   if (snapshot.phase === 'complete') {
     return 'result'
   }
@@ -58,7 +57,7 @@ function normalizeProgressValue(value: unknown): number | undefined {
 }
 
 export function useQuizSession() {
-  const initialQuestionId = solagreeQuizQuestionIds[0]
+  const initialQuestionId = solagreeQuizQuestionIds[0] ?? 'state'
   const answers = ref<QuizAnswerMap>({})
   const currentQuestionId = ref<QuizQuestionId>(initialQuestionId)
   const phase = ref<QuizSessionPhase>('question')
