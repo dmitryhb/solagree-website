@@ -15,12 +15,6 @@ const quizHost = useQuizHost(quizSession, {
   onEvent: event => emit('hostEvent', event)
 })
 const quizBodyRef = ref<HTMLElement | null>(null)
-const explainer = computed(() => {
-  return {
-    title: quizSession.currentQuestion.value.explainerTitle,
-    body: quizSession.currentQuestion.value.explainerBody
-  }
-})
 const currentStepNumber = computed(() => {
   if (quizSession.phase.value !== 'question') {
     return undefined
@@ -139,18 +133,13 @@ function handleBack() {
           :primary-action-label="quizSession.primaryActionLabel.value"
           :can-go-back="quizSession.canGoBack.value"
           :can-advance="quizSession.canAdvance.value"
+          :show-explainer="quizHost.hostConfig.value.display.showExplainer"
           @back="handleBack"
           @advance="handleAdvance"
           @cta="quizHost.handleResultCtaClick"
           @reset="quizHost.handleReset"
           @single-change="quizHost.handleSingleAnswer($event.questionId, $event.value)"
           @multi-change="quizHost.handleMultiAnswer($event.questionId, { value: $event.value, checked: $event.checked })"
-        />
-
-        <QuizExplainer
-          v-if="quizSession.phase.value === 'question' && quizHost.hostConfig.value.display.showExplainer"
-          :title="explainer.title"
-          :body="explainer.body"
         />
       </div>
     </div>

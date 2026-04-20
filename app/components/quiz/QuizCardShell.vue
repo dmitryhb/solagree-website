@@ -17,6 +17,7 @@ const props = defineProps<{
   primaryActionLabel: string
   canGoBack?: boolean
   canAdvance?: boolean
+  showExplainer?: boolean
 }>()
 
 const shouldShowBackButton = computed(() => {
@@ -29,6 +30,17 @@ const stepCounterLabel = computed(() => {
   }
 
   return `${props.currentStepNumber} of ${props.totalStepCount}`
+})
+
+const questionExplainer = computed(() => {
+  if (!props.showExplainer || !props.question?.explainerTitle || !props.question.explainerBody) {
+    return undefined
+  }
+
+  return {
+    title: props.question.explainerTitle,
+    body: props.question.explainerBody
+  }
 })
 
 const emit = defineEmits<{
@@ -91,6 +103,13 @@ const emit = defineEmits<{
               :result="result"
               @cta="emit('cta', $event)"
               @reset="emit('reset')"
+            />
+
+            <QuizExplainer
+              v-if="questionExplainer"
+              class="quiz-card-shell__explainer"
+              :title="questionExplainer.title"
+              :body="questionExplainer.body"
             />
 
             <div
