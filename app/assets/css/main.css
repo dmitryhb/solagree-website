@@ -667,9 +667,32 @@ select {
     transform 160ms ease;
 }
 
-.site-footer__social-link svg {
+.site-footer__social-icon {
+  display: block;
   width: 24px;
   height: 24px;
+  background: currentColor;
+  -webkit-mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-size: contain;
+}
+
+.site-footer__social-icon--facebook {
+  -webkit-mask-image: url("/icons/social-facebook.svg");
+  mask-image: url("/icons/social-facebook.svg");
+}
+
+.site-footer__social-icon--instagram {
+  -webkit-mask-image: url("/icons/social-instagram.svg");
+  mask-image: url("/icons/social-instagram.svg");
+}
+
+.site-footer__social-icon--linkedin {
+  -webkit-mask-image: url("/icons/social-linkedin.svg");
+  mask-image: url("/icons/social-linkedin.svg");
 }
 
 .site-footer__social-link:hover {

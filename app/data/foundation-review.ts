@@ -237,39 +237,3 @@ export const reviewFaqPreview = [
       'Yes. The swatches are rendered from the shared CSS variables, and the same tokens already power the homepage shell and button primitives.'
   }
 ] as const
-
-export const reviewFooterGroups = [
-  {
-    title: 'Review areas',
-    links: [
-      { label: 'Typography', to: '#typography' },
-      { label: 'Colors', to: '#colors' },
-      { label: 'Buttons', to: '#buttons' }
-    ]
-  },
-  {
-    title: 'Foundation',
-    links: [
-      { label: 'Shared primitives', to: '#primitives' },
-      { label: 'Signoff gates', to: '#signoff' },
-      { label: 'Homepage shell', to: '/' }
-    ]
-  },
-  {
-    title: 'Project',
-    links: [
-      { label: 'HIR-30 checkpoint', to: '#signoff' },
-      { label: 'Stakeholder review route', to: '#footer-preview' },
-      { label: 'Amsterdam, NL', to: '/' }
-    ]
-  }
-] as const
-
-export const reviewFooterCallout = {
-  brand: 'Solagree review',
-  title: 'Foundation approved, quiz implementation can start next.',
-  description:
-    'This footer preview closes the route with the same shared structure used elsewhere, proving the signoff surface is built from reusable pieces rather than one-off review markup.',
-  ctaLabel: 'Is Solagree right for you?',
-  ctaTo: '/quiz'
-} as const

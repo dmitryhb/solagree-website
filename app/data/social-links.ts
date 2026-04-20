@@ -1,13 +1,4 @@
-export type SocialLinkIcon = 'facebook' | 'instagram' | 'linkedin'
-
-export interface SocialLink {
-  label: string
-  ariaLabel: string
-  href: string
-  icon: SocialLinkIcon
-}
-
-type SocialLinkOverrides = Partial<Record<SocialLinkIcon, Partial<Omit<SocialLink, 'icon'>>>>
+import type { SocialLink, SocialLinkIcon, SocialLinkOverrides } from '~/types/links'
 
 export const solagreeSocialLinks = [
   {

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { isExternalHref } from '~/utils/links'
+
 const props = withDefaults(defineProps<{
   to?: string
   href?: string
@@ -39,7 +41,7 @@ const linkProps = computed(() => {
   }
 
   if (props.href && !props.disabled) {
-    const isExternal = /^https?:\/\//.test(props.href)
+    const isExternal = isExternalHref(props.href)
 
     return {
       href: props.href,
