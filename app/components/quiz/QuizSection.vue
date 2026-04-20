@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { QuizHostConfigInput, QuizHostEvent } from '~/data/quiz-types'
-import { solagreeQuizShellContent } from '~/data/quiz'
 
 const props = defineProps<{
   hostConfig?: QuizHostConfigInput
@@ -94,12 +93,17 @@ function handleBack() {
         v-if="quizHost.hostConfig.value.display.showShellHeader"
         class="quiz-section__header"
       >
-        <h2 class="quiz-section__heading">
-          {{ solagreeQuizShellContent.heading }}
-        </h2>
-        <p class="quiz-section__intro">
-          {{ solagreeQuizShellContent.intro }}
-        </p>
+        <NuxtLink
+          to="/"
+          class="quiz-section__logo-link"
+          aria-label="Solagree home"
+        >
+          <img
+            class="quiz-section__logo"
+            src="/solagree-logo.svg"
+            alt="Solagree"
+          >
+        </NuxtLink>
       </header>
 
       <div
