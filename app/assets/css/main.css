@@ -598,6 +598,7 @@ select {
 
 .quiz-section--standalone .quiz-section__layout {
   grid-template-rows: auto minmax(0, 1fr);
+  width: 100%;
   max-width: none;
   min-height: 100svh;
   padding-block: clamp(1.25rem, 3vw, 2rem) clamp(2rem, 4vw, 3rem);
@@ -1268,7 +1269,7 @@ select {
   }
 
   .quiz-section--standalone {
-    padding-inline: 1rem;
+    padding-inline: 0;
   }
 
   .quiz-section__layout {
