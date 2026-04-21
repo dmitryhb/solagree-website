@@ -240,6 +240,11 @@
   background: #323449;
 }
 
+.attorney-application-form__submit:disabled {
+  cursor: wait;
+  opacity: 0.72;
+}
+
 .attorney-application-form__submit:focus-visible,
 .attorney-application-form__small-action:focus-visible,
 .attorney-application-form__add-license:focus-visible,
@@ -276,8 +281,13 @@
   font-weight: 700;
 }
 
-.attorney-application-form__result--auto-approval {
+.attorney-application-form__result--success {
   background: rgba(250, 255, 129, 0.35);
+}
+
+.attorney-application-form__result--error {
+  border: 1px solid rgba(168, 57, 57, 0.28);
+  background: rgba(168, 57, 57, 0.08);
 }
 
 @media (max-width: 767px) {

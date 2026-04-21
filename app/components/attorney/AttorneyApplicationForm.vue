@@ -5,12 +5,19 @@ import {
   attorneyYesNoOptions
 } from '~/data/attorney-application'
 import { stateOptions } from '~/data/us-states'
-import type { AttorneyApplicationFormState, AttorneyApplicationResult } from '~/types/attorney-application'
+import type {
+  AttorneyApplicationApiErrorResponse,
+  AttorneyApplicationApiResponse,
+  AttorneyApplicationFormState,
+  AttorneyApplicationResult
+} from '~/types/attorney-application'
 
 const currentYear = new Date().getFullYear()
 
+const runtimeConfig = useRuntimeConfig()
 const formEl = ref<HTMLFormElement | null>(null)
 const hasAttemptedSubmit = ref(false)
+const submitting = ref(false)
 const submissionResult = ref<AttorneyApplicationResult | null>(null)
 
 const form = reactive<AttorneyApplicationFormState>({
@@ -46,7 +53,44 @@ function removeLicenseNumber(index: number) {
   form.licenseNumbers.splice(index, 1)
 }
 
-function handleSubmit() {
+function getPortalApiBaseUrl() {
+  return String(runtimeConfig.public.portalApiBaseUrl || '').replace(/\/+$/, '')
+}
+
+function getSubmissionErrorMessage(error: unknown) {
+  if (
+    typeof error === 'object'
+    && error !== null
+    && 'data' in error
+    && typeof error.data === 'object'
+    && error.data !== null
+    && 'message' in error.data
+    && typeof error.data.message === 'string'
+  ) {
+    return error.data.message
+  }
+
+  if (
+    typeof error === 'object'
+    && error !== null
+    && 'statusMessage' in error
+    && typeof error.statusMessage === 'string'
+  ) {
+    return error.statusMessage
+  }
+
+  if (error instanceof Error) {
+    return error.message
+  }
+
+  return 'We could not submit your application. Please try again.'
+}
+
+async function handleSubmit() {
+  if (submitting.value) {
+    return
+  }
+
   hasAttemptedSubmit.value = true
   submissionResult.value = null
 
@@ -57,19 +101,39 @@ function handleSubmit() {
     return
   }
 
-  const needsVettingCall = form.mediationExperience !== 'none' || form.consultationInterest === 'yes'
+  submitting.value = true
 
-  submissionResult.value = needsVettingCall
-    ? {
-        kind: 'vetting',
-        title: 'Application received',
-        message: 'Based on your selections, our team will follow up to schedule a vetting call before portal access is opened.'
+  try {
+    const portalApiBaseUrl = getPortalApiBaseUrl()
+    const response = await $fetch<AttorneyApplicationApiResponse | AttorneyApplicationApiErrorResponse>(
+      `${portalApiBaseUrl}/api/attorney-applications`,
+      {
+        method: 'POST',
+        body: {
+          ...form,
+          licenseNumbers: form.licenseNumbers.map(licenseNumber => licenseNumber.trim())
+        }
       }
-    : {
-        kind: 'auto-approval',
-        title: 'Application received',
-        message: 'You are eligible for automatic approval. We will send portal access and a short walkthrough to your email.'
-      }
+    )
+
+    if ('error' in response) {
+      throw new Error(response.message)
+    }
+
+    submissionResult.value = {
+      kind: 'success',
+      title: 'Application received',
+      message: 'Thank you. Our team will review your application and email you with next steps.'
+    }
+  } catch (error) {
+    submissionResult.value = {
+      kind: 'error',
+      title: 'Submission failed',
+      message: getSubmissionErrorMessage(error)
+    }
+  } finally {
+    submitting.value = false
+  }
 }
 </script>
 
@@ -472,8 +536,9 @@ function handleSubmit() {
       <button
         class="attorney-application-form__submit"
         type="submit"
+        :disabled="submitting"
       >
-        <span>SEND</span>
+        <span>{{ submitting ? 'SENDING...' : 'SEND' }}</span>
         <img
           class="attorney-application-form__submit-icon"
           src="/icons/send.svg"

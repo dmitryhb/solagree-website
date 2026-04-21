@@ -32,7 +32,17 @@ export interface AttorneySelectOption<TValue extends string = string> {
 }
 
 export interface AttorneyApplicationResult {
-  kind: 'vetting' | 'auto-approval'
+  kind: 'success' | 'error'
   title: string
+  message: string
+}
+
+export interface AttorneyApplicationApiResponse {
+  applicationId: string
+  status: 'pending'
+}
+
+export interface AttorneyApplicationApiErrorResponse {
+  error: true
   message: string
 }

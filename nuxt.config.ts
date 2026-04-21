@@ -23,6 +23,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'https://www.solagree.com',
+      portalApiBaseUrl: process.env.NUXT_PUBLIC_PORTAL_API_BASE_URL || 'http://localhost:3001',
       solagreeQuiz: {
         hostId: 'solagree-quiz',
         mode: 'standalone',

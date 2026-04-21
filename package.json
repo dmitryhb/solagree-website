@@ -7,6 +7,7 @@
     "dev": "nuxt dev --port 3003",
     "deploy:staging": "./scripts/deploy-staging.sh",
     "generate": "nuxt generate",
+    "typecheck": "nuxt typecheck",
     "preview": "nuxt preview --port 3003",
     "postinstall": "nuxt prepare"
   },
@@ -18,6 +19,8 @@
     "vue-router": "^5.0.4"
   },
   "devDependencies": {
-    "sass": "^1.99.0"
+    "@types/node": "^25.6.0",
+    "sass": "^1.99.0",
+    "vue-tsc": "^3.2.7"
   }
 }

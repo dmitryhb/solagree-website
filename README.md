@@ -1,6 +1,6 @@
-# Nuxt Minimal Starter
+# Solagree Website
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Public Solagree marketing website built with Nuxt.
 
 ## Setup
 
@@ -22,7 +22,7 @@ bun install
 
 ## Development Server
 
-Start the development server on `http://localhost:3000`:
+Start the development server on `http://localhost:3003`:
 
 ```bash
 # npm
@@ -37,6 +37,16 @@ yarn dev
 # bun
 bun run dev
 ```
+
+## Portal API integration
+
+The attorney application form submits to the Solagree Portal API.
+
+```bash
+NUXT_PUBLIC_PORTAL_API_BASE_URL=http://localhost:3001
+```
+
+The portal must allow the website origin through `PUBLIC_ATTORNEY_APPLICATION_ALLOWED_ORIGINS`.
 
 ## Production
 
