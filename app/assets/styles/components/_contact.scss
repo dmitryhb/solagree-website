@@ -98,13 +98,17 @@
 
 .contact-form {
   display: grid;
-  gap: 1rem;
+  width: min(100%, 560px);
+  justify-self: end;
+  gap: 1.125rem;
 }
 
 .contact-form input,
 .contact-form textarea {
+  box-sizing: border-box;
   width: 100%;
-  min-height: 43px;
+  height: 43px;
+  min-height: 0;
   border: 1px solid rgba(62, 64, 89, 0.34);
   border-radius: 6px;
   background: var(--color-page);
@@ -119,7 +123,8 @@
 }
 
 .contact-form textarea {
-  min-height: 106px;
+  height: 106px;
+  min-height: 0;
   resize: vertical;
 }
 
@@ -139,7 +144,8 @@
 .contact-form__submit {
   display: inline-flex;
   width: 100%;
-  min-height: 45px;
+  height: 45px;
+  min-height: 0;
   align-items: center;
   justify-content: center;
   gap: 0.65rem;
