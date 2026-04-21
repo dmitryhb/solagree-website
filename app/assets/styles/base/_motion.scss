@@ -1,4 +1,25 @@
+.page-appear-enter-active,
+.page-appear-leave-active {
+  transition:
+    opacity 220ms ease,
+    transform 220ms ease,
+    filter 220ms ease;
+}
+
+.page-appear-leave-active {
+  transition-duration: 140ms;
+}
+
+.page-appear-enter-from,
+.page-appear-leave-to {
+  opacity: 0;
+  filter: blur(2px);
+  transform: translateY(10px);
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .page-appear-enter-active,
+  .page-appear-leave-active,
   .quiz-card-shell-step-enter-active,
   .quiz-card-shell-step-leave-active,
   .quiz-back-button,
@@ -12,6 +33,8 @@
     transition: none;
   }
 
+  .page-appear-enter-from,
+  .page-appear-leave-to,
   .quiz-card-shell-step-enter-from,
   .quiz-card-shell-step-leave-to,
   .quiz-back-button:not(:disabled):hover,
@@ -27,7 +50,10 @@
   }
 
   .quiz-card-shell-step-enter-from,
-  .quiz-card-shell-step-leave-to {
+  .quiz-card-shell-step-leave-to,
+  .page-appear-enter-from,
+  .page-appear-leave-to {
     opacity: 1;
+    filter: none;
   }
 }

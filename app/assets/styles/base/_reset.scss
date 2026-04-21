@@ -1,5 +1,6 @@
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: var(--site-anchor-offset);
 }
 
 body {
@@ -29,4 +30,14 @@ select {
 
 .page-shell {
   min-height: 100vh;
+}
+
+[id] {
+  scroll-margin-top: var(--site-anchor-offset);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }

@@ -47,4 +47,13 @@
   --radius-card: 24px;
   --radius-pill: 50px;
   --site-max-width: 1180px;
+  --site-header-height: 76px;
+  --site-anchor-offset: calc(var(--site-header-height) + 1.25rem);
+}
+
+@media (max-width: 900px) {
+  :root {
+    --site-header-height: 72px;
+    --site-anchor-offset: calc(var(--site-header-height) + 1rem);
+  }
 }
