@@ -20,7 +20,9 @@ import { splashFeatures } from '~/data/splash-content'
         <p class="splash-section__intro">
           A next-generation divorce method designed to reduce conflict and cost - even when you don't agree on everything.
         </p>
+      </div>
 
+      <div class="splash-section__footer">
         <div class="splash-section__actions">
           <SiteButton
             class="splash-section__primary"
@@ -37,17 +39,17 @@ import { splashFeatures } from '~/data/splash-content'
             How it Works
           </SiteButton>
         </div>
-      </div>
 
-      <ul class="splash-section__features">
-        <li
-          v-for="feature in splashFeatures"
-          :key="feature.label"
-          class="splash-section__feature"
-        >
-          {{ feature.label }}
-        </li>
-      </ul>
+        <ul class="splash-section__features">
+          <li
+            v-for="feature in splashFeatures"
+            :key="feature.label"
+            class="splash-section__feature"
+          >
+            {{ feature.label }}
+          </li>
+        </ul>
+      </div>
     </div>
   </section>
 </template>

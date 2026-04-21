@@ -29,7 +29,7 @@
 
 .splash-section__inner {
   display: grid;
-  gap: 38px;
+  gap: 36px;
   width: min(100%, 1192px);
   margin-inline: auto;
 }
@@ -62,11 +62,17 @@
   line-height: 1.5;
 }
 
+.splash-section__footer {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(2rem, 5.5vw, 5rem);
+}
+
 .splash-section__actions {
   display: flex;
   flex-wrap: wrap;
   gap: 18px;
-  margin-top: 29px;
 }
 
 .splash-section__primary.sol-button,
@@ -131,6 +137,11 @@
     gap: 42px;
   }
 
+  .splash-section__footer {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
   .splash-section__features {
     justify-content: flex-start;
   }
@@ -168,7 +179,6 @@
   .splash-section__actions {
     width: 100%;
     gap: 12px;
-    margin-top: 24px;
   }
 
   .splash-section__primary.sol-button,
