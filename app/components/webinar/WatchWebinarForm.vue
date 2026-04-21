@@ -12,7 +12,7 @@ const form = reactive<WebinarFormState>({
 
 const statusMessage = ref('')
 
-function handleSubmit() {
+const handleSubmit = () => {
   statusMessage.value = 'Thanks. We will send the webinar access details shortly.'
 }
 </script>

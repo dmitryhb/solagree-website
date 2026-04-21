@@ -12,7 +12,7 @@ const emit = defineEmits<{
   change: [payload: { value: string, checked: boolean }]
 }>()
 
-function isChecked(optionId: string) {
+const isChecked = (optionId: string) => {
   if (Array.isArray(props.value)) {
     return props.value.includes(optionId)
   }

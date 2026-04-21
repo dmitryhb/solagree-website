@@ -9,7 +9,7 @@ import type {
   QuizResultViewModel
 } from '~/data/quiz-types'
 
-function getResolvedSpouseContactOutcome(answers: Readonly<QuizAnswerMap>) {
+const getResolvedSpouseContactOutcome = (answers: Readonly<QuizAnswerMap>) => {
   if (!answers.spouseContact) {
     return null
   }
@@ -17,7 +17,10 @@ function getResolvedSpouseContactOutcome(answers: Readonly<QuizAnswerMap>) {
   return solagreeQuizResolvedPolicy.spouseContactOutcomes[answers.spouseContact] ?? null
 }
 
-export function buildQuizConsultMetadata(answers: Readonly<QuizAnswerMap>): QuizConsultMetadata {
+/**
+ * Builds structured metadata used by quiz analytics and result routing.
+ */
+export const buildQuizConsultMetadata = (answers: Readonly<QuizAnswerMap>): QuizConsultMetadata => {
   const tags = new Set<QuizInternalTag>()
   const parentingTopicIds = answers.parentingDetails ?? []
   const financialTopicIds = answers.financialDetails ?? []
@@ -84,7 +87,10 @@ export function buildQuizConsultMetadata(answers: Readonly<QuizAnswerMap>): Quiz
   }
 }
 
-export function evaluateQuizAnswers(answers: Readonly<QuizAnswerMap>): QuizEvaluation {
+/**
+ * Evaluates quiz answers into the configured result policy outcome.
+ */
+export const evaluateQuizAnswers = (answers: Readonly<QuizAnswerMap>): QuizEvaluation => {
   const metadata = buildQuizConsultMetadata(answers)
   const resolvedSpouseContactOutcome = getResolvedSpouseContactOutcome(answers)
 
@@ -138,7 +144,10 @@ export function evaluateQuizAnswers(answers: Readonly<QuizAnswerMap>): QuizEvalu
   }
 }
 
-export function getQuizResultViewModel(evaluation: QuizEvaluation): QuizResultViewModel {
+/**
+ * Resolves display copy and CTA data for a quiz evaluation.
+ */
+export const getQuizResultViewModel = (evaluation: QuizEvaluation): QuizResultViewModel => {
   const content = evaluation.kind === 'resolved'
     ? solagreeQuizResultContent[evaluation.outcome]
     : solagreeQuizOpenPolicyContent[evaluation.policyId]
@@ -148,12 +157,18 @@ export function getQuizResultViewModel(evaluation: QuizEvaluation): QuizResultVi
   }
 }
 
-export function getQuizDeferredPolicyIds(_: Readonly<QuizAnswerMap>): readonly QuizOpenPolicy['id'][] {
+/**
+ * Returns non-blocking open policy IDs that can be handled after result routing.
+ */
+export const getQuizDeferredPolicyIds = (_: Readonly<QuizAnswerMap>): readonly QuizOpenPolicy['id'][] => {
   return solagreeQuizOpenPolicies
     .filter(policy => !policy.blocksOutcome)
     .map(policy => policy.id)
 }
 
-export function isQuizResultBlockedByOpenPolicy(evaluation: QuizEvaluation): boolean {
+/**
+ * Checks whether an evaluation is blocked by an unresolved open policy.
+ */
+export const isQuizResultBlockedByOpenPolicy = (evaluation: QuizEvaluation): boolean => {
   return evaluation.kind === 'open-policy'
 }

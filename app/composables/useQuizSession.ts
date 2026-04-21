@@ -19,7 +19,7 @@ import {
 } from '~/utils/quiz-navigation'
 import { evaluateQuizAnswers, getQuizResultViewModel } from '~/utils/quiz-results'
 
-function isQuizSessionSnapshot(value: unknown): value is QuizPersistedSession {
+const isQuizSessionSnapshot = (value: unknown): value is QuizPersistedSession => {
   if (!value || typeof value !== 'object') {
     return false
   }
@@ -40,7 +40,7 @@ function isQuizSessionSnapshot(value: unknown): value is QuizPersistedSession {
   )
 }
 
-function normalizeQuizSessionPhase(snapshot: { phase?: unknown }): QuizSessionPhase {
+const normalizeQuizSessionPhase = (snapshot: { phase?: unknown }): QuizSessionPhase => {
   if (snapshot.phase === 'complete') {
     return 'result'
   }
@@ -48,7 +48,7 @@ function normalizeQuizSessionPhase(snapshot: { phase?: unknown }): QuizSessionPh
   return snapshot.phase === 'result' ? 'result' : 'question'
 }
 
-function normalizeProgressValue(value: unknown): number | undefined {
+const normalizeProgressValue = (value: unknown): number | undefined => {
   if (typeof value !== 'number' || !Number.isFinite(value)) {
     return undefined
   }
@@ -56,7 +56,10 @@ function normalizeProgressValue(value: unknown): number | undefined {
   return Math.min(Math.max(Math.round(value), 0), 100)
 }
 
-export function useQuizSession() {
+/**
+ * Owns quiz answer state, branching navigation, result evaluation, and persistence.
+ */
+export const useQuizSession = () => {
   const initialQuestionId = solagreeQuizQuestionIds[0] ?? 'state'
   const answers = ref<QuizAnswerMap>({})
   const currentQuestionId = ref<QuizQuestionId>(initialQuestionId)
@@ -94,18 +97,18 @@ export function useQuizSession() {
     return nextQuestionId ? solagreeQuizLabels.next : solagreeQuizLabels.finish
   })
 
-  function raiseForwardProgressFloor() {
+  const raiseForwardProgressFloor = () => {
     maxForwardProgressValue.value = Math.max(
       maxForwardProgressValue.value,
       branchProgressValue.value
     )
   }
 
-  function resetProgressFloorToCurrentBranch() {
+  const resetProgressFloorToCurrentBranch = () => {
     maxForwardProgressValue.value = branchProgressValue.value
   }
 
-  function syncQuestionPosition(nextAnswers: QuizAnswerMap, preferredQuestionId?: QuizQuestionId) {
+  const syncQuestionPosition = (nextAnswers: QuizAnswerMap, preferredQuestionId?: QuizQuestionId) => {
     const prunedAnswers = pruneHiddenQuizAnswers(nextAnswers)
     answers.value = prunedAnswers
     currentQuestionId.value = coerceQuizCurrentQuestionId(prunedAnswers, preferredQuestionId ?? currentQuestionId.value)
@@ -113,10 +116,10 @@ export function useQuizSession() {
     raiseForwardProgressFloor()
   }
 
-  function setAnswer<TQuestionId extends QuizQuestionId>(
+  const setAnswer = <TQuestionId extends QuizQuestionId>(
     questionId: TQuestionId,
     value: QuizQuestionValue<TQuestionId> | undefined
-  ) {
+  ) => {
     const nextAnswers: QuizAnswerMap = {
       ...answers.value
     }
@@ -130,11 +133,11 @@ export function useQuizSession() {
     syncQuestionPosition(nextAnswers, questionId)
   }
 
-  function setSingleAnswer(questionId: QuizQuestionId, value: string | undefined) {
+  const setSingleAnswer = (questionId: QuizQuestionId, value: string | undefined) => {
     setAnswer(questionId, value as QuizQuestionValue | undefined)
   }
 
-  function toggleMultiAnswer(questionId: QuizQuestionId, optionId: string, checked: boolean) {
+  const toggleMultiAnswer = (questionId: QuizQuestionId, optionId: string, checked: boolean) => {
     const current = answers.value[questionId]
     const currentValues = Array.isArray(current) ? current : []
     const nextValues = checked
@@ -144,7 +147,7 @@ export function useQuizSession() {
     setAnswer(questionId, nextValues as QuizQuestionValue)
   }
 
-  function goNext() {
+  const goNext = () => {
     if (!canAdvance.value) {
       return
     }
@@ -161,7 +164,7 @@ export function useQuizSession() {
     raiseForwardProgressFloor()
   }
 
-  function goBack() {
+  const goBack = () => {
     if (phase.value === 'result') {
       phase.value = 'question'
       currentQuestionId.value = visibleQuestionIds.value.at(-1) ?? initialQuestionId
@@ -176,7 +179,7 @@ export function useQuizSession() {
     }
   }
 
-  function reset() {
+  const reset = () => {
     answers.value = {}
     currentQuestionId.value = initialQuestionId
     phase.value = 'question'

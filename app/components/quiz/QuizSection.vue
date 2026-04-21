@@ -40,7 +40,7 @@ const sectionClasses = computed(() => {
   }
 })
 
-function getQuizScrollBehavior(): ScrollBehavior {
+const getQuizScrollBehavior = (): ScrollBehavior => {
   if (!import.meta.client) {
     return 'auto'
   }
@@ -48,7 +48,7 @@ function getQuizScrollBehavior(): ScrollBehavior {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
 }
 
-async function scrollQuizToTop() {
+const scrollQuizToTop = async () => {
   if (!import.meta.client) {
     return
   }
@@ -67,11 +67,11 @@ async function scrollQuizToTop() {
   })
 }
 
-function hasRevealedQuizResult(previousPhase: typeof quizSession.phase.value) {
+const hasRevealedQuizResult = (previousPhase: typeof quizSession.phase.value) => {
   return previousPhase !== 'result' && quizSession.phase.value === 'result'
 }
 
-async function handleAdvance() {
+const handleAdvance = async () => {
   const previousPhase = quizSession.phase.value
 
   quizHost.handleAdvance()
@@ -83,7 +83,7 @@ async function handleAdvance() {
   await scrollQuizToTop()
 }
 
-function handleBack() {
+const handleBack = () => {
   quizHost.handleBack()
 }
 </script>

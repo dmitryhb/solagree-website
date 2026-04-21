@@ -41,6 +41,7 @@ bun run dev
 ## Project Docs
 
 - [API patterns](docs/api-patterns.md)
+- [Code style](docs/code-style.md)
 - [Solagree quiz host contract](docs/solagree-quiz-host-contract.md)
 
 ## Portal API integration

@@ -1,29 +1,41 @@
 import { solagreeQuizQuestionIds, solagreeQuizQuestionMap, solagreeQuizQuestions } from '~/data/quiz-schema'
 import type { QuizAnswerMap, QuizQuestionDefinition, QuizQuestionId, QuizQuestionValue } from '~/data/quiz-types'
 
-export function isQuizQuestionVisible(
+/**
+ * Resolves conditional visibility for a quiz question against current answers.
+ */
+export const isQuizQuestionVisible = (
   question: QuizQuestionDefinition,
   answers: Readonly<QuizAnswerMap>
-): boolean {
+): boolean => {
   return question.isVisible ? question.isVisible(answers) : true
 }
 
-export function getVisibleQuizQuestions(
+/**
+ * Returns the currently reachable quiz questions in schema order.
+ */
+export const getVisibleQuizQuestions = (
   answers: Readonly<QuizAnswerMap>
-): readonly QuizQuestionDefinition[] {
+): readonly QuizQuestionDefinition[] => {
   return solagreeQuizQuestions.filter(question => isQuizQuestionVisible(question, answers))
 }
 
-export function getVisibleQuizQuestionIds(
+/**
+ * Returns IDs for the currently reachable quiz questions.
+ */
+export const getVisibleQuizQuestionIds = (
   answers: Readonly<QuizAnswerMap>
-): readonly QuizQuestionId[] {
+): readonly QuizQuestionId[] => {
   return getVisibleQuizQuestions(answers).map(question => question.id)
 }
 
-export function isQuizAnswerPresent(
+/**
+ * Checks whether an answer value satisfies the minimum completeness rule.
+ */
+export const isQuizAnswerPresent = (
   questionId: QuizQuestionId,
   value: QuizQuestionValue | undefined
-): boolean {
+): boolean => {
   if (Array.isArray(value)) {
     return value.length > 0
   }
@@ -35,9 +47,12 @@ export function isQuizAnswerPresent(
   return typeof value === 'string' && value.length > 0
 }
 
-export function pruneHiddenQuizAnswers(
+/**
+ * Removes answers for questions hidden by the current branching path.
+ */
+export const pruneHiddenQuizAnswers = (
   answers: Readonly<QuizAnswerMap>
-): QuizAnswerMap {
+): QuizAnswerMap => {
   let nextAnswers: QuizAnswerMap = { ...answers }
   let previousSerialized = ''
 
@@ -67,10 +82,13 @@ export function pruneHiddenQuizAnswers(
   return nextAnswers
 }
 
-export function coerceQuizCurrentQuestionId(
+/**
+ * Ensures the active question is visible, falling back to the first visible question.
+ */
+export const coerceQuizCurrentQuestionId = (
   answers: Readonly<QuizAnswerMap>,
   currentQuestionId?: QuizQuestionId
-): QuizQuestionId {
+): QuizQuestionId => {
   const visibleQuestionIds = getVisibleQuizQuestionIds(answers)
 
   if (currentQuestionId && visibleQuestionIds.includes(currentQuestionId)) {
@@ -80,10 +98,13 @@ export function coerceQuizCurrentQuestionId(
   return visibleQuestionIds[0] ?? solagreeQuizQuestionIds[0] ?? 'state'
 }
 
-export function getNextQuizQuestionId(
+/**
+ * Finds the next visible question after the current question.
+ */
+export const getNextQuizQuestionId = (
   currentQuestionId: QuizQuestionId,
   answers: Readonly<QuizAnswerMap>
-): QuizQuestionId | null {
+): QuizQuestionId | null => {
   const visibleQuestionIds = getVisibleQuizQuestionIds(answers)
   const currentIndex = visibleQuestionIds.indexOf(currentQuestionId)
 
@@ -94,10 +115,13 @@ export function getNextQuizQuestionId(
   return visibleQuestionIds[currentIndex + 1] ?? null
 }
 
-export function getPreviousQuizQuestionId(
+/**
+ * Finds the previous visible question before the current question.
+ */
+export const getPreviousQuizQuestionId = (
   currentQuestionId: QuizQuestionId,
   answers: Readonly<QuizAnswerMap>
-): QuizQuestionId | null {
+): QuizQuestionId | null => {
   const visibleQuestionIds = getVisibleQuizQuestionIds(answers)
   const currentIndex = visibleQuestionIds.indexOf(currentQuestionId)
 
@@ -108,11 +132,14 @@ export function getPreviousQuizQuestionId(
   return visibleQuestionIds[currentIndex - 1] ?? null
 }
 
-export function getQuizProgressValue(
+/**
+ * Calculates the current visible-branch progress percentage.
+ */
+export const getQuizProgressValue = (
   currentQuestionId: QuizQuestionId,
   answers: Readonly<QuizAnswerMap>,
   phase: 'question' | 'result'
-): number {
+): number => {
   const visibleQuestionIds = getVisibleQuizQuestionIds(answers)
 
   if (!visibleQuestionIds.length) {
@@ -129,6 +156,9 @@ export function getQuizProgressValue(
   return Math.round(((normalizedIndex + 1) / visibleQuestionIds.length) * 100)
 }
 
-export function getQuizQuestionById(questionId: QuizQuestionId) {
+/**
+ * Looks up a quiz question by ID.
+ */
+export const getQuizQuestionById = (questionId: QuizQuestionId) => {
   return solagreeQuizQuestionMap[questionId]
 }

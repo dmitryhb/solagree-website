@@ -42,11 +42,11 @@ watch(
   }
 )
 
-function addLicenseNumber() {
+const addLicenseNumber = () => {
   form.licenseNumbers.push('')
 }
 
-function removeLicenseNumber(index: number) {
+const removeLicenseNumber = (index: number) => {
   if (form.licenseNumbers.length === 1) {
     form.licenseNumbers[0] = ''
     return
@@ -55,7 +55,7 @@ function removeLicenseNumber(index: number) {
   form.licenseNumbers.splice(index, 1)
 }
 
-async function handleSubmit() {
+const handleSubmit = async () => {
   if (submitting.value) {
     return
   }

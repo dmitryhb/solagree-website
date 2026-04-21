@@ -15,11 +15,11 @@ const description = computed(() =>
     : 'We could not load this page. Please try again, or return home to continue.'
 )
 
-function handleHome() {
+const handleHome = () => {
   clearError({ redirect: '/' })
 }
 
-function handleQuiz() {
+const handleQuiz = () => {
   clearError({ redirect: '/#quiz' })
 }
 </script>

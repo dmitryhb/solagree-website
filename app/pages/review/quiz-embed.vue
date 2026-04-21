@@ -28,7 +28,7 @@ const hostConfig = {
   }
 } as const
 
-function handleHostEvent(event: QuizHostEvent) {
+const handleHostEvent = (event: QuizHostEvent) => {
   events.value = [event, ...events.value].slice(0, 8)
 }
 

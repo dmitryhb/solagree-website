@@ -42,8 +42,8 @@ API service modules should own:
 - endpoint constants
 - request payload builders
 - response and error handling
-- exported submit/load/update functions
-- TSDoc for exported functions and interfaces
+- exported submit/load/update helpers
+- TSDoc for exported helpers and interfaces
 
 Example shape:
 
@@ -53,14 +53,17 @@ export interface SubmitThingOptions {
   fetcher: Fetcher
 }
 
-export function createThingPayload(form: ThingFormState): ThingPayload {
+export const createThingPayload = (form: ThingFormState): ThingPayload => {
   return {
     ...form,
     name: form.name.trim()
   }
 }
 
-export async function submitThing(form: ThingFormState, options: SubmitThingOptions) {
+export const submitThing = async (
+  form: ThingFormState,
+  options: SubmitThingOptions
+): Promise<ThingApiResponse> => {
   const response = await options.fetcher<ThingApiResponse>(url, {
     method: 'POST',
     body: createThingPayload(form)
@@ -88,7 +91,7 @@ await submitAttorneyApplication(form, {
 Avoid:
 
 ```ts
-export async function submitAttorneyApplication(form: AttorneyApplicationFormState) {
+export const submitAttorneyApplication = async (form: AttorneyApplicationFormState) => {
   const runtimeConfig = useRuntimeConfig()
   // ...
 }
@@ -109,7 +112,7 @@ Store endpoint paths as constants inside the service module.
 Normalize API base URLs before appending endpoint paths:
 
 ```ts
-export function normalizePortalApiBaseUrl(portalApiBaseUrl: string) {
+export const normalizePortalApiBaseUrl = (portalApiBaseUrl: string): string => {
   return String(portalApiBaseUrl || '').replace(/\/+$/, '')
 }
 ```
@@ -157,8 +160,8 @@ Add TSDoc to exported service interfaces and functions. Keep comments concise an
 Document:
 
 - what payload builders normalize
-- what a submit function returns
-- what errors a submit function throws
+- what a submit helper returns
+- what errors a submit helper throws
 - what dependencies/options the service expects
 
 ## Verification

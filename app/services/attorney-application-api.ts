@@ -43,16 +43,16 @@ export interface SubmitAttorneyApplicationOptions {
 /**
  * Removes trailing slashes so endpoint paths can be appended consistently.
  */
-export function normalizePortalApiBaseUrl(portalApiBaseUrl: string) {
+export const normalizePortalApiBaseUrl = (portalApiBaseUrl: string): string => {
   return String(portalApiBaseUrl || '').replace(/\/+$/, '')
 }
 
 /**
  * Creates the API payload from form state and trims repeatable license fields.
  */
-export function createAttorneyApplicationSubmissionPayload(
+export const createAttorneyApplicationSubmissionPayload = (
   form: AttorneyApplicationFormState
-): AttorneyApplicationSubmissionPayload {
+): AttorneyApplicationSubmissionPayload => {
   return {
     ...form,
     licenseNumbers: form.licenseNumbers.map((licenseNumber) => licenseNumber.trim())
@@ -62,7 +62,7 @@ export function createAttorneyApplicationSubmissionPayload(
 /**
  * Converts Nuxt/fetch/native errors into a user-facing submission message.
  */
-export function getAttorneyApplicationSubmissionErrorMessage(error: unknown) {
+export const getAttorneyApplicationSubmissionErrorMessage = (error: unknown): string => {
   if (
     typeof error === 'object'
     && error !== null
@@ -96,10 +96,10 @@ export function getAttorneyApplicationSubmissionErrorMessage(error: unknown) {
  *
  * @throws Error when the portal returns an application-level error response.
  */
-export async function submitAttorneyApplication(
+export const submitAttorneyApplication = async (
   form: AttorneyApplicationFormState,
   options: SubmitAttorneyApplicationOptions
-) {
+): Promise<AttorneyApplicationApiResponse> => {
   const portalApiBaseUrl = normalizePortalApiBaseUrl(options.portalApiBaseUrl)
   const response = await options.fetcher<AttorneyApplicationApiResult>(
     `${portalApiBaseUrl}${ATTORNEY_APPLICATIONS_ENDPOINT}`,

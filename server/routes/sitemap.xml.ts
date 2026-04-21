@@ -3,11 +3,11 @@ import type { SitemapRoute } from '~/types/sitemap'
 
 const DEFAULT_SITE_URL = 'https://www.solagree.com'
 
-function normalizeSiteUrl(siteUrl?: string) {
+const normalizeSiteUrl = (siteUrl?: string) => {
   return (siteUrl || DEFAULT_SITE_URL).replace(/\/+$/, '')
 }
 
-function normalizePath(path: string) {
+const normalizePath = (path: string) => {
   if (path === '/') {
     return ''
   }
@@ -15,7 +15,7 @@ function normalizePath(path: string) {
   return path.startsWith('/') ? path : `/${path}`
 }
 
-function escapeXml(value: string) {
+const escapeXml = (value: string) => {
   return value
     .replaceAll('&', '&amp;')
     .replaceAll('<', '&lt;')
@@ -24,7 +24,7 @@ function escapeXml(value: string) {
     .replaceAll("'", '&apos;')
 }
 
-function renderSitemapUrl(route: SitemapRoute, siteUrl: string) {
+const renderSitemapUrl = (route: SitemapRoute, siteUrl: string) => {
   const loc = `${siteUrl}${normalizePath(route.path)}`
 
   return [
@@ -36,7 +36,7 @@ function renderSitemapUrl(route: SitemapRoute, siteUrl: string) {
   ].join('\n')
 }
 
-function renderSitemap(routes: readonly SitemapRoute[], siteUrl: string) {
+const renderSitemap = (routes: readonly SitemapRoute[], siteUrl: string) => {
   return [
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',

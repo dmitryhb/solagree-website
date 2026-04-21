@@ -2,7 +2,7 @@ import type { RouterConfig } from '@nuxt/schema'
 
 const ANCHOR_SCROLL_OFFSET = 96
 
-function getHashSelector(hash: string) {
+const getHashSelector = (hash: string) => {
   try {
     return decodeURIComponent(hash)
   } catch {
@@ -11,7 +11,7 @@ function getHashSelector(hash: string) {
 }
 
 export default <RouterConfig>{
-  scrollBehavior(to, _from, savedPosition) {
+  scrollBehavior: (to, _from, savedPosition) => {
     if (savedPosition) {
       return savedPosition
     }

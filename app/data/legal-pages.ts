@@ -141,4 +141,7 @@ export const legalPages: Record<LegalSlug, LegalPageContent> = {
   }
 }
 
+/**
+ * Type guard for validating route params against configured legal page slugs.
+ */
 export const isLegalSlug = (slug: string): slug is LegalSlug => slug in legalPages
