@@ -1,9 +1,10 @@
 <script setup lang="ts">
 const route = useRoute()
-const isQuizRoute = computed(() => route.path === '/quiz')
+const normalizedRoutePath = computed(() => (route.path === '/' ? route.path : route.path.replace(/\/+$/, '')))
+const isQuizRoute = computed(() => normalizedRoutePath.value === '/quiz')
 const showSiteHeader = computed(() => !isQuizRoute.value)
-const isInternalShell = computed(() => route.path !== '/' && !isQuizRoute.value)
-const pageKey = computed(() => route.path)
+const isInternalShell = computed(() => normalizedRoutePath.value !== '/' && !isQuizRoute.value)
+const pageKey = computed(() => normalizedRoutePath.value)
 const pageTransition = {
   name: 'page-appear',
   mode: 'out-in',
