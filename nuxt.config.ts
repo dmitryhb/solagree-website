@@ -22,6 +22,7 @@ export default defineNuxtConfig({
   css: ['~/assets/styles/vendor.css', '~/assets/styles/main.scss'],
   runtimeConfig: {
     public: {
+      siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'https://www.solagree.com',
       solagreeQuiz: {
         hostId: 'solagree-quiz',
         mode: 'standalone',
