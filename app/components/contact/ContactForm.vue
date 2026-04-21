@@ -101,6 +101,7 @@ function handleSubmit() {
     <p
       v-if="statusMessage"
       class="contact-form__status"
+      role="status"
       aria-live="polite"
     >
       {{ statusMessage }}

@@ -6,6 +6,8 @@ const props = defineProps<{
   options: readonly QuizOption[]
   value?: string
   placeholder?: string
+  labelledBy?: string
+  describedBy?: string
 }>()
 
 const emit = defineEmits<{
@@ -24,6 +26,8 @@ function onChange(event: Event) {
       :id="id"
       class="quiz-select-field__control"
       :value="value ?? ''"
+      :aria-labelledby="labelledBy"
+      :aria-describedby="describedBy"
       @change="onChange"
     >
       <option value="">

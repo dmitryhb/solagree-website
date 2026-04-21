@@ -17,13 +17,13 @@ const hostConfig = {
       href: 'https://example.com/book-solagree',
       trackingId: 'cta-solagree-review',
       target: '_blank',
-      rel: 'noreferrer'
+      rel: 'noopener noreferrer'
     },
     'attorney-consult': {
       href: 'https://example.com/book-attorney',
       trackingId: 'cta-attorney-review',
       target: '_blank',
-      rel: 'noreferrer'
+      rel: 'noopener noreferrer'
     }
   }
 } as const

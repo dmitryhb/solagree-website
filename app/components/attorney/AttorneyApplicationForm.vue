@@ -182,7 +182,8 @@ function handleSubmit() {
 
         <div
           class="attorney-application-form__state-list"
-          aria-describedby="attorney-bar-states-hint"
+          :aria-describedby="hasBarStateError ? 'attorney-bar-states-hint attorney-bar-states-error' : 'attorney-bar-states-hint'"
+          :aria-invalid="hasBarStateError ? 'true' : undefined"
         >
           <label
             v-for="state in stateOptions"
@@ -201,7 +202,9 @@ function handleSubmit() {
 
         <p
           v-if="hasBarStateError"
+          id="attorney-bar-states-error"
           class="attorney-application-form__error"
+          role="alert"
         >
           Select at least one state.
         </p>
@@ -230,6 +233,8 @@ function handleSubmit() {
               :name="`licenseNumber-${index}`"
               type="text"
               placeholder="Type here..."
+              :aria-invalid="hasAttemptedSubmit && !form.licenseNumbers[index]?.trim() ? 'true' : undefined"
+              :aria-describedby="hasLicenseNumberError ? 'attorney-license-error' : undefined"
               required
             >
             <button
@@ -253,7 +258,9 @@ function handleSubmit() {
 
         <p
           v-if="hasLicenseNumberError"
+          id="attorney-license-error"
           class="attorney-application-form__error"
+          role="alert"
         >
           Enter a license number for every license field.
         </p>
@@ -310,7 +317,7 @@ function handleSubmit() {
           id="attorney-disciplinary-finding-hint"
           class="attorney-application-form__hint"
         >
-          A positive answer does not necessarily disqualify you. Yes/No - if yes, please explain.
+          A positive answer does not necessarily disqualify you.
         </p>
         <select
           id="attorney-disciplinary-finding"

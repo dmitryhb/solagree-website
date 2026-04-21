@@ -153,7 +153,7 @@ const currentYear = new Date().getFullYear()
                 class="site-footer__social-link"
                 :href="link.href"
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 :aria-label="link.ariaLabel"
               >
                 <span

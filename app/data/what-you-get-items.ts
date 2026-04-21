@@ -4,16 +4,16 @@ export const whatYouGetItems: WhatYouGetItem[] = [
   {
     title: 'Faster Resolution',
     description: 'Typically resolves in months - completely virtual, and no courtroom appearances.',
-    iconSrc: '/images/faster-resolution.png'
+    iconSrc: '/images/faster-resolution.webp'
   },
   {
     title: 'Flat-Fee Pricing',
     description: 'Know your costs upfront with predictable flat fees - no hourly billing surprises.',
-    iconSrc: '/images/flatfree-pricing.png'
+    iconSrc: '/images/flatfree-pricing.webp'
   },
   {
     title: 'Binding Commitment',
     description: 'Both parties commit to reaching resolution from day one - no one walks away.',
-    iconSrc: '/images/binding-commitment.png'
+    iconSrc: '/images/binding-commitment.webp'
   }
 ]

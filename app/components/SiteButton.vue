@@ -46,7 +46,7 @@ const linkProps = computed(() => {
     return {
       href: props.href,
       target: isExternal ? '_blank' : undefined,
-      rel: isExternal ? 'noreferrer' : undefined
+      rel: isExternal ? 'noopener noreferrer' : undefined
     }
   }
 

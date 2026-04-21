@@ -42,7 +42,7 @@ import { webinarFeatures } from '~/data/webinar-registration'
     <figure class="webinar-registration-intro__presenter">
       <img
         class="webinar-registration-intro__presenter-image"
-        src="/images/amanda.png"
+        src="/images/amanda.webp"
         alt="Amanda, Solagree co-founder"
         width="762"
         height="562"

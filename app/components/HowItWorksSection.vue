@@ -49,7 +49,7 @@ import { howItWorksPhases } from '~/data/how-it-works-phases'
 
       <figure class="how-it-works-section__video">
         <img
-          src="/images/video-placeholder.png"
+          src="/images/video-placeholder.webp"
           alt="Video placeholder for Solagree: How It Works."
           width="2152"
           height="1210"
