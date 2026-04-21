@@ -12,15 +12,14 @@
 
 .contact-page__top {
   display: grid;
-  grid-template-columns: minmax(0, 380px) minmax(390px, 480px);
-  justify-content: space-between;
-  gap: clamp(3rem, 8vw, 7rem);
+  grid-template-columns: minmax(0, 1fr) minmax(390px, 480px);
+  gap: clamp(3.5rem, 6vw, 5rem);
 }
 
 .contact-page__intro {
   display: grid;
   align-content: start;
-  min-height: 335px;
+  min-height: 528px;
 }
 
 .contact-page__eyebrow {
@@ -35,25 +34,25 @@
 }
 
 .contact-page__copy {
-  max-width: 356px;
+  max-width: 560px;
   margin: 2.25rem 0 0;
   color: #171616;
   font-family: var(--font-nav);
-  font-size: 1rem;
-  line-height: 1.42;
+  font-size: 1.125rem;
+  line-height: 1.45;
 }
 
 .contact-person-card {
   display: flex;
   align-items: center;
-  gap: 1.125rem;
+  gap: 1.5rem;
   margin-top: auto;
 }
 
 .contact-person-card__image {
   display: block;
-  width: 96px;
-  height: 96px;
+  width: 130px;
+  height: 130px;
   border-radius: 2px;
   object-fit: cover;
   object-position: center;
@@ -79,7 +78,7 @@
 .contact-person-card__name {
   color: var(--color-ink);
   font-family: var(--font-nav);
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 500;
   line-height: 1.15;
 }
