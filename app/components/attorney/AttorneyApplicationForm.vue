@@ -445,7 +445,11 @@ function handleSubmit() {
         >
         <span>
           I have read and agree to the
-          <NuxtLink to="/legal/terms-of-service">
+          <NuxtLink
+            to="/legal/terms-of-service"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             terms and conditions
           </NuxtLink>.
         </span>
