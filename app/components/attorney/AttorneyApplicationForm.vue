@@ -456,10 +456,14 @@ function handleSubmit() {
         type="submit"
       >
         <span>SEND</span>
-        <span
+        <img
           class="attorney-application-form__submit-icon"
+          src="/icons/send.svg"
+          alt=""
+          width="16"
+          height="16"
           aria-hidden="true"
-        />
+        >
       </button>
 
       <div
