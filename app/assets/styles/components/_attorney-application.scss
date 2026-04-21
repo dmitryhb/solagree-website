@@ -1,0 +1,328 @@
+.attorney-application-page {
+  min-height: 100vh;
+  background: var(--color-page);
+  color: var(--color-ink);
+}
+
+.attorney-application-page__content {
+  width: min(calc(100% - 2.5rem), 1184px);
+  margin-inline: auto;
+  padding-block: clamp(4.5rem, 6vw, 5.75rem) clamp(5.25rem, 7.5vw, 7rem);
+}
+
+.attorney-application-form {
+  width: min(100%, 560px);
+  margin-inline: auto;
+}
+
+.attorney-application-form__title {
+  margin: 0 0 clamp(2rem, 3.5vw, 2.625rem);
+  color: var(--color-heading);
+  font-family: var(--font-nav);
+  font-size: clamp(1.15rem, 1.55vw, 1.375rem);
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.attorney-application-form__form {
+  display: grid;
+  gap: 1.125rem;
+}
+
+.attorney-application-form__field,
+.attorney-application-form__fieldset {
+  display: grid;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.attorney-application-form__field label,
+.attorney-application-form__fieldset legend {
+  color: var(--color-ink);
+  font-family: var(--font-nav);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.attorney-application-form__field label span,
+.attorney-application-form__fieldset legend span {
+  color: var(--color-badge-warm);
+}
+
+.attorney-application-form__field input,
+.attorney-application-form__field select,
+.attorney-application-form__field textarea,
+.attorney-application-form__license-row input {
+  width: 100%;
+  min-height: 43px;
+  border: 1px solid rgba(62, 64, 89, 0.34);
+  border-radius: 6px;
+  background: var(--color-page);
+  color: var(--color-ink);
+  font-family: var(--font-nav);
+  font-size: 0.875rem;
+  line-height: 1.4;
+  padding: 0.75rem 1rem;
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    background-color 160ms ease;
+}
+
+.attorney-application-form__field textarea {
+  min-height: 106px;
+  resize: vertical;
+}
+
+.attorney-application-form__field select {
+  appearance: none;
+  background-image:
+    linear-gradient(45deg, transparent 50%, currentColor 50%),
+    linear-gradient(135deg, currentColor 50%, transparent 50%);
+  background-position:
+    calc(100% - 18px) 52%,
+    calc(100% - 13px) 52%;
+  background-size:
+    5px 5px,
+    5px 5px;
+  background-repeat: no-repeat;
+  padding-right: 2.75rem;
+}
+
+.attorney-application-form__field input::placeholder,
+.attorney-application-form__field textarea::placeholder,
+.attorney-application-form__license-row input::placeholder {
+  color: rgba(62, 64, 89, 0.52);
+  opacity: 1;
+}
+
+.attorney-application-form__field input:focus,
+.attorney-application-form__field select:focus,
+.attorney-application-form__field textarea:focus,
+.attorney-application-form__license-row input:focus {
+  outline: none;
+  border-color: rgba(62, 64, 89, 0.58);
+  box-shadow: 0 0 0 3px rgba(62, 64, 89, 0.1);
+}
+
+.attorney-application-form__fieldset {
+  min-inline-size: 0;
+  padding: 0;
+  border: 0;
+  margin: 0;
+}
+
+.attorney-application-form__hint,
+.attorney-application-form__error {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  line-height: 1.35;
+}
+
+.attorney-application-form__hint {
+  color: rgba(62, 64, 89, 0.72);
+}
+
+.attorney-application-form__error {
+  color: var(--color-badge-warm);
+}
+
+.attorney-application-form__state-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+  max-height: 180px;
+  overflow: auto;
+  padding: 0.75rem;
+  border: 1px solid rgba(62, 64, 89, 0.34);
+  border-radius: 6px;
+  background: var(--color-page);
+}
+
+.attorney-application-form__fieldset--invalid .attorney-application-form__state-list {
+  border-color: var(--color-badge-warm);
+}
+
+.attorney-application-form__checkbox-card,
+.attorney-application-form__terms {
+  display: flex;
+  align-items: flex-start;
+  color: var(--color-ink);
+  font-family: var(--font-nav);
+  line-height: 1.35;
+}
+
+.attorney-application-form__checkbox-card {
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+}
+
+.attorney-application-form__checkbox-card input,
+.attorney-application-form__terms input {
+  width: 1rem;
+  height: 1rem;
+  flex: 0 0 auto;
+  accent-color: var(--color-ink);
+}
+
+.attorney-application-form__license-list {
+  display: grid;
+  gap: 0.625rem;
+}
+
+.attorney-application-form__license-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.attorney-application-form__small-action,
+.attorney-application-form__add-license {
+  border: 0;
+  background: transparent;
+  color: var(--color-ink);
+  cursor: pointer;
+  font-family: var(--font-nav);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.attorney-application-form__small-action {
+  padding: 0.5rem 0;
+}
+
+.attorney-application-form__add-license {
+  justify-self: start;
+  padding: 0;
+}
+
+.attorney-application-form__terms {
+  gap: 0.625rem;
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+}
+
+.attorney-application-form__terms a {
+  color: inherit;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.attorney-application-form__submit {
+  display: inline-flex;
+  width: 100%;
+  min-height: 45px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--color-ink);
+  color: var(--color-white);
+  cursor: pointer;
+  font-family: var(--font-nav);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1;
+  padding: 0.75rem 1.5rem;
+  transition: background-color 160ms ease;
+}
+
+.attorney-application-form__submit:hover {
+  background: #323449;
+}
+
+.attorney-application-form__submit:focus-visible,
+.attorney-application-form__small-action:focus-visible,
+.attorney-application-form__add-license:focus-visible,
+.attorney-application-form__terms a:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 3px;
+}
+
+.attorney-application-form__submit-icon {
+  position: relative;
+  width: 12px;
+  height: 12px;
+  color: var(--color-accent);
+}
+
+.attorney-application-form__submit-icon::before,
+.attorney-application-form__submit-icon::after {
+  content: "";
+  position: absolute;
+  background: currentColor;
+}
+
+.attorney-application-form__submit-icon::before {
+  top: 5px;
+  left: 1px;
+  width: 10px;
+  height: 2px;
+  transform: rotate(-28deg);
+  transform-origin: right center;
+}
+
+.attorney-application-form__submit-icon::after {
+  top: 1px;
+  right: 0;
+  width: 7px;
+  height: 7px;
+  border-top: 2px solid currentColor;
+  border-right: 2px solid currentColor;
+  background: transparent;
+}
+
+.attorney-application-form__result {
+  display: grid;
+  gap: 0.35rem;
+  padding: 1rem;
+  border-radius: 10px;
+  background: var(--color-surface-cool);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  line-height: 1.45;
+}
+
+.attorney-application-form__result p {
+  margin: 0;
+}
+
+.attorney-application-form__result-title {
+  font-family: var(--font-nav);
+  font-weight: 700;
+}
+
+.attorney-application-form__result--auto-approval {
+  background: rgba(250, 255, 129, 0.35);
+}
+
+@media (max-width: 767px) {
+  .attorney-application-page__content {
+    width: min(calc(100% - 2rem), 640px);
+    padding-block: 3.25rem 4.5rem;
+  }
+
+  .attorney-application-form__state-list {
+    grid-template-columns: 1fr;
+  }
+
+  .attorney-application-form__license-row {
+    grid-template-columns: 1fr;
+    gap: 0.35rem;
+  }
+
+  .attorney-application-form__small-action {
+    justify-self: start;
+    padding: 0;
+  }
+}

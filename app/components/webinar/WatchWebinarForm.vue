@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { stateOptions } from '~/data/webinar-registration'
+import { stateOptions } from '~/data/us-states'
 import type { WebinarFormState } from '~/types/webinar'
 
 const form = reactive<WebinarFormState>({

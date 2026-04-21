@@ -97,7 +97,7 @@ const currentYear = new Date().getFullYear()
                 </NuxtLink>
               </li>
               <li>
-                <NuxtLink to="/">
+                <NuxtLink to="/attorney-application">
                   Join the Network
                 </NuxtLink>
               </li>
