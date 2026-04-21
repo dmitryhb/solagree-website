@@ -120,7 +120,7 @@ const currentYear = new Date().getFullYear()
                 </NuxtLink>
               </li>
               <li>
-                <NuxtLink to="/">
+                <NuxtLink to="/contact">
                   Contact Us
                 </NuxtLink>
               </li>
