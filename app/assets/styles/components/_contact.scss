@@ -105,8 +105,8 @@
 .contact-form textarea {
   width: 100%;
   min-height: 43px;
-  border: 1px solid rgba(62, 64, 89, 0.62);
-  border-radius: 2px;
+  border: 1px solid rgba(62, 64, 89, 0.34);
+  border-radius: 6px;
   background: var(--color-page);
   color: var(--color-ink);
   font-family: var(--font-nav);
@@ -119,20 +119,20 @@
 }
 
 .contact-form textarea {
-  min-height: 151px;
+  min-height: 106px;
   resize: vertical;
 }
 
 .contact-form input::placeholder,
 .contact-form textarea::placeholder {
-  color: rgba(62, 64, 89, 0.72);
+  color: rgba(62, 64, 89, 0.52);
   opacity: 1;
 }
 
 .contact-form input:focus,
 .contact-form textarea:focus {
   outline: none;
-  border-color: var(--color-ink);
+  border-color: rgba(62, 64, 89, 0.58);
   box-shadow: 0 0 0 3px rgba(62, 64, 89, 0.1);
 }
 
