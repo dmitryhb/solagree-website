@@ -38,6 +38,11 @@ yarn dev
 bun run dev
 ```
 
+## Project Docs
+
+- [API patterns](docs/api-patterns.md)
+- [Solagree quiz host contract](docs/solagree-quiz-host-contract.md)
+
 ## Portal API integration
 
 The attorney application form submits to the Solagree Portal API.
