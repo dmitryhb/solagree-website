@@ -317,7 +317,7 @@ function handleSubmit() {
           id="attorney-disciplinary-finding-hint"
           class="attorney-application-form__hint"
         >
-          A positive answer does not necessarily disqualify you. Yes/No - if yes, please explain.
+          A positive answer does not necessarily disqualify you.
         </p>
         <select
           id="attorney-disciplinary-finding"
