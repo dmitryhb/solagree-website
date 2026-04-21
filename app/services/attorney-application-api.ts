@@ -19,19 +19,37 @@ type AttorneyApplicationFetcher = <TResponse>(
   options: AttorneyApplicationFetchOptions
 ) => Promise<TResponse>
 
+/**
+ * Request body sent to the portal API after client-side normalization.
+ */
 export interface AttorneyApplicationSubmissionPayload extends AttorneyApplicationFormState {
   licenseNumbers: string[]
 }
 
+/**
+ * Dependencies required to submit an attorney application.
+ */
 export interface SubmitAttorneyApplicationOptions {
+  /**
+   * Base URL for the external portal API, usually from runtime config.
+   */
   portalApiBaseUrl: string
+  /**
+   * Fetch implementation used by the caller. Nuxt components should pass `$fetch`.
+   */
   fetcher: AttorneyApplicationFetcher
 }
 
+/**
+ * Removes trailing slashes so endpoint paths can be appended consistently.
+ */
 export function normalizePortalApiBaseUrl(portalApiBaseUrl: string) {
   return String(portalApiBaseUrl || '').replace(/\/+$/, '')
 }
 
+/**
+ * Creates the API payload from form state and trims repeatable license fields.
+ */
 export function createAttorneyApplicationSubmissionPayload(
   form: AttorneyApplicationFormState
 ): AttorneyApplicationSubmissionPayload {
@@ -41,6 +59,9 @@ export function createAttorneyApplicationSubmissionPayload(
   }
 }
 
+/**
+ * Converts Nuxt/fetch/native errors into a user-facing submission message.
+ */
 export function getAttorneyApplicationSubmissionErrorMessage(error: unknown) {
   if (
     typeof error === 'object'
@@ -70,6 +91,11 @@ export function getAttorneyApplicationSubmissionErrorMessage(error: unknown) {
   return DEFAULT_SUBMISSION_ERROR_MESSAGE
 }
 
+/**
+ * Submits an attorney application to the portal API and returns the successful API response.
+ *
+ * @throws Error when the portal returns an application-level error response.
+ */
 export async function submitAttorneyApplication(
   form: AttorneyApplicationFormState,
   options: SubmitAttorneyApplicationOptions
