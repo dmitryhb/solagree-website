@@ -12,8 +12,8 @@ defineProps<{
       class="contact-person-card__image"
       :src="person.imageSrc"
       :alt="person.name"
-      width="96"
-      height="96"
+      width="118"
+      height="118"
       loading="lazy"
       decoding="async"
     >
@@ -25,12 +25,14 @@ defineProps<{
       <h2 class="contact-person-card__name">
         {{ person.name }}
       </h2>
-      <a :href="`mailto:${person.email}`">
-        {{ person.email }}
-      </a>
-      <a :href="`tel:${person.phone.replace(/[^+\d]/g, '')}`">
-        {{ person.phone }}
-      </a>
+      <div class="contact-person-card__links">
+        <a :href="`mailto:${person.email}`">
+          {{ person.email }}
+        </a>
+        <a :href="`tel:${person.phone.replace(/[^+\d]/g, '')}`">
+          {{ person.phone }}
+        </a>
+      </div>
     </div>
   </article>
 </template>

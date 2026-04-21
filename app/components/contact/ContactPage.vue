@@ -10,9 +10,9 @@ import { contactPerson, directContactItems } from '~/data/contact'
     <section class="contact-page__content">
       <div class="contact-page__top">
         <div class="contact-page__intro">
-          <p class="contact-page__eyebrow">
+          <h1 class="contact-page__title">
             Contact
-          </p>
+          </h1>
           <p class="contact-page__copy">
             Whether you have additional questions, want to book a consultation, or need support, our team is here to help.
           </p>

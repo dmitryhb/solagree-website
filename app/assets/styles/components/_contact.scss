@@ -12,7 +12,7 @@
 
 .contact-page__top {
   display: grid;
-  grid-template-columns: minmax(0, 356px) minmax(390px, 480px);
+  grid-template-columns: minmax(0, 520px) minmax(390px, 480px);
   justify-content: space-between;
   gap: clamp(4rem, 7vw, 7rem);
 }
@@ -22,19 +22,17 @@
   align-content: start;
 }
 
-.contact-page__eyebrow {
+.contact-page__title {
   margin: 0;
-  color: var(--color-ink);
-  font-family: var(--font-nav);
-  font-size: 0.8125rem;
-  font-weight: 700;
-  line-height: 1.35;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  color: var(--color-heading);
+  font-family: var(--font-display);
+  font-size: clamp(2.25rem, 4vw, 3.375rem);
+  font-weight: 400;
+  line-height: 1.1;
 }
 
 .contact-page__copy {
-  max-width: 356px;
+  max-width: 520px;
   margin: 2rem 0 0;
   color: #171616;
   font-family: var(--font-nav);
@@ -45,14 +43,14 @@
 .contact-person-card {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 1.25rem;
   margin-top: clamp(5.25rem, 8vw, 6.25rem);
 }
 
 .contact-person-card__image {
   display: block;
-  width: 96px;
-  height: 96px;
+  width: 118px;
+  height: 118px;
   border-radius: 2px;
   object-fit: cover;
   object-position: center;
@@ -71,22 +69,28 @@
 .contact-person-card__role {
   color: rgba(62, 64, 89, 0.6);
   font-family: var(--font-body);
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   line-height: 1.3;
 }
 
 .contact-person-card__name {
   color: var(--color-ink);
   font-family: var(--font-nav);
-  font-size: 1rem;
+  font-size: 1.125rem;
   font-weight: 500;
   line-height: 1.15;
+}
+
+.contact-person-card__links {
+  display: grid;
+  gap: 0.1rem;
+  margin-top: 0.5rem;
 }
 
 .contact-person-card a {
   color: var(--color-ink);
   font-family: var(--font-body);
-  font-size: 0.75rem;
+  font-size: 0.875rem;
   line-height: 1.3;
   text-decoration: none;
 }
@@ -324,8 +328,8 @@
   }
 
   .contact-person-card__image {
-    width: 80px;
-    height: 80px;
+    width: 92px;
+    height: 92px;
   }
 
   .contact-person-card__name {

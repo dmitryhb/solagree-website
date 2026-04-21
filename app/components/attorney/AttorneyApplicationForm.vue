@@ -306,10 +306,17 @@ function handleSubmit() {
         <label for="attorney-disciplinary-finding">
           Have you ever been subject to a disciplinary finding?<span aria-hidden="true">*</span>
         </label>
+        <p
+          id="attorney-disciplinary-finding-hint"
+          class="attorney-application-form__hint"
+        >
+          A positive answer does not necessarily disqualify you. Yes/No - if yes, please explain.
+        </p>
         <select
           id="attorney-disciplinary-finding"
           v-model="form.disciplinaryFinding"
           name="disciplinaryFinding"
+          aria-describedby="attorney-disciplinary-finding-hint"
           required
         >
           <option
@@ -412,7 +419,7 @@ function handleSubmit() {
 
       <div class="attorney-application-form__field attorney-application-form__field--select">
         <label for="attorney-consultation-interest">
-          Interested in 30-45 minute flat-fee pre-enrollment consultation calls?<span aria-hidden="true">*</span>
+          Are you interested in taking 30-45 min flat fee ($250) pre-enrollment consultation calls as an attorney advocate?<span aria-hidden="true">*</span>
         </label>
         <select
           id="attorney-consultation-interest"
