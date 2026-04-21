@@ -167,17 +167,17 @@ const currentYear = new Date().getFullYear()
 
           <ul class="site-footer__legal-links">
             <li>
-              <NuxtLink to="/">
+              <NuxtLink to="/legal/terms-of-service">
                 Terms of Service
               </NuxtLink>
             </li>
             <li>
-              <NuxtLink to="/">
+              <NuxtLink to="/legal/privacy-policy">
                 Privacy Policy
               </NuxtLink>
             </li>
             <li>
-              <NuxtLink to="/">
+              <NuxtLink to="/legal/accessibility">
                 Accessibility
               </NuxtLink>
             </li>
