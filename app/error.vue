@@ -29,56 +29,29 @@ function handleQuiz() {
     <div class="app-shell app-shell--internal">
       <AppHeader />
 
-      <main class="error-page">
-        <section
-          class="error-page__hero"
-          aria-labelledby="error-page-title"
-        >
-          <div class="error-page__content">
-            <p class="error-page__eyebrow">
-              {{ eyebrow }}
-            </p>
-
-            <h1
-              id="error-page-title"
-              class="error-page__title"
-            >
-              {{ title }}
-            </h1>
-
-            <p class="error-page__description">
-              {{ description }}
-            </p>
-
-            <div class="error-page__actions">
-              <button
-                class="sol-button sol-button--primary"
-                type="button"
-                @click="handleHome"
-              >
-                Return home
-              </button>
-
-              <button
-                class="sol-button sol-button--muted"
-                type="button"
-                @click="handleQuiz"
-              >
-                Take the quiz
-              </button>
-            </div>
-          </div>
-
-          <div
-            class="error-page__mark"
-            aria-hidden="true"
+      <ErrorPageContent
+        :eyebrow="eyebrow"
+        :title="title"
+        :description="description"
+      >
+        <template #actions>
+          <button
+            class="sol-button sol-button--primary"
+            type="button"
+            @click="handleHome"
           >
-            <span>404</span>
-          </div>
-        </section>
+            Return home
+          </button>
 
-        <SiteFooter />
-      </main>
+          <button
+            class="sol-button sol-button--muted"
+            type="button"
+            @click="handleQuiz"
+          >
+            Take the quiz
+          </button>
+        </template>
+      </ErrorPageContent>
     </div>
   </UApp>
 </template>
