@@ -46,7 +46,7 @@
 
         <figure class="for-professionals-section__media">
           <img
-            src="/images/for-professionals.png"
+            src="/images/for-professionals.webp"
             alt="Professional advisor seated at a desk."
             width="1056"
             height="1086"

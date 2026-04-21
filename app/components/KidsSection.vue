@@ -7,7 +7,7 @@
     <div class="kids-section__inner">
       <figure class="kids-section__media">
         <img
-          src="/images/kids.png"
+          src="/images/kids.webp"
           alt="Parent crouching beside a child in a family home."
           width="1050"
           height="1288"
