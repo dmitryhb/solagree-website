@@ -6,6 +6,7 @@ const isMobileMenuOpen = ref(false)
 const isScrolled = ref(false)
 const isHomeRoute = computed(() => route.path === '/')
 const isSolidHeader = computed(() => !isHomeRoute.value)
+const menuToggleLabel = computed(() => (isMobileMenuOpen.value ? 'Close navigation menu' : 'Open navigation menu'))
 
 function updateScrolledState() {
   isScrolled.value = window.scrollY > 8
@@ -44,6 +45,7 @@ watch(
       'site-header--scrolled': isHomeRoute && isScrolled,
       'site-header--menu-open': isMobileMenuOpen
     }"
+    @keydown.esc="closeMobileMenu"
   >
     <div class="site-header__bar">
       <NuxtLink
@@ -70,6 +72,7 @@ watch(
           :key="link.label"
           class="site-header__nav-link"
           :to="link.to"
+          :aria-current="route.fullPath === link.to ? 'page' : undefined"
         >
           {{ link.label }}
         </NuxtLink>
@@ -79,6 +82,7 @@ watch(
         <NuxtLink
           class="site-header__login"
           :to="headerLoginLink.to"
+          :aria-current="route.path === headerLoginLink.to ? 'page' : undefined"
         >
           {{ headerLoginLink.label }}
         </NuxtLink>
@@ -98,7 +102,7 @@ watch(
         type="button"
         :aria-expanded="isMobileMenuOpen"
         aria-controls="site-header-mobile-menu"
-        aria-label="Toggle navigation menu"
+        :aria-label="menuToggleLabel"
         @click="isMobileMenuOpen = !isMobileMenuOpen"
       >
         <span aria-hidden="true" />
@@ -121,6 +125,7 @@ watch(
             :key="link.label"
             class="site-header__mobile-link"
             :to="link.to"
+            :aria-current="route.fullPath === link.to ? 'page' : undefined"
             @click="closeMobileMenu"
           >
             {{ link.label }}
@@ -131,6 +136,7 @@ watch(
           <NuxtLink
             class="site-header__mobile-login"
             :to="headerLoginLink.to"
+            :aria-current="route.path === headerLoginLink.to ? 'page' : undefined"
             @click="closeMobileMenu"
           >
             {{ headerLoginLink.label }}

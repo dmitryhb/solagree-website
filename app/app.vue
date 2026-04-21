@@ -18,11 +18,18 @@ const pageTransition = {
       class="app-shell"
       :class="{ 'app-shell--internal': isInternalShell }"
     >
+      <SkipLink />
       <AppHeader v-if="showSiteHeader" />
-      <NuxtPage
-        :page-key="pageKey"
-        :transition="pageTransition"
-      />
+      <div
+        id="main-content"
+        class="main-content-anchor"
+        tabindex="-1"
+      >
+        <NuxtPage
+          :page-key="pageKey"
+          :transition="pageTransition"
+        />
+      </div>
     </div>
   </UApp>
 </template>

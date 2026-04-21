@@ -27,31 +27,38 @@ function handleQuiz() {
 <template>
   <UApp>
     <div class="app-shell app-shell--internal">
+      <SkipLink />
       <AppHeader />
 
-      <ErrorPageContent
-        :eyebrow="eyebrow"
-        :title="title"
-        :description="description"
+      <div
+        id="main-content"
+        class="main-content-anchor"
+        tabindex="-1"
       >
-        <template #actions>
-          <button
-            class="sol-button sol-button--primary"
-            type="button"
-            @click="handleHome"
-          >
-            Return home
-          </button>
+        <ErrorPageContent
+          :eyebrow="eyebrow"
+          :title="title"
+          :description="description"
+        >
+          <template #actions>
+            <button
+              class="sol-button sol-button--primary"
+              type="button"
+              @click="handleHome"
+            >
+              Return home
+            </button>
 
-          <button
-            class="sol-button sol-button--muted"
-            type="button"
-            @click="handleQuiz"
-          >
-            Take the quiz
-          </button>
-        </template>
-      </ErrorPageContent>
+            <button
+              class="sol-button sol-button--muted"
+              type="button"
+              @click="handleQuiz"
+            >
+              Take the quiz
+            </button>
+          </template>
+        </ErrorPageContent>
+      </div>
     </div>
   </UApp>
 </template>

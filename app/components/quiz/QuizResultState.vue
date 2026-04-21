@@ -102,7 +102,7 @@ const emit = defineEmits<{
             class="quiz-result-state__resource-link"
             :href="resource.href"
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
           >
             {{ resource.label }}
           </a>

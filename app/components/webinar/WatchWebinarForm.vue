@@ -163,11 +163,12 @@ function handleSubmit() {
         </span>
       </button>
 
-      <p
-        v-if="statusMessage"
-        class="watch-webinar-form__status"
-        aria-live="polite"
-      >
+    <p
+      v-if="statusMessage"
+      class="watch-webinar-form__status"
+      role="status"
+      aria-live="polite"
+    >
         {{ statusMessage }}
       </p>
     </form>

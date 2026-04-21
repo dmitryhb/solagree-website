@@ -97,6 +97,9 @@
 }
 
 .site-footer__links a {
+  display: inline-flex;
+  min-height: 24px;
+  align-items: center;
   color: var(--color-surface-footer);
   font-family: var(--font-body);
   font-size: 1rem;
@@ -141,8 +144,8 @@
 
 .site-footer__social-link {
   display: inline-flex;
-  width: 24px;
-  height: 24px;
+  width: 32px;
+  height: 32px;
   align-items: center;
   justify-content: center;
   color: var(--color-surface-footer);
@@ -214,6 +217,9 @@
 }
 
 .site-footer__legal-links a {
+  display: inline-flex;
+  min-height: 24px;
+  align-items: center;
   text-decoration: none;
   transition: color 160ms ease;
 }

@@ -17,6 +17,16 @@ a {
   text-decoration: none;
 }
 
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 3px;
+}
+
 button,
 input,
 textarea,
@@ -30,6 +40,36 @@ select {
 
 .page-shell {
   min-height: 100vh;
+}
+
+.main-content-anchor:focus {
+  outline: none;
+}
+
+.skip-link {
+  position: fixed;
+  inset-block-start: 1rem;
+  inset-inline-start: 1rem;
+  z-index: 1000;
+  min-height: 44px;
+  align-items: center;
+  border-radius: var(--radius-pill);
+  background: var(--color-ink);
+  color: var(--color-white);
+  font-family: var(--font-nav);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  line-height: 1;
+  padding: 0.9rem 1.15rem;
+  transform: translateY(calc(-100% - 1.5rem));
+  transition: transform 160ms ease;
+}
+
+.skip-link:focus-visible {
+  display: inline-flex;
+  outline: 3px solid var(--color-accent);
+  outline-offset: 3px;
+  transform: translateY(0);
 }
 
 [id] {

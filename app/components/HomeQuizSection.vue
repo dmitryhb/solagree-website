@@ -25,12 +25,12 @@ const homeQuizHostConfig: QuizHostConfigInput = {
   >
     <div class="home-quiz-section__inner">
       <header class="home-quiz-section__header">
-        <h1
+        <h2
           id="home-quiz-title"
           class="home-quiz-section__title"
         >
           Find the right Solagree divorce plan in minutes.
-        </h1>
+        </h2>
         <p class="home-quiz-section__intro">
           Answer a few questions and we'll suggest a plan to fit your unique needs.
         </p>
