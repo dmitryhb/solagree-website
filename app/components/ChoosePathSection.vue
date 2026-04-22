@@ -9,7 +9,10 @@ import { choosePathOptions } from '~/data/choose-path-options'
     aria-labelledby="choose-path-title"
   >
     <div class="choose-path-section__inner">
-      <header class="choose-path-section__header">
+      <header
+        v-appear
+        class="choose-path-section__header"
+      >
         <h2
           id="choose-path-title"
           class="choose-path-section__title"
@@ -24,9 +27,10 @@ import { choosePathOptions } from '~/data/choose-path-options'
 
       <div class="choose-path-section__grid">
         <ChoosePathCard
-          v-for="option in choosePathOptions"
+          v-for="(option, index) in choosePathOptions"
           :key="option.title"
           :option="option"
+          v-appear="{ delay: index * 90, variant: 'scale' }"
         />
       </div>
     </div>

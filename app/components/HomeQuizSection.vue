@@ -24,7 +24,10 @@ const homeQuizHostConfig: QuizHostConfigInput = {
     aria-labelledby="home-quiz-title"
   >
     <div class="home-quiz-section__inner">
-      <header class="home-quiz-section__header">
+      <header
+        v-appear
+        class="home-quiz-section__header"
+      >
         <h2
           id="home-quiz-title"
           class="home-quiz-section__title"
@@ -36,7 +39,10 @@ const homeQuizHostConfig: QuizHostConfigInput = {
         </p>
       </header>
 
-      <div class="home-quiz-section__quiz">
+      <div
+        v-appear="{ variant: 'scale' }"
+        class="home-quiz-section__quiz"
+      >
         <SolagreeQuizEmbed :host-config="homeQuizHostConfig" />
       </div>
     </div>

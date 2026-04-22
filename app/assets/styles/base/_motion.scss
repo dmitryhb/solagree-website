@@ -17,6 +17,36 @@
   transform: translateY(10px);
 }
 
+.appearance-reveal {
+  opacity: 0;
+  transition:
+    opacity 680ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 680ms cubic-bezier(0.22, 1, 0.36, 1),
+    filter 680ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--appearance-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+.appearance-reveal--fade {
+  filter: blur(3px);
+}
+
+.appearance-reveal--slide {
+  filter: blur(1px);
+  transform: translateY(24px);
+}
+
+.appearance-reveal--scale {
+  filter: blur(1px);
+  transform: translateY(18px) scale(0.985);
+}
+
+.appearance-reveal.is-visible {
+  opacity: 1;
+  filter: none;
+  transform: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -29,6 +59,7 @@
 
   .page-appear-enter-active,
   .page-appear-leave-active,
+  .appearance-reveal,
   .quiz-card-shell-step-enter-active,
   .quiz-card-shell-step-leave-active,
   .quiz-back-button,
@@ -38,12 +69,26 @@
   .site-footer__social-link,
   .quiz-primary-action,
   .quiz-result-state__cta,
-  .quiz-result-state__cta-icon {
+  .quiz-result-state__cta-icon,
+  .what-you-get-card,
+  .pricing-card,
+  .choose-path-card,
+  .direct-contact-card,
+  .kids-section__media img,
+  .for-professionals-section__panel,
+  .for-professionals-section__media img,
+  .how-it-works-section__video img,
+  .home-quiz-section__quiz,
+  .webinar-registration-intro__presenter-image,
+  .watch-webinar-form,
+  .webinar-video-frame,
+  .error-page__mark {
     transition: none;
   }
 
   .page-appear-enter-from,
   .page-appear-leave-to,
+  .appearance-reveal,
   .quiz-card-shell-step-enter-from,
   .quiz-card-shell-step-leave-to,
   .quiz-back-button:not(:disabled):hover,
@@ -54,14 +99,28 @@
   .quiz-primary-action:not(:disabled):active,
   .quiz-result-state__cta--primary:hover,
   .quiz-result-state__cta--secondary:hover,
-  .quiz-result-state__cta--secondary:hover .quiz-result-state__cta-icon {
+  .quiz-result-state__cta--secondary:hover .quiz-result-state__cta-icon,
+  .what-you-get-card:hover,
+  .pricing-card:hover,
+  .choose-path-card:hover,
+  .direct-contact-card:hover,
+  .kids-section__media:hover img,
+  .for-professionals-section__panel:hover,
+  .for-professionals-section__media:hover img,
+  .how-it-works-section__video:hover img,
+  .home-quiz-section__quiz:hover,
+  .webinar-registration-intro__presenter-image:hover,
+  .watch-webinar-form:hover,
+  .webinar-video-frame:hover,
+  .error-page__mark:hover {
     transform: none;
   }
 
   .quiz-card-shell-step-enter-from,
   .quiz-card-shell-step-leave-to,
   .page-appear-enter-from,
-  .page-appear-leave-to {
+  .page-appear-leave-to,
+  .appearance-reveal {
     opacity: 1;
     filter: none;
   }

@@ -25,6 +25,11 @@
   width: 100%;
   aspect-ratio: 525 / 644;
   object-fit: cover;
+  transition: transform 520ms ease;
+}
+
+.kids-section__media:hover img {
+  transform: scale(1.025);
 }
 
 .kids-section__content {

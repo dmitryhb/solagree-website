@@ -5,7 +5,10 @@
     aria-labelledby="for-professionals-title"
   >
     <div class="for-professionals-section__inner">
-      <header class="for-professionals-section__header">
+      <header
+        v-appear
+        class="for-professionals-section__header"
+      >
         <h2
           id="for-professionals-title"
           class="for-professionals-section__title"
@@ -19,7 +22,10 @@
       </header>
 
       <div class="for-professionals-section__content">
-        <div class="for-professionals-section__panel">
+        <div
+          v-appear="{ variant: 'scale' }"
+          class="for-professionals-section__panel"
+        >
           <div class="for-professionals-section__copy">
             <h3 class="for-professionals-section__panel-title">
               Scalable solutions for forward-thinking advisors
@@ -44,7 +50,10 @@
           </SiteButton>
         </div>
 
-        <figure class="for-professionals-section__media">
+        <figure
+          v-appear="{ delay: 100, variant: 'scale' }"
+          class="for-professionals-section__media"
+        >
           <img
             src="/images/for-professionals.webp"
             alt="Professional advisor seated at a desk."

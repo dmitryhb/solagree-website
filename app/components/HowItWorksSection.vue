@@ -10,7 +10,10 @@ import { howItWorksPhases } from '~/data/how-it-works-phases'
   >
     <div class="how-it-works-section__inner">
       <div class="how-it-works-section__intro-grid">
-        <div class="how-it-works-section__copy">
+        <div
+          v-appear
+          class="how-it-works-section__copy"
+        >
           <h2
             id="how-it-works-title"
             class="how-it-works-section__title"
@@ -32,8 +35,9 @@ import { howItWorksPhases } from '~/data/how-it-works-phases'
 
         <ol class="how-it-works-section__phases">
           <li
-            v-for="phase in howItWorksPhases"
+            v-for="(phase, index) in howItWorksPhases"
             :key="phase.title"
+            v-appear="{ delay: index * 80 }"
             class="how-it-works-section__phase"
           >
             <h3 class="how-it-works-section__phase-title">
@@ -47,7 +51,10 @@ import { howItWorksPhases } from '~/data/how-it-works-phases'
         </ol>
       </div>
 
-      <figure class="how-it-works-section__video">
+      <figure
+        v-appear="{ variant: 'scale' }"
+        class="how-it-works-section__video"
+      >
         <img
           src="/images/video-placeholder.webp"
           alt="Video placeholder for Solagree: How It Works."

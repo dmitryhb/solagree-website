@@ -6,8 +6,8 @@ import WebinarRegistrationIntro from '~/components/webinar/WebinarRegistrationIn
 <template>
   <main class="webinar-registration-page">
     <div class="webinar-registration-page__content">
-      <WebinarRegistrationIntro />
-      <WatchWebinarForm />
+      <WebinarRegistrationIntro v-appear />
+      <WatchWebinarForm v-appear="{ delay: 100, variant: 'scale' }" />
     </div>
 
     <SiteFooter />

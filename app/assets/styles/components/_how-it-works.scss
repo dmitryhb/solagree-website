@@ -119,6 +119,11 @@
   width: 100%;
   aspect-ratio: 1076 / 605;
   object-fit: cover;
+  transition: transform 520ms ease;
+}
+
+.how-it-works-section__video:hover img {
+  transform: scale(1.02);
 }
 
 .get-started-section {

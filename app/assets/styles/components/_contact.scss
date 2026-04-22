@@ -218,6 +218,16 @@
   padding: 1.25rem;
   border-radius: 2px;
   background: var(--color-surface-footer);
+  transition:
+    background-color 180ms ease,
+    box-shadow 220ms ease,
+    transform 220ms ease;
+}
+
+.direct-contact-card:hover {
+  background: #f2eee7;
+  box-shadow: 0 18px 42px rgba(62, 64, 89, 0.08);
+  transform: translateY(-4px);
 }
 
 .direct-contact-card__icon {

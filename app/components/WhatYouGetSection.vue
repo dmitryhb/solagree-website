@@ -9,7 +9,10 @@ import { whatYouGetItems } from '~/data/what-you-get-items'
     aria-labelledby="what-you-get-title"
   >
     <div class="what-you-get-section__inner">
-      <header class="what-you-get-section__header">
+      <header
+        v-appear
+        class="what-you-get-section__header"
+      >
         <h2
           id="what-you-get-title"
           class="what-you-get-section__title"
@@ -20,9 +23,10 @@ import { whatYouGetItems } from '~/data/what-you-get-items'
 
       <div class="what-you-get-section__grid">
         <WhatYouGetCard
-          v-for="item in whatYouGetItems"
+          v-for="(item, index) in whatYouGetItems"
           :key="item.title"
           :item="item"
+          v-appear="{ delay: index * 80, variant: 'scale' }"
         />
       </div>
     </div>

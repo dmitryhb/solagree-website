@@ -59,6 +59,14 @@
   border-radius: 16px;
   background: var(--color-surface-muted-dark);
   color: var(--color-white);
+  transition:
+    background-color 220ms ease,
+    transform 220ms ease;
+}
+
+.choose-path-card:hover {
+  background: #767d97;
+  transform: translateY(-4px);
 }
 
 .choose-path-card__content {

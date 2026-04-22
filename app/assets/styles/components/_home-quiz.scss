@@ -43,6 +43,11 @@
 .home-quiz-section__quiz {
   width: min(100%, 1076px);
   margin-inline: auto;
+  transition: transform 220ms ease;
+}
+
+.home-quiz-section__quiz:hover {
+  transform: translateY(-3px);
 }
 
 .home-quiz-section .quiz-section {

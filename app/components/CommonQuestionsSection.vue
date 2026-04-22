@@ -42,7 +42,10 @@ const commonQuestionItems: AccordionItem[] = [
     aria-labelledby="common-questions-title"
   >
     <div class="common-questions-section__inner">
-      <div class="common-questions-section__copy">
+      <div
+        v-appear
+        class="common-questions-section__copy"
+      >
         <h2
           id="common-questions-title"
           class="common-questions-section__title"
@@ -71,6 +74,7 @@ const commonQuestionItems: AccordionItem[] = [
       </div>
 
       <BaseAccordion
+        v-appear="{ delay: 100 }"
         class="common-questions-section__accordion"
         :items="commonQuestionItems"
         default-value="question-1"

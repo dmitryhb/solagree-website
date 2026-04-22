@@ -12,7 +12,10 @@ defineProps<{
       class="error-page__hero"
       aria-labelledby="error-page-title"
     >
-      <div class="error-page__content">
+      <div
+        v-appear
+        class="error-page__content"
+      >
         <p class="error-page__eyebrow">
           {{ eyebrow }}
         </p>
@@ -34,6 +37,7 @@ defineProps<{
       </div>
 
       <div
+        v-appear="{ delay: 100, variant: 'scale' }"
         class="error-page__mark"
         aria-hidden="true"
       >

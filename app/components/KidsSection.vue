@@ -5,7 +5,10 @@
     aria-labelledby="kids-title"
   >
     <div class="kids-section__inner">
-      <figure class="kids-section__media">
+      <figure
+        v-appear="{ variant: 'scale' }"
+        class="kids-section__media"
+      >
         <img
           src="/images/kids.webp"
           alt="Parent crouching beside a child in a family home."
@@ -16,7 +19,10 @@
         >
       </figure>
 
-      <div class="kids-section__content">
+      <div
+        v-appear="{ delay: 100 }"
+        class="kids-section__content"
+      >
         <div class="kids-section__copy">
           <h2
             id="kids-title"

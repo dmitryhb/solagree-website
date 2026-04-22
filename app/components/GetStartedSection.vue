@@ -4,7 +4,10 @@
     class="get-started-section"
     aria-labelledby="get-started-title"
   >
-    <div class="get-started-section__inner">
+    <div
+      v-appear
+      class="get-started-section__inner"
+    >
       <h2
         id="get-started-title"
         class="get-started-section__title"

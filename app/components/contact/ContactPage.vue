@@ -9,7 +9,10 @@ import { contactPerson, directContactItems } from '~/data/contact'
   <main class="contact-page">
     <section class="contact-page__content">
       <div class="contact-page__top">
-        <div class="contact-page__intro">
+        <div
+          v-appear
+          class="contact-page__intro"
+        >
           <h1 class="contact-page__title">
             Contact
           </h1>
@@ -20,7 +23,7 @@ import { contactPerson, directContactItems } from '~/data/contact'
           <ContactPersonCard :person="contactPerson" />
         </div>
 
-        <ContactForm />
+        <ContactForm v-appear="{ delay: 100, variant: 'scale' }" />
       </div>
 
       <section
@@ -28,6 +31,7 @@ import { contactPerson, directContactItems } from '~/data/contact'
         aria-labelledby="contact-direct-title"
       >
         <h2
+          v-appear
           id="contact-direct-title"
           class="contact-page__direct-title"
         >
@@ -36,9 +40,10 @@ import { contactPerson, directContactItems } from '~/data/contact'
 
         <div class="contact-page__direct-grid">
           <DirectContactCard
-            v-for="item in directContactItems"
+            v-for="(item, index) in directContactItems"
             :key="item.title"
             :item="item"
+            v-appear="{ delay: index * 80, variant: 'scale' }"
           />
         </div>
       </section>

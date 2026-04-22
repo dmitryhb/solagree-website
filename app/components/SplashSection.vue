@@ -4,6 +4,7 @@ import { splashFeatures } from '~/data/splash-content'
 
 <template>
   <section
+    v-appear="{ variant: 'fade' }"
     class="splash-section"
     aria-labelledby="splash-title"
   >

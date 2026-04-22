@@ -9,7 +9,10 @@ import { pricingPlans } from '~/data/pricing-plans'
     aria-labelledby="pricing-title"
   >
     <div class="pricing-section__inner">
-      <header class="pricing-section__header">
+      <header
+        v-appear
+        class="pricing-section__header"
+      >
         <h2
           id="pricing-title"
           class="pricing-section__title"
@@ -20,9 +23,10 @@ import { pricingPlans } from '~/data/pricing-plans'
 
       <div class="pricing-section__grid">
         <PricingCard
-          v-for="plan in pricingPlans"
+          v-for="(plan, index) in pricingPlans"
           :key="plan.name"
           :plan="plan"
+          v-appear="{ delay: index * 80, variant: 'scale' }"
         />
       </div>
     </div>
