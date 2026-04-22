@@ -9,7 +9,7 @@
           id="attorney-application-sent-title"
           class="attorney-application-sent__title"
         >
-          Thank you for applying.
+          Thank you for applying!
         </h1>
 
         <p class="attorney-application-sent__copy">
