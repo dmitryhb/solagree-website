@@ -12,12 +12,29 @@ const updateScrolledState = () => {
   isScrolled.value = window.scrollY > 8
 }
 
+const scheduleScrolledStateUpdate = async () => {
+  if (!import.meta.client) {
+    return
+  }
+
+  if (isHomeRoute.value && !route.hash) {
+    isScrolled.value = false
+  }
+
+  await nextTick()
+
+  window.requestAnimationFrame(() => {
+    updateScrolledState()
+    window.requestAnimationFrame(updateScrolledState)
+  })
+}
+
 const closeMobileMenu = () => {
   isMobileMenuOpen.value = false
 }
 
 onMounted(() => {
-  updateScrolledState()
+  scheduleScrolledStateUpdate()
   window.addEventListener('scroll', updateScrolledState, { passive: true })
 })
 
@@ -30,10 +47,9 @@ watch(
   () => {
     closeMobileMenu()
 
-    if (import.meta.client) {
-      nextTick(updateScrolledState)
-    }
-  }
+    scheduleScrolledStateUpdate()
+  },
+  { flush: 'post' }
 )
 </script>
 
