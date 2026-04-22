@@ -4,11 +4,11 @@
   "private": true,
   "scripts": {
     "build": "nuxt build",
-    "dev": "nuxt dev --port 3003",
+    "dev": "nuxt dev --host solagree.local --port 3003",
     "deploy:staging": "./scripts/deploy-staging.sh",
     "generate": "nuxt generate",
     "typecheck": "nuxt typecheck",
-    "preview": "nuxt preview --port 3003",
+    "preview": "nuxt preview --host solagree.local --port 3003",
     "postinstall": "nuxt prepare"
   },
   "dependencies": {

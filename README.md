@@ -22,7 +22,7 @@ bun install
 
 ## Development Server
 
-Start the development server on `http://localhost:3003`:
+Start the development server on `http://solagree.local:3003`:
 
 ```bash
 # npm
@@ -49,7 +49,7 @@ bun run dev
 The attorney application form submits to the Solagree Portal API.
 
 ```bash
-NUXT_PUBLIC_PORTAL_API_BASE_URL=http://localhost:3001
+NUXT_PUBLIC_PORTAL_API_BASE_URL=http://solagree-portal.local:3004
 ```
 
 Configure `NUXT_PUBLIC_PORTAL_API_BASE_URL` as the Portal application origin, not the
@@ -58,14 +58,14 @@ individual API route. The website app appends the API path itself.
 Correct local configuration:
 
 ```bash
-NUXT_PUBLIC_PORTAL_API_BASE_URL=http://localhost:3001
+NUXT_PUBLIC_PORTAL_API_BASE_URL=http://solagree-portal.local:3004
 ```
 
 Incorrect configuration:
 
 ```bash
-NUXT_PUBLIC_PORTAL_API_BASE_URL=http://localhost:3001/api
-NUXT_PUBLIC_PORTAL_API_BASE_URL=http://localhost:3001/api/attorney-applications
+NUXT_PUBLIC_PORTAL_API_BASE_URL=http://solagree-portal.local:3004/api
+NUXT_PUBLIC_PORTAL_API_BASE_URL=http://solagree-portal.local:3004/api/attorney-applications
 ```
 
 With the correct value, the attorney application form submits to:
@@ -76,10 +76,12 @@ ${NUXT_PUBLIC_PORTAL_API_BASE_URL}/api/attorney-applications
 
 For local development:
 
-- Run the website on `http://localhost:3003`.
-- Run the portal on `http://localhost:3001`.
-- Set `NUXT_PUBLIC_PORTAL_API_BASE_URL=http://localhost:3001` in the website `.env`.
-- Ensure the portal allows the website origin through `PUBLIC_ATTORNEY_APPLICATION_ALLOWED_ORIGINS`, for example `http://localhost:3003,http://127.0.0.1:3003`.
+- Add `127.0.0.1 solagree.local solagree-portal.local` to `/etc/hosts`.
+- Run the website on `http://solagree.local:3003`.
+- Run the portal on `http://solagree-portal.local:3004`.
+- Set `NUXT_PUBLIC_SITE_URL=http://solagree.local:3003` in the website `.env`.
+- Set `NUXT_PUBLIC_PORTAL_API_BASE_URL=http://solagree-portal.local:3004` in the website `.env`.
+- Ensure the portal allows the website origin through `PUBLIC_ATTORNEY_APPLICATION_ALLOWED_ORIGINS`, for example `http://solagree.local:3003,http://localhost:3003,http://127.0.0.1:3003`.
 
 For production, set `NUXT_PUBLIC_PORTAL_API_BASE_URL` to the public Portal origin that serves the Nitro API routes. If the website calls the Portal from a different origin, the Portal must include the website origin in `PUBLIC_ATTORNEY_APPLICATION_ALLOWED_ORIGINS`.
 

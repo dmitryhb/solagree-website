@@ -14,7 +14,7 @@ interface AttorneyApplicationFetchOptions {
   body: AttorneyApplicationSubmissionPayload
 }
 
-type AttorneyApplicationFetcher = <TResponse>(
+export type AttorneyApplicationFetcher = <TResponse>(
   request: string,
   options: AttorneyApplicationFetchOptions
 ) => Promise<TResponse>

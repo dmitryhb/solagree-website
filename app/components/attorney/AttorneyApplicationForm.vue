@@ -8,6 +8,7 @@ import {
   getAttorneyApplicationSubmissionErrorMessage,
   submitAttorneyApplication
 } from '~/services/attorney-application-api'
+import type { AttorneyApplicationFetcher } from '~/services/attorney-application-api'
 import { stateOptions } from '~/data/us-states'
 import type {
   AttorneyApplicationFormState,
@@ -75,7 +76,7 @@ const handleSubmit = async () => {
   try {
     await submitAttorneyApplication(form, {
       portalApiBaseUrl: runtimeConfig.public.portalApiBaseUrl,
-      fetcher: $fetch
+      fetcher: $fetch as unknown as AttorneyApplicationFetcher
     })
 
     submissionResult.value = {
