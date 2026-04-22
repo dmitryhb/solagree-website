@@ -11,8 +11,9 @@ const TWITTER_CARD_TYPE = 'summary_large_image'
 const normalizePath = (path: string) => {
   const trimmedPath = path.split('?')[0]?.split('#')[0] || '/'
   const normalizedPath = trimmedPath.startsWith('/') ? trimmedPath : `/${trimmedPath}`
+  const dedupedPath = normalizedPath.replace(/\/{2,}/g, '/')
 
-  return normalizedPath === '/' ? normalizedPath : normalizedPath.replace(/\/+$/, '')
+  return dedupedPath === '/' ? dedupedPath : dedupedPath.replace(/\/+$/, '')
 }
 
 /**
