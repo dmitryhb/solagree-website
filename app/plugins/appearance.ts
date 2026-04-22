@@ -42,27 +42,36 @@ const prepareAppearanceRevealElement = (
 }
 
 export default defineNuxtPlugin((nuxtApp) => {
-  const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
-  const observer = reducedMotionQuery.matches
-    ? null
-    : new IntersectionObserver(
-        (entries) => {
-          for (const entry of entries) {
-            if (!entry.isIntersecting) {
-              continue
-            }
-
-            entry.target.classList.add(APPEARANCE_VISIBLE_CLASS)
-            observer?.unobserve(entry.target)
+  const observer = import.meta.client && !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    ? new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) {
+            continue
           }
-        },
-        {
-          rootMargin: '0px 0px -8% 0px',
-          threshold: 0.12
+
+          entry.target.classList.add(APPEARANCE_VISIBLE_CLASS)
+          observer?.unobserve(entry.target)
         }
-      )
+      },
+      {
+        rootMargin: '0px 0px -8% 0px',
+        threshold: 0.12
+      }
+    )
+    : null
 
   nuxtApp.vueApp.directive('appear', {
+    getSSRProps: (binding) => {
+      const options = getAppearanceRevealOptions(binding)
+
+      return {
+        class: `appearance-reveal appearance-reveal--${options.variant}`,
+        style: {
+          '--appearance-delay': `${Math.max(options.delay, 0)}ms`
+        }
+      }
+    },
     created: (element: HTMLElement, binding) => {
       prepareAppearanceRevealElement(element, binding)
     },
