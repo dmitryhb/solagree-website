@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { headerLoginLink, headerPrimaryLinks, headerQuizLink } from '~/data/header-navigation'
 
-const route = useRoute()
+const router = useRouter()
+const currentRoute = computed(() => router.currentRoute.value)
 const isMobileMenuOpen = ref(false)
 const isScrolled = ref(false)
-const isHomeRoute = computed(() => route.path === '/')
+const isResettingHomeScroll = ref(false)
+const isHomeRoute = computed(() => currentRoute.value.path === '/')
 const isSolidHeader = computed(() => !isHomeRoute.value)
 const menuToggleLabel = computed(() => (isMobileMenuOpen.value ? 'Close navigation menu' : 'Open navigation menu'))
 const scrollUpdateTimers: number[] = []
@@ -20,7 +22,12 @@ const clearScrollUpdateTimers = () => {
 }
 
 const updateScrolledState = () => {
-  isScrolled.value = isHomeRoute.value && window.scrollY > 8
+  if (!isHomeRoute.value || (isResettingHomeScroll.value && !currentRoute.value.hash)) {
+    isScrolled.value = false
+    return
+  }
+
+  isScrolled.value = window.scrollY > 8
 }
 
 /**
@@ -34,19 +41,27 @@ const scheduleScrolledStateUpdate = async () => {
 
   clearScrollUpdateTimers()
 
-  if (isHomeRoute.value && !route.hash) {
+  if (isHomeRoute.value && !currentRoute.value.hash) {
+    isResettingHomeScroll.value = true
     isScrolled.value = false
     window.scrollTo({ left: 0, top: 0, behavior: 'auto' })
+  } else {
+    isResettingHomeScroll.value = false
   }
 
   await nextTick()
 
   const refreshScrolledState = () => {
-    if (isHomeRoute.value && !route.hash && window.scrollY > 0) {
+    if (isHomeRoute.value && !currentRoute.value.hash && window.scrollY > 0) {
       window.scrollTo({ left: 0, top: 0, behavior: 'auto' })
     }
 
     updateScrolledState()
+
+    if (isHomeRoute.value && !currentRoute.value.hash && window.scrollY <= 8) {
+      isResettingHomeScroll.value = false
+      updateScrolledState()
+    }
   }
 
   window.requestAnimationFrame(() => {
@@ -74,7 +89,7 @@ onBeforeUnmount(() => {
 })
 
 watch(
-  () => route.fullPath,
+  () => currentRoute.value.fullPath,
   () => {
     closeMobileMenu()
 
@@ -119,7 +134,7 @@ watch(
           :key="link.label"
           class="site-header__nav-link"
           :to="link.to"
-          :aria-current="route.fullPath === link.to ? 'page' : undefined"
+          :aria-current="currentRoute.fullPath === link.to ? 'page' : undefined"
         >
           {{ link.label }}
         </NuxtLink>
@@ -129,7 +144,7 @@ watch(
         <NuxtLink
           class="site-header__login"
           :to="headerLoginLink.to"
-          :aria-current="route.path === headerLoginLink.to ? 'page' : undefined"
+          :aria-current="currentRoute.path === headerLoginLink.to ? 'page' : undefined"
         >
           {{ headerLoginLink.label }}
         </NuxtLink>
@@ -172,7 +187,7 @@ watch(
             :key="link.label"
             class="site-header__mobile-link"
             :to="link.to"
-            :aria-current="route.fullPath === link.to ? 'page' : undefined"
+            :aria-current="currentRoute.fullPath === link.to ? 'page' : undefined"
             @click="closeMobileMenu"
           >
             {{ link.label }}
@@ -183,7 +198,7 @@ watch(
           <NuxtLink
             class="site-header__mobile-login"
             :to="headerLoginLink.to"
-            :aria-current="route.path === headerLoginLink.to ? 'page' : undefined"
+            :aria-current="currentRoute.path === headerLoginLink.to ? 'page' : undefined"
             @click="closeMobileMenu"
           >
             {{ headerLoginLink.label }}
