@@ -1,9 +1,13 @@
 <script setup lang="ts">
-const route = useRoute()
-const normalizedRoutePath = computed(() => (route.path === '/' ? route.path : route.path.replace(/\/+$/, '')))
+const router = useRouter()
+const currentRoute = computed(() => router.currentRoute.value)
+const normalizedRoutePath = computed(() => (
+  currentRoute.value.path === '/' ? currentRoute.value.path : currentRoute.value.path.replace(/\/+$/, '')
+))
 const isQuizRoute = computed(() => normalizedRoutePath.value === '/quiz')
 const showSiteHeader = computed(() => !isQuizRoute.value)
 const isInternalShell = computed(() => normalizedRoutePath.value !== '/' && !isQuizRoute.value)
+const siteHeaderKey = computed(() => (isInternalShell.value ? 'internal' : 'home'))
 const pageKey = computed(() => normalizedRoutePath.value)
 const pageTransition = {
   name: 'page-appear',
@@ -19,7 +23,10 @@ const pageTransition = {
       :class="{ 'app-shell--internal': isInternalShell }"
     >
       <SkipLink />
-      <AppHeader v-if="showSiteHeader" />
+      <AppHeader
+        v-if="showSiteHeader"
+        :key="siteHeaderKey"
+      />
       <div
         id="main-content"
         class="main-content-anchor"

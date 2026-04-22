@@ -10,6 +10,38 @@
   padding-block: clamp(4.5rem, 6vw, 5.75rem) clamp(5.25rem, 7.5vw, 7rem);
 }
 
+.attorney-application-page__content--sent {
+  display: grid;
+  min-height: clamp(420px, 50vw, 560px);
+  align-items: center;
+}
+
+.attorney-application-sent {
+  display: grid;
+  max-width: 760px;
+  gap: 1.25rem;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.attorney-application-sent__title {
+  margin: 0;
+  color: var(--color-heading);
+  font-family: var(--font-display);
+  font-size: clamp(2.1667rem, 4vw, 3.75rem);
+  font-weight: 400;
+  line-height: 1.05;
+}
+
+.attorney-application-sent__copy {
+  max-width: 620px;
+  margin: 0 auto;
+  color: var(--color-ink);
+  font-family: var(--font-nav);
+  font-size: clamp(1rem, 1.8vw, 1.25rem);
+  line-height: 1.55;
+}
+
 .attorney-application-form {
   width: min(100%, 560px);
   margin-inline: auto;
@@ -294,6 +326,10 @@
   .attorney-application-page__content {
     width: min(calc(100% - 2rem), 640px);
     padding-block: 3.25rem 4.5rem;
+  }
+
+  .attorney-application-page__content--sent {
+    min-height: 360px;
   }
 
   .attorney-application-form__state-list {

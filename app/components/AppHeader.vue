@@ -1,15 +1,77 @@
 <script setup lang="ts">
 import { headerLoginLink, headerPrimaryLinks, headerQuizLink } from '~/data/header-navigation'
 
-const route = useRoute()
+const router = useRouter()
+const currentRoute = computed(() => router.currentRoute.value)
 const isMobileMenuOpen = ref(false)
 const isScrolled = ref(false)
-const isHomeRoute = computed(() => route.path === '/')
+const isResettingHomeScroll = ref(false)
+const isHomeRoute = computed(() => currentRoute.value.path === '/')
 const isSolidHeader = computed(() => !isHomeRoute.value)
 const menuToggleLabel = computed(() => (isMobileMenuOpen.value ? 'Close navigation menu' : 'Open navigation menu'))
+const scrollUpdateTimers: number[] = []
+
+const clearScrollUpdateTimers = () => {
+  while (scrollUpdateTimers.length) {
+    const timer = scrollUpdateTimers.pop()
+
+    if (timer !== undefined) {
+      window.clearTimeout(timer)
+    }
+  }
+}
 
 const updateScrolledState = () => {
+  if (!isHomeRoute.value || (isResettingHomeScroll.value && !currentRoute.value.hash)) {
+    isScrolled.value = false
+    return
+  }
+
   isScrolled.value = window.scrollY > 8
+}
+
+/**
+ * Nuxt restores scroll after route state changes, so home navigation needs an
+ * immediate top reset plus delayed reads to avoid carrying the internal header.
+ */
+const scheduleScrolledStateUpdate = async () => {
+  if (!import.meta.client) {
+    return
+  }
+
+  clearScrollUpdateTimers()
+
+  if (isHomeRoute.value && !currentRoute.value.hash) {
+    isResettingHomeScroll.value = true
+    isScrolled.value = false
+    window.scrollTo({ left: 0, top: 0, behavior: 'auto' })
+  } else {
+    isResettingHomeScroll.value = false
+  }
+
+  await nextTick()
+
+  const refreshScrolledState = () => {
+    if (isHomeRoute.value && !currentRoute.value.hash && window.scrollY > 0) {
+      window.scrollTo({ left: 0, top: 0, behavior: 'auto' })
+    }
+
+    updateScrolledState()
+
+    if (isHomeRoute.value && !currentRoute.value.hash && window.scrollY <= 8) {
+      isResettingHomeScroll.value = false
+      updateScrolledState()
+    }
+  }
+
+  window.requestAnimationFrame(() => {
+    refreshScrolledState()
+    window.requestAnimationFrame(refreshScrolledState)
+  })
+
+  for (const delay of [80, 180, 360]) {
+    scrollUpdateTimers.push(window.setTimeout(refreshScrolledState, delay))
+  }
 }
 
 const closeMobileMenu = () => {
@@ -17,23 +79,23 @@ const closeMobileMenu = () => {
 }
 
 onMounted(() => {
-  updateScrolledState()
+  scheduleScrolledStateUpdate()
   window.addEventListener('scroll', updateScrolledState, { passive: true })
 })
 
 onBeforeUnmount(() => {
+  clearScrollUpdateTimers()
   window.removeEventListener('scroll', updateScrolledState)
 })
 
 watch(
-  () => route.fullPath,
+  () => currentRoute.value.fullPath,
   () => {
     closeMobileMenu()
 
-    if (import.meta.client) {
-      nextTick(updateScrolledState)
-    }
-  }
+    scheduleScrolledStateUpdate()
+  },
+  { flush: 'post' }
 )
 </script>
 
@@ -72,7 +134,7 @@ watch(
           :key="link.label"
           class="site-header__nav-link"
           :to="link.to"
-          :aria-current="route.fullPath === link.to ? 'page' : undefined"
+          :aria-current="currentRoute.fullPath === link.to ? 'page' : undefined"
         >
           {{ link.label }}
         </NuxtLink>
@@ -82,7 +144,7 @@ watch(
         <NuxtLink
           class="site-header__login"
           :to="headerLoginLink.to"
-          :aria-current="route.path === headerLoginLink.to ? 'page' : undefined"
+          :aria-current="currentRoute.path === headerLoginLink.to ? 'page' : undefined"
         >
           {{ headerLoginLink.label }}
         </NuxtLink>
@@ -125,7 +187,7 @@ watch(
             :key="link.label"
             class="site-header__mobile-link"
             :to="link.to"
-            :aria-current="route.fullPath === link.to ? 'page' : undefined"
+            :aria-current="currentRoute.fullPath === link.to ? 'page' : undefined"
             @click="closeMobileMenu"
           >
             {{ link.label }}
@@ -136,7 +198,7 @@ watch(
           <NuxtLink
             class="site-header__mobile-login"
             :to="headerLoginLink.to"
-            :aria-current="route.path === headerLoginLink.to ? 'page' : undefined"
+            :aria-current="currentRoute.path === headerLoginLink.to ? 'page' : undefined"
             @click="closeMobileMenu"
           >
             {{ headerLoginLink.label }}

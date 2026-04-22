@@ -79,11 +79,7 @@ const handleSubmit = async () => {
       fetcher: $fetch as unknown as AttorneyApplicationFetcher
     })
 
-    submissionResult.value = {
-      kind: 'success',
-      title: 'Application received',
-      message: 'Thank you. Our team will review your application and email you with next steps.'
-    }
+    await navigateTo('/attorney-application/sent')
   } catch (error) {
     submissionResult.value = {
       kind: 'error',
