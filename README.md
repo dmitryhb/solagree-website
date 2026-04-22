@@ -85,6 +85,25 @@ For local development:
 
 For production, set `NUXT_PUBLIC_PORTAL_API_BASE_URL` to the public Portal origin that serves the Nitro API routes. If the website calls the Portal from a different origin, the Portal must include the website origin in `PUBLIC_ATTORNEY_APPLICATION_ALLOWED_ORIGINS`.
 
+For staging deployment, `npm run deploy:staging` defaults to:
+
+```bash
+NUXT_PUBLIC_SITE_URL=https://solagree.qamachine.com
+NUXT_PUBLIC_PORTAL_API_BASE_URL=https://solagree-portal.qamachine.com
+```
+
+These values are exported before `nuxt generate` so the generated static website sends attorney application requests to:
+
+```text
+https://solagree-portal.qamachine.com/api/attorney-applications
+```
+
+The staging Portal `.env` must allow the website origin:
+
+```bash
+PUBLIC_ATTORNEY_APPLICATION_ALLOWED_ORIGINS=https://solagree.qamachine.com,https://www.solagree.com,https://solagree.com
+```
+
 ## Production
 
 Build the application for production:

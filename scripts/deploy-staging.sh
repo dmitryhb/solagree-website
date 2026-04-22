@@ -8,6 +8,8 @@ OUTPUT_DIR="$ROOT_DIR/.output/public/"
 SSH_USER="${SSH_USER:-qa_solagree}"
 SSH_HOST="${SSH_HOST:-solagree.qamachine.com}"
 REMOTE_PATH="${REMOTE_PATH:-/home/qa_solagree/public_html/}"
+STAGING_SITE_URL="${NUXT_PUBLIC_SITE_URL:-https://solagree.qamachine.com}"
+STAGING_PORTAL_API_BASE_URL="${NUXT_PUBLIC_PORTAL_API_BASE_URL:-https://solagree-portal.qamachine.com}"
 
 DRY_RUN=false
 SKIP_BUILD=false
@@ -30,6 +32,10 @@ done
 
 if [ "$SKIP_BUILD" = false ]; then
   echo "Generating static output..."
+  export NUXT_PUBLIC_SITE_URL="$STAGING_SITE_URL"
+  export NUXT_PUBLIC_PORTAL_API_BASE_URL="$STAGING_PORTAL_API_BASE_URL"
+  echo "Using site URL: $NUXT_PUBLIC_SITE_URL"
+  echo "Using portal API base URL: $NUXT_PUBLIC_PORTAL_API_BASE_URL"
   npm run generate
 fi
 
@@ -49,4 +55,3 @@ fi
 
 echo "Deploying $OUTPUT_DIR to ${SSH_USER}@${SSH_HOST}:${REMOTE_PATH}"
 rsync "${RSYNC_ARGS[@]}" "$OUTPUT_DIR" "${SSH_USER}@${SSH_HOST}:${REMOTE_PATH}"
-
