@@ -30,7 +30,10 @@ export const solagreeSocialLinksByIcon = solagreeSocialLinks.reduce<Record<Socia
   {} as Record<SocialLinkIcon, SocialLink>
 )
 
-export function createSolagreeSocialLinks(overrides: SocialLinkOverrides = {}) {
+/**
+ * Creates the configured Solagree social link list with optional per-icon overrides.
+ */
+export const createSolagreeSocialLinks = (overrides: SocialLinkOverrides = {}) => {
   return solagreeSocialLinks.map(link => ({
     ...link,
     ...overrides[link.icon],

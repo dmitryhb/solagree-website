@@ -35,7 +35,7 @@ export const defaultQuizHostRuntimeConfig = {
   ctas: defaultQuizCtaTargets
 } as const satisfies QuizHostRuntimeConfig
 
-function mergeQuizCtaTargets(overrides?: QuizHostConfigInput['ctas']) {
+const mergeQuizCtaTargets = (overrides?: QuizHostConfigInput['ctas']) => {
   return Object.entries(defaultQuizCtaTargets).reduce<QuizHostRuntimeConfig['ctas']>((targets, [actionId, target]) => {
     targets[actionId as QuizCtaActionId] = {
       ...target,
@@ -46,10 +46,13 @@ function mergeQuizCtaTargets(overrides?: QuizHostConfigInput['ctas']) {
   }, {})
 }
 
-export function resolveQuizHostConfig(
+/**
+ * Merges runtime quiz host config with optional per-embed overrides.
+ */
+export const resolveQuizHostConfig = (
   runtimeConfig?: QuizHostConfigInput,
   overrides?: QuizHostConfigInput
-): QuizHostRuntimeConfig {
+): QuizHostRuntimeConfig => {
   const mergedInput: QuizHostConfigInput = {
     ...runtimeConfig,
     ...overrides,
@@ -91,10 +94,13 @@ export function resolveQuizHostConfig(
   }
 }
 
-export function resolveQuizResultViewForHost(
+/**
+ * Applies host-specific CTA overrides to a quiz result view model.
+ */
+export const resolveQuizResultViewForHost = (
   result: QuizResultViewModel,
   hostConfig: QuizHostRuntimeConfig
-): QuizResultViewModel {
+): QuizResultViewModel => {
   const ctaOverride = hostConfig.ctas[result.primaryCta.actionId]
 
   return {

@@ -4,10 +4,13 @@ import {
   attorneyMediationOptions,
   attorneyYesNoOptions
 } from '~/data/attorney-application'
+import {
+  getAttorneyApplicationSubmissionErrorMessage,
+  submitAttorneyApplication
+} from '~/services/attorney-application-api'
+import type { AttorneyApplicationFetcher } from '~/services/attorney-application-api'
 import { stateOptions } from '~/data/us-states'
 import type {
-  AttorneyApplicationApiErrorResponse,
-  AttorneyApplicationApiResponse,
   AttorneyApplicationFormState,
   AttorneyApplicationResult
 } from '~/types/attorney-application'
@@ -40,11 +43,11 @@ watch(
   }
 )
 
-function addLicenseNumber() {
+const addLicenseNumber = () => {
   form.licenseNumbers.push('')
 }
 
-function removeLicenseNumber(index: number) {
+const removeLicenseNumber = (index: number) => {
   if (form.licenseNumbers.length === 1) {
     form.licenseNumbers[0] = ''
     return
@@ -53,40 +56,7 @@ function removeLicenseNumber(index: number) {
   form.licenseNumbers.splice(index, 1)
 }
 
-function getPortalApiBaseUrl() {
-  return String(runtimeConfig.public.portalApiBaseUrl || '').replace(/\/+$/, '')
-}
-
-function getSubmissionErrorMessage(error: unknown) {
-  if (
-    typeof error === 'object'
-    && error !== null
-    && 'data' in error
-    && typeof error.data === 'object'
-    && error.data !== null
-    && 'message' in error.data
-    && typeof error.data.message === 'string'
-  ) {
-    return error.data.message
-  }
-
-  if (
-    typeof error === 'object'
-    && error !== null
-    && 'statusMessage' in error
-    && typeof error.statusMessage === 'string'
-  ) {
-    return error.statusMessage
-  }
-
-  if (error instanceof Error) {
-    return error.message
-  }
-
-  return 'We could not submit your application. Please try again.'
-}
-
-async function handleSubmit() {
+const handleSubmit = async () => {
   if (submitting.value) {
     return
   }
@@ -104,21 +74,10 @@ async function handleSubmit() {
   submitting.value = true
 
   try {
-    const portalApiBaseUrl = getPortalApiBaseUrl()
-    const response = await $fetch<AttorneyApplicationApiResponse | AttorneyApplicationApiErrorResponse>(
-      `${portalApiBaseUrl}/api/attorney-applications`,
-      {
-        method: 'POST',
-        body: {
-          ...form,
-          licenseNumbers: form.licenseNumbers.map(licenseNumber => licenseNumber.trim())
-        }
-      }
-    )
-
-    if ('error' in response) {
-      throw new Error(response.message)
-    }
+    await submitAttorneyApplication(form, {
+      portalApiBaseUrl: runtimeConfig.public.portalApiBaseUrl,
+      fetcher: $fetch as unknown as AttorneyApplicationFetcher
+    })
 
     submissionResult.value = {
       kind: 'success',
@@ -129,7 +88,7 @@ async function handleSubmit() {
     submissionResult.value = {
       kind: 'error',
       title: 'Submission failed',
-      message: getSubmissionErrorMessage(error)
+      message: getAttorneyApplicationSubmissionErrorMessage(error)
     }
   } finally {
     submitting.value = false

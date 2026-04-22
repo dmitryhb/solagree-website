@@ -13,7 +13,7 @@ const emit = defineEmits<{
   change: [payload: { value: string, checked: boolean }]
 }>()
 
-function onChange(event: Event) {
+const onChange = (event: Event) => {
   const target = event.target as HTMLInputElement
   emit('change', {
     value: props.value,

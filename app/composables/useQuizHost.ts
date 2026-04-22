@@ -16,14 +16,17 @@ interface UseQuizHostOptions {
   onEvent?: (event: QuizHostEvent) => void
 }
 
-function createQuizHostSessionId() {
+const createQuizHostSessionId = () => {
   return `quiz-${Math.random().toString(36).slice(2, 10)}`
 }
 
-export function useQuizHost(
+/**
+ * Connects quiz session state to host configuration, CTA overrides, and embed events.
+ */
+export const useQuizHost = (
   quizSession: ReturnType<typeof useQuizSession>,
   options: UseQuizHostOptions = {}
-) {
+) => {
   const runtimeConfig = useRuntimeConfig()
   const sessionId = ref(createQuizHostSessionId())
   const hostConfig = computed(() => {
@@ -37,13 +40,13 @@ export function useQuizHost(
     return result ? resolveQuizResultViewForHost(result, hostConfig.value) : undefined
   })
 
-  function shouldEmitEvents() {
+  const shouldEmitEvents = () => {
     return hostConfig.value.analytics.enabled
       || hostConfig.value.bridge.postMessage
       || typeof options.onEvent === 'function'
   }
 
-  function dispatchEvent(event: QuizHostEvent) {
+  const dispatchEvent = (event: QuizHostEvent) => {
     if (!import.meta.client) {
       return
     }
@@ -61,7 +64,7 @@ export function useQuizHost(
     }
   }
 
-  function buildEventContext() {
+  const buildEventContext = () => {
     return {
       hostId: hostConfig.value.hostId,
       mode: hostConfig.value.mode,
@@ -71,7 +74,7 @@ export function useQuizHost(
     } as const
   }
 
-  function trackQuestionViewed(questionId: QuizQuestionId, progress: number) {
+  const trackQuestionViewed = (questionId: QuizQuestionId, progress: number) => {
     if (!shouldEmitEvents()) {
       return
     }
@@ -86,7 +89,7 @@ export function useQuizHost(
     dispatchEvent(event)
   }
 
-  function trackQuestionAnswered(questionId: QuizQuestionId, value: QuizQuestionAnsweredEvent['value']) {
+  const trackQuestionAnswered = (questionId: QuizQuestionId, value: QuizQuestionAnsweredEvent['value']) => {
     if (!shouldEmitEvents()) {
       return
     }
@@ -102,7 +105,7 @@ export function useQuizHost(
     dispatchEvent(event)
   }
 
-  function getTrackedAnswerValue(questionId: QuizQuestionId): QuizQuestionAnsweredEvent['value'] | undefined {
+  const getTrackedAnswerValue = (questionId: QuizQuestionId): QuizQuestionAnsweredEvent['value'] | undefined => {
     const value = quizSession.answers.value[questionId]
 
     if (value === undefined) {
@@ -114,7 +117,7 @@ export function useQuizHost(
       : value as QuizQuestionAnsweredEvent['value']
   }
 
-  function handleSingleAnswer(questionId: QuizQuestionId, value: string | undefined) {
+  const handleSingleAnswer = (questionId: QuizQuestionId, value: string | undefined) => {
     quizSession.setSingleAnswer(questionId, value)
 
     const nextValue = getTrackedAnswerValue(questionId)
@@ -123,7 +126,7 @@ export function useQuizHost(
     }
   }
 
-  function handleMultiAnswer(questionId: QuizQuestionId, payload: { value: string, checked: boolean }) {
+  const handleMultiAnswer = (questionId: QuizQuestionId, payload: { value: string, checked: boolean }) => {
     quizSession.toggleMultiAnswer(questionId, payload.value, payload.checked)
 
     const nextValue = getTrackedAnswerValue(questionId)
@@ -132,7 +135,7 @@ export function useQuizHost(
     }
   }
 
-  function handleAdvance() {
+  const handleAdvance = () => {
     const fromQuestionId = quizSession.currentQuestionId.value
     const previousPhase = quizSession.phase.value
 
@@ -151,11 +154,11 @@ export function useQuizHost(
     })
   }
 
-  function handleBack() {
+  const handleBack = () => {
     quizSession.goBack()
   }
 
-  function handleReset() {
+  const handleReset = () => {
     quizSession.reset()
 
     if (!shouldEmitEvents()) {
@@ -170,7 +173,7 @@ export function useQuizHost(
     dispatchEvent(event)
   }
 
-  function handleResultCtaClick(cta: QuizResultCta) {
+  const handleResultCtaClick = (cta: QuizResultCta) => {
     if (!shouldEmitEvents()) {
       return
     }

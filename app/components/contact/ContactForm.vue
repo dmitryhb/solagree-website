@@ -10,7 +10,7 @@ const form = reactive<ContactFormState>({
 
 const statusMessage = ref('')
 
-function handleSubmit() {
+const handleSubmit = () => {
   statusMessage.value = 'Thanks. We will get back to you shortly.'
 }
 </script>

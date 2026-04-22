@@ -14,7 +14,7 @@ const emit = defineEmits<{
   'update:value': [value: string | undefined]
 }>()
 
-function onChange(event: Event) {
+const onChange = (event: Event) => {
   const target = event.target as HTMLSelectElement
   emit('update:value', target.value || undefined)
 }

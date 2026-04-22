@@ -8,11 +8,11 @@ const isHomeRoute = computed(() => route.path === '/')
 const isSolidHeader = computed(() => !isHomeRoute.value)
 const menuToggleLabel = computed(() => (isMobileMenuOpen.value ? 'Close navigation menu' : 'Open navigation menu'))
 
-function updateScrolledState() {
+const updateScrolledState = () => {
   isScrolled.value = window.scrollY > 8
 }
 
-function closeMobileMenu() {
+const closeMobileMenu = () => {
   isMobileMenuOpen.value = false
 }
 
