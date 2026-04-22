@@ -7,26 +7,56 @@ const isScrolled = ref(false)
 const isHomeRoute = computed(() => route.path === '/')
 const isSolidHeader = computed(() => !isHomeRoute.value)
 const menuToggleLabel = computed(() => (isMobileMenuOpen.value ? 'Close navigation menu' : 'Open navigation menu'))
+const scrollUpdateTimers: number[] = []
 
-const updateScrolledState = () => {
-  isScrolled.value = window.scrollY > 8
+const clearScrollUpdateTimers = () => {
+  while (scrollUpdateTimers.length) {
+    const timer = scrollUpdateTimers.pop()
+
+    if (timer !== undefined) {
+      window.clearTimeout(timer)
+    }
+  }
 }
 
+const updateScrolledState = () => {
+  isScrolled.value = isHomeRoute.value && window.scrollY > 8
+}
+
+/**
+ * Nuxt restores scroll after route state changes, so home navigation needs an
+ * immediate top reset plus delayed reads to avoid carrying the internal header.
+ */
 const scheduleScrolledStateUpdate = async () => {
   if (!import.meta.client) {
     return
   }
 
+  clearScrollUpdateTimers()
+
   if (isHomeRoute.value && !route.hash) {
     isScrolled.value = false
+    window.scrollTo({ left: 0, top: 0, behavior: 'auto' })
   }
 
   await nextTick()
 
-  window.requestAnimationFrame(() => {
+  const refreshScrolledState = () => {
+    if (isHomeRoute.value && !route.hash && window.scrollY > 0) {
+      window.scrollTo({ left: 0, top: 0, behavior: 'auto' })
+    }
+
     updateScrolledState()
-    window.requestAnimationFrame(updateScrolledState)
+  }
+
+  window.requestAnimationFrame(() => {
+    refreshScrolledState()
+    window.requestAnimationFrame(refreshScrolledState)
   })
+
+  for (const delay of [80, 180, 360]) {
+    scrollUpdateTimers.push(window.setTimeout(refreshScrolledState, delay))
+  }
 }
 
 const closeMobileMenu = () => {
@@ -39,6 +69,7 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
+  clearScrollUpdateTimers()
   window.removeEventListener('scroll', updateScrolledState)
 })
 

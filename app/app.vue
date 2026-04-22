@@ -4,6 +4,7 @@ const normalizedRoutePath = computed(() => (route.path === '/' ? route.path : ro
 const isQuizRoute = computed(() => normalizedRoutePath.value === '/quiz')
 const showSiteHeader = computed(() => !isQuizRoute.value)
 const isInternalShell = computed(() => normalizedRoutePath.value !== '/' && !isQuizRoute.value)
+const siteHeaderKey = computed(() => (isInternalShell.value ? 'internal' : 'home'))
 const pageKey = computed(() => normalizedRoutePath.value)
 const pageTransition = {
   name: 'page-appear',
@@ -19,7 +20,10 @@ const pageTransition = {
       :class="{ 'app-shell--internal': isInternalShell }"
     >
       <SkipLink />
-      <AppHeader v-if="showSiteHeader" />
+      <AppHeader
+        v-if="showSiteHeader"
+        :key="siteHeaderKey"
+      />
       <div
         id="main-content"
         class="main-content-anchor"
