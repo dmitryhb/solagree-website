@@ -14,9 +14,10 @@ if (!isLegalSlug(slug)) {
 
 const page = legalPages[slug]
 
-useSeoMeta({
+useSolagreeSeo({
   title: page.metaTitle,
-  description: page.metaDescription
+  description: page.metaDescription,
+  path: `/legal/${page.slug}`
 })
 </script>
 

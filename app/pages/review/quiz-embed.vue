@@ -32,10 +32,11 @@ const handleHostEvent = (event: QuizHostEvent) => {
   events.value = [event, ...events.value].slice(0, 8)
 }
 
-useSeoMeta({
+useSolagreeSeo({
   title: 'Quiz Embed Review | Solagree',
   description: 'Internal signoff surface for the Solagree quiz embed contract.',
-  robots: 'noindex, nofollow'
+  noIndex: true,
+  path: '/review/quiz-embed'
 })
 </script>
 

@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import AttorneyApplicationPage from '~/components/attorney/AttorneyApplicationPage.vue'
 
-useSeoMeta({
-  title: 'Attorney Application | Solagree',
-  description: 'Apply to become a Solagree attorney partner and share your licensing, mediation, and consultation preferences.'
+useSolagreeSeo({
+  title: 'Attorney Partner Application',
+  description:
+    'Apply to become a Solagree attorney partner and share your licensing, mediation, arbitration, and consultation preferences.',
+  path: '/attorney-application',
+  image: '/images/for-professionals.webp'
 })
 </script>
 

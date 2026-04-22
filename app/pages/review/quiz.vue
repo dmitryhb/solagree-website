@@ -1,8 +1,9 @@
 <script setup lang="ts">
-useSeoMeta({
+useSolagreeSeo({
   title: 'Quiz Review | Solagree',
   description: 'Internal signoff surface for the Solagree embeddable quiz flow.',
-  robots: 'noindex, nofollow'
+  noIndex: true,
+  path: '/review/quiz'
 })
 </script>
 

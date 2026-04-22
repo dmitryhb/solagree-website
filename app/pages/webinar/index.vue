@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import WebinarRegistrationPage from '~/components/webinar/WebinarRegistrationPage.vue'
 
-useSeoMeta({
-  title: 'Webinar Registration | Solagree',
-  description: 'Watch a short Solagree attorney partner overview and see how Solagree can add more cases, referrals, and revenue opportunities to your practice.'
+useSolagreeSeo({
+  title: 'Attorney Partner Webinar',
+  description:
+    'Watch the Solagree attorney partner overview to learn how structured divorce resolution can create referrals, cases, and new revenue opportunities.',
+  path: '/webinar',
+  image: '/images/amanda.webp'
 })
 </script>
 

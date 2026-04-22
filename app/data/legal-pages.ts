@@ -63,8 +63,8 @@ export const legalPages: Record<LegalSlug, LegalPageContent> = {
     slug: 'terms-of-service',
     navLabel: 'Terms of Service',
     title: 'Terms of Service',
-    metaTitle: 'Terms of Service | Solagree',
-    metaDescription: 'Review Solagree terms of service and legal guidelines.',
+    metaTitle: 'Terms of Service',
+    metaDescription: 'Review the Solagree terms of service for website use, service expectations, and legal guidelines.',
     sourceLabel: 'SOLAGREE.COM',
     revisionLabel: 'Date of Last Revision: March 13, 2025',
     blocks: placeholderBlocks
@@ -73,8 +73,8 @@ export const legalPages: Record<LegalSlug, LegalPageContent> = {
     slug: 'privacy-policy',
     navLabel: 'Privacy Policy',
     title: 'Privacy Policy',
-    metaTitle: 'Privacy Policy | Solagree',
-    metaDescription: 'Review Solagree privacy policy and learn how personal information is collected and handled.',
+    metaTitle: 'Privacy Policy',
+    metaDescription: 'Review the Solagree privacy policy and learn how personal information is collected, used, and handled.',
     sourceLabel: 'SOLAGREE.COM',
     revisionLabel: 'Date of Last Revision: March 13, 2025',
     blocks: [
@@ -133,8 +133,8 @@ export const legalPages: Record<LegalSlug, LegalPageContent> = {
     slug: 'accessibility',
     navLabel: 'Accessibility',
     title: 'Accessibility',
-    metaTitle: 'Accessibility | Solagree',
-    metaDescription: 'Review Solagree accessibility information and commitments.',
+    metaTitle: 'Accessibility',
+    metaDescription: 'Review Solagree accessibility information, standards, and commitments for making the website easier to use.',
     sourceLabel: 'SOLAGREE.COM',
     revisionLabel: 'Date of Last Revision: March 13, 2025',
     blocks: placeholderBlocks

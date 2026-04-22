@@ -1,7 +1,9 @@
 <script setup lang="ts">
-useSeoMeta({
-  title: 'Quiz | Solagree',
-  description: 'Standalone Solagree quiz experience.'
+useSolagreeSeo({
+  title: 'Divorce Plan Quiz',
+  description:
+    'Take the Solagree quiz to see whether expedited or traditional structured divorce support may fit your situation.',
+  path: '/quiz'
 })
 </script>
 

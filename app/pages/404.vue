@@ -1,8 +1,9 @@
 <script setup lang="ts">
-useSeoMeta({
-  title: 'Page Not Found | Solagree',
+useSolagreeSeo({
+  title: 'Page Not Found',
   description: 'The page you are looking for may have moved, or the link may no longer be available.',
-  robots: 'noindex, nofollow'
+  noIndex: true,
+  path: '/404'
 })
 </script>
 

@@ -1,8 +1,9 @@
 <script setup lang="ts">
-useSeoMeta({
+useSolagreeSeo({
   title: 'Foundation Review | Solagree',
   description: 'Internal signoff surface for the live Solagree foundation layer.',
-  robots: 'noindex, nofollow'
+  noIndex: true,
+  path: '/review/foundation'
 })
 
 const resolvedColors = ref<Record<string, string>>({})

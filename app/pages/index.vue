@@ -1,7 +1,30 @@
 <script setup lang="ts">
-useSeoMeta({
-  title: 'Solagree | Divorce without court',
-  description: 'A next-generation divorce method designed to reduce conflict and cost, even when you do not agree on everything.'
+import { solagreeSocialLinks } from '~/data/social-links'
+
+const runtimeConfig = useRuntimeConfig()
+const siteUrl = runtimeConfig.public.siteUrl.replace(/\/+$/, '')
+
+useSolagreeSeo({
+  title: 'Virtual Flat-Fee Divorce Without Court',
+  description:
+    'Solagree helps couples resolve divorce online with a structured, flat-fee process designed to reduce conflict, cost, and court involvement.',
+  path: '/',
+  structuredData: [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'Organization',
+      name: 'Solagree',
+      url: siteUrl,
+      logo: `${siteUrl}/solagree-logo.svg`,
+      sameAs: solagreeSocialLinks.map(link => link.href)
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      name: 'Solagree',
+      url: siteUrl
+    }
+  ]
 })
 </script>
 
