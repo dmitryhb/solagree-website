@@ -3,6 +3,10 @@ import type {
   AttorneyApplicationApiResponse,
   AttorneyApplicationFormState
 } from '~/types/attorney-application'
+import {
+  getPortalSubmissionErrorMessage,
+  normalizePortalApiBaseUrl
+} from '~/services/portal-api'
 
 const ATTORNEY_APPLICATIONS_ENDPOINT = '/api/attorney-applications'
 const DEFAULT_SUBMISSION_ERROR_MESSAGE = 'We could not submit your application. Please try again.'
@@ -41,13 +45,6 @@ export interface SubmitAttorneyApplicationOptions {
 }
 
 /**
- * Removes trailing slashes so endpoint paths can be appended consistently.
- */
-export const normalizePortalApiBaseUrl = (portalApiBaseUrl: string): string => {
-  return String(portalApiBaseUrl || '').replace(/\/+$/, '')
-}
-
-/**
  * Creates the API payload from form state and trims repeatable license fields.
  */
 export const createAttorneyApplicationSubmissionPayload = (
@@ -63,32 +60,7 @@ export const createAttorneyApplicationSubmissionPayload = (
  * Converts Nuxt/fetch/native errors into a user-facing submission message.
  */
 export const getAttorneyApplicationSubmissionErrorMessage = (error: unknown): string => {
-  if (
-    typeof error === 'object'
-    && error !== null
-    && 'data' in error
-    && typeof error.data === 'object'
-    && error.data !== null
-    && 'message' in error.data
-    && typeof error.data.message === 'string'
-  ) {
-    return error.data.message
-  }
-
-  if (
-    typeof error === 'object'
-    && error !== null
-    && 'statusMessage' in error
-    && typeof error.statusMessage === 'string'
-  ) {
-    return error.statusMessage
-  }
-
-  if (error instanceof Error) {
-    return error.message
-  }
-
-  return DEFAULT_SUBMISSION_ERROR_MESSAGE
+  return getPortalSubmissionErrorMessage(error, DEFAULT_SUBMISSION_ERROR_MESSAGE)
 }
 
 /**
