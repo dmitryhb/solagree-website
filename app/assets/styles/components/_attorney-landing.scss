@@ -7,6 +7,80 @@
   min-height: 0;
 }
 
+.attorney-value-section {
+  background: var(--color-page);
+  padding: 72px 2rem 76px;
+}
+
+.attorney-value-section__inner {
+  width: min(100%, 1184px);
+  margin-inline: auto;
+}
+
+.attorney-value-section__header {
+  display: grid;
+  justify-items: center;
+  gap: 18px;
+  text-align: center;
+}
+
+.attorney-value-section__title {
+  margin: 0;
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  font-size: 54px;
+  font-weight: 500;
+  line-height: 1.011;
+}
+
+.attorney-value-section__intro {
+  margin: 0;
+  color: #171616;
+  font-family: var(--font-ui);
+  font-size: 18.4px;
+  line-height: 1.4;
+}
+
+.attorney-value-section__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 56px;
+}
+
+.attorney-value-card {
+  min-height: 206px;
+  padding: 24px 24px 28px;
+  border: 1px solid var(--color-badge-warm);
+  border-radius: 12px;
+  background: transparent;
+}
+
+.attorney-value-card__icon {
+  display: block;
+  width: 21px;
+  height: 20px;
+  margin-bottom: 12px;
+}
+
+.attorney-value-card__title {
+  margin: 0;
+  color: var(--color-ink);
+  font-family: var(--font-nav);
+  font-size: 29px;
+  font-weight: 400;
+  line-height: 1.13;
+}
+
+.attorney-value-card__description {
+  max-width: 330px;
+  margin: 16px 0 0;
+  color: #171616;
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.44;
+}
+
 .attorney-one-place-section {
   background: var(--color-surface-cool);
   padding: 65px 2rem 68px;
@@ -373,6 +447,33 @@
 }
 
 @media (max-width: 1100px) {
+  .attorney-value-section {
+    padding: 64px 1.5rem;
+  }
+
+  .attorney-value-section__inner {
+    width: min(100%, 760px);
+  }
+
+  .attorney-value-section__title {
+    font-size: 48px;
+    line-height: 1.15;
+  }
+
+  .attorney-value-section__grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-top: 40px;
+  }
+
+  .attorney-value-card {
+    min-height: 0;
+  }
+
+  .attorney-value-card__description {
+    max-width: 100%;
+  }
+
   .attorney-one-place-section {
     padding: 64px 1.5rem;
   }
@@ -477,6 +578,32 @@
 }
 
 @media (max-width: 767px) {
+  .attorney-value-section {
+    padding: 56px 1.25rem;
+  }
+
+  .attorney-value-section__header {
+    justify-items: start;
+    text-align: left;
+  }
+
+  .attorney-value-section__title {
+    font-size: 40px;
+  }
+
+  .attorney-value-section__intro,
+  .attorney-value-card__description {
+    font-size: 16.5px;
+  }
+
+  .attorney-value-card {
+    padding: 22px 20px 24px;
+  }
+
+  .attorney-value-card__title {
+    font-size: 25px;
+  }
+
   .attorney-one-place-section {
     padding: 56px 1.25rem;
   }

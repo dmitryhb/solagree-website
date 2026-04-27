@@ -4,6 +4,7 @@ import AttorneyFitsPracticeSection from '~/components/attorney/AttorneyFitsPract
 import AttorneyLandingPage from '~/components/attorney/AttorneyLandingPage.vue'
 import AttorneyMoreCasesSection from '~/components/attorney/AttorneyMoreCasesSection.vue'
 import AttorneyOnePlaceSection from '~/components/attorney/AttorneyOnePlaceSection.vue'
+import AttorneyValueSection from '~/components/attorney/AttorneyValueSection.vue'
 
 useSolagreeSeo({
   title: 'Attorney Partners',
@@ -15,6 +16,7 @@ useSolagreeSeo({
 
 <template>
   <AttorneyLandingPage>
+    <AttorneyValueSection />
     <AttorneyOnePlaceSection />
     <AttorneyMoreCasesSection />
     <AttorneyFaqSection />
