@@ -16,7 +16,7 @@
           id="attorney-hero-title"
           class="attorney-hero-section__title"
         >
-          Expand Your Practice.
+          <span>Expand Your Practice.</span>
           <span>Reclaim Your Time.</span>
         </h1>
 

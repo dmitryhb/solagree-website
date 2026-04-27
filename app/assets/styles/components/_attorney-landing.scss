@@ -14,10 +14,10 @@
 
 .attorney-hero-section__inner {
   display: grid;
-  grid-template-columns: minmax(0, 592px) minmax(0, 562px);
-  gap: 82px;
+  grid-template-columns: minmax(0, 680px) minmax(0, 562px);
+  gap: 64px;
   align-items: center;
-  width: min(100%, 1160px);
+  width: min(100%, 1306px);
   margin-inline: auto;
 }
 
@@ -49,6 +49,7 @@
   font-size: 54px;
   font-weight: 500;
   line-height: 1.18;
+  max-width: 680px;
 }
 
 .attorney-hero-section__title span {
