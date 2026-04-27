@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AttorneyFaqSection from '~/components/attorney/AttorneyFaqSection.vue'
 import AttorneyFitsPracticeSection from '~/components/attorney/AttorneyFitsPracticeSection.vue'
 import AttorneyLandingPage from '~/components/attorney/AttorneyLandingPage.vue'
 
@@ -12,6 +13,7 @@ useSolagreeSeo({
 
 <template>
   <AttorneyLandingPage>
+    <AttorneyFaqSection />
     <AttorneyFitsPracticeSection />
   </AttorneyLandingPage>
 </template>

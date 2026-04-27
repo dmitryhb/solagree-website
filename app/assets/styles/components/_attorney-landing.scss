@@ -7,6 +7,73 @@
   min-height: 0;
 }
 
+.attorney-faq-section {
+  background: var(--color-page);
+  padding: clamp(5rem, 8vw, 7.5rem) 2rem clamp(4.75rem, 7vw, 6rem);
+}
+
+.attorney-faq-section__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 41.75rem) minmax(0, 47.25rem);
+  gap: clamp(4rem, 8.9vw, 10.625rem);
+  align-items: start;
+  width: min(100%, 1532px);
+  margin-inline: auto;
+}
+
+.attorney-faq-section__copy {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.attorney-faq-section__title {
+  margin: 0;
+  color: var(--color-heading);
+  font-family: var(--font-display);
+  font-size: 4.5rem;
+  font-weight: 500;
+  line-height: 1.08;
+}
+
+.attorney-faq-section__intro {
+  max-width: 41.75rem;
+  margin: 0;
+  color: #171616;
+  font-family: var(--font-body);
+  font-size: 1.75rem;
+  line-height: 1.36;
+}
+
+.attorney-faq-section__accordion {
+  align-self: start;
+}
+
+.attorney-faq-section__accordion.base-accordion [data-slot="trigger"] {
+  padding: 0.95rem 0 1.05rem;
+  gap: 2rem;
+}
+
+.attorney-faq-section__accordion .base-accordion__label {
+  font-family: var(--font-ui);
+  font-size: 1.6875rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.attorney-faq-section__accordion .base-accordion__text {
+  max-width: 47rem;
+  padding-bottom: 1.5rem;
+  font-family: var(--font-ui);
+  font-size: 1.75rem;
+  line-height: 1.36;
+}
+
+.attorney-faq-section__accordion .base-accordion__indicator {
+  width: 1.75rem;
+  height: 1.75rem;
+  font-size: 2rem;
+}
+
 .attorney-fits-practice-section {
   background: var(--color-surface-footer);
   padding: 6.25rem 2rem 5.5rem;
@@ -81,6 +148,29 @@
 }
 
 @media (max-width: 1100px) {
+  .attorney-faq-section {
+    padding: 4.5rem 1.5rem;
+  }
+
+  .attorney-faq-section__inner {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    width: min(100%, 760px);
+  }
+
+  .attorney-faq-section__title {
+    font-size: 3.5rem;
+  }
+
+  .attorney-faq-section__intro,
+  .attorney-faq-section__accordion .base-accordion__text {
+    font-size: 1.35rem;
+  }
+
+  .attorney-faq-section__accordion .base-accordion__label {
+    font-size: 1.35rem;
+  }
+
   .attorney-fits-practice-section {
     padding: 4.5rem 1.5rem;
   }
@@ -113,6 +203,45 @@
 }
 
 @media (max-width: 767px) {
+  .attorney-faq-section {
+    padding: 4rem 1.25rem;
+  }
+
+  .attorney-faq-section__inner {
+    gap: 2.5rem;
+  }
+
+  .attorney-faq-section__copy {
+    gap: 1.25rem;
+  }
+
+  .attorney-faq-section__title {
+    font-size: 2.75rem;
+    line-height: 1.12;
+  }
+
+  .attorney-faq-section__intro,
+  .attorney-faq-section__accordion .base-accordion__text {
+    font-size: 1.0625rem;
+    line-height: 1.55;
+  }
+
+  .attorney-faq-section__accordion.base-accordion [data-slot="trigger"] {
+    padding: 1rem 0;
+    gap: 1rem;
+  }
+
+  .attorney-faq-section__accordion .base-accordion__label {
+    font-size: 1.0625rem;
+    line-height: 1.35;
+  }
+
+  .attorney-faq-section__accordion .base-accordion__indicator {
+    width: 1.5rem;
+    height: 1.5rem;
+    font-size: 1.5rem;
+  }
+
   .attorney-fits-practice-section {
     padding: 3.75rem 1.25rem 4rem;
   }
