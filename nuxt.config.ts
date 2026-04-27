@@ -49,7 +49,7 @@ export default defineNuxtConfig({
         },
         ctas: {
           'solagree-consult': {
-            href: '#solagree-consult-placeholder'
+            href: '/book-a-solagree-consult'
           },
           'attorney-consult': {
             href: '#attorney-consult-placeholder'

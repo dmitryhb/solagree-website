@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import type { QuizResultViewModel } from '~/data/quiz-types'
+import { appendReferralToHref } from '~/utils/referral'
 
-defineProps<{
+const props = defineProps<{
   result: QuizResultViewModel
 }>()
 
@@ -9,6 +10,31 @@ const emit = defineEmits<{
   reset: []
   cta: [payload: QuizResultViewModel['primaryCta']]
 }>()
+
+const route = useRoute()
+
+const referralCode = computed(() => {
+  const refValue = route.query.ref
+
+  if (Array.isArray(refValue)) {
+    return refValue.find((value) => typeof value === 'string' && value.trim()) ?? null
+  }
+
+  return typeof refValue === 'string' ? refValue.trim() || null : null
+})
+
+const primaryCtaHref = computed(() => {
+  if (props.result.primaryCta.actionId !== 'solagree-consult') {
+    return props.result.primaryCta.href
+  }
+
+  return appendReferralToHref(props.result.primaryCta.href, referralCode.value)
+})
+
+const primaryCta = computed(() => ({
+  ...props.result.primaryCta,
+  href: primaryCtaHref.value
+}))
 </script>
 
 <template>
@@ -29,12 +55,12 @@ const emit = defineEmits<{
     <div class="quiz-result-state__actions">
       <a
         class="quiz-result-state__cta quiz-result-state__cta--primary"
-        :href="result.primaryCta.href"
-        :target="result.primaryCta.target"
-        :rel="result.primaryCta.rel"
-        @click="emit('cta', result.primaryCta)"
+        :href="primaryCta.href"
+        :target="primaryCta.target"
+        :rel="primaryCta.rel"
+        @click="emit('cta', primaryCta)"
       >
-        {{ result.primaryCta.label }}
+        {{ primaryCta.label }}
       </a>
 
       <button
