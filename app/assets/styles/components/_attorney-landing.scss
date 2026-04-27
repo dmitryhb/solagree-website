@@ -176,6 +176,16 @@
   padding: 50px 42px 42px;
   border-radius: 14px;
   background: var(--color-surface-stone);
+  transition:
+    background-color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
+}
+
+.attorney-partner-card:hover {
+  background: #ebe6de;
+  box-shadow: 0 14px 28px rgba(62, 64, 89, 0.08);
+  transform: translateY(-3px);
 }
 
 .attorney-partner-card__main {
