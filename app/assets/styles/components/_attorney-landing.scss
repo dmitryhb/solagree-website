@@ -172,7 +172,8 @@
 
 .attorney-partner-card {
   display: grid;
-  align-content: space-between;
+  grid-template-rows: 1fr auto;
+  gap: 48px;
   min-height: 400px;
   padding: 42px;
   border-radius: 14px;
@@ -191,7 +192,8 @@
 
 .attorney-partner-card__main {
   display: grid;
-  gap: 34px;
+  grid-template-rows: auto 1fr;
+  gap: 46px;
 }
 
 .attorney-partner-card__title {
@@ -738,8 +740,13 @@
   }
 
   .attorney-partner-card {
+    grid-template-rows: none;
     min-height: 0;
     gap: 40px;
+  }
+
+  .attorney-partner-card__main {
+    grid-template-rows: none;
   }
 
   .attorney-how-it-works-section {
