@@ -33,9 +33,9 @@ import { attorneyValueCards } from '~/data/attorney-value-cards'
         >
           <img
             class="attorney-value-card__icon"
-            src="/icons/growth-icon.svg"
+            :src="card.iconSrc"
             alt=""
-            width="21"
+            width="20"
             height="20"
             aria-hidden="true"
           >

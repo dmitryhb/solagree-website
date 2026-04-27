@@ -13,7 +13,7 @@
 }
 
 .attorney-value-section__inner {
-  width: min(100%, 1184px);
+  width: min(100%, 1108px);
   margin-inline: auto;
 }
 
@@ -44,21 +44,22 @@
 .attorney-value-section__grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 18px;
-  margin-top: 56px;
+  gap: 16px;
+  margin-top: 54px;
 }
 
 .attorney-value-card {
-  min-height: 206px;
-  padding: 24px 24px 28px;
+  min-height: 174px;
+  padding: 22px 22px 24px;
   border: 1px solid var(--color-badge-warm);
   border-radius: 12px;
-  background: transparent;
+  background: var(--color-white);
+  box-shadow: 0 10px 12px rgba(233, 226, 210, 0.3);
 }
 
 .attorney-value-card__icon {
   display: block;
-  width: 21px;
+  width: 20px;
   height: 20px;
   margin-bottom: 12px;
 }
@@ -67,18 +68,17 @@
   margin: 0;
   color: var(--color-ink);
   font-family: var(--font-nav);
-  font-size: 29px;
+  font-size: 24px;
   font-weight: 400;
-  line-height: 1.13;
+  line-height: 1.15;
 }
 
 .attorney-value-card__description {
-  max-width: 330px;
-  margin: 16px 0 0;
+  margin: 15px 0 0;
   color: #171616;
   font-family: var(--font-body);
-  font-size: 17px;
-  line-height: 1.44;
+  font-size: 15px;
+  line-height: 1.42;
 }
 
 .attorney-one-place-section {
