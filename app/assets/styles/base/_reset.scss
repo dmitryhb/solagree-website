@@ -1,15 +1,38 @@
 html {
+  max-width: 100%;
+  overflow-x: clip;
   scroll-behavior: smooth;
   scroll-padding-top: var(--site-anchor-offset);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
 body {
   min-height: 100vh;
   margin: 0;
+  overflow-x: clip;
   background-color: var(--color-page);
   color: var(--color-text);
   font-family: var(--font-body);
   text-rendering: optimizeLegibility;
+}
+
+img,
+svg,
+video,
+canvas {
+  max-width: 100%;
+}
+
+@supports not (overflow: clip) {
+  html,
+  body {
+    overflow-x: hidden;
+  }
 }
 
 a {
