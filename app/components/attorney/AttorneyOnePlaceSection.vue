@@ -60,10 +60,14 @@ import { attorneyOnePlaceBenefits } from '~/data/attorney-benefits'
           size="sm"
         >
           Watch the Partner Briefing
-          <span
-            class="attorney-one-place-section__cta-arrow"
+          <img
+            class="button-arrow-icon"
+            src="/icons/arrow.svg"
+            alt=""
+            width="16"
+            height="17"
             aria-hidden="true"
-          />
+          >
         </SiteButton>
       </div>
     </div>

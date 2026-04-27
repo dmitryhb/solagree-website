@@ -31,10 +31,14 @@
             to="/webinar/"
           >
             Watch the Partner Briefing
-            <span
-              class="attorney-hero-section__primary-arrow"
+            <img
+              class="button-arrow-icon"
+              src="/icons/arrow.svg"
+              alt=""
+              width="16"
+              height="17"
               aria-hidden="true"
-            />
+            >
           </SiteButton>
 
           <NuxtLink

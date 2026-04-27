@@ -81,38 +81,6 @@
   line-height: 1;
 }
 
-.attorney-hero-section__primary-arrow {
-  position: relative;
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-}
-
-.attorney-hero-section__primary-arrow::before,
-.attorney-hero-section__primary-arrow::after {
-  position: absolute;
-  content: "";
-  background: currentColor;
-}
-
-.attorney-hero-section__primary-arrow::before {
-  top: 7px;
-  left: 1px;
-  width: 14px;
-  height: 2px;
-}
-
-.attorney-hero-section__primary-arrow::after {
-  top: 3px;
-  right: 1px;
-  width: 9px;
-  height: 9px;
-  border-top: 2px solid currentColor;
-  border-right: 2px solid currentColor;
-  background: transparent;
-  transform: rotate(45deg);
-}
-
 .attorney-hero-section__secondary {
   color: var(--color-white);
   font-family: var(--font-nav);
@@ -191,38 +159,6 @@
   color: var(--color-ink);
   font-size: 18px;
   line-height: 1;
-}
-
-.attorney-partner-paths-section__cta-arrow {
-  position: relative;
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-}
-
-.attorney-partner-paths-section__cta-arrow::before,
-.attorney-partner-paths-section__cta-arrow::after {
-  position: absolute;
-  content: "";
-  background: currentColor;
-}
-
-.attorney-partner-paths-section__cta-arrow::before {
-  top: 7px;
-  left: 1px;
-  width: 14px;
-  height: 2px;
-}
-
-.attorney-partner-paths-section__cta-arrow::after {
-  top: 3px;
-  right: 1px;
-  width: 9px;
-  height: 9px;
-  border-top: 2px solid currentColor;
-  border-right: 2px solid currentColor;
-  background: transparent;
-  transform: rotate(45deg);
 }
 
 .attorney-partner-paths-section__grid {
@@ -525,38 +461,6 @@
   color: var(--color-ink);
   font-size: 18px;
   line-height: 1;
-}
-
-.attorney-one-place-section__cta-arrow {
-  position: relative;
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-}
-
-.attorney-one-place-section__cta-arrow::before,
-.attorney-one-place-section__cta-arrow::after {
-  position: absolute;
-  content: "";
-  background: currentColor;
-}
-
-.attorney-one-place-section__cta-arrow::before {
-  top: 7px;
-  left: 1px;
-  width: 14px;
-  height: 2px;
-}
-
-.attorney-one-place-section__cta-arrow::after {
-  top: 3px;
-  right: 1px;
-  width: 9px;
-  height: 9px;
-  border-top: 2px solid currentColor;
-  border-right: 2px solid currentColor;
-  background: transparent;
-  transform: rotate(45deg);
 }
 
 .attorney-more-cases-section {
