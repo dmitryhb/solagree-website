@@ -23,6 +23,11 @@ const publicRoutes: SitemapRoute[] = [
     priority: 0.6
   },
   {
+    path: '/attorneys',
+    changefreq: 'monthly',
+    priority: 0.7
+  },
+  {
     path: '/attorney-application',
     changefreq: 'monthly',
     priority: 0.7

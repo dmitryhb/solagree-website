@@ -9,21 +9,21 @@
 
 .attorney-fits-practice-section {
   background: var(--color-surface-footer);
-  padding: clamp(4.5rem, 7vw, 6.75rem) 2rem clamp(4.25rem, 6vw, 5.5rem);
+  padding: 6.25rem 2rem 5.5rem;
 }
 
 .attorney-fits-practice-section__inner {
-  width: min(100%, 1740px);
+  width: min(100%, 1742px);
   margin-inline: auto;
 }
 
 .attorney-fits-practice-section__title {
-  margin: 0 0 clamp(2.25rem, 4vw, 3.25rem);
+  margin: 0 0 3rem;
   color: var(--color-ink);
   font-family: var(--font-display);
-  font-size: clamp(3.25rem, 5vw, 5.25rem);
+  font-size: 4.5rem;
   font-weight: 500;
-  line-height: 1.08;
+  line-height: 1.12;
   text-align: center;
 }
 
@@ -55,7 +55,7 @@
   margin: 0;
   color: #171616;
   font-family: var(--font-nav);
-  font-size: clamp(1.5rem, 2vw, 2rem);
+  font-size: 2rem;
   font-weight: 600;
   line-height: 1.36;
 }
@@ -81,8 +81,20 @@
 }
 
 @media (max-width: 1100px) {
+  .attorney-fits-practice-section {
+    padding: 4.5rem 1.5rem;
+  }
+
   .attorney-fits-practice-section__inner {
     width: min(100%, 760px);
+  }
+
+  .attorney-fits-practice-section__title {
+    font-size: 3.5rem;
+  }
+
+  .attorney-fits-practice-section__copy {
+    font-size: 1.625rem;
   }
 
   .attorney-fits-practice-section__grid {

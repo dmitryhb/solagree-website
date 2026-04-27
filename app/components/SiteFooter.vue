@@ -77,7 +77,7 @@ const currentYear = new Date().getFullYear()
             </p>
             <ul class="site-footer__links">
               <li>
-                <NuxtLink to="/">
+                <NuxtLink to="/attorneys">
                   Attorneys
                 </NuxtLink>
               </li>

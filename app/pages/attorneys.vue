@@ -6,7 +6,7 @@ useSolagreeSeo({
   title: 'Attorney Partners',
   description:
     'Learn how attorneys can partner with Solagree to support clients through a structured, flat-fee divorce process.',
-  path: '/attorney'
+  path: '/attorneys'
 })
 </script>
 
