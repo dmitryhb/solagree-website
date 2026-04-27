@@ -7,6 +7,68 @@
   min-height: 0;
 }
 
+.attorney-how-it-works-section {
+  background: var(--color-page);
+  padding: 46px 2rem 70px;
+}
+
+.attorney-how-it-works-section__inner {
+  display: grid;
+  justify-items: center;
+  width: min(100%, 1076px);
+  margin-inline: auto;
+  text-align: center;
+}
+
+.attorney-how-it-works-section__header {
+  display: grid;
+  justify-items: center;
+  gap: 24px;
+}
+
+.attorney-how-it-works-section__title {
+  margin: 0;
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  font-size: 54px;
+  font-weight: 500;
+  line-height: 1.011;
+}
+
+.attorney-how-it-works-section__intro {
+  margin: 0;
+  color: #171616;
+  font-family: var(--font-body);
+  font-size: 18.4px;
+  line-height: 1.4;
+}
+
+.attorney-how-it-works-section__video.webinar-video-frame {
+  width: 100%;
+  margin-top: 48px;
+}
+
+.attorney-how-it-works-section__cta.sol-button {
+  width: min(100%, 546px);
+  min-height: 48px;
+  margin-top: 42px;
+  padding: 15px 24px;
+  color: var(--color-ink);
+  font-size: 18px;
+  line-height: 1;
+}
+
+.attorney-how-it-works-section__quote {
+  max-width: 780px;
+  margin: 76px auto 0;
+  color: #171616;
+  font-family: var(--font-body);
+  font-size: 35px;
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1.34;
+}
+
 .attorney-value-section {
   background: var(--color-page);
   padding: 72px 2rem 76px;
@@ -447,6 +509,24 @@
 }
 
 @media (max-width: 1100px) {
+  .attorney-how-it-works-section {
+    padding: 64px 1.5rem;
+  }
+
+  .attorney-how-it-works-section__inner {
+    width: min(100%, 760px);
+  }
+
+  .attorney-how-it-works-section__title {
+    font-size: 48px;
+    line-height: 1.15;
+  }
+
+  .attorney-how-it-works-section__quote {
+    margin-top: 56px;
+    font-size: 30px;
+  }
+
   .attorney-value-section {
     padding: 64px 1.5rem;
   }
@@ -578,6 +658,40 @@
 }
 
 @media (max-width: 767px) {
+  .attorney-how-it-works-section {
+    padding: 56px 1.25rem;
+  }
+
+  .attorney-how-it-works-section__header {
+    justify-items: start;
+    gap: 16px;
+    text-align: left;
+  }
+
+  .attorney-how-it-works-section__title {
+    font-size: 40px;
+  }
+
+  .attorney-how-it-works-section__intro {
+    font-size: 16.5px;
+  }
+
+  .attorney-how-it-works-section__video.webinar-video-frame {
+    margin-top: 32px;
+  }
+
+  .attorney-how-it-works-section__cta.sol-button {
+    width: 100%;
+    min-width: 0;
+    margin-top: 28px;
+  }
+
+  .attorney-how-it-works-section__quote {
+    margin-top: 40px;
+    font-size: 24px;
+    line-height: 1.38;
+  }
+
   .attorney-value-section {
     padding: 56px 1.25rem;
   }
