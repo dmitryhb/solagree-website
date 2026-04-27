@@ -1,0 +1,136 @@
+.attorney-landing-page {
+  min-height: 100vh;
+  background: var(--color-page);
+}
+
+.attorney-landing-page__content {
+  min-height: 0;
+}
+
+.attorney-fits-practice-section {
+  background: var(--color-surface-footer);
+  padding: clamp(4.5rem, 7vw, 6.75rem) 2rem clamp(4.25rem, 6vw, 5.5rem);
+}
+
+.attorney-fits-practice-section__inner {
+  width: min(100%, 1740px);
+  margin-inline: auto;
+}
+
+.attorney-fits-practice-section__title {
+  margin: 0 0 clamp(2.25rem, 4vw, 3.25rem);
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  font-size: clamp(3.25rem, 5vw, 5.25rem);
+  font-weight: 500;
+  line-height: 1.08;
+  text-align: center;
+}
+
+.attorney-fits-practice-section__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 8px;
+}
+
+.attorney-fits-practice-section__panel,
+.attorney-fits-practice-section__media {
+  overflow: hidden;
+  border-radius: 16px;
+}
+
+.attorney-fits-practice-section__panel {
+  display: grid;
+  min-height: 392px;
+  align-content: center;
+  justify-items: center;
+  gap: clamp(2.75rem, 4vw, 4.125rem);
+  padding: clamp(2.5rem, 4vw, 5.75rem) clamp(2rem, 4vw, 3.625rem);
+  background: var(--color-surface-stone);
+  text-align: center;
+}
+
+.attorney-fits-practice-section__copy {
+  max-width: 750px;
+  margin: 0;
+  color: #171616;
+  font-family: var(--font-nav);
+  font-size: clamp(1.5rem, 2vw, 2rem);
+  font-weight: 600;
+  line-height: 1.36;
+}
+
+.attorney-fits-practice-section__cta.sol-button {
+  min-width: 218px;
+  padding: 1.25rem 2rem;
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.attorney-fits-practice-section__media {
+  min-height: 392px;
+  margin: 0;
+  background: var(--color-surface-stone);
+}
+
+.attorney-fits-practice-section__media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (max-width: 1100px) {
+  .attorney-fits-practice-section__inner {
+    width: min(100%, 760px);
+  }
+
+  .attorney-fits-practice-section__grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .attorney-fits-practice-section__panel,
+  .attorney-fits-practice-section__media {
+    min-height: 0;
+  }
+
+  .attorney-fits-practice-section__media {
+    aspect-ratio: 1218 / 545;
+  }
+}
+
+@media (max-width: 767px) {
+  .attorney-fits-practice-section {
+    padding: 3.75rem 1.25rem 4rem;
+  }
+
+  .attorney-fits-practice-section__title {
+    margin-bottom: 2rem;
+    font-size: 2.75rem;
+    line-height: 1.12;
+    text-align: left;
+  }
+
+  .attorney-fits-practice-section__panel {
+    justify-items: start;
+    gap: 2rem;
+    padding: 2rem 1.5rem;
+    text-align: left;
+  }
+
+  .attorney-fits-practice-section__copy {
+    font-size: 1.25rem;
+    line-height: 1.45;
+  }
+
+  .attorney-fits-practice-section__cta.sol-button {
+    min-width: 0;
+    padding: 1rem 1.5rem;
+    font-size: 1.125rem;
+  }
+
+  .attorney-fits-practice-section__media {
+    aspect-ratio: 1.18;
+  }
+}
