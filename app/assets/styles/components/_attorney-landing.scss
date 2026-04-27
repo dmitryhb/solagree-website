@@ -9,32 +9,32 @@
 
 .attorney-more-cases-section {
   background: var(--color-page);
-  padding: clamp(5rem, 8vw, 7.625rem) 2rem clamp(4.75rem, 7vw, 5.75rem);
+  padding: 64px 2rem;
 }
 
 .attorney-more-cases-section__inner {
   display: grid;
-  grid-template-columns: minmax(0, 38.5rem) minmax(0, 45rem);
-  gap: clamp(4rem, 8.4vw, 10.125rem);
+  grid-template-columns: minmax(0, 500px) minmax(0, 525px);
+  gap: 51px;
   align-items: center;
-  width: min(100%, 1518px);
+  width: min(100%, 1076px);
   margin-inline: auto;
 }
 
 .attorney-more-cases-section__copy {
   display: grid;
   align-content: start;
-  gap: 2.25rem;
+  gap: 24px;
 }
 
 .attorney-more-cases-section__title {
-  max-width: 38.5rem;
+  max-width: 500px;
   margin: 0;
   color: var(--color-heading);
   font-family: var(--font-display);
-  font-size: 4.5rem;
+  font-size: 54px;
   font-weight: 500;
-  line-height: 1.08;
+  line-height: 1.011;
 }
 
 .attorney-more-cases-section__body,
@@ -42,16 +42,16 @@
   margin: 0;
   color: var(--color-heading);
   font-family: var(--font-body);
-  font-size: 2rem;
-  line-height: 1.35;
+  font-size: 18px;
+  line-height: 1.431;
 }
 
 .attorney-more-cases-section__body {
-  max-width: 38rem;
+  max-width: 460px;
 }
 
 .attorney-more-cases-section__link-copy {
-  margin-top: 1.625rem;
+  margin-top: 12px;
 }
 
 .attorney-more-cases-section__link {
@@ -79,7 +79,7 @@
 .attorney-more-cases-section__media img {
   display: block;
   width: 100%;
-  aspect-ratio: 720 / 545;
+  aspect-ratio: 525 / 397;
   object-fit: cover;
   object-position: center;
   transition: transform 520ms ease;
@@ -91,15 +91,15 @@
 
 .attorney-faq-section {
   background: var(--color-page);
-  padding: clamp(5rem, 8vw, 7.5rem) 2rem clamp(4.75rem, 7vw, 6rem);
+  padding: 73px 2rem;
 }
 
 .attorney-faq-section__inner {
   display: grid;
-  grid-template-columns: minmax(0, 41.75rem) minmax(0, 47.25rem);
-  gap: clamp(4rem, 8.9vw, 10.625rem);
+  grid-template-columns: minmax(0, 503px) minmax(0, 531px);
+  gap: 42px;
   align-items: start;
-  width: min(100%, 1532px);
+  width: min(100%, 1076px);
   margin-inline: auto;
 }
 
@@ -112,18 +112,18 @@
   margin: 0;
   color: var(--color-heading);
   font-family: var(--font-display);
-  font-size: 4.5rem;
+  font-size: 54px;
   font-weight: 500;
-  line-height: 1.08;
+  line-height: 1.011;
 }
 
 .attorney-faq-section__intro {
-  max-width: 41.75rem;
+  max-width: 502px;
   margin: 0;
   color: #171616;
   font-family: var(--font-body);
-  font-size: 1.75rem;
-  line-height: 1.36;
+  font-size: 18px;
+  line-height: 1.431;
 }
 
 .attorney-faq-section__accordion {
@@ -131,55 +131,55 @@
 }
 
 .attorney-faq-section__accordion.base-accordion [data-slot="trigger"] {
-  padding: 0.95rem 0 1.05rem;
-  gap: 2rem;
+  padding: 15px 0 16px;
+  gap: 1rem;
 }
 
 .attorney-faq-section__accordion .base-accordion__label {
   font-family: var(--font-ui);
-  font-size: 1.6875rem;
+  font-size: 18px;
   font-weight: 600;
-  line-height: 1.35;
+  line-height: 1.4;
 }
 
 .attorney-faq-section__accordion .base-accordion__text {
-  max-width: 47rem;
-  padding-bottom: 1.5rem;
+  max-width: 531px;
+  padding-bottom: 24px;
   font-family: var(--font-ui);
-  font-size: 1.75rem;
-  line-height: 1.36;
+  font-size: 18.4px;
+  line-height: 1.4;
 }
 
 .attorney-faq-section__accordion .base-accordion__indicator {
-  width: 1.75rem;
-  height: 1.75rem;
-  font-size: 2rem;
+  width: 20px;
+  height: 21px;
+  font-size: 24px;
 }
 
 .attorney-fits-practice-section {
   background: var(--color-surface-footer);
-  padding: 6.25rem 2rem 5.5rem;
+  padding: 82px 2rem 86px;
 }
 
 .attorney-fits-practice-section__inner {
-  width: min(100%, 1742px);
+  width: min(100%, 1076px);
   margin-inline: auto;
 }
 
 .attorney-fits-practice-section__title {
-  margin: 0 0 3rem;
+  margin: 0 0 34px;
   color: var(--color-ink);
   font-family: var(--font-display);
-  font-size: 4.5rem;
+  font-size: 54px;
   font-weight: 500;
-  line-height: 1.12;
+  line-height: 1.011;
   text-align: center;
 }
 
 .attorney-fits-practice-section__grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 8px;
+  gap: 9px;
 }
 
 .attorney-fits-practice-section__panel,
@@ -190,34 +190,34 @@
 
 .attorney-fits-practice-section__panel {
   display: grid;
-  min-height: 392px;
+  min-height: 218px;
   align-content: center;
   justify-items: center;
-  gap: clamp(2.75rem, 4vw, 4.125rem);
-  padding: clamp(2.5rem, 4vw, 5.75rem) clamp(2rem, 4vw, 3.625rem);
+  gap: 46px;
+  padding: 44px 31px;
   background: var(--color-surface-stone);
   text-align: center;
 }
 
 .attorney-fits-practice-section__copy {
-  max-width: 750px;
+  max-width: 460px;
   margin: 0;
   color: #171616;
   font-family: var(--font-nav);
-  font-size: 2rem;
+  font-size: 18.4px;
   font-weight: 600;
-  line-height: 1.36;
+  line-height: 1.431;
 }
 
 .attorney-fits-practice-section__cta.sol-button {
-  min-width: 218px;
-  padding: 1.25rem 2rem;
-  font-size: 1.5rem;
+  min-width: 137px;
+  padding: 15px 24px;
+  font-size: 18px;
   line-height: 1;
 }
 
 .attorney-fits-practice-section__media {
-  min-height: 392px;
+  min-height: 218px;
   margin: 0;
   background: var(--color-surface-stone);
 }
@@ -231,7 +231,7 @@
 
 @media (max-width: 1100px) {
   .attorney-more-cases-section {
-    padding: 4.5rem 1.5rem;
+    padding: 64px 1.5rem;
   }
 
   .attorney-more-cases-section__inner {
@@ -245,12 +245,13 @@
   }
 
   .attorney-more-cases-section__title {
-    font-size: 3.5rem;
+    font-size: 48px;
+    line-height: 1.15;
   }
 
   .attorney-more-cases-section__body,
   .attorney-more-cases-section__link-copy {
-    font-size: 1.5rem;
+    font-size: 17.5px;
   }
 
   .attorney-more-cases-section__link-copy {
@@ -258,7 +259,7 @@
   }
 
   .attorney-faq-section {
-    padding: 4.5rem 1.5rem;
+    padding: 64px 1.5rem;
   }
 
   .attorney-faq-section__inner {
@@ -268,20 +269,21 @@
   }
 
   .attorney-faq-section__title {
-    font-size: 3.5rem;
+    font-size: 48px;
+    line-height: 1.15;
   }
 
   .attorney-faq-section__intro,
   .attorney-faq-section__accordion .base-accordion__text {
-    font-size: 1.35rem;
+    font-size: 17.5px;
   }
 
   .attorney-faq-section__accordion .base-accordion__label {
-    font-size: 1.35rem;
+    font-size: 17.5px;
   }
 
   .attorney-fits-practice-section {
-    padding: 4.5rem 1.5rem;
+    padding: 64px 1.5rem;
   }
 
   .attorney-fits-practice-section__inner {
@@ -289,11 +291,12 @@
   }
 
   .attorney-fits-practice-section__title {
-    font-size: 3.5rem;
+    font-size: 48px;
+    line-height: 1.15;
   }
 
   .attorney-fits-practice-section__copy {
-    font-size: 1.625rem;
+    font-size: 17.5px;
   }
 
   .attorney-fits-practice-section__grid {
