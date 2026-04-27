@@ -6,3 +6,12 @@ export interface AttorneyValueCard {
   title: string
   description: string
 }
+
+/**
+ * Content model for a partnership path card on the attorney landing page.
+ */
+export interface AttorneyPartnerPath {
+  title: string
+  description: string
+  details: string[]
+}

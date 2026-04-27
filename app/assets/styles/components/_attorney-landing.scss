@@ -7,6 +7,141 @@
   min-height: 0;
 }
 
+.attorney-partner-paths-section {
+  background: var(--color-page);
+  padding: 94px 2rem 90px;
+}
+
+.attorney-partner-paths-section__inner {
+  display: grid;
+  justify-items: center;
+  width: min(100%, 1160px);
+  margin-inline: auto;
+}
+
+.attorney-partner-paths-section__header {
+  display: grid;
+  justify-items: center;
+  gap: 20px;
+  text-align: center;
+}
+
+.attorney-partner-paths-section__title {
+  margin: 0;
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  font-size: 54px;
+  font-weight: 500;
+  line-height: 1.011;
+}
+
+.attorney-partner-paths-section__intro {
+  margin: 0;
+  color: #171616;
+  font-family: var(--font-body);
+  font-size: 18.4px;
+  line-height: 1.4;
+}
+
+.attorney-partner-paths-section__cta.sol-button {
+  min-width: 267px;
+  min-height: 48px;
+  margin-top: 15px;
+  padding: 15px 24px;
+  color: var(--color-ink);
+  font-size: 18px;
+  line-height: 1;
+}
+
+.attorney-partner-paths-section__cta-arrow {
+  position: relative;
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+}
+
+.attorney-partner-paths-section__cta-arrow::before,
+.attorney-partner-paths-section__cta-arrow::after {
+  position: absolute;
+  content: "";
+  background: currentColor;
+}
+
+.attorney-partner-paths-section__cta-arrow::before {
+  top: 7px;
+  left: 1px;
+  width: 14px;
+  height: 2px;
+}
+
+.attorney-partner-paths-section__cta-arrow::after {
+  top: 3px;
+  right: 1px;
+  width: 9px;
+  height: 9px;
+  border-top: 2px solid currentColor;
+  border-right: 2px solid currentColor;
+  background: transparent;
+  transform: rotate(45deg);
+}
+
+.attorney-partner-paths-section__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  width: 100%;
+  margin-top: 52px;
+}
+
+.attorney-partner-card {
+  display: grid;
+  align-content: space-between;
+  min-height: 400px;
+  padding: 50px 42px 42px;
+  border-radius: 14px;
+  background: var(--color-surface-stone);
+}
+
+.attorney-partner-card__main {
+  display: grid;
+  gap: 48px;
+}
+
+.attorney-partner-card__title {
+  margin: 0;
+  color: var(--color-ink);
+  font-family: var(--font-nav);
+  font-size: 34px;
+  font-weight: 700;
+  line-height: 1.24;
+}
+
+.attorney-partner-card__description {
+  max-width: 310px;
+  margin: 0;
+  color: #171616;
+  font-family: var(--font-body);
+  font-size: 18px;
+  line-height: 1.45;
+}
+
+.attorney-partner-card__details {
+  display: grid;
+  gap: 18px;
+  padding: 0;
+  margin: 0;
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: 20px;
+  line-height: 1.48;
+  list-style: none;
+}
+
+.attorney-partner-card__details li {
+  padding-bottom: 12px;
+  border-bottom: 2px solid #171616;
+}
+
 .attorney-how-it-works-section {
   background: var(--color-page);
   padding: 46px 2rem 70px;
@@ -509,6 +644,30 @@
 }
 
 @media (max-width: 1100px) {
+  .attorney-partner-paths-section {
+    padding: 64px 1.5rem;
+  }
+
+  .attorney-partner-paths-section__inner {
+    width: min(100%, 760px);
+  }
+
+  .attorney-partner-paths-section__title {
+    font-size: 48px;
+    line-height: 1.15;
+  }
+
+  .attorney-partner-paths-section__grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-top: 40px;
+  }
+
+  .attorney-partner-card {
+    min-height: 0;
+    gap: 40px;
+  }
+
   .attorney-how-it-works-section {
     padding: 64px 1.5rem;
   }
@@ -658,6 +817,45 @@
 }
 
 @media (max-width: 767px) {
+  .attorney-partner-paths-section {
+    padding: 56px 1.25rem;
+  }
+
+  .attorney-partner-paths-section__header {
+    justify-items: start;
+    text-align: left;
+  }
+
+  .attorney-partner-paths-section__title {
+    font-size: 40px;
+  }
+
+  .attorney-partner-paths-section__intro,
+  .attorney-partner-card__description {
+    font-size: 16.5px;
+  }
+
+  .attorney-partner-paths-section__cta.sol-button {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .attorney-partner-card {
+    padding: 32px 24px 30px;
+  }
+
+  .attorney-partner-card__main {
+    gap: 24px;
+  }
+
+  .attorney-partner-card__title {
+    font-size: 28px;
+  }
+
+  .attorney-partner-card__details {
+    font-size: 18px;
+  }
+
   .attorney-how-it-works-section {
     padding: 56px 1.25rem;
   }
