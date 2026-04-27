@@ -21,13 +21,10 @@
         </p>
 
         <p class="attorney-more-cases-section__link-copy">
-          Learn more in
-          <NuxtLink
+          Learn more in&nbsp;<NuxtLink
             class="attorney-more-cases-section__link"
             to="/webinar/"
-          >
-            the briefing
-          </NuxtLink>.
+          >the briefing</NuxtLink>.
         </p>
       </div>
 
