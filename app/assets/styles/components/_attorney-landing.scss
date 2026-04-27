@@ -7,6 +7,147 @@
   min-height: 0;
 }
 
+.attorney-one-place-section {
+  background: var(--color-surface-cool);
+  padding: 65px 2rem 68px;
+}
+
+.attorney-one-place-section__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 525px) minmax(0, 500px);
+  gap: 50px;
+  align-items: center;
+  width: min(100%, 1076px);
+  margin-inline: auto;
+}
+
+.attorney-one-place-section__media {
+  overflow: hidden;
+  margin: 0;
+  border-radius: 16px;
+  background: var(--color-surface-stone);
+}
+
+.attorney-one-place-section__media img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 525 / 644;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 520ms ease;
+}
+
+.attorney-one-place-section__media:hover img {
+  transform: scale(1.025);
+}
+
+.attorney-one-place-section__content {
+  display: grid;
+  align-content: center;
+  gap: 26px;
+}
+
+.attorney-one-place-section__copy {
+  display: grid;
+  gap: 19px;
+}
+
+.attorney-one-place-section__title {
+  max-width: 500px;
+  margin: 0;
+  color: var(--color-heading);
+  font-family: var(--font-display);
+  font-size: 54px;
+  font-weight: 500;
+  line-height: 1.011;
+}
+
+.attorney-one-place-section__intro {
+  max-width: 500px;
+  margin: 0;
+  color: var(--color-heading);
+  font-family: var(--font-body);
+  font-size: 24px;
+  line-height: 1.42;
+}
+
+.attorney-one-place-section__benefits {
+  display: grid;
+  gap: 18px;
+}
+
+.attorney-one-place-section__benefits-title {
+  margin: 0;
+  color: var(--color-heading);
+  font-family: var(--font-nav);
+  font-size: 18.4px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.attorney-one-place-section__list {
+  display: grid;
+  gap: 6px;
+  padding-left: 24px;
+  margin: 0;
+  color: var(--color-heading);
+  font-family: var(--font-body);
+  font-size: 18px;
+  line-height: 1.55;
+}
+
+.attorney-one-place-section__list li::marker {
+  color: var(--color-badge-warm);
+}
+
+.attorney-one-place-section__list strong {
+  color: var(--color-badge-warm);
+  font-family: var(--font-nav);
+  font-weight: 700;
+}
+
+.attorney-one-place-section__cta.sol-button {
+  width: fit-content;
+  min-width: 235px;
+  margin-top: 7px;
+  padding: 15px 24px;
+  color: var(--color-ink);
+  font-size: 18px;
+  line-height: 1;
+}
+
+.attorney-one-place-section__cta-arrow {
+  position: relative;
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+}
+
+.attorney-one-place-section__cta-arrow::before,
+.attorney-one-place-section__cta-arrow::after {
+  position: absolute;
+  content: "";
+  background: currentColor;
+}
+
+.attorney-one-place-section__cta-arrow::before {
+  top: 7px;
+  left: 1px;
+  width: 14px;
+  height: 2px;
+}
+
+.attorney-one-place-section__cta-arrow::after {
+  top: 3px;
+  right: 1px;
+  width: 9px;
+  height: 9px;
+  border-top: 2px solid currentColor;
+  border-right: 2px solid currentColor;
+  background: transparent;
+  transform: rotate(45deg);
+}
+
 .attorney-more-cases-section {
   background: var(--color-page);
   padding: 64px 2rem;
@@ -58,10 +199,12 @@
   color: inherit;
   text-underline-offset: 0.12em;
   text-decoration-thickness: 1px;
+  text-decoration: underline;
 }
 
 .attorney-more-cases-section__link:hover {
   color: var(--color-ink);
+  text-decoration: none;
 }
 
 .attorney-more-cases-section__link:focus-visible {
@@ -230,6 +373,25 @@
 }
 
 @media (max-width: 1100px) {
+  .attorney-one-place-section {
+    padding: 64px 1.5rem;
+  }
+
+  .attorney-one-place-section__inner {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    width: min(100%, 760px);
+  }
+
+  .attorney-one-place-section__title {
+    font-size: 48px;
+    line-height: 1.15;
+  }
+
+  .attorney-one-place-section__intro {
+    font-size: 20px;
+  }
+
   .attorney-more-cases-section {
     padding: 64px 1.5rem;
   }
@@ -315,6 +477,36 @@
 }
 
 @media (max-width: 767px) {
+  .attorney-one-place-section {
+    padding: 56px 1.25rem;
+  }
+
+  .attorney-one-place-section__inner {
+    gap: 32px;
+  }
+
+  .attorney-one-place-section__content {
+    gap: 24px;
+  }
+
+  .attorney-one-place-section__title {
+    font-size: 40px;
+  }
+
+  .attorney-one-place-section__intro,
+  .attorney-one-place-section__list {
+    font-size: 16.5px;
+  }
+
+  .attorney-one-place-section__benefits-title {
+    font-size: 17px;
+  }
+
+  .attorney-one-place-section__cta.sol-button {
+    width: 100%;
+    min-width: 0;
+  }
+
   .attorney-more-cases-section {
     padding: 4rem 1.25rem;
   }
