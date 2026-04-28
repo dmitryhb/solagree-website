@@ -1,5 +1,6 @@
 import Handlebars from 'handlebars'
-import type { CoBrandedPagePublicConfig, CoBrandedPageRenderMode } from '~/types/co-branded-page'
+import type { CoBrandedPagePublicConfig } from '#shared/types/co-branded-page'
+import type { CoBrandedPageRenderMode } from '~/types/co-branded-page'
 
 interface CoBrandedPageTemplateContext extends CoBrandedPagePublicConfig {
   isEmbed: boolean

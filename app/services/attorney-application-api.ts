@@ -1,6 +1,11 @@
 import type {
   AttorneyApplicationApiErrorResponse,
   AttorneyApplicationApiResponse,
+  AttorneyApplicationSubmissionPayload,
+  AttorneyMediationExperienceValue,
+  AttorneyYesNoAnswer
+} from '#shared/types/attorney-application'
+import type {
   AttorneyApplicationFormState
 } from '~/types/attorney-application'
 import {
@@ -24,13 +29,6 @@ export type AttorneyApplicationFetcher = <TResponse>(
 ) => Promise<TResponse>
 
 /**
- * Request body sent to the portal API after client-side normalization.
- */
-export interface AttorneyApplicationSubmissionPayload extends AttorneyApplicationFormState {
-  licenseNumbers: string[]
-}
-
-/**
  * Dependencies required to submit an attorney application.
  */
 export interface SubmitAttorneyApplicationOptions {
@@ -44,15 +42,49 @@ export interface SubmitAttorneyApplicationOptions {
   fetcher: AttorneyApplicationFetcher
 }
 
+const isAttorneyYesNoAnswer = (value: string): value is AttorneyYesNoAnswer => {
+  return value === 'yes' || value === 'no'
+}
+
+const isAttorneyMediationExperienceValue = (value: string): value is AttorneyMediationExperienceValue => {
+  return value === 'none' || value === 'certification' || value === 'practice' || value === 'both'
+}
+
 /**
  * Creates the API payload from form state and trims repeatable license fields.
+ *
+ * @throws Error when required select fields are not narrowed to API values.
  */
 export const createAttorneyApplicationSubmissionPayload = (
   form: AttorneyApplicationFormState
 ): AttorneyApplicationSubmissionPayload => {
+  if (
+    !isAttorneyYesNoAnswer(form.goodStanding)
+    || !isAttorneyYesNoAnswer(form.disciplinaryFinding)
+    || !isAttorneyMediationExperienceValue(form.mediationExperience)
+    || !isAttorneyYesNoAnswer(form.neutralInterest)
+    || !isAttorneyYesNoAnswer(form.consultationInterest)
+  ) {
+    throw new Error('Please complete all required fields.')
+  }
+
   return {
-    ...form,
-    licenseNumbers: form.licenseNumbers.map((licenseNumber) => licenseNumber.trim())
+    name: form.name,
+    company: form.company,
+    email: form.email,
+    phone: form.phone,
+    address: form.address,
+    barStates: form.barStates,
+    licenseNumbers: form.licenseNumbers.map((licenseNumber) => licenseNumber.trim()),
+    initialLicensureYear: form.initialLicensureYear,
+    goodStanding: form.goodStanding,
+    disciplinaryFinding: form.disciplinaryFinding,
+    disciplinaryExplanation: form.disciplinaryExplanation,
+    mediationExperience: form.mediationExperience,
+    neutralInterest: form.neutralInterest,
+    adrNetworks: form.adrNetworks,
+    consultationInterest: form.consultationInterest,
+    termsAccepted: form.termsAccepted
   }
 }
 

@@ -1,6 +1,8 @@
 import type {
   ConsultBestTimeOfDay,
-  ConsultPreferredContactMethod,
+  ConsultPreferredContactMethod
+} from '#shared/types/consult-request'
+import type {
   ConsultRequestFormState,
   ConsultSelectOption
 } from '~/types/consult-request'

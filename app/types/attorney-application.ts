@@ -1,11 +1,11 @@
-export type AttorneyYesNo = '' | 'yes' | 'no'
+import type {
+  AttorneyMediationExperienceValue,
+  AttorneyYesNoAnswer
+} from '#shared/types/attorney-application'
 
-export type AttorneyMediationExperience =
-  | ''
-  | 'none'
-  | 'certification'
-  | 'practice'
-  | 'both'
+export type AttorneyYesNo = '' | AttorneyYesNoAnswer
+
+export type AttorneyMediationExperience = '' | AttorneyMediationExperienceValue
 
 export interface AttorneyApplicationFormState {
   name: string
@@ -34,15 +34,5 @@ export interface AttorneySelectOption<TValue extends string = string> {
 export interface AttorneyApplicationResult {
   kind: 'success' | 'error'
   title: string
-  message: string
-}
-
-export interface AttorneyApplicationApiResponse {
-  applicationId: string
-  status: 'pending'
-}
-
-export interface AttorneyApplicationApiErrorResponse {
-  error: true
   message: string
 }
