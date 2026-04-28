@@ -8,6 +8,7 @@ import {
   getAttorneyApplicationSubmissionErrorMessage,
   submitAttorneyApplication
 } from '~/services/attorney-application-api'
+import { isPortalApiConfigurationError } from '~/services/portal-api'
 import type { AttorneyApplicationFetcher } from '~/services/attorney-application-api'
 import { stateOptions } from '~/data/us-states'
 import type {
@@ -81,6 +82,10 @@ const handleSubmit = async () => {
 
     await navigateTo('/attorney-application/sent')
   } catch (error) {
+    if (isPortalApiConfigurationError(error)) {
+      console.error(error)
+    }
+
     submissionResult.value = {
       kind: 'error',
       title: 'Submission failed',
