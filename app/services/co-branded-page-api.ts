@@ -3,6 +3,9 @@ import type { CoBrandedPagePublicConfig, CoBrandedPageTemplateId } from '#shared
 
 const CO_BRANDED_PAGE_ENDPOINT_PREFIX = '/api/public/co-branded-pages'
 const DEFAULT_TEMPLATE_ID: CoBrandedPageTemplateId = 'solagree-basic-v1'
+const APPROVED_CO_BRANDED_CTA_PATHS = ['/quiz', '/book-a-solagree-consult']
+const APPROVED_CO_BRANDED_CTA_HOSTS = ['solagree.com', 'www.solagree.com']
+const APPROVED_CO_BRANDED_URL_PROTOCOLS = ['http:', 'https:']
 
 interface RawCoBrandedPagePublicConfig {
   slug?: unknown
@@ -33,14 +36,88 @@ const normalizeTemplateId = (value: unknown): CoBrandedPageTemplateId => {
   return value === DEFAULT_TEMPLATE_ID ? value : DEFAULT_TEMPLATE_ID
 }
 
+const getDefaultCtaUrl = (slug: string): string => {
+  return `/quiz?ref=${encodeURIComponent(slug)}`
+}
+
+const isApprovedCtaPath = (pathname: string): boolean => {
+  return APPROVED_CO_BRANDED_CTA_PATHS.some((approvedPath) => {
+    return pathname === approvedPath || pathname.startsWith(`${approvedPath}/`)
+  })
+}
+
+const isApprovedCtaHost = (hostname: string): boolean => {
+  const normalizedHostname = hostname.toLowerCase()
+
+  return APPROVED_CO_BRANDED_CTA_HOSTS.includes(normalizedHostname)
+}
+
+/**
+ * Allows only approved site-relative paths and approved Solagree http(s) hosts
+ * before a partner-provided CTA URL reaches the HTML template.
+ */
+export const normalizeCoBrandedCtaUrl = (value: unknown, fallbackSlug: string): string => {
+  const ctaUrl = normalizeOptionalString(value)
+  const fallbackUrl = getDefaultCtaUrl(fallbackSlug)
+
+  if (!ctaUrl) {
+    return fallbackUrl
+  }
+
+  try {
+    if (ctaUrl.startsWith('/')) {
+      const parsedRelativeUrl = new URL(ctaUrl, 'https://www.solagree.com')
+
+      return isApprovedCtaPath(parsedRelativeUrl.pathname)
+        ? `${parsedRelativeUrl.pathname}${parsedRelativeUrl.search}${parsedRelativeUrl.hash}`
+        : fallbackUrl
+    }
+
+    const parsedAbsoluteUrl = new URL(ctaUrl)
+
+    return APPROVED_CO_BRANDED_URL_PROTOCOLS.includes(parsedAbsoluteUrl.protocol)
+      && isApprovedCtaHost(parsedAbsoluteUrl.hostname)
+      && isApprovedCtaPath(parsedAbsoluteUrl.pathname)
+      ? parsedAbsoluteUrl.toString()
+      : fallbackUrl
+  } catch {
+    return fallbackUrl
+  }
+}
+
+/**
+ * Resolves partner image URLs while rejecting unsafe schemes such as javascript:
+ * and data:. Invalid or blocked image URLs safely omit the partner logo.
+ */
+export const normalizeCoBrandedImageUrl = (
+  value: unknown,
+  portalApiBaseUrl: string
+): string | null => {
+  const imageUrl = normalizeOptionalString(value)
+
+  if (!imageUrl) {
+    return null
+  }
+
+  try {
+    const normalizedImageUrl = new URL(imageUrl, portalApiBaseUrl)
+
+    return APPROVED_CO_BRANDED_URL_PROTOCOLS.includes(normalizedImageUrl.protocol)
+      ? normalizedImageUrl.toString()
+      : null
+  } catch {
+    return null
+  }
+}
+
 const normalizeLogoUrl = (
   payload: RawCoBrandedPagePublicConfig,
   portalApiBaseUrl: string
 ): string | null => {
-  const directLogoUrl = normalizeOptionalString(payload.logoUrl)
+  const directLogoUrl = normalizeCoBrandedImageUrl(payload.logoUrl, portalApiBaseUrl)
 
   if (directLogoUrl) {
-    return new URL(directLogoUrl, portalApiBaseUrl).toString()
+    return directLogoUrl
   }
 
   if (
@@ -48,9 +125,7 @@ const normalizeLogoUrl = (
     && payload.logo !== null
     && 'url' in payload.logo
   ) {
-    const logoUrl = normalizeOptionalString(payload.logo.url)
-
-    return logoUrl ? new URL(logoUrl, portalApiBaseUrl).toString() : null
+    return normalizeCoBrandedImageUrl(payload.logo.url, portalApiBaseUrl)
   }
 
   return null
@@ -79,7 +154,7 @@ export const normalizeCoBrandedPageConfig = (
     companyName,
     phoneNumber: normalizeOptionalString(payload.phoneNumber) ?? normalizeOptionalString(payload.phone),
     logoUrl: normalizeLogoUrl(payload, portalApiBaseUrl),
-    ctaUrl: normalizeOptionalString(payload.ctaUrl) ?? `/quiz?ref=${encodeURIComponent(slug)}`
+    ctaUrl: normalizeCoBrandedCtaUrl(payload.ctaUrl, slug)
   }
 }
 
