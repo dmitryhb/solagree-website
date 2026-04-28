@@ -33,11 +33,14 @@ const normalizeTemplateId = (value: unknown): CoBrandedPageTemplateId => {
   return value === DEFAULT_TEMPLATE_ID ? value : DEFAULT_TEMPLATE_ID
 }
 
-const normalizeLogoUrl = (payload: RawCoBrandedPagePublicConfig): string | null => {
+const normalizeLogoUrl = (
+  payload: RawCoBrandedPagePublicConfig,
+  portalApiBaseUrl: string
+): string | null => {
   const directLogoUrl = normalizeOptionalString(payload.logoUrl)
 
   if (directLogoUrl) {
-    return directLogoUrl
+    return new URL(directLogoUrl, portalApiBaseUrl).toString()
   }
 
   if (
@@ -45,7 +48,9 @@ const normalizeLogoUrl = (payload: RawCoBrandedPagePublicConfig): string | null 
     && payload.logo !== null
     && 'url' in payload.logo
   ) {
-    return normalizeOptionalString(payload.logo.url)
+    const logoUrl = normalizeOptionalString(payload.logo.url)
+
+    return logoUrl ? new URL(logoUrl, portalApiBaseUrl).toString() : null
   }
 
   return null
@@ -56,7 +61,8 @@ const normalizeLogoUrl = (payload: RawCoBrandedPagePublicConfig): string | null 
  */
 export const normalizeCoBrandedPageConfig = (
   payload: unknown,
-  fallbackSlug: string
+  fallbackSlug: string,
+  portalApiBaseUrl: string
 ): CoBrandedPagePublicConfig => {
   if (!isRecord(payload)) {
     throw new Error('Co-branded page configuration is invalid.')
@@ -72,7 +78,7 @@ export const normalizeCoBrandedPageConfig = (
     templateId: normalizeTemplateId(payload.templateId),
     companyName,
     phoneNumber: normalizeOptionalString(payload.phoneNumber) ?? normalizeOptionalString(payload.phone),
-    logoUrl: normalizeLogoUrl(payload),
+    logoUrl: normalizeLogoUrl(payload, portalApiBaseUrl),
     ctaUrl: normalizeOptionalString(payload.ctaUrl) ?? `/quiz?ref=${encodeURIComponent(slug)}`
   }
 }
@@ -98,7 +104,7 @@ export const fetchCoBrandedPageConfig = async (
       `${portalApiBaseUrl}${CO_BRANDED_PAGE_ENDPOINT_PREFIX}/${encodeURIComponent(slug)}`
     )
 
-    return normalizeCoBrandedPageConfig(payload, slug)
+    return normalizeCoBrandedPageConfig(payload, slug, portalApiBaseUrl)
   } catch (error) {
     if (
       typeof error === 'object'
