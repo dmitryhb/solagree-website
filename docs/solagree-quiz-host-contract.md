@@ -6,6 +6,7 @@
 
 - Standalone route: use `QuizSection` with no props. It resolves Nuxt runtime defaults automatically.
 - Embedded module: use `SolagreeQuizEmbed`. It wraps `QuizSection` with embedded defaults and re-emits host events.
+- Public iframe route: use `/quiz/embed?ref=<slug>`. The route renders `SolagreeQuizEmbed`, sets `noindex`, skips marketing chrome, and preserves the optional `ref` query value into same-site consult CTAs.
 
 ## Host Config
 
