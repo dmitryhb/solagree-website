@@ -14,6 +14,7 @@ import type {
   ConsultRequestFormState,
   ConsultRequestResult
 } from '~/types/consult-request'
+import { getStoredConsultQuizAnswers } from '~/utils/consult-quiz-answers'
 
 const runtimeConfig = useRuntimeConfig()
 const route = useRoute()
@@ -71,7 +72,8 @@ const handleSubmit = async () => {
       portalApiBaseUrl: runtimeConfig.public.portalApiBaseUrl,
       fetcher: $fetch as unknown as ConsultRequestFetcher,
       referralCode: referralCode.value,
-      sourceUrl: getSourceUrl()
+      sourceUrl: getSourceUrl(),
+      quizAnswers: getStoredConsultQuizAnswers()
     })
 
     await navigateTo(thankYouPath.value)
@@ -150,8 +152,11 @@ const handleSubmit = async () => {
           v-model="form.phone"
           name="phone"
           type="tel"
-          autocomplete="tel"
-          placeholder="1-415-555-1234..."
+          autocomplete="tel-national"
+          inputmode="tel"
+          pattern="\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}"
+          title="Use a 10-digit US phone number, e.g. 415-555-1234."
+          placeholder="415-555-1234..."
           required
         >
       </div>

@@ -8,6 +8,7 @@ import type {
   ConsultRequestApiErrorResponse,
   ConsultRequestApiResponse,
   ConsultRequestFormState,
+  ConsultRequestQuizAnswer,
   ConsultRequestSubmissionPayload
 } from '~/types/consult-request'
 
@@ -46,6 +47,10 @@ export interface SubmitConsultRequestOptions {
    * Optional source URL for operational attribution.
    */
   sourceUrl?: string | null
+  /**
+   * Optional public quiz answer snapshot captured before the consult request.
+   */
+  quizAnswers?: ConsultRequestQuizAnswer[] | null
 }
 
 /**
@@ -70,7 +75,7 @@ const isConsultBestTimeOfDay = (value: string): value is ConsultBestTimeOfDay =>
  */
 export const createConsultRequestSubmissionPayload = (
   form: ConsultRequestFormState,
-  options: Pick<SubmitConsultRequestOptions, 'referralCode' | 'sourceUrl'> = {}
+  options: Pick<SubmitConsultRequestOptions, 'referralCode' | 'sourceUrl' | 'quizAnswers'> = {}
 ): ConsultRequestSubmissionPayload => {
   const preferredContactMethod = form.preferredContactMethod.trim()
   const bestTimeOfDay = form.bestTimeOfDay.trim()
@@ -87,7 +92,8 @@ export const createConsultRequestSubmissionPayload = (
     preferredContactMethod,
     bestTimeOfDay,
     referralCode: options.referralCode?.trim() || null,
-    sourceUrl: options.sourceUrl?.trim() || null
+    sourceUrl: options.sourceUrl?.trim() || null,
+    quizAnswers: options.quizAnswers ?? []
   }
 }
 

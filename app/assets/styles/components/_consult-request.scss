@@ -31,7 +31,7 @@
 }
 
 .consult-request-sent {
-  max-width: 760px;
+  max-width: 1040px;
   margin-inline: auto;
 }
 
@@ -43,6 +43,11 @@
   font-size: clamp(2.1667rem, 4vw, 3.75rem);
   font-weight: 400;
   line-height: 1.05;
+}
+
+.consult-request-sent__title {
+  font-size: clamp(2.1667rem, 5.4vw, 4.5rem);
+  white-space: nowrap;
 }
 
 .consult-request-form__copy,
@@ -198,5 +203,9 @@
 
   .consult-request-page__content--sent {
     min-height: 360px;
+  }
+
+  .consult-request-sent__title {
+    white-space: normal;
   }
 }

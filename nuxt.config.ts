@@ -52,7 +52,7 @@ export default defineNuxtConfig({
             href: '/book-a-solagree-consult'
           },
           'attorney-consult': {
-            href: '#attorney-consult-placeholder'
+            href: '/book-a-solagree-consult'
           },
           'fallback-resources': {
             href: '#fallback-resources'

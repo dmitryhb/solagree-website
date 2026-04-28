@@ -11,6 +11,13 @@ export interface ConsultRequestFormState {
   bestTimeOfDay: ConsultBestTimeOfDay | ''
 }
 
+export interface ConsultRequestQuizAnswer {
+  questionId: string
+  question: string
+  value: string | string[]
+  answerLabels: string[]
+}
+
 export interface ConsultSelectOption<TValue extends string = string> {
   label: string
   value: TValue
@@ -25,6 +32,7 @@ export interface ConsultRequestSubmissionPayload {
   bestTimeOfDay: ConsultBestTimeOfDay
   referralCode?: string | null
   sourceUrl?: string | null
+  quizAnswers?: ConsultRequestQuizAnswer[] | null
 }
 
 export interface ConsultRequestApiResponse {

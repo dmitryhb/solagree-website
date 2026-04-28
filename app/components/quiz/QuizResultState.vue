@@ -23,8 +23,13 @@ const referralCode = computed(() => {
   return typeof refValue === 'string' ? refValue.trim() || null : null
 })
 
+const consultActionIds = new Set<QuizResultViewModel['primaryCta']['actionId']>([
+  'solagree-consult',
+  'attorney-consult'
+])
+
 const primaryCtaHref = computed(() => {
-  if (props.result.primaryCta.actionId !== 'solagree-consult') {
+  if (!consultActionIds.has(props.result.primaryCta.actionId)) {
     return props.result.primaryCta.href
   }
 
