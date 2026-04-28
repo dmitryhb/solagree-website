@@ -23,7 +23,7 @@ export default defineNuxtConfig({
     serverAppConfig: false
   },
   ssr: true,
-  modules: ['@nuxt/ui'],
+  modules: ['@nuxt/ui', '@nuxt/eslint'],
   css: ['~/assets/styles/vendor.css', '~/assets/styles/main.scss'],
   vite: {
     optimizeDeps: {

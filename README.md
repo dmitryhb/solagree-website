@@ -44,6 +44,21 @@ bun run dev
 - [Code style](docs/code-style.md)
 - [Solagree quiz host contract](docs/solagree-quiz-host-contract.md)
 
+## Code Quality
+
+Run ESLint before handing work to review:
+
+```bash
+npm run lint
+```
+
+For a focused pass on locally changed Vue and TypeScript files, pass file paths
+directly to ESLint:
+
+```bash
+npx eslint app/components/ExampleComponent.vue app/utils/example.ts
+```
+
 ## Portal API integration
 
 The attorney application and Solagree consult forms submit to the Solagree Portal API.

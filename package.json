@@ -7,6 +7,7 @@
     "dev": "nuxt dev --host solagree.local --port 3003",
     "deploy:staging": "./scripts/deploy-staging.sh",
     "generate": "nuxt generate",
+    "lint": "eslint .",
     "typecheck": "nuxt typecheck",
     "preview": "nuxt preview --host solagree.local --port 3003",
     "postinstall": "nuxt prepare"
@@ -20,7 +21,9 @@
     "vue-router": "^5.0.4"
   },
   "devDependencies": {
+    "@nuxt/eslint": "^1.15.2",
     "@types/node": "^25.6.0",
+    "eslint": "^9.39.4",
     "sass": "^1.99.0",
     "vue-tsc": "^3.2.7"
   }
