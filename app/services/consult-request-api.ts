@@ -7,10 +7,10 @@ import type {
   ConsultPreferredContactMethod,
   ConsultRequestApiErrorResponse,
   ConsultRequestApiResponse,
-  ConsultRequestFormState,
   ConsultRequestQuizAnswer,
   ConsultRequestSubmissionPayload
-} from '~/types/consult-request'
+} from '#shared/types/consult-request'
+import type { ConsultRequestFormState } from '~/types/consult-request'
 
 const CONSULT_REQUESTS_ENDPOINT = '/api/consult-requests'
 const DEFAULT_SUBMISSION_ERROR_MESSAGE = 'We could not submit your consult request. Please try again.'

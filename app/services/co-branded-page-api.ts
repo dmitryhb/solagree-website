@@ -1,5 +1,5 @@
 import { normalizePortalApiBaseUrl } from '~/services/portal-api'
-import type { CoBrandedPagePublicConfig, CoBrandedPageTemplateId } from '~/types/co-branded-page'
+import type { CoBrandedPagePublicConfig, CoBrandedPageTemplateId } from '#shared/types/co-branded-page'
 
 const CO_BRANDED_PAGE_ENDPOINT_PREFIX = '/api/public/co-branded-pages'
 const DEFAULT_TEMPLATE_ID: CoBrandedPageTemplateId = 'solagree-basic-v1'

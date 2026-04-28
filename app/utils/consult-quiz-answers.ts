@@ -5,7 +5,7 @@ import type {
   QuizQuestionId,
   QuizQuestionValue
 } from '~/data/quiz-types'
-import type { ConsultRequestQuizAnswer } from '~/types/consult-request'
+import type { ConsultRequestQuizAnswer } from '#shared/types/consult-request'
 import {
   getVisibleQuizQuestionIds,
   pruneHiddenQuizAnswers
