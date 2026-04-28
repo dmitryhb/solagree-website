@@ -5,6 +5,9 @@ ErrorDocument 404 /404/
   RewriteEngine On
   RewriteBase /
 
+  RewriteRule ^co-branded/[^/]+/?$ /index.html [L]
+  RewriteRule ^co-branded/[^/]+/embed/?$ /index.html [L]
+
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteRule ^ - [R=404,L]

@@ -6,8 +6,9 @@ const normalizedRoutePath = computed(() => (
 ))
 const quizShellRoutes = new Set(['/quiz', '/quiz/embed'])
 const isQuizRoute = computed(() => quizShellRoutes.has(normalizedRoutePath.value))
-const showSiteHeader = computed(() => !isQuizRoute.value)
-const isInternalShell = computed(() => normalizedRoutePath.value !== '/' && !isQuizRoute.value)
+const isCoBrandedRoute = computed(() => normalizedRoutePath.value.startsWith('/co-branded/'))
+const showSiteHeader = computed(() => !isQuizRoute.value && !isCoBrandedRoute.value)
+const isInternalShell = computed(() => normalizedRoutePath.value !== '/' && !isQuizRoute.value && !isCoBrandedRoute.value)
 const siteHeaderKey = computed(() => (isInternalShell.value ? 'internal' : 'home'))
 const pageKey = computed(() => normalizedRoutePath.value)
 const pageTransition = {
