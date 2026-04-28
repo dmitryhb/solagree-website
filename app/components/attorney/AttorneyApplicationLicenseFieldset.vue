@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { AttorneyLicenseNumberRow } from '~/composables/useAttorneyApplicationForm'
+import type { AttorneyLicenseNumberRow } from '~/types/attorney-application'
 
 defineProps<{
   rows: AttorneyLicenseNumberRow[]

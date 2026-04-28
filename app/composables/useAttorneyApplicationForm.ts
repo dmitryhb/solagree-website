@@ -8,13 +8,9 @@ import {
 import type { AttorneyApplicationFetcher } from '~/services/attorney-application-api'
 import type {
   AttorneyApplicationFormState,
-  AttorneyApplicationResult
+  AttorneyApplicationResult,
+  AttorneyLicenseNumberRow
 } from '~/types/attorney-application'
-
-export interface AttorneyLicenseNumberRow {
-  id: string
-  value: string
-}
 
 type AttorneyApplicationFormModel = Omit<AttorneyApplicationFormState, 'licenseNumbers'> & {
   licenseNumbers: AttorneyLicenseNumberRow[]
