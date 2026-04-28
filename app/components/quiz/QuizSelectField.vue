@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { QuizOption } from '~/data/quiz-types'
 
-const props = defineProps<{
+defineProps<{
   id: string
   options: readonly QuizOption[]
   value?: string

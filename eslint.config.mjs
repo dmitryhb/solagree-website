@@ -9,7 +9,6 @@ export default withNuxt({
   ],
   rules: {
     '@typescript-eslint/no-dynamic-delete': 'off',
-    '@typescript-eslint/no-unused-vars': 'off',
     'no-control-regex': 'off',
     'vue/attributes-order': 'off',
     'vue/no-v-html': 'off',
