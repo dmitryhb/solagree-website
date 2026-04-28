@@ -30,6 +30,7 @@ const {
     slug: slug.value
   }),
   {
+    server: false,
     watch: [slug]
   }
 )
