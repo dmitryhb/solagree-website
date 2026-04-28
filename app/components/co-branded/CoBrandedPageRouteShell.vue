@@ -71,8 +71,15 @@ useSolagreeSeo({
       <div class="co-branded-page-route__state-box">
         <h1>Page unavailable</h1>
         <p>
-          {{ error ? 'We could not load this co-branded Solagree page right now.' : 'This co-branded Solagree page is not available.' }}
+          {{ error ? 'We could not load this Solagree partner page right now.' : 'This Solagree partner page is not available.' }}
         </p>
+        <SiteButton
+          class="co-branded-page-route__home-link"
+          to="/"
+          variant="secondary"
+        >
+          Go to home page
+        </SiteButton>
       </div>
     </div>
   </main>
