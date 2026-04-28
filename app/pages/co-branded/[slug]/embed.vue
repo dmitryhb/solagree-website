@@ -9,7 +9,8 @@ const slug = computed(() => String(route.params.slug || '').trim())
 const {
   data: coBrandedPage,
   pending,
-  error
+  error,
+  status
 } = await useAsyncData(
   () => `co-branded-page-embed:${slug.value}`,
   () => fetchCoBrandedPageConfig({
@@ -21,10 +22,12 @@ const {
     watch: [slug]
   }
 )
+const isLoadingCoBrandedPage = computed(() => pending.value || status.value === 'idle' || status.value === 'pending')
+const isCoBrandedPageUnavailable = computed(() => status.value === 'error' || (status.value === 'success' && !coBrandedPage.value))
 
 useSolagreeSeo({
-  title: 'Co-branded Solagree Embed',
-  description: 'Embedded co-branded Solagree page.',
+  title: 'Co-branded Solagree page',
+  description: 'Start a structured Solagree divorce planning quiz from a partner co-branded page.',
   noIndex: true,
   path: `/co-branded/${slug.value}/embed`
 })
@@ -39,14 +42,22 @@ useSolagreeSeo({
     />
 
     <div
-      v-else
+      v-else-if="isLoadingCoBrandedPage"
       class="co-branded-page-route__state"
       role="status"
+      aria-label="Loading co-branded page"
+    >
+      <div class="co-branded-page-route__spinner" />
+    </div>
+
+    <div
+      v-else-if="isCoBrandedPageUnavailable"
+      class="co-branded-page-route__state"
     >
       <div class="co-branded-page-route__state-box">
-        <h1>{{ pending ? 'Loading page' : 'Page unavailable' }}</h1>
+        <h1>Page unavailable</h1>
         <p>
-          {{ error ? 'We could not load this embedded Solagree page right now.' : 'This embedded Solagree page is not available.' }}
+          {{ error ? 'We could not load this co-branded Solagree page right now.' : 'This co-branded Solagree page is not available.' }}
         </p>
       </div>
     </div>
