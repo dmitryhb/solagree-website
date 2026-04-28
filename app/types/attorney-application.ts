@@ -26,6 +26,11 @@ export interface AttorneyApplicationFormState {
   termsAccepted: boolean
 }
 
+export interface AttorneyLicenseNumberRow {
+  id: string
+  value: string
+}
+
 export interface AttorneySelectOption<TValue extends string = string> {
   label: string
   value: TValue
