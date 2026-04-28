@@ -1,3 +1,8 @@
+const DEV_PORTAL_API_BASE_URL = 'http://solagree-portal.local:3004'
+const isProduction = process.env.NODE_ENV === 'production'
+const portalApiBaseUrl = process.env.NUXT_PUBLIC_PORTAL_API_BASE_URL?.trim()
+  || (isProduction ? '' : DEV_PORTAL_API_BASE_URL)
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
@@ -31,7 +36,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'https://www.solagree.com',
-      portalApiBaseUrl: process.env.NUXT_PUBLIC_PORTAL_API_BASE_URL || 'http://solagree-portal.local:3004',
+      portalApiBaseUrl,
       solagreeQuiz: {
         hostId: 'solagree-quiz',
         mode: 'standalone',

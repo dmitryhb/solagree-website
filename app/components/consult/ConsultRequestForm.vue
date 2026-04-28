@@ -9,6 +9,7 @@ import {
   getConsultRequestSubmissionErrorMessage,
   submitConsultRequest
 } from '~/services/consult-request-api'
+import { isPortalApiConfigurationError } from '~/services/portal-api'
 import type { ConsultRequestFetcher } from '~/services/consult-request-api'
 import type {
   ConsultRequestFormState,
@@ -78,6 +79,10 @@ const handleSubmit = async () => {
 
     await navigateTo(thankYouPath.value)
   } catch (error) {
+    if (isPortalApiConfigurationError(error)) {
+      console.error(error)
+    }
+
     submissionResult.value = {
       title: 'Request not sent',
       message: getConsultRequestSubmissionErrorMessage(error)
