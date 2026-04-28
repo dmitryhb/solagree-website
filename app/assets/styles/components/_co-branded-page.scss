@@ -7,7 +7,6 @@
 
 .co-branded-page-route--embed {
   min-height: 100svh;
-  background: var(--color-page);
 }
 
 .co-branded-page-route__state {
@@ -62,11 +61,6 @@
   margin-inline: auto;
   padding: clamp(1.5rem, 4vw, 2.5rem) clamp(1rem, 5vw, 4rem) clamp(2rem, 6vw, 4rem);
   color: var(--color-text);
-}
-
-.co-branded-page--embed {
-  width: min(calc(100% - 1rem), 920px);
-  padding-block: clamp(1rem, 3vw, 2rem);
 }
 
 .co-branded-page__brand-row {
@@ -308,15 +302,6 @@
   font-size: 1rem;
   font-weight: 600;
   line-height: 1.5;
-}
-
-.co-branded-page--embed .co-branded-page__intro h1 {
-  font-size: clamp(2.4rem, 8vw, 3.8rem);
-}
-
-.co-branded-page--embed .co-branded-page__benefits-grid,
-.co-branded-page--embed .co-branded-page__process {
-  grid-template-columns: 1fr;
 }
 
 @keyframes co-branded-page-spin {
