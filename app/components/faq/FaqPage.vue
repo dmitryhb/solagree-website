@@ -59,9 +59,6 @@ const activeAccordionDefaultValue = computed(() => activeSection.value?.items[0]
           >
             {{ activeSection.label }}
           </h2>
-          <p class="legal-document__source">
-            {{ page.sourceLabel }}
-          </p>
         </header>
 
         <BaseAccordion

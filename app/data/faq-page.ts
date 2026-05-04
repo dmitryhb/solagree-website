@@ -7,7 +7,6 @@ import type { FaqPageContent } from '~/types/faq'
 export const faqPageContent = {
   title: 'FAQs',
   intro: 'Find answers to common questions about the Solagree process, pricing, professionals, and whether it may fit your situation.',
-  sourceLabel: 'SOLAGREE.COM',
   metaTitle: 'Frequently Asked Questions',
   metaDescription:
     'Review frequently asked questions about Solagree, including process, pricing, professionals, children, and next steps.',

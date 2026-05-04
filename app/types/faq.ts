@@ -20,7 +20,6 @@ export interface FaqSection {
 export interface FaqPageContent {
   title: string
   intro: string
-  sourceLabel: string
   metaTitle: string
   metaDescription: string
   sections: FaqSection[]
