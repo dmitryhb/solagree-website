@@ -261,15 +261,15 @@
 
 .co-branded-page__how-it-works {
   display: grid;
-  gap: clamp(3.75rem, 6vw, 5.5rem);
-  padding-block: clamp(4.5rem, 6.6vw, 6.75rem);
+  gap: clamp(3.25rem, 5vw, 4.75rem);
+  padding-block: clamp(4rem, 5.8vw, 5.875rem);
 }
 
 .co-branded-page__how-it-works h2 {
   margin: 0;
   color: var(--color-heading);
   font-family: var(--font-display);
-  font-size: clamp(3rem, 5vw, 4.75rem);
+  font-size: clamp(2.75rem, 4.2vw, 3.75rem);
   font-weight: 500;
   line-height: 1.05;
   text-align: center;
@@ -289,16 +289,16 @@
 }
 
 .co-branded-page__how-step-icon {
-  width: clamp(7rem, 9.5vw, 9.625rem);
+  width: clamp(6rem, 7.8vw, 7.875rem);
   height: auto;
   aspect-ratio: 1;
   object-fit: contain;
 }
 
 .co-branded-page__how-step-number {
-  margin-top: 1.35rem;
+  margin-top: 1.15rem;
   font-family: var(--font-ui);
-  font-size: clamp(3rem, 4.9vw, 4.25rem);
+  font-size: clamp(2.5rem, 3.7vw, 3.25rem);
   font-weight: 900;
   line-height: 0.85;
 }
@@ -320,21 +320,21 @@
 }
 
 .co-branded-page__how-step h3 {
-  margin: 1.45rem 0 0;
+  margin: 1.15rem 0 0;
   color: var(--color-heading);
   font-family: var(--font-ui);
-  font-size: clamp(1.15rem, 1.45vw, 1.35rem);
+  font-size: clamp(1rem, 1.18vw, 1.125rem);
   font-weight: 900;
   line-height: 1.2;
 }
 
 .co-branded-page__how-step p {
-  max-width: 17.25rem;
-  margin: 1.6rem 0 0;
+  max-width: 15.5rem;
+  margin: 1.35rem 0 0;
   color: var(--color-black);
   font-family: var(--font-body);
-  font-size: clamp(1.35rem, 1.85vw, 1.75rem);
-  line-height: 1.08;
+  font-size: clamp(1.1rem, 1.35vw, 1.35rem);
+  line-height: 1.12;
 }
 
 .co-branded-page__next-steps {
