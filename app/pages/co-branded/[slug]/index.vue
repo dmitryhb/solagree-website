@@ -1,11 +1,12 @@
 <script setup lang="ts">
 const route = useRoute()
-const slug = computed(() => String(route.params.slug || '').trim())
-</script>
+const slug = String(route.params.slug || '').trim()
 
-<template>
-  <CoBrandedPageRouteShell
-    mode="page"
-    :seo-path="`/co-branded/${slug}`"
-  />
-</template>
+await navigateTo({
+  path: `/go/${encodeURIComponent(slug)}`,
+  query: route.query,
+  hash: route.hash
+}, {
+  redirectCode: 301
+})
+</script>

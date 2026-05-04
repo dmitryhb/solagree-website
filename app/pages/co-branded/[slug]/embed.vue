@@ -1,13 +1,12 @@
 <script setup lang="ts">
 const route = useRoute()
-const slug = computed(() => String(route.params.slug || '').trim())
-</script>
+const slug = String(route.params.slug || '').trim()
 
-<template>
-  <CoBrandedPageRouteShell
-    mode="embed"
-    :seo-path="`/co-branded/${slug}/embed`"
-    no-index
-    wrapper-class="co-branded-page-route--embed"
-  />
-</template>
+await navigateTo({
+  path: `/go/${encodeURIComponent(slug)}/embed`,
+  query: route.query,
+  hash: route.hash
+}, {
+  redirectCode: 301
+})
+</script>
