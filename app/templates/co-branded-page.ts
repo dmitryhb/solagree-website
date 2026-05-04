@@ -77,6 +77,33 @@ const solagreeBasicTemplate = Handlebars.compile<CoBrandedPageTemplateContext>(`
       </div>
     </section>
 
+    <section class="co-branded-page__attorney-guide" aria-labelledby="co-branded-attorney-guide-title">
+      <img
+        class="co-branded-page__attorney-guide-image"
+        src="/images/co-branded-attorney-guides.webp"
+        alt="Attorney reviewing documents at a laptop"
+      >
+
+      <div class="co-branded-page__attorney-guide-content">
+        <h2 id="co-branded-attorney-guide-title">How Your Attorney Guides You</h2>
+        <p class="co-branded-page__attorney-guide-lede">
+          Your attorney works alongside the Solagree process at every phase:
+        </p>
+
+        <ul class="co-branded-page__attorney-guide-list">
+          <li><strong>Before you start</strong> - ensures you understand the process and answers your initial questions</li>
+          <li><strong>Before mediation</strong> - reviews expert summaries, identifies issues, and helps you prepare your strategy</li>
+          <li><strong>Before arbitration</strong> - helps you present your position effectively and advises on what matters most</li>
+          <li><strong>After resolution</strong> - reviews the final award, walks you through the outcome, and handles all court filing</li>
+        </ul>
+
+        <a class="co-branded-page__primary-cta co-branded-page__primary-cta--light co-branded-page__primary-cta--arrow" href="{{ctaUrl}}">
+          Schedule a Free Consultation
+          <img class="button-arrow-icon" src="/icons/arrow.svg" alt="">
+        </a>
+      </div>
+    </section>
+
     <section class="co-branded-page__tracks" aria-labelledby="co-branded-tracks-title">
       <h2 id="co-branded-tracks-title">Choose Your Track</h2>
 
