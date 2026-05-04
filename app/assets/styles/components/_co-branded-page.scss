@@ -186,6 +186,101 @@
   line-height: 1.35;
 }
 
+.co-branded-page__what-is {
+  display: grid;
+  gap: clamp(3.5rem, 6vw, 5.5rem);
+  padding-block: clamp(4.5rem, 7vw, 6.75rem) clamp(3.75rem, 6vw, 5.75rem);
+}
+
+.co-branded-page__what-is-heading {
+  display: grid;
+  justify-items: center;
+  gap: 1.8rem;
+  text-align: center;
+}
+
+.co-branded-page__what-is-heading h2 {
+  margin: 0;
+  color: var(--color-heading);
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 4.25vw, 3.875rem);
+  font-weight: 500;
+  line-height: 1.05;
+  letter-spacing: 0;
+}
+
+.co-branded-page__what-is-heading p {
+  max-width: 57rem;
+  margin: 0;
+  color: var(--color-black);
+  font-family: var(--font-body);
+  font-size: clamp(1.05rem, 1.45vw, 1.375rem);
+  line-height: 1.32;
+}
+
+.co-branded-page__what-is-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(1.25rem, 2vw, 1.5rem);
+  align-items: stretch;
+}
+
+.co-branded-page__what-is-image,
+.co-branded-page__what-is-card {
+  min-height: clamp(29rem, 44vw, 42rem);
+  border-radius: 14px;
+}
+
+.co-branded-page__what-is-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.co-branded-page__what-is-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(3rem, 5vw, 5rem) clamp(2.75rem, 4.5vw, 4.5rem);
+  background: #f1eee4;
+}
+
+.co-branded-page__what-is-card h3 {
+  margin: 0;
+  color: var(--color-heading);
+  font-family: var(--font-display);
+  font-size: clamp(2.65rem, 4vw, 3.8rem);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: 0;
+}
+
+.co-branded-page__what-is-card ul {
+  display: grid;
+  gap: 0;
+  margin: clamp(2rem, 3vw, 2.75rem) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.co-branded-page__what-is-card li {
+  padding-block: clamp(1rem, 1.7vw, 1.35rem);
+  border-bottom: 2px solid var(--color-white);
+  color: var(--color-heading);
+  font-family: var(--font-body);
+  font-size: clamp(1.35rem, 2vw, 2rem);
+  line-height: 1.35;
+}
+
+.co-branded-page__what-is-card li:first-child {
+  padding-top: 0;
+}
+
+.co-branded-page__what-is-card .co-branded-page__primary-cta {
+  min-width: min(100%, 21rem);
+  margin-top: clamp(3rem, 5vw, 4.75rem);
+}
+
 .co-branded-page__how-it-works {
   display: grid;
   gap: clamp(3.25rem, 5vw, 4.75rem);
@@ -858,7 +953,13 @@
     display: none;
   }
 
+  .co-branded-page__what-is-heading,
+  .co-branded-page__what-is-heading p {
+    text-align: left;
+  }
+
   .co-branded-page__how-steps,
+  .co-branded-page__what-is-grid,
   .co-branded-page__tracks-grid,
   .co-branded-page__attorney-guide,
   .co-branded-page__questions,
@@ -901,6 +1002,15 @@
     min-height: 0;
   }
 
+  .co-branded-page__what-is-image,
+  .co-branded-page__what-is-card {
+    min-height: auto;
+  }
+
+  .co-branded-page__what-is-image {
+    aspect-ratio: 1056 / 1086;
+  }
+
   .co-branded-page__questions h2 {
     font-size: 48px;
   }
@@ -937,6 +1047,18 @@
 
   .co-branded-page__track-card {
     padding: 28px 24px;
+  }
+
+  .co-branded-page__what-is-card {
+    padding: 2.25rem 1.5rem;
+  }
+
+  .co-branded-page__what-is-card h3 {
+    font-size: 40px;
+  }
+
+  .co-branded-page__what-is-card li {
+    font-size: 22px;
   }
 
   .co-branded-page__track-header {

@@ -21,6 +21,34 @@ const solagreeBasicTemplate = Handlebars.compile<CoBrandedPageTemplateContext>(`
       {{/unless}}
     </header>
 
+    <section class="co-branded-page__what-is" aria-labelledby="co-branded-what-is-title">
+      <div class="co-branded-page__what-is-heading">
+        <h2 id="co-branded-what-is-title">What is Solagree?</h2>
+        <p>
+          A flat-fee, virtual alternative to traditional divorce litigation with a structured path to resolution &ndash;
+          even when you don't agree on everything.
+        </p>
+      </div>
+
+      <div class="co-branded-page__what-is-grid">
+        <img
+          class="co-branded-page__what-is-image"
+          src="/images/co-branded-who-its-for.webp"
+          alt="Family smiling while looking at a phone together"
+        >
+
+        <div class="co-branded-page__what-is-card">
+          <h3>Who It&rsquo;s For:</h3>
+          <ul>
+            <li>Couples who want to avoid lengthy and costly court battles</li>
+            <li>Cases from moderate to complex (financial and/or parenting issues)</li>
+            <li>Both parties willing to participate in good faith even if they don&rsquo;t agree</li>
+          </ul>
+          <a class="co-branded-page__primary-cta co-branded-page__primary-cta--light" href="{{ctaUrl}}">Schedule a Free Consultation</a>
+        </div>
+      </div>
+    </section>
+
     <section class="co-branded-page__how-it-works" aria-labelledby="co-branded-how-it-works-title">
       <h2 id="co-branded-how-it-works-title">How It Works</h2>
 
