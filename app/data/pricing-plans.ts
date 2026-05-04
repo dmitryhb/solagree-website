@@ -2,52 +2,48 @@ import type { PricingPlan } from '~/types/pricing'
 
 export const pricingPlans: PricingPlan[] = [
   {
-    name: '15-Minute Expert Consult',
-    price: '$50',
-    cadence: '/ one time',
+    name: 'Parenting Track',
+    price: '$2,250',
+    cadence: '/ per person',
     description:
-      'A focused consultation to understand your situation, answer initial questions, and determine if Solagree is the right fit for your divorce.',
+      'Guided by parenting specialists and neutral mediators who help you create a sustainable parenting plan.',
     features: [
-      '15-minute call with expert',
-      'Initial situation assessment',
-      'Flat-fee price quote'
+      'Custody and parenting time schedules',
+      'Decision-making responsibilities',
+      'Holiday and vacation planning',
+      'Co-parenting communication plans'
     ],
-    ctaLabel: 'Book a Consultation',
-    ctaTo: '#quiz',
-    note: 'Get clarity about your options'
+    note: 'Best for couples focused on children under 18'
   },
   {
-    name: 'Solagree Expedited',
-    price: '$5,400',
-    cadence: '/ per couple',
+    name: 'Financial Track',
+    price: '$4,800',
+    cadence: '/ per person',
     description:
-      'Navigate the process with expert support at each phase. For lower-conflict couples who want to move efficiently without attorneys.',
+      'Guided by CDFA® financial experts and neutral mediators who help you navigate complex financial decisions.',
     features: [
-      'CDFA® financial analysis',
-      'Structured mediation sessions',
-      'Binding arbitration award'
+      'Property division and asset distribution',
+      'Business ownership and valuation',
+      'Retirement accounts and pensions',
+      'Spousal support calculations'
     ],
-    ctaLabel: 'Get started with Expedited',
-    ctaTo: '#quiz',
-    note: 'Best for couples that mostly agree',
-    badge: 'Best value'
+    note: 'Best for couples with assets to divide',
+    badge: 'Popular'
   },
   {
-    name: 'Solagree Traditional',
-    eyebrow: 'Starting at',
-    price: '$11,500',
-    cadence: '/ per couple',
+    name: 'Parenting + Financial',
+    eyebrow: 'Save over $1,000 each',
+    price: '$5,990',
+    cadence: '/ per person',
     description:
-      'For complex or high-conflict cases. Includes extended mediation, professional support, and optional attorney representation.',
+      'Combines expert parenting and CDFA® financial guidance in one comprehensive process - with neutral mediation and arbitration.',
     features: [
-      'Extended mediation & support',
-      'CDFA® financial expertise',
-      'Optional attorney representation'
+      'Child custody, schedules, and co-parenting',
+      'Property division and asset distribution',
+      'Businesses, pensions, retirement accounts',
+      'Spousal support calculations'
     ],
-    ctaLabel: 'Get started with Traditional',
-    ctaTo: '#quiz',
-    note: 'Best for complex finances, custody or business owners',
-    badge: 'For complex cases',
+    note: 'For couples with both parenting and financial concerns',
     featured: true
   }
 ]

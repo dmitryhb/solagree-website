@@ -11,7 +11,7 @@
 .pricing-section__header {
   display: grid;
   justify-items: center;
-  margin-bottom: 48px;
+  margin-bottom: 72px;
   text-align: center;
 }
 
@@ -23,6 +23,26 @@
   font-size: 54px;
   font-weight: 500;
   line-height: 1.067;
+}
+
+.pricing-section__intro,
+.pricing-section__note {
+  margin: 0;
+  color: var(--color-accent-text);
+  font-family: var(--font-body);
+  font-size: 18px;
+  line-height: 1.35;
+  text-align: center;
+}
+
+.pricing-section__intro {
+  max-width: 64rem;
+  margin-top: 24px;
+}
+
+.pricing-section__note {
+  max-width: 62rem;
+  margin: 48px auto 0;
 }
 
 .pricing-section__grid {
@@ -175,24 +195,16 @@
 }
 
 .pricing-card__feature::before {
-  content: "✓";
+  content: "";
   display: inline-flex;
   width: 24px;
   height: 24px;
   flex: 0 0 auto;
-  align-items: center;
-  justify-content: center;
-  border-radius: 8px;
-  background: var(--color-surface-footer);
-  color: #27241f;
-  font-family: var(--font-ui);
-  font-size: 16px;
-  line-height: 1;
+  background: url("/icons/co-branded-check-light.svg") center / contain no-repeat;
 }
 
 .pricing-card--featured .pricing-card__feature::before {
-  background: var(--color-surface-dark);
-  color: var(--color-surface-footer);
+  background-image: url("/icons/co-branded-check-dark.svg");
 }
 
 .pricing-card__cta.sol-button {
@@ -212,7 +224,7 @@
 }
 
 .pricing-card__note {
-  margin: 0;
+  margin: auto 0 0;
   color: rgba(39, 36, 31, 0.64);
   font-family: var(--font-body);
   font-size: 14px;
@@ -244,6 +256,11 @@
     margin-bottom: 36px;
     text-align: left;
     justify-items: start;
+  }
+
+  .pricing-section__intro,
+  .pricing-section__note {
+    text-align: left;
   }
 
   .pricing-section__title {

@@ -43,7 +43,7 @@ defineProps<{
 
       <div class="pricing-card__includes">
         <p class="pricing-card__includes-title">
-          Includes
+          For cases involving
         </p>
 
         <ul class="pricing-card__features">
@@ -59,6 +59,7 @@ defineProps<{
     </div>
 
     <SiteButton
+      v-if="plan.ctaLabel && plan.ctaTo"
       class="pricing-card__cta"
       :to="plan.ctaTo"
       :variant="plan.featured ? 'secondary' : 'muted'"

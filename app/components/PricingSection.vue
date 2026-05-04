@@ -17,8 +17,11 @@ import { pricingPlans } from '~/data/pricing-plans'
           id="pricing-title"
           class="pricing-section__title"
         >
-          Transparent flat-fee pricing.
+          Choose Your Track
         </h2>
+        <p class="pricing-section__intro">
+          Solagree's platform fees include the core process: neutral experts, mediation, arbitration, and final award.
+        </p>
       </header>
 
       <div class="pricing-section__grid">
@@ -29,6 +32,11 @@ import { pricingPlans } from '~/data/pricing-plans'
           v-appear="{ delay: index * 80, variant: 'scale' }"
         />
       </div>
+
+      <p class="pricing-section__note">
+        Your attorney continues to provide strategic guidance throughout the Solagree process.<br>
+        Discuss their fee structure directly with your attorney.
+      </p>
     </div>
   </section>
 </template>
