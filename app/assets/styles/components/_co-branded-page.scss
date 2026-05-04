@@ -259,6 +259,84 @@
   line-height: 1.45;
 }
 
+.co-branded-page__how-it-works {
+  display: grid;
+  gap: clamp(3.75rem, 6vw, 5.5rem);
+  padding-block: clamp(4.5rem, 6.6vw, 6.75rem);
+}
+
+.co-branded-page__how-it-works h2 {
+  margin: 0;
+  color: var(--color-heading);
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 5vw, 4.75rem);
+  font-weight: 500;
+  line-height: 1.05;
+  text-align: center;
+}
+
+.co-branded-page__how-steps {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(1.75rem, 4vw, 4.75rem);
+  align-items: start;
+}
+
+.co-branded-page__how-step {
+  display: grid;
+  justify-items: center;
+  text-align: center;
+}
+
+.co-branded-page__how-step-icon {
+  width: clamp(7rem, 9.5vw, 9.625rem);
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: contain;
+}
+
+.co-branded-page__how-step-number {
+  margin-top: 1.35rem;
+  font-family: var(--font-ui);
+  font-size: clamp(3rem, 4.9vw, 4.25rem);
+  font-weight: 900;
+  line-height: 0.85;
+}
+
+.co-branded-page__how-step--organized .co-branded-page__how-step-number {
+  color: #ead6cf;
+}
+
+.co-branded-page__how-step--agreement .co-branded-page__how-step-number {
+  color: #c8f4b9;
+}
+
+.co-branded-page__how-step--resolution .co-branded-page__how-step-number {
+  color: #aee0ff;
+}
+
+.co-branded-page__how-step--finalize .co-branded-page__how-step-number {
+  color: #d4baf2;
+}
+
+.co-branded-page__how-step h3 {
+  margin: 1.45rem 0 0;
+  color: var(--color-heading);
+  font-family: var(--font-ui);
+  font-size: clamp(1.15rem, 1.45vw, 1.35rem);
+  font-weight: 900;
+  line-height: 1.2;
+}
+
+.co-branded-page__how-step p {
+  max-width: 17.25rem;
+  margin: 1.6rem 0 0;
+  color: var(--color-black);
+  font-family: var(--font-body);
+  font-size: clamp(1.35rem, 1.85vw, 1.75rem);
+  line-height: 1.08;
+}
+
 .co-branded-page__next-steps {
   display: grid;
   gap: clamp(2.5rem, 5vw, 4rem);
@@ -841,6 +919,13 @@
   }
 }
 
+@media (max-width: 1024px) {
+  .co-branded-page__how-steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 3rem 2rem;
+  }
+}
+
 @media (max-width: 780px) {
   .co-branded-page {
     gap: 2.25rem;
@@ -859,6 +944,7 @@
   }
 
   .co-branded-page__benefits-grid,
+  .co-branded-page__how-steps,
   .co-branded-page__tracks-grid,
   .co-branded-page__attorney-guide,
   .co-branded-page__questions,

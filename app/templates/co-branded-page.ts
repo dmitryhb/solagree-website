@@ -41,6 +41,60 @@ const solagreeBasicTemplate = Handlebars.compile<CoBrandedPageTemplateContext>(`
       </div>
     </section>
 
+    <section class="co-branded-page__how-it-works" aria-labelledby="co-branded-how-it-works-title">
+      <h2 id="co-branded-how-it-works-title">How It Works</h2>
+
+      <div class="co-branded-page__how-steps">
+        <article class="co-branded-page__how-step co-branded-page__how-step--organized">
+          <img
+            class="co-branded-page__how-step-icon"
+            src="/images/co-branded-icon-get-organized.webp"
+            alt=""
+            aria-hidden="true"
+          >
+          <span class="co-branded-page__how-step-number">01</span>
+          <h3>Get Organized</h3>
+          <p>Experts help organize your financial and parenting information.</p>
+        </article>
+
+        <article class="co-branded-page__how-step co-branded-page__how-step--agreement">
+          <img
+            class="co-branded-page__how-step-icon"
+            src="/images/co-branded-icon-reach-agreement.webp"
+            alt=""
+            aria-hidden="true"
+          >
+          <span class="co-branded-page__how-step-number">02</span>
+          <h3>Reach Agreement</h3>
+          <p>Virtual mediation to resolve parenting and financial issues.</p>
+        </article>
+
+        <article class="co-branded-page__how-step co-branded-page__how-step--resolution">
+          <img
+            class="co-branded-page__how-step-icon"
+            src="/images/co-branded-icon-binding-resolution.webp"
+            alt=""
+            aria-hidden="true"
+          >
+          <span class="co-branded-page__how-step-number">03</span>
+          <h3>Binding Resolution</h3>
+          <p>Secure a binding decision on any remaining unresolved matters.</p>
+        </article>
+
+        <article class="co-branded-page__how-step co-branded-page__how-step--finalize">
+          <img
+            class="co-branded-page__how-step-icon"
+            src="/images/co-branded-icon-finalize-file.webp"
+            alt=""
+            aria-hidden="true"
+          >
+          <span class="co-branded-page__how-step-number">04</span>
+          <h3>Finalize &amp; File</h3>
+          <p>Documents prepared and filed (typically no court appearance needed.)</p>
+        </article>
+      </div>
+    </section>
+
     <section class="co-branded-page__attorney-guide" aria-labelledby="co-branded-attorney-guide-title">
       <img
         class="co-branded-page__attorney-guide-image"
