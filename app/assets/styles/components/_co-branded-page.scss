@@ -606,24 +606,16 @@
 }
 
 .co-branded-page__track-features li::before {
-  content: "✓";
+  content: "";
   display: inline-flex;
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   flex: 0 0 auto;
-  align-items: center;
-  justify-content: center;
-  border-radius: 7px;
-  background: var(--color-surface-footer);
-  color: #27241f;
-  font-family: var(--font-ui);
-  font-size: 14px;
-  line-height: 1;
+  background: url("/icons/co-branded-check-light.svg") center / contain no-repeat;
 }
 
 .co-branded-page__track-card--featured .co-branded-page__track-features li::before {
-  background: var(--color-surface-dark);
-  color: var(--color-surface-footer);
+  background-image: url("/icons/co-branded-check-dark.svg");
 }
 
 .co-branded-page__track-note {
