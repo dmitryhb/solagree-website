@@ -2,6 +2,8 @@
 import FaqPage from '~/components/faq/FaqPage.vue'
 import { faqPageContent } from '~/data/faq-page'
 
+const faqStructuredItems = faqPageContent.sections.flatMap((section) => section.items)
+
 useSolagreeSeo({
   title: faqPageContent.metaTitle,
   description: faqPageContent.metaDescription,
@@ -10,7 +12,7 @@ useSolagreeSeo({
     {
       '@context': 'https://schema.org',
       '@type': 'FAQPage',
-      mainEntity: faqPageContent.items.map((item) => ({
+      mainEntity: faqStructuredItems.map((item) => ({
         '@type': 'Question',
         name: item.label,
         acceptedAnswer: {

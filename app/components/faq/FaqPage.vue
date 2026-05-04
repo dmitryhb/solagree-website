@@ -1,9 +1,32 @@
 <script setup lang="ts">
 import type { FaqPageContent } from '~/types/faq'
+import LegalTabs from '~/components/legal/LegalTabs.vue'
 
-defineProps<{
+const props = defineProps<{
   page: FaqPageContent
 }>()
+
+const route = useRoute()
+
+const sectionTabs = computed(() => props.page.sections.map((section) => ({
+  label: section.label,
+  slug: section.slug,
+  to: {
+    path: '/faq',
+    query: {
+      section: section.slug
+    }
+  }
+})))
+
+const activeSection = computed(() => {
+  const requestedSection = String(route.query.section ?? '')
+
+  return props.page.sections.find((section) => section.slug === requestedSection) ?? props.page.sections[0]
+})
+
+const activeSectionSlug = computed(() => activeSection.value?.slug ?? '')
+const activeAccordionDefaultValue = computed(() => activeSection.value?.items[0]?.value)
 </script>
 
 <template>
@@ -16,9 +39,16 @@ defineProps<{
         <p class="legal-hero__intro">
           {{ page.intro }}
         </p>
+
+        <LegalTabs
+          :items="sectionTabs"
+          :active-slug="activeSectionSlug"
+          aria-label="FAQ sections"
+        />
       </header>
 
       <article
+        v-if="activeSection"
         class="legal-document faq-page__document"
         aria-labelledby="faq-page-title"
       >
@@ -27,7 +57,7 @@ defineProps<{
             id="faq-page-title"
             class="legal-document__title"
           >
-            {{ page.documentTitle }}
+            {{ activeSection.label }}
           </h2>
           <p class="legal-document__source">
             {{ page.sourceLabel }}
@@ -35,9 +65,10 @@ defineProps<{
         </header>
 
         <BaseAccordion
+          :key="activeSection.slug"
           class="faq-page__accordion"
-          :items="page.items"
-          default-value="what-is-solagree"
+          :items="activeSection.items"
+          :default-value="activeAccordionDefaultValue"
           numbered
         />
       </article>
