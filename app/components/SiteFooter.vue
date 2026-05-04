@@ -64,7 +64,7 @@ const currentYear = new Date().getFullYear()
                 </NuxtLink>
               </li>
               <li>
-                <NuxtLink to="/">
+                <NuxtLink to="/faq">
                   FAQs
                 </NuxtLink>
               </li>
@@ -115,7 +115,7 @@ const currentYear = new Date().getFullYear()
                 </NuxtLink>
               </li>
               <li>
-                <NuxtLink to="/">
+                <NuxtLink to="/faq">
                   FAQ
                 </NuxtLink>
               </li>

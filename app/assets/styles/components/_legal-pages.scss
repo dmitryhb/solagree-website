@@ -153,6 +153,38 @@
   font-weight: 700;
 }
 
+.faq-page__document {
+  max-width: 820px;
+}
+
+.faq-page__accordion {
+  margin-top: 0;
+}
+
+.faq-page__accordion.base-accordion [data-slot="trigger"] {
+  padding: 1.15rem 0;
+}
+
+.faq-page__accordion .base-accordion__label {
+  color: var(--color-ink);
+  font-family: var(--font-nav);
+  font-size: clamp(1.05rem, 1.55vw, 1.25rem);
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.faq-page__accordion .base-accordion__indicator {
+  color: var(--color-ink);
+}
+
+.faq-page__accordion .base-accordion__text {
+  max-width: 690px;
+  color: #27241f;
+  font-family: var(--font-body);
+  font-size: clamp(1rem, 1.35vw, 1.125rem);
+  line-height: 1.48;
+}
+
 @media (max-width: 767px) {
   .legal-page__content {
     width: min(calc(100% - 2rem), 1184px);
@@ -186,5 +218,9 @@
 
   .legal-document__title {
     font-size: clamp(2.35rem, 13vw, 3.25rem);
+  }
+
+  .faq-page__accordion .base-accordion__label {
+    font-size: 1.05rem;
   }
 }
