@@ -61,10 +61,25 @@
 .co-branded-page {
   display: grid;
   gap: clamp(2.25rem, 5vw, 4rem);
-  width: min(calc(100% - 2rem), 1200px);
+  width: min(calc(100% - 2rem), 1257px);
   margin-inline: auto;
   padding: clamp(1.5rem, 4vw, 2.5rem) clamp(1rem, 5vw, 4rem) clamp(2rem, 6vw, 4rem);
   color: var(--color-text);
+}
+
+.co-branded-page--standard {
+  padding-bottom: 0;
+}
+
+.co-branded-page--embed {
+  width: 100%;
+  padding: 0 0 clamp(2rem, 6vw, 4rem);
+}
+
+.co-branded-page--embed > :not(.co-branded-page__brand-row) {
+  width: min(calc(100% - 2rem), 1257px);
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 5vw, 4rem);
 }
 
 .co-branded-page__brand-row {
@@ -74,6 +89,12 @@
   align-items: center;
   justify-content: center;
   gap: 1rem;
+}
+
+.co-branded-page--embed .co-branded-page__brand-row {
+  width: 100%;
+  padding: clamp(1rem, 2.5vw, 1.5rem);
+  background: var(--color-page);
 }
 
 .co-branded-page__solagree-logo {
@@ -156,6 +177,12 @@
   color: var(--color-white);
 }
 
+.co-branded-page__primary-cta--light {
+  min-width: min(100%, 15rem);
+  background: var(--color-accent);
+  color: var(--color-heading);
+}
+
 .co-branded-page__secondary-cta {
   margin-top: 1.9rem;
   background: #f4ff62;
@@ -166,6 +193,11 @@
   background: var(--color-text);
 }
 
+.co-branded-page__primary-cta--light:hover {
+  background: #f7ff74;
+  color: var(--color-heading);
+}
+
 .co-branded-page__primary-cta:focus-visible,
 .co-branded-page__secondary-cta:focus-visible {
   outline: 3px solid rgba(155, 96, 75, 0.44);
@@ -173,7 +205,8 @@
 }
 
 .co-branded-page__benefits h2,
-.co-branded-page__process h2 {
+.co-branded-page__process h2,
+.co-branded-page__section-heading h2 {
   margin: 0;
   color: var(--color-heading);
   font-family: var(--font-display);
@@ -185,6 +218,24 @@
 .co-branded-page__benefits h2 {
   text-align: center;
   font-size: clamp(2.5rem, 5vw, 3.25rem);
+}
+
+.co-branded-page__section-heading {
+  max-width: 58rem;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.co-branded-page__section-heading h2 {
+  font-size: clamp(3rem, 5.2vw, 4.5rem);
+}
+
+.co-branded-page__section-heading p {
+  margin: 1.35rem 0 0;
+  color: var(--color-black);
+  font-family: var(--font-body);
+  font-size: clamp(1rem, 1.25vw, 1.18rem);
+  line-height: 1.35;
 }
 
 .co-branded-page__benefits-grid {
@@ -308,6 +359,168 @@
   line-height: 1.5;
 }
 
+.co-branded-page__next-steps {
+  display: grid;
+  gap: clamp(2.5rem, 5vw, 4rem);
+}
+
+.co-branded-page__next-steps-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(1.25rem, 2vw, 1.5rem);
+  align-items: stretch;
+}
+
+.co-branded-page__next-steps-card {
+  display: flex;
+  min-height: clamp(23rem, 31vw, 27rem);
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: clamp(2.25rem, 4vw, 4rem);
+  border-radius: 14px;
+  background: #e4ded4;
+}
+
+.co-branded-page__next-steps-card h3,
+.co-branded-page__next-steps-card p {
+  margin: 0;
+}
+
+.co-branded-page__next-steps-card h3 {
+  max-width: 12.5ch;
+  color: var(--color-heading);
+  font-family: var(--font-display);
+  font-size: clamp(2.25rem, 3vw, 3.25rem);
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: 0;
+}
+
+.co-branded-page__next-steps-card p {
+  max-width: 31rem;
+  margin-top: 1.9rem;
+  color: var(--color-black);
+  font-size: clamp(1rem, 1.2vw, 1.15rem);
+  line-height: 1.45;
+}
+
+.co-branded-page__next-steps-card .co-branded-page__primary-cta {
+  margin-top: 2.1rem;
+}
+
+.co-branded-page__next-steps-image {
+  width: 100%;
+  height: 100%;
+  min-height: clamp(23rem, 31vw, 27rem);
+  border-radius: 14px;
+  object-fit: cover;
+}
+
+.co-branded-page__footer {
+  width: 100vw;
+  margin-inline: calc(50% - 50vw);
+  margin-top: clamp(1.25rem, 3vw, 2rem);
+  padding: clamp(3rem, 5vw, 4.5rem) 2rem clamp(2.25rem, 4vw, 3.25rem);
+  background: var(--color-surface-dark);
+  color: var(--color-surface-footer);
+}
+
+.co-branded-page__footer-inner,
+.co-branded-page__footer-bottom {
+  width: min(100%, 1257px);
+  margin-inline: auto;
+}
+
+.co-branded-page__footer-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(16rem, max-content);
+  gap: clamp(2rem, 8vw, 7rem);
+  align-items: start;
+}
+
+.co-branded-page__footer-contact,
+.co-branded-page__footer-solagree {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.co-branded-page__footer-contact strong,
+.co-branded-page__footer-contact span,
+.co-branded-page__footer-solagree a {
+  color: var(--color-surface-footer);
+  font-family: var(--font-nav);
+}
+
+.co-branded-page__footer-contact strong {
+  font-size: 1.1rem;
+  line-height: 1.25;
+}
+
+.co-branded-page__footer-contact-lines {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1rem;
+  margin-top: 0.45rem;
+}
+
+.co-branded-page__footer-solagree {
+  justify-items: start;
+}
+
+.co-branded-page__footer-logo {
+  display: block;
+  width: 9.25rem;
+  height: auto;
+  aspect-ratio: 300 / 38;
+  background: var(--color-white);
+  -webkit-mask: url("/solagree-logo.svg") center / contain no-repeat;
+  mask: url("/solagree-logo.svg") center / contain no-repeat;
+}
+
+.co-branded-page__footer-solagree a,
+.co-branded-page__footer-legal a {
+  text-decoration: none;
+}
+
+.co-branded-page__footer-solagree a:hover,
+.co-branded-page__footer-legal a:hover {
+  color: var(--color-accent);
+}
+
+.co-branded-page__footer-bottom {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: 1rem clamp(2rem, 8vw, 7rem);
+  margin-top: clamp(3rem, 6vw, 5rem);
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(238, 233, 225, 0.22);
+}
+
+.co-branded-page__footer-legal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 0.8rem;
+  grid-column: 1 / -1;
+}
+
+.co-branded-page__footer-legal a,
+.co-branded-page__footer-bottom p {
+  margin: 0;
+  color: var(--color-surface-footer);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  line-height: 1.55;
+  text-transform: uppercase;
+}
+
+.co-branded-page__footer-bottom p:last-child {
+  font-family: var(--font-nav);
+  letter-spacing: 0;
+  text-transform: none;
+}
+
 @keyframes co-branded-page-spin {
   to {
     transform: rotate(360deg);
@@ -345,7 +558,23 @@
   }
 
   .co-branded-page__benefits-grid,
-  .co-branded-page__process {
+  .co-branded-page__process,
+  .co-branded-page__next-steps-grid,
+  .co-branded-page__footer-inner,
+  .co-branded-page__footer-bottom {
     grid-template-columns: 1fr;
+  }
+
+  .co-branded-page__section-heading {
+    text-align: left;
+  }
+
+  .co-branded-page__next-steps-card,
+  .co-branded-page__next-steps-image {
+    min-height: auto;
+  }
+
+  .co-branded-page__next-steps-image {
+    aspect-ratio: 1.2;
   }
 }

@@ -5,16 +5,19 @@ import type { CoBrandedPageRenderMode } from '~/types/co-branded-page'
 interface CoBrandedPageTemplateContext extends CoBrandedPagePublicConfig {
   isEmbed: boolean
   contactLine: string
+  currentYear: number
 }
 
 const solagreeBasicTemplate = Handlebars.compile<CoBrandedPageTemplateContext>(`
   <article class="co-branded-page co-branded-page--{{#if isEmbed}}embed{{else}}standard{{/if}}">
     <header class="co-branded-page__brand-row">
       <img class="co-branded-page__solagree-logo" src="/solagree-logo.svg" alt="Solagree">
-      {{#if logoUrl}}
-        <span class="co-branded-page__brand-divider" aria-hidden="true"></span>
-        <img class="co-branded-page__partner-logo" src="{{logoUrl}}" alt="{{companyName}}">
-      {{/if}}
+      {{#unless isEmbed}}
+        {{#if logoUrl}}
+          <span class="co-branded-page__brand-divider" aria-hidden="true"></span>
+          <img class="co-branded-page__partner-logo" src="{{logoUrl}}" alt="{{companyName}}">
+        {{/if}}
+      {{/unless}}
     </header>
 
     <section class="co-branded-page__intro" aria-label="Co-branded page introduction">
@@ -73,6 +76,69 @@ const solagreeBasicTemplate = Handlebars.compile<CoBrandedPageTemplateContext>(`
         </article>
       </div>
     </section>
+
+    <section class="co-branded-page__next-steps" aria-labelledby="co-branded-next-steps-title">
+      <div class="co-branded-page__section-heading">
+        <h2 id="co-branded-next-steps-title">Your Next Steps</h2>
+        <p>
+          Help couples reach resolution faster while expanding your practice. Join our network of attorneys, CDFAs, and counselors nationwide.
+        </p>
+      </div>
+
+      <div class="co-branded-page__next-steps-grid">
+        <div class="co-branded-page__next-steps-card">
+          <h3>Schedule Your Complimentary Solagree Consultation ($60 value)</h3>
+          <p>Meet with a Solagree expert to confirm fit, answer questions, and map out the process for you.</p>
+          <a class="co-branded-page__primary-cta co-branded-page__primary-cta--light" href="{{ctaUrl}}">Schedule a Consultation</a>
+        </div>
+
+        <img
+          class="co-branded-page__next-steps-image"
+          src="/images/co-branded-next-steps.webp"
+          alt="Woman speaking by phone"
+        >
+      </div>
+    </section>
+
+    {{#unless isEmbed}}
+      <footer class="co-branded-page__footer">
+        <div class="co-branded-page__footer-inner">
+          <div class="co-branded-page__footer-contact">
+            {{#if attorneyName}}
+              <strong>{{attorneyName}}</strong>
+            {{/if}}
+            {{#if firmName}}
+              <span>{{firmName}}</span>
+            {{else}}
+              <span>{{companyName}}</span>
+            {{/if}}
+            <div class="co-branded-page__footer-contact-lines">
+              {{#if phoneNumber}}
+                <span>Phone: {{phoneNumber}}</span>
+              {{/if}}
+              {{#if emailAddress}}
+                <span>Email: {{emailAddress}}</span>
+              {{/if}}
+            </div>
+          </div>
+
+          <div class="co-branded-page__footer-solagree">
+            <span class="co-branded-page__footer-logo" aria-label="Solagree"></span>
+            <a href="https://solagree.com" target="_blank" rel="noopener noreferrer">Learn more: solagree.com</a>
+          </div>
+        </div>
+
+        <div class="co-branded-page__footer-bottom">
+          <nav class="co-branded-page__footer-legal" aria-label="Legal links">
+            <a href="/legal/terms-of-service">Terms of Service</a>
+            <a href="/legal/privacy-policy">Privacy Policy</a>
+            <a href="/legal/accessibility">Accessibility</a>
+          </nav>
+          <p>© {{currentYear}} Solagree, LLC. All Rights Reserved.</p>
+          <p>Solagree® is not a law firm and does not provide legal advice. We connect clients with independent professionals.</p>
+        </div>
+      </footer>
+    {{/unless}}
   </article>
 `)
 
@@ -92,6 +158,7 @@ export const renderCoBrandedPageTemplate = (
   return template({
     ...config,
     isEmbed: mode === 'embed',
-    contactLine: config.phoneNumber ? `Questions? Call ${config.phoneNumber}` : ''
+    contactLine: config.phoneNumber ? `Questions? Call ${config.phoneNumber}` : '',
+    currentYear: new Date().getFullYear()
   })
 }

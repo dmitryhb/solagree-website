@@ -12,6 +12,12 @@ interface RawCoBrandedPagePublicConfig {
   templateId?: unknown
   companyName?: unknown
   partnerCompany?: unknown
+  attorneyName?: unknown
+  contactName?: unknown
+  name?: unknown
+  firmName?: unknown
+  emailAddress?: unknown
+  email?: unknown
   phoneNumber?: unknown
   phone?: unknown
   logoUrl?: unknown
@@ -152,7 +158,12 @@ export const normalizeCoBrandedPageConfig = (
     slug,
     templateId: normalizeTemplateId(payload.templateId),
     companyName,
+    attorneyName: normalizeOptionalString(payload.attorneyName)
+      ?? normalizeOptionalString(payload.contactName)
+      ?? normalizeOptionalString(payload.name),
+    firmName: normalizeOptionalString(payload.firmName),
     phoneNumber: normalizeOptionalString(payload.phoneNumber) ?? normalizeOptionalString(payload.phone),
+    emailAddress: normalizeOptionalString(payload.emailAddress) ?? normalizeOptionalString(payload.email),
     logoUrl: normalizeLogoUrl(payload, portalApiBaseUrl),
     ctaUrl: normalizeCoBrandedCtaUrl(payload.ctaUrl, slug)
   }

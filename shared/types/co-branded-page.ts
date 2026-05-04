@@ -7,7 +7,10 @@ export interface CoBrandedPagePublicConfig {
   slug: string
   templateId: CoBrandedPageTemplateId
   companyName: string
+  attorneyName: string | null
+  firmName: string | null
   phoneNumber: string | null
+  emailAddress: string | null
   logoUrl: string | null
   ctaUrl: string
 }
