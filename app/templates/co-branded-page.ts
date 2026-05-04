@@ -5,6 +5,7 @@ import type { CoBrandedPageRenderMode } from '~/types/co-branded-page'
 interface CoBrandedPageTemplateContext extends CoBrandedPagePublicConfig {
   isEmbed: boolean
   attorneyDisplayName: string
+  attorneyDisplayNameWithPeriod: string
   currentYear: number
 }
 
@@ -215,7 +216,7 @@ const solagreeBasicTemplate = Handlebars.compile<CoBrandedPageTemplateContext>(`
 
       <p class="co-branded-page__tracks-note">
         Your attorney continues to provide strategic guidance throughout the Solagree process.<br>
-        Discuss their fee structure directly with {{attorneyDisplayName}}.
+        Discuss their fee structure directly with {{attorneyDisplayNameWithPeriod}}
       </p>
     </section>
 
@@ -368,6 +369,7 @@ export const renderCoBrandedPageTemplate = (
     ...config,
     isEmbed: mode === 'embed',
     attorneyDisplayName: config.attorneyName ?? config.companyName,
+    attorneyDisplayNameWithPeriod: `${config.attorneyName ?? config.companyName}`.replace(/\.*$/, '.'),
     currentYear: new Date().getFullYear()
   })
 }
