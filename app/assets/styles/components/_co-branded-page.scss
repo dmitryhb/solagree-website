@@ -378,16 +378,26 @@
 }
 
 .co-branded-page__attorney-guide {
+  position: relative;
+  z-index: 0;
   display: grid;
-  width: 100vw;
-  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.92fr);
-  gap: clamp(3rem, 4.3vw, 4.5rem);
+  width: min(calc(100% - 2.5rem), 1368px);
+  grid-template-columns: minmax(0, 0.98fr) minmax(0, 0.84fr);
+  gap: clamp(3rem, 4.5vw, 4.5rem);
   align-items: center;
-  margin-inline: calc(50% - 50vw);
-  padding:
-    clamp(4rem, 5.7vw, 5.75rem)
-    max(clamp(1rem, 5vw, 4rem), calc((100vw - 1368px) / 2));
+  margin-inline: auto;
+  padding-block: clamp(4rem, 5.7vw, 5.75rem);
+}
+
+.co-branded-page__attorney-guide::before {
+  position: absolute;
+  z-index: -1;
+  inset-block: 0;
+  left: 50%;
+  width: 100vw;
   background: #f7f3ec;
+  content: "";
+  transform: translateX(-50%);
 }
 
 .co-branded-page__attorney-guide-image {
@@ -400,12 +410,12 @@
 }
 
 .co-branded-page__attorney-guide-content {
-  width: min(100%, 33.75rem);
+  width: min(100%, 37rem);
   justify-self: start;
 }
 
 .co-branded-page__attorney-guide h2 {
-  max-width: 9.5ch;
+  max-width: 13ch;
   margin: 0;
   color: var(--color-heading);
   font-family: var(--font-display);
@@ -416,9 +426,9 @@
 }
 
 .co-branded-page__attorney-guide-lede {
-  max-width: 31rem;
+  max-width: 34.5rem;
   margin: clamp(1.6rem, 2vw, 1.8rem) 0 0;
-  color: var(--color-accent-text);
+  color: var(--color-heading);
   font-family: var(--font-body);
   font-size: clamp(1.6rem, 2.05vw, 2rem);
   font-weight: 400;
@@ -431,7 +441,7 @@
   max-width: 35rem;
   margin: clamp(2rem, 2.7vw, 2.5rem) 0 0;
   padding-left: 1.3rem;
-  color: var(--color-accent-text);
+  color: var(--color-heading);
   font-family: var(--font-body);
   font-size: clamp(1.25rem, 1.55vw, 1.5rem);
   font-weight: 400;
