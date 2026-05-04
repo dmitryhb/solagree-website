@@ -5,6 +5,7 @@ import type { CoBrandedPageRenderMode } from '~/types/co-branded-page'
 interface CoBrandedPageTemplateContext extends CoBrandedPagePublicConfig {
   isEmbed: boolean
   contactLine: string
+  attorneyDisplayName: string
   currentYear: number
 }
 
@@ -106,6 +107,9 @@ const solagreeBasicTemplate = Handlebars.compile<CoBrandedPageTemplateContext>(`
 
     <section class="co-branded-page__tracks" aria-labelledby="co-branded-tracks-title">
       <h2 id="co-branded-tracks-title">Choose Your Track</h2>
+      <p class="co-branded-page__tracks-intro">
+        Solagree's platform fees include the core process: neutral experts, mediation, arbitration, and final award.
+      </p>
 
       <div class="co-branded-page__tracks-grid">
         <article class="co-branded-page__track-card">
@@ -191,6 +195,11 @@ const solagreeBasicTemplate = Handlebars.compile<CoBrandedPageTemplateContext>(`
           <p class="co-branded-page__track-note">For couples with both parenting and financial concerns</p>
         </article>
       </div>
+
+      <p class="co-branded-page__tracks-note">
+        Your attorney continues to provide strategic guidance throughout the Solagree process.<br>
+        Discuss their fee structure directly with {{attorneyDisplayName}}.
+      </p>
     </section>
 
     <section class="co-branded-page__questions" aria-labelledby="co-branded-questions-title">
@@ -342,6 +351,7 @@ export const renderCoBrandedPageTemplate = (
     ...config,
     isEmbed: mode === 'embed',
     contactLine: config.phoneNumber ? `Questions? Call ${config.phoneNumber}` : '',
+    attorneyDisplayName: config.attorneyName ?? config.companyName,
     currentYear: new Date().getFullYear()
   })
 }

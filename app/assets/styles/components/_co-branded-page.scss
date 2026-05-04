@@ -479,6 +479,26 @@
   text-align: center;
 }
 
+.co-branded-page__tracks-intro,
+.co-branded-page__tracks-note {
+  max-width: 62rem;
+  margin: 0 auto;
+  color: var(--color-black);
+  font-family: var(--font-body);
+  font-size: 18px;
+  line-height: 1.35;
+  text-align: center;
+}
+
+.co-branded-page__tracks-intro {
+  margin-top: -28px;
+}
+
+.co-branded-page__tracks-note {
+  max-width: 58rem;
+  margin-top: -18px;
+}
+
 .co-branded-page__tracks-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
