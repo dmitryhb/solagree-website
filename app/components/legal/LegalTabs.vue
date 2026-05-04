@@ -1,16 +1,19 @@
 <script setup lang="ts">
-import type { LegalNavItem, LegalSlug } from '~/types/legal'
+import type { TabNavItem } from '~/types/tabs'
 
-defineProps<{
-  items: LegalNavItem[]
-  activeSlug: LegalSlug
-}>()
+withDefaults(defineProps<{
+  items: TabNavItem[]
+  activeSlug: string
+  ariaLabel?: string
+}>(), {
+  ariaLabel: 'Legal policies'
+})
 </script>
 
 <template>
   <nav
     class="legal-tabs"
-    aria-label="Legal policies"
+    :aria-label="ariaLabel"
   >
     <NuxtLink
       v-for="item in items"
