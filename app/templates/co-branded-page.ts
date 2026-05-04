@@ -169,6 +169,14 @@ const solagreeBasicTemplate = Handlebars.compile<CoBrandedPageTemplateContext>(`
     <section class="co-branded-page__questions" aria-labelledby="co-branded-questions-title">
       <div class="co-branded-page__questions-copy">
         <h2 id="co-branded-questions-title">Common Questions</h2>
+        <div class="co-branded-page__questions-intro">
+          <p>
+            Solagree offers a structured alternative to traditional divorce litigation - combining expert financial guidance, mediation, and binding arbitration.
+          </p>
+          <p>
+            Our process is designed for couples who can't agree on everything but want to avoid lengthy court battles and reach resolution efficiently.
+          </p>
+        </div>
         <a class="co-branded-page__primary-cta co-branded-page__primary-cta--light" href="{{ctaUrl}}">Schedule a Consultation</a>
       </div>
 

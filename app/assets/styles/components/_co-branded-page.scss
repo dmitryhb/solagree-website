@@ -581,9 +581,24 @@
   letter-spacing: 0;
 }
 
+.co-branded-page__questions-intro {
+  display: grid;
+  gap: 15px;
+  max-width: 502px;
+  margin-top: 16px;
+  color: var(--color-accent-text);
+  font-family: var(--font-body);
+  font-size: 18px;
+  line-height: 1.431;
+}
+
+.co-branded-page__questions-intro p {
+  margin: 0;
+}
+
 .co-branded-page__questions-copy .co-branded-page__primary-cta {
   min-width: 274px;
-  margin-top: clamp(10rem, 15vw, 15rem);
+  margin-top: 44px;
   padding: 15px 24px;
 }
 
