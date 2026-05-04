@@ -4,7 +4,6 @@ import type { CoBrandedPageRenderMode } from '~/types/co-branded-page'
 
 interface CoBrandedPageTemplateContext extends CoBrandedPagePublicConfig {
   isEmbed: boolean
-  contactLine: string
   attorneyDisplayName: string
   currentYear: number
 }
@@ -20,20 +19,6 @@ const solagreeBasicTemplate = Handlebars.compile<CoBrandedPageTemplateContext>(`
         {{/if}}
       {{/unless}}
     </header>
-
-    <section class="co-branded-page__intro" aria-label="Co-branded page introduction">
-      <p class="co-branded-page__eyebrow">In partnership with {{companyName}}</p>
-      <h1>A clearer divorce plan starts here.</h1>
-      <p>
-        Solagree helps families understand their path, organize next steps, and prepare for a focused consult.
-      </p>
-      <div class="co-branded-page__actions">
-        <a class="co-branded-page__primary-cta" href="{{ctaUrl}}">Start the quiz</a>
-        {{#if contactLine}}
-          <span class="co-branded-page__contact">{{contactLine}}</span>
-        {{/if}}
-      </div>
-    </section>
 
     <section class="co-branded-page__benefits" aria-labelledby="co-branded-benefits-title">
       <h2 id="co-branded-benefits-title">What you get with Solagree</h2>
@@ -52,28 +37,6 @@ const solagreeBasicTemplate = Handlebars.compile<CoBrandedPageTemplateContext>(`
           <span class="co-branded-page__benefit-icon co-branded-page__benefit-icon--commitment" aria-hidden="true"></span>
           <h3>Binding Commitment</h3>
           <p>Both parties commit to resolving from day one - no one walks away.</p>
-        </article>
-      </div>
-    </section>
-
-    <section class="co-branded-page__process" aria-labelledby="co-branded-process-title">
-      <div class="co-branded-page__process-intro">
-        <h2 id="co-branded-process-title">How It Works</h2>
-        <p>Three phases. One resolution. A structured process designed for couples who can't agree on everything.</p>
-        <a class="co-branded-page__secondary-cta" href="{{ctaUrl}}">Is Solagree Right for You?</a>
-      </div>
-      <div class="co-branded-page__phases">
-        <article>
-          <h3>Phase 1: Assessment</h3>
-          <p>Your CCFA helps you organize finances and documents where you already agree.</p>
-        </article>
-        <article>
-          <h3>Phase 2: Mediation</h3>
-          <p>A skilled mediator guides structured negotiations on custody, finances, and support.</p>
-        </article>
-        <article>
-          <h3>Phase 3: Arbitration</h3>
-          <p>Your arbitrator creates a binding agreement. What you've agreed on is adopted; what you haven't is decided for you.</p>
         </article>
       </div>
     </section>
@@ -350,7 +313,6 @@ export const renderCoBrandedPageTemplate = (
   return template({
     ...config,
     isEmbed: mode === 'embed',
-    contactLine: config.phoneNumber ? `Questions? Call ${config.phoneNumber}` : '',
     attorneyDisplayName: config.attorneyName ?? config.companyName,
     currentYear: new Date().getFullYear()
   })

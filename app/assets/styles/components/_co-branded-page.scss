@@ -114,53 +114,7 @@
   object-fit: contain;
 }
 
-.co-branded-page__intro {
-  max-width: 48rem;
-  margin-inline: auto;
-  text-align: center;
-}
-
-.co-branded-page__eyebrow,
-.co-branded-page__contact {
-  margin: 0;
-  color: #9b604b;
-  font-family: var(--font-ui);
-  font-size: 0.95rem;
-  font-weight: 700;
-  letter-spacing: 0;
-  text-transform: uppercase;
-}
-
-.co-branded-page__intro h1 {
-  max-width: 13ch;
-  margin: 1rem auto 0;
-  color: var(--color-heading);
-  font-family: var(--font-display);
-  font-size: clamp(2.6rem, 6vw, 4.6rem);
-  font-weight: 600;
-  line-height: 1;
-  letter-spacing: 0;
-}
-
-.co-branded-page__intro p:not(.co-branded-page__eyebrow) {
-  max-width: 42rem;
-  margin: 1.25rem auto 0;
-  color: rgba(62, 64, 89, 0.78);
-  font-size: clamp(1rem, 1.6vw, 1.1rem);
-  line-height: 1.7;
-}
-
-.co-branded-page__actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  margin-top: 1.75rem;
-}
-
-.co-branded-page__primary-cta,
-.co-branded-page__secondary-cta {
+.co-branded-page__primary-cta {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -172,11 +126,6 @@
   font-weight: 700;
   line-height: 1;
   text-decoration: none;
-}
-
-.co-branded-page__primary-cta {
-  background: var(--color-surface-dark);
-  color: var(--color-white);
 }
 
 .co-branded-page__primary-cta--light {
@@ -196,12 +145,6 @@
   transform: translateX(3px);
 }
 
-.co-branded-page__secondary-cta {
-  margin-top: 1.9rem;
-  background: #f4ff62;
-  color: var(--color-heading);
-}
-
 .co-branded-page__primary-cta:hover {
   background: var(--color-text);
 }
@@ -211,14 +154,12 @@
   color: var(--color-heading);
 }
 
-.co-branded-page__primary-cta:focus-visible,
-.co-branded-page__secondary-cta:focus-visible {
+.co-branded-page__primary-cta:focus-visible {
   outline: 3px solid rgba(155, 96, 75, 0.44);
   outline-offset: 4px;
 }
 
 .co-branded-page__benefits h2,
-.co-branded-page__process h2,
 .co-branded-page__section-heading h2 {
   margin: 0;
   color: var(--color-heading);
@@ -316,60 +257,6 @@
   font-size: 0.98rem;
   font-weight: 600;
   line-height: 1.45;
-}
-
-.co-branded-page__process {
-  display: grid;
-  grid-template-columns: 0.9fr 1.1fr;
-  gap: clamp(2rem, 5vw, 4rem);
-  align-items: start;
-}
-
-.co-branded-page__process h2 {
-  font-size: clamp(2.5rem, 5vw, 3.7rem);
-}
-
-.co-branded-page__process-intro p {
-  max-width: 29rem;
-  margin: 1.25rem 0 0;
-  color: rgba(62, 64, 89, 0.78);
-  font-size: 1rem;
-  font-weight: 700;
-  line-height: 1.55;
-}
-
-.co-branded-page__phases {
-  display: grid;
-}
-
-.co-branded-page__phases article {
-  padding: 1rem 0;
-  border-bottom: 2px solid rgba(63, 49, 84, 0.14);
-}
-
-.co-branded-page__phases article:first-child {
-  padding-top: 0;
-}
-
-.co-branded-page__phases h3,
-.co-branded-page__phases p {
-  margin: 0;
-}
-
-.co-branded-page__phases h3 {
-  color: #9b604b;
-  font-family: var(--font-ui);
-  font-size: 1rem;
-  font-weight: 800;
-  line-height: 1.35;
-}
-
-.co-branded-page__phases p {
-  margin-top: 0.65rem;
-  color: rgba(62, 64, 89, 0.78);
-  font-size: 1rem;
-  font-weight: 600;
-  line-height: 1.5;
 }
 
 .co-branded-page__next-steps {
@@ -967,26 +854,12 @@
     display: none;
   }
 
-  .co-branded-page__intro {
-    text-align: left;
-  }
-
-  .co-branded-page__intro h1 {
-    margin-inline: 0;
-  }
-
-  .co-branded-page__actions {
-    align-items: stretch;
-    flex-direction: column;
-  }
-
   .co-branded-page__benefits h2 {
     text-align: left;
   }
 
   .co-branded-page__benefits-grid,
   .co-branded-page__tracks-grid,
-  .co-branded-page__process,
   .co-branded-page__attorney-guide,
   .co-branded-page__questions,
   .co-branded-page__next-steps-grid,
