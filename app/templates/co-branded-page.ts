@@ -77,6 +77,95 @@ const solagreeBasicTemplate = Handlebars.compile<CoBrandedPageTemplateContext>(`
       </div>
     </section>
 
+    <section class="co-branded-page__tracks" aria-labelledby="co-branded-tracks-title">
+      <h2 id="co-branded-tracks-title">Choose Your Track</h2>
+
+      <div class="co-branded-page__tracks-grid">
+        <article class="co-branded-page__track-card">
+          <header class="co-branded-page__track-header">
+            <h3>Parenting Track</h3>
+          </header>
+
+          <div class="co-branded-page__track-price">
+            <span class="co-branded-page__track-amount">$2,250</span>
+            <span class="co-branded-page__track-cadence">/ per person</span>
+          </div>
+
+          <p class="co-branded-page__track-description">
+            Guided by parenting specialists and neutral mediators who help you create a sustainable parenting plan.
+          </p>
+
+          <div class="co-branded-page__track-includes">
+            <p class="co-branded-page__track-includes-title">For cases involving</p>
+            <ul class="co-branded-page__track-features">
+              <li>Custody and parenting time schedules</li>
+              <li>Decision-making responsibilities</li>
+              <li>Holiday and vacation planning</li>
+              <li>Co-parenting communication plans</li>
+            </ul>
+          </div>
+
+          <p class="co-branded-page__track-note">Best for couples focused on children under 18</p>
+        </article>
+
+        <article class="co-branded-page__track-card">
+          <header class="co-branded-page__track-header">
+            <h3>Financial Track</h3>
+            <span class="co-branded-page__track-badge">Popular</span>
+          </header>
+
+          <div class="co-branded-page__track-price">
+            <span class="co-branded-page__track-amount">$4,800</span>
+            <span class="co-branded-page__track-cadence">/ per person</span>
+          </div>
+
+          <p class="co-branded-page__track-description">
+            Guided by CDFA® financial experts and neutral mediators who help you navigate complex financial decisions.
+          </p>
+
+          <div class="co-branded-page__track-includes">
+            <p class="co-branded-page__track-includes-title">For cases involving</p>
+            <ul class="co-branded-page__track-features">
+              <li>Property division and asset distribution</li>
+              <li>Business ownership and valuation</li>
+              <li>Retirement accounts and pensions</li>
+              <li>Spousal support calculations</li>
+            </ul>
+          </div>
+
+          <p class="co-branded-page__track-note">Best for couples with assets to divide</p>
+        </article>
+
+        <article class="co-branded-page__track-card co-branded-page__track-card--featured">
+          <header class="co-branded-page__track-header">
+            <h3>Parenting + Financial</h3>
+          </header>
+
+          <p class="co-branded-page__track-eyebrow">Save over $1,000 each</p>
+          <div class="co-branded-page__track-price">
+            <span class="co-branded-page__track-amount">$5,990</span>
+            <span class="co-branded-page__track-cadence">/ per person</span>
+          </div>
+
+          <p class="co-branded-page__track-description">
+            Combines expert parenting and CDFA® financial guidance in one comprehensive process - with neutral mediation and arbitration.
+          </p>
+
+          <div class="co-branded-page__track-includes">
+            <p class="co-branded-page__track-includes-title">For cases involving</p>
+            <ul class="co-branded-page__track-features">
+              <li>Child custody, schedules, and co-parenting</li>
+              <li>Property division and asset distribution</li>
+              <li>Businesses, pensions, retirement accounts</li>
+              <li>Spousal support calculations</li>
+            </ul>
+          </div>
+
+          <p class="co-branded-page__track-note">For couples with both parenting and financial concerns</p>
+        </article>
+      </div>
+    </section>
+
     <section class="co-branded-page__questions" aria-labelledby="co-branded-questions-title">
       <div class="co-branded-page__questions-copy">
         <h2 id="co-branded-questions-title">Common Questions</h2>
