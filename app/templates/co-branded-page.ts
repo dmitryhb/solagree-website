@@ -21,27 +21,6 @@ const solagreeBasicTemplate = Handlebars.compile<CoBrandedPageTemplateContext>(`
       {{/unless}}
     </header>
 
-    <section class="co-branded-page__benefits" aria-labelledby="co-branded-benefits-title">
-      <h2 id="co-branded-benefits-title">What you get with Solagree</h2>
-      <div class="co-branded-page__benefits-grid">
-        <article class="co-branded-page__benefit-card">
-          <span class="co-branded-page__benefit-icon co-branded-page__benefit-icon--resolution" aria-hidden="true"></span>
-          <h3>Foster Resolution</h3>
-          <p>Typically resolves in months - completely virtual, and no courtroom appearances.</p>
-        </article>
-        <article class="co-branded-page__benefit-card">
-          <span class="co-branded-page__benefit-icon co-branded-page__benefit-icon--pricing" aria-hidden="true"></span>
-          <h3>Flat-Fee Pricing</h3>
-          <p>Know your costs upfront with predictable flat fees - no hourly billing surprises.</p>
-        </article>
-        <article class="co-branded-page__benefit-card">
-          <span class="co-branded-page__benefit-icon co-branded-page__benefit-icon--commitment" aria-hidden="true"></span>
-          <h3>Binding Commitment</h3>
-          <p>Both parties commit to resolving from day one - no one walks away.</p>
-        </article>
-      </div>
-    </section>
-
     <section class="co-branded-page__how-it-works" aria-labelledby="co-branded-how-it-works-title">
       <h2 id="co-branded-how-it-works-title">How It Works</h2>
 
