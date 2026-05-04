@@ -77,6 +77,65 @@ const solagreeBasicTemplate = Handlebars.compile<CoBrandedPageTemplateContext>(`
       </div>
     </section>
 
+    <section class="co-branded-page__questions" aria-labelledby="co-branded-questions-title">
+      <div class="co-branded-page__questions-copy">
+        <h2 id="co-branded-questions-title">Common Questions</h2>
+        <a class="co-branded-page__primary-cta co-branded-page__primary-cta--light" href="{{ctaUrl}}">Schedule a Consultation</a>
+      </div>
+
+      <div class="co-branded-page__questions-accordion">
+        <details class="co-branded-page__accordion-item" open>
+          <summary>
+            <span>How does the Solagree consultation work?</span>
+            <span class="co-branded-page__accordion-icon" aria-hidden="true"></span>
+          </summary>
+          <p>
+            You meet with a Solagree expert to confirm fit, answer process questions, and understand the next steps before moving forward.
+          </p>
+        </details>
+
+        <details class="co-branded-page__accordion-item">
+          <summary>
+            <span>Is Solagree a law firm?</span>
+            <span class="co-branded-page__accordion-icon" aria-hidden="true"></span>
+          </summary>
+          <p>
+            No. Solagree is not a law firm and does not provide legal advice. We connect clients with independent professionals.
+          </p>
+        </details>
+
+        <details class="co-branded-page__accordion-item">
+          <summary>
+            <span>What happens after I complete the quiz?</span>
+            <span class="co-branded-page__accordion-icon" aria-hidden="true"></span>
+          </summary>
+          <p>
+            Your answers help identify whether Solagree may fit your situation and guide the best next step for a consultation.
+          </p>
+        </details>
+
+        <details class="co-branded-page__accordion-item">
+          <summary>
+            <span>Can Solagree help if we do not agree on everything?</span>
+            <span class="co-branded-page__accordion-icon" aria-hidden="true"></span>
+          </summary>
+          <p>
+            Yes. The process is designed for couples who need a structured path through unresolved financial, parenting, or support issues.
+          </p>
+        </details>
+
+        <details class="co-branded-page__accordion-item">
+          <summary>
+            <span>How long does the process take?</span>
+            <span class="co-branded-page__accordion-icon" aria-hidden="true"></span>
+          </summary>
+          <p>
+            Timing depends on the complexity of your situation, but the process is built to move families toward resolution efficiently.
+          </p>
+        </details>
+      </div>
+    </section>
+
     <section class="co-branded-page__next-steps" aria-labelledby="co-branded-next-steps-title">
       <div class="co-branded-page__section-heading">
         <h2 id="co-branded-next-steps-title">Your Next Steps</h2>
