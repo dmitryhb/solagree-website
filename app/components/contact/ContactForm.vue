@@ -72,8 +72,10 @@ const handleSubmit = async () => {
     role="status"
     aria-live="polite"
   >
-    <p><strong>Thank you for reaching out.</strong></p>
-    <p>We’ve received your message, and a Solagree team member will review it and follow up soon. If your matter is urgent, please use the direct contact details on this page.</p>
+    <div>
+      <p><strong>Thank you for reaching out.</strong></p>
+      <p>We’ve received your message, and a Solagree team member will review it and follow up soon. If your matter is urgent, please use the direct contact details on this page.</p>
+    </div>
   </div>
 
   <form
