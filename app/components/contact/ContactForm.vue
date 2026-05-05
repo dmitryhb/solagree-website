@@ -66,14 +66,15 @@ const handleSubmit = async () => {
 </script>
 
 <template>
-  <p
+  <div
     v-if="submitted"
     class="contact-form contact-form__thank-you"
     role="status"
     aria-live="polite"
   >
-    Thank you for reaching out. We’ve received your message, and a Solagree team member will review it and follow up soon. If your matter is urgent, please use the direct contact details on this page.
-  </p>
+    <p><strong>Thank you for reaching out.</strong></p>
+    <p>We’ve received your message, and a Solagree team member will review it and follow up soon. If your matter is urgent, please use the direct contact details on this page.</p>
+  </div>
 
   <form
     v-else

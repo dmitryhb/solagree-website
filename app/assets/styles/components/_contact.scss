@@ -203,6 +203,14 @@
   line-height: 1.55;
 }
 
+.contact-form__thank-you p {
+  margin: 0;
+}
+
+.contact-form__thank-you p + p {
+  margin-top: 0.75rem;
+}
+
 .contact-page__direct {
   margin-top: clamp(6rem, 10vw, 8.5rem);
 }
