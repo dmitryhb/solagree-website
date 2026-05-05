@@ -13,6 +13,7 @@ STAGING_PORTAL_API_BASE_URL="${NUXT_PUBLIC_PORTAL_API_BASE_URL:-https://solagree
 
 DRY_RUN=false
 SKIP_BUILD=false
+SKIP_ROUTE_CHECK=false
 
 for arg in "$@"; do
   case "$arg" in
@@ -22,9 +23,12 @@ for arg in "$@"; do
     --skip-build)
       SKIP_BUILD=true
       ;;
+    --skip-route-check)
+      SKIP_ROUTE_CHECK=true
+      ;;
     *)
       echo "Unknown option: $arg" >&2
-      echo "Supported options: --dry-run, --skip-build" >&2
+      echo "Supported options: --dry-run, --skip-build, --skip-route-check" >&2
       exit 1
       ;;
   esac
@@ -55,3 +59,26 @@ fi
 
 echo "Deploying $OUTPUT_DIR to ${SSH_USER}@${SSH_HOST}:${REMOTE_PATH}"
 rsync "${RSYNC_ARGS[@]}" "$OUTPUT_DIR" "${SSH_USER}@${SSH_HOST}:${REMOTE_PATH}"
+
+if [ "$DRY_RUN" = false ] && [ "$SKIP_ROUTE_CHECK" = false ]; then
+  ROUTE_CHECK_URL="${STAGING_SITE_URL%/}/go/__co-branded-route-check__"
+  ROUTE_CHECK_STATUS="$(curl -sS -o /dev/null -w "%{http_code}" "$ROUTE_CHECK_URL" || true)"
+
+  if [ "$ROUTE_CHECK_STATUS" = "404" ]; then
+    cat >&2 <<MESSAGE
+Staging route check failed: $ROUTE_CHECK_URL returned HTTP 404.
+
+The generated static website must route dynamic Nuxt paths such as /go/:slug
+to /200.html. Update the nginx server block for $STAGING_SITE_URL with:
+
+  location / {
+      try_files \$uri \$uri/ /200.html;
+  }
+
+Then reload nginx and rerun this deployment.
+MESSAGE
+    exit 1
+  fi
+
+  echo "Route check passed: $ROUTE_CHECK_URL returned HTTP $ROUTE_CHECK_STATUS"
+fi

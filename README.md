@@ -120,6 +120,35 @@ https://solagree-portal.qamachine.com/api/attorney-applications
 https://solagree-portal.qamachine.com/api/consult-requests
 ```
 
+## Co-branded partner pages
+
+Published co-branded partner pages are served by the website under:
+
+```text
+/go/:slug
+/go/:slug/embed
+```
+
+The website fetches page data from the Portal public API:
+
+```text
+${NUXT_PUBLIC_PORTAL_API_BASE_URL}/api/public/co-branded-pages/:slug
+```
+
+Because the staging website deploys as static Nuxt output, nginx must route
+dynamic paths to Nuxt's generated fallback file. The staging website server block
+must include:
+
+```nginx
+location / {
+    try_files $uri $uri/ /200.html;
+}
+```
+
+`npm run deploy:staging` checks this after upload by requesting a `/go/...`
+route and fails if nginx still returns `404`. Use `--skip-route-check` only when
+the server fallback is being changed separately.
+
 The staging Portal `.env` must allow the website origin for public form submissions:
 
 ```bash
