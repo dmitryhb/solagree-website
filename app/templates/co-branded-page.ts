@@ -336,7 +336,7 @@ const solagreeBasicTemplate = Handlebars.compile<CoBrandedPageTemplateContext>(`
       <div class="co-branded-page__section-heading">
         <h2 id="co-branded-next-steps-title">Your Next Steps</h2>
         <p>
-          Help couples reach resolution faster while expanding your practice. Join our network of attorneys, CDFAs, and counselors nationwide.
+          Ready to see if Solagree is right for your situation? Schedule a consultation to get your questions answered and map out your path forward.
         </p>
       </div>
 
