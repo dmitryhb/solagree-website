@@ -117,13 +117,13 @@
 .co-branded-page__hero {
   display: grid;
   width: 100vw;
-  grid-template-columns: minmax(0, 0.94fr) minmax(0, 1fr);
-  gap: clamp(3rem, 6.3vw, 6.75rem);
+  grid-template-columns: minmax(0, 1fr) minmax(0, min(42.75rem, 48vw));
+  gap: clamp(2.5rem, 4.6vw, 5.25rem);
   align-items: center;
   margin-inline: calc(50% - 50vw);
   padding:
     clamp(4rem, 6.25vw, 5.5rem)
-    max(clamp(1rem, 5vw, 4rem), calc((100vw - 1257px) / 2))
+    max(clamp(1rem, 5vw, 4rem), calc((100vw - 1700px) / 2))
     clamp(4rem, 6.4vw, 5.75rem);
   background: var(--color-surface-dark);
   color: var(--color-surface-footer);
@@ -132,7 +132,7 @@
 .co-branded-page__hero-content {
   display: grid;
   justify-items: start;
-  max-width: 45rem;
+  max-width: 48rem;
 }
 
 .co-branded-page__hero-eyebrow {
@@ -155,41 +155,48 @@
   margin: 0;
   color: var(--color-page);
   font-family: var(--font-display);
-  font-size: clamp(3.25rem, 3.95vw, 4.25rem);
+  font-size: clamp(3.1rem, 3.35vw, 3.95rem);
   font-weight: 500;
-  line-height: 1.16;
+  line-height: 1.19;
   letter-spacing: 0;
 }
 
+.co-branded-page__hero h1 span {
+  display: block;
+  white-space: nowrap;
+}
+
 .co-branded-page__hero-copy {
-  max-width: 42rem;
-  margin: clamp(2rem, 3.2vw, 2.75rem) 0 0;
+  max-width: 40rem;
+  margin: clamp(1.65rem, 2.75vw, 2.35rem) 0 0;
   color: var(--color-white);
   font-family: var(--font-body);
-  font-size: clamp(1.15rem, 1.55vw, 1.45rem);
+  font-size: clamp(1.05rem, 1.32vw, 1.28rem);
   font-weight: 400;
-  line-height: 1.32;
+  line-height: 1.36;
 }
 
 .co-branded-page__hero-cta {
   min-width: min(100%, 20.5rem);
-  margin-top: clamp(2.5rem, 4.3vw, 3.55rem);
+  margin-top: clamp(2.15rem, 3.55vw, 3rem);
 }
 
 .co-branded-page__hero-note {
   max-width: 28rem;
-  margin: clamp(2.5rem, 4vw, 3.35rem) 0 0;
+  margin: clamp(2.35rem, 3.55vw, 3rem) 0 0;
   color: var(--color-white);
   font-family: var(--font-ui);
-  font-size: clamp(1.05rem, 1.45vw, 1.22rem);
+  font-size: clamp(0.95rem, 1.24vw, 1.08rem);
   font-weight: 700;
   line-height: 1.25;
 }
 
 .co-branded-page__hero-image {
   width: 100%;
+  max-width: 42.75rem;
   aspect-ratio: 968 / 772;
   border-radius: 14px;
+  justify-self: end;
   object-fit: cover;
 }
 
@@ -1117,6 +1124,10 @@
 
   .co-branded-page__hero h1 {
     font-size: clamp(3rem, 12vw, 4.25rem);
+  }
+
+  .co-branded-page__hero h1 span {
+    white-space: normal;
   }
 
   .co-branded-page__hero-copy {

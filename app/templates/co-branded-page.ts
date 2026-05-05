@@ -24,7 +24,10 @@ const solagreeBasicTemplate = Handlebars.compile<CoBrandedPageTemplateContext>(`
     <section class="co-branded-page__hero" aria-labelledby="co-branded-hero-title">
       <div class="co-branded-page__hero-content">
         <p class="co-branded-page__hero-eyebrow">A Better Way Forward</p>
-        <h1 id="co-branded-hero-title">A Structured Path to<br>Divorce Resolution</h1>
+        <h1 id="co-branded-hero-title">
+          <span>A Structured Path to</span>
+          <span>Divorce Resolution</span>
+        </h1>
         <p class="co-branded-page__hero-copy">
           Your attorney provides access to Solagree &ndash; a structured alternative to traditional court litigation.
         </p>
