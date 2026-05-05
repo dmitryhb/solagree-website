@@ -87,16 +87,14 @@
 .co-branded-page__brand-row {
   box-sizing: border-box;
   display: flex;
-  width: 100vw;
+  width: min(calc(100vw - 2rem), 1700px);
   min-width: 0;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: clamp(1.25rem, 5vw, 4rem);
-  margin-inline: calc(50% - 50vw);
-  padding:
-    clamp(0.75rem, 1.85vw, 1.25rem)
-    max(clamp(1.5rem, 5vw, 4rem), calc((100vw - 1700px) / 2));
+  margin-inline: calc(50% - min(calc(50vw - 1rem), 850px));
+  padding: clamp(0.45rem, 1vw, 0.75rem) 0;
 }
 
 .co-branded-page--embed .co-branded-page__brand-row {
@@ -129,7 +127,7 @@
   padding:
     clamp(4rem, 6.25vw, 5.5rem)
     max(clamp(1.5rem, 5vw, 4rem), calc((100vw - 1700px) / 2))
-    clamp(4rem, 6.4vw, 5.75rem);
+    clamp(6.4rem, 8.25vw, 7.85rem);
   background: var(--color-surface-dark);
   color: var(--color-surface-footer);
 }
@@ -207,7 +205,7 @@
 
 .co-branded-page__feature-strip {
   width: 100vw;
-  margin-top: clamp(-4rem, -5vw, -2.25rem);
+  margin-top: 0;
   margin-inline: calc(50% - 50vw);
   padding: clamp(1.1rem, 1.75vw, 1.45rem) clamp(1rem, 5vw, 4rem);
   background: #d6caef;
@@ -219,7 +217,7 @@
 
 .co-branded-page__feature-strip ul {
   display: grid;
-  max-width: 62rem;
+  max-width: min(100%, 1257px);
   grid-template-columns: repeat(4, minmax(0, max-content));
   justify-content: space-between;
   gap: clamp(1rem, 4vw, 4rem);
@@ -331,6 +329,7 @@
 .co-branded-page__what-is {
   display: grid;
   gap: clamp(3rem, 5vw, 4.75rem);
+  padding-top: clamp(5rem, 6.75vw, 6.5rem);
 }
 
 .co-branded-page__what-is-heading {
