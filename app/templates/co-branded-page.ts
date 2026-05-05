@@ -12,13 +12,12 @@ interface CoBrandedPageTemplateContext extends CoBrandedPagePublicConfig {
 const solagreeBasicTemplate = Handlebars.compile<CoBrandedPageTemplateContext>(`
   <article class="co-branded-page co-branded-page--{{#if isEmbed}}embed{{else}}standard{{/if}}">
     <header class="co-branded-page__brand-row">
-      <img class="co-branded-page__solagree-logo" src="/solagree-logo.svg" alt="Solagree">
       {{#unless isEmbed}}
         {{#if logoUrl}}
-          <span class="co-branded-page__brand-divider" aria-hidden="true"></span>
           <img class="co-branded-page__partner-logo" src="{{logoUrl}}" alt="{{companyName}}">
         {{/if}}
       {{/unless}}
+      <img class="co-branded-page__solagree-logo" src="/solagree-logo.svg" alt="Solagree">
     </header>
 
     <section class="co-branded-page__hero" aria-labelledby="co-branded-hero-title">

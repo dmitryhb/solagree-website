@@ -87,30 +87,25 @@
   min-width: 0;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: center;
-  gap: 1rem;
+  justify-content: space-between;
+  gap: clamp(1.25rem, 5vw, 4rem);
 }
 
 .co-branded-page--embed .co-branded-page__brand-row {
   width: 100%;
+  justify-content: center;
   padding: clamp(1rem, 2.5vw, 1.5rem);
   background: var(--color-page);
 }
 
 .co-branded-page__solagree-logo {
-  width: clamp(9rem, 18vw, 11.5rem);
+  width: clamp(10.5rem, 18vw, 13.25rem);
   height: auto;
 }
 
-.co-branded-page__brand-divider {
-  width: 1px;
-  height: 2.25rem;
-  background: var(--color-border-strong);
-}
-
 .co-branded-page__partner-logo {
-  max-width: min(13rem, 58vw);
-  max-height: 4rem;
+  max-width: min(22rem, 52vw);
+  max-height: 5.25rem;
   object-fit: contain;
 }
 
@@ -1082,11 +1077,7 @@
   }
 
   .co-branded-page__brand-row {
-    justify-content: flex-start;
-  }
-
-  .co-branded-page__brand-divider {
-    display: none;
+    justify-content: space-between;
   }
 
   .co-branded-page__feature-strip ul {
