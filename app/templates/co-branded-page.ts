@@ -21,6 +21,15 @@ const solagreeBasicTemplate = Handlebars.compile<CoBrandedPageTemplateContext>(`
       {{/unless}}
     </header>
 
+    <section class="co-branded-page__feature-strip" aria-label="Solagree benefits">
+      <ul>
+        <li>Resolve Faster</li>
+        <li>Flat-Fee Pricing</li>
+        <li>Entirely Virtual</li>
+        <li>Binding Process</li>
+      </ul>
+    </section>
+
     <section class="co-branded-page__what-is" aria-labelledby="co-branded-what-is-title">
       <div class="co-branded-page__what-is-heading">
         <h2 id="co-branded-what-is-title">What is Solagree?</h2>
