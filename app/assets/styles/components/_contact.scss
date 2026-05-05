@@ -170,6 +170,11 @@
   background: #323449;
 }
 
+.contact-form__submit:disabled {
+  cursor: not-allowed;
+  opacity: 0.68;
+}
+
 .contact-form__submit:focus-visible {
   outline: 2px solid var(--color-ink);
   outline-offset: 3px;
@@ -188,6 +193,14 @@
   font-family: var(--font-body);
   font-size: 0.9375rem;
   line-height: 1.45;
+}
+
+.contact-form__thank-you {
+  margin: 0;
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.55;
 }
 
 .contact-page__direct {

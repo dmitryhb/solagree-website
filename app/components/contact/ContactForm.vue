@@ -1,5 +1,17 @@
 <script setup lang="ts">
+import {
+  getContactSubmissionErrorMessage,
+  submitContactSubmission
+} from '~/services/contact-submission-api'
+import { isPortalApiConfigurationError } from '~/services/portal-api'
+import type { ContactSubmissionFetcher } from '~/services/contact-submission-api'
 import type { ContactFormState } from '~/types/contact'
+
+const runtimeConfig = useRuntimeConfig()
+const formEl = ref<HTMLFormElement | null>(null)
+const submitting = ref(false)
+const submitted = ref(false)
+const statusMessage = ref('')
 
 const form = reactive<ContactFormState>({
   name: '',
@@ -8,15 +20,64 @@ const form = reactive<ContactFormState>({
   message: ''
 })
 
-const statusMessage = ref('')
+const getSourceUrl = (): string | null => {
+  if (!import.meta.client) {
+    return null
+  }
 
-const handleSubmit = () => {
-  statusMessage.value = 'Thanks. We will get back to you shortly.'
+  const sourceUrl = new URL(window.location.href)
+  sourceUrl.hash = ''
+
+  return sourceUrl.toString()
+}
+
+const handleSubmit = async () => {
+  if (submitting.value) {
+    return
+  }
+
+  statusMessage.value = ''
+
+  if (!formEl.value?.checkValidity()) {
+    formEl.value?.reportValidity()
+    return
+  }
+
+  submitting.value = true
+
+  try {
+    await submitContactSubmission(form, {
+      portalApiBaseUrl: runtimeConfig.public.portalApiBaseUrl,
+      fetcher: $fetch as unknown as ContactSubmissionFetcher,
+      sourceUrl: getSourceUrl()
+    })
+
+    submitted.value = true
+  } catch (error) {
+    if (isPortalApiConfigurationError(error)) {
+      console.error(error)
+    }
+
+    statusMessage.value = getContactSubmissionErrorMessage(error)
+  } finally {
+    submitting.value = false
+  }
 }
 </script>
 
 <template>
+  <p
+    v-if="submitted"
+    class="contact-form contact-form__thank-you"
+    role="status"
+    aria-live="polite"
+  >
+    Thank you for reaching out. We’ve received your message, and a Solagree team member will review it and follow up soon. If your matter is urgent, please use the direct contact details on this page.
+  </p>
+
   <form
+    v-else
+    ref="formEl"
     class="contact-form"
     aria-label="Contact form"
     @submit.prevent="handleSubmit"
@@ -86,8 +147,9 @@ const handleSubmit = () => {
     <button
       class="contact-form__submit"
       type="submit"
+      :disabled="submitting"
     >
-      <span>SEND</span>
+      <span>{{ submitting ? 'SENDING...' : 'SEND' }}</span>
       <img
         class="contact-form__submit-icon"
         src="/icons/send.svg"
