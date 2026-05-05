@@ -59,6 +59,12 @@
 }
 
 .co-branded-page {
+  --co-branded-page-hero-edge: max(clamp(1.5rem, 5vw, 4rem), calc((100vw - 1700px) / 2));
+  --co-branded-page-hero-gap: clamp(2.5rem, 4.6vw, 5.25rem);
+  --co-branded-page-hero-gap-half: clamp(1.25rem, 2.3vw, 2.625rem);
+  --co-branded-page-hero-grid-width: calc(45rem + 42.75rem + var(--co-branded-page-hero-gap));
+  --co-branded-page-hero-grid-half-width: calc(22.5rem + 21.375rem + var(--co-branded-page-hero-gap-half));
+
   display: grid;
   gap: clamp(2.25rem, 5vw, 4rem);
   width: min(calc(100% - 2rem), 1257px);
@@ -97,6 +103,21 @@
   padding: clamp(0.45rem, 1vw, 0.75rem) 0;
 }
 
+@media (min-width: 781px) {
+  .co-branded-page--standard .co-branded-page__brand-row {
+    width: min(
+      calc(100vw - var(--co-branded-page-hero-edge) - var(--co-branded-page-hero-edge)),
+      var(--co-branded-page-hero-grid-width)
+    );
+    margin-inline: calc(
+      50% - min(
+        calc(50vw - var(--co-branded-page-hero-edge)),
+        var(--co-branded-page-hero-grid-half-width)
+      )
+    );
+  }
+}
+
 .co-branded-page--embed .co-branded-page__brand-row {
   width: 100%;
   justify-content: center;
@@ -120,13 +141,13 @@
   display: grid;
   width: 100vw;
   grid-template-columns: minmax(0, 45rem) minmax(0, 42.75rem);
-  gap: clamp(2.5rem, 4.6vw, 5.25rem);
+  gap: var(--co-branded-page-hero-gap);
   align-items: center;
   justify-content: center;
   margin-inline: calc(50% - 50vw);
   padding:
     clamp(4rem, 6.25vw, 5.5rem)
-    max(clamp(1.5rem, 5vw, 4rem), calc((100vw - 1700px) / 2))
+    var(--co-branded-page-hero-edge)
     clamp(6.4rem, 8.25vw, 7.85rem);
   background: var(--color-surface-dark);
   color: var(--color-surface-footer);
@@ -1085,8 +1106,24 @@
     gap: 2.25rem;
   }
 
+  .co-branded-page--standard {
+    gap: 0;
+  }
+
   .co-branded-page__brand-row {
+    flex-wrap: nowrap;
     justify-content: space-between;
+    gap: clamp(0.75rem, 3vw, 1.25rem);
+    padding: 0.6rem 0 0.5rem;
+  }
+
+  .co-branded-page__solagree-logo {
+    width: min(44vw, 14rem);
+  }
+
+  .co-branded-page__partner-logo {
+    max-width: min(22vw, 7rem);
+    max-height: min(22vw, 7rem);
   }
 
   .co-branded-page__feature-strip ul {
@@ -1123,7 +1160,8 @@
   }
 
   .co-branded-page__hero h1 {
-    font-size: clamp(3rem, 12vw, 4.25rem);
+    font-size: clamp(2rem, 6vw, 2.9rem);
+    line-height: 1.16;
   }
 
   .co-branded-page__hero h1 span {
@@ -1196,6 +1234,22 @@
 
   .co-branded-page__next-steps-image {
     aspect-ratio: 1.2;
+  }
+}
+
+@media (max-width: 480px) {
+  .co-branded-page__solagree-logo {
+    width: min(38vw, 9rem);
+  }
+
+  .co-branded-page__partner-logo {
+    max-width: min(20vw, 5rem);
+    max-height: min(20vw, 5rem);
+  }
+
+  .co-branded-page__hero h1 {
+    font-size: clamp(1.9rem, 7.8vw, 2.15rem);
+    line-height: 1.14;
   }
 }
 
