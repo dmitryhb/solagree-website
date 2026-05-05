@@ -68,6 +68,8 @@
 }
 
 .co-branded-page--standard {
+  gap: 0;
+  padding-top: 0;
   padding-bottom: 0;
 }
 
@@ -83,12 +85,18 @@
 }
 
 .co-branded-page__brand-row {
+  box-sizing: border-box;
   display: flex;
+  width: 100vw;
   min-width: 0;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: clamp(1.25rem, 5vw, 4rem);
+  margin-inline: calc(50% - 50vw);
+  padding:
+    clamp(0.75rem, 1.85vw, 1.25rem)
+    max(clamp(1.5rem, 5vw, 4rem), calc((100vw - 1700px) / 2));
 }
 
 .co-branded-page--embed .co-branded-page__brand-row {
@@ -99,7 +107,7 @@
 }
 
 .co-branded-page__solagree-logo {
-  width: clamp(10.5rem, 18vw, 13.25rem);
+  width: clamp(15.75rem, 27vw, 19.875rem);
   height: auto;
 }
 
