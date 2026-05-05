@@ -276,51 +276,57 @@ const solagreeBasicTemplate = Handlebars.compile<CoBrandedPageTemplateContext>(`
       <div class="co-branded-page__questions-accordion">
         <details class="co-branded-page__accordion-item" open>
           <summary>
-            <span>How does the Solagree consultation work?</span>
+            <span>How do I get my spouse to agree to Solagree?</span>
+            <span class="co-branded-page__accordion-icon" aria-hidden="true"></span>
+          </summary>
+          <div class="co-branded-page__accordion-content">
+            <p>Here are a few approaches:</p>
+            <ul>
+              <li>Share this page so they can explore Solagree on their own</li>
+              <li>Focus on the benefits - faster resolution, less conflict, predictable costs</li>
+              <li>Connect them with their own advisor - We can help both spouses find appropriate professional support</li>
+              <li>Schedule a consultation to discuss the best strategy for your situation, and we'll help you navigate next steps.</li>
+            </ul>
+          </div>
+        </details>
+
+        <details class="co-branded-page__accordion-item">
+          <summary>
+            <span>Do we need attorneys?</span>
             <span class="co-branded-page__accordion-icon" aria-hidden="true"></span>
           </summary>
           <p>
-            You meet with a Solagree expert to confirm fit, answer process questions, and understand the next steps before moving forward.
+            While not required, we recommend both parties work with independent attorneys who can provide legal guidance throughout the process. We can refer you to network attorneys who work with Solagree.
           </p>
         </details>
 
         <details class="co-branded-page__accordion-item">
           <summary>
-            <span>Is Solagree a law firm?</span>
+            <span>Is the arbitration binding?</span>
             <span class="co-branded-page__accordion-icon" aria-hidden="true"></span>
           </summary>
           <p>
-            No. Solagree is not a law firm and does not provide legal advice. We connect clients with independent professionals.
+            Yes, in most states. The arbitration award becomes a legally binding resolution that can be filed with the court without appearing.
           </p>
         </details>
 
         <details class="co-branded-page__accordion-item">
           <summary>
-            <span>What happens after I complete the quiz?</span>
+            <span>Are payment plans available?</span>
             <span class="co-branded-page__accordion-icon" aria-hidden="true"></span>
           </summary>
           <p>
-            Your answers help identify whether Solagree may fit your situation and guide the best next step for a consultation.
+            Yes. Payment plan options are available. Schedule a consultation to discuss the best payment structure for your situation.
           </p>
         </details>
 
         <details class="co-branded-page__accordion-item">
           <summary>
-            <span>Can Solagree help if we do not agree on everything?</span>
+            <span>What happens after the Solagree process?</span>
             <span class="co-branded-page__accordion-icon" aria-hidden="true"></span>
           </summary>
           <p>
-            Yes. The process is designed for couples who need a structured path through unresolved financial, parenting, or support issues.
-          </p>
-        </details>
-
-        <details class="co-branded-page__accordion-item">
-          <summary>
-            <span>How long does the process take?</span>
-            <span class="co-branded-page__accordion-icon" aria-hidden="true"></span>
-          </summary>
-          <p>
-            Timing depends on the complexity of your situation, but the process is built to move families toward resolution efficiently.
+            The final agreement or arbitration award is filed with the court to make it legally binding. In most cases, no courtroom appearance is required. Your financial advisor can help you implement your post-divorce financial plan.
           </p>
         </details>
       </div>
