@@ -111,14 +111,12 @@
 
 .co-branded-page__hero {
   display: grid;
-  width: 100vw;
   grid-template-columns: minmax(0, 1fr) minmax(0, min(42.75rem, 48vw));
   gap: clamp(2.5rem, 4.6vw, 5.25rem);
   align-items: center;
-  margin-inline: calc(50% - 50vw);
   padding:
     clamp(4rem, 6.25vw, 5.5rem)
-    max(clamp(1rem, 5vw, 4rem), calc((100vw - 1700px) / 2))
+    clamp(1.5rem, 5vw, 4rem)
     clamp(4rem, 6.4vw, 5.75rem);
   background: var(--color-surface-dark);
   color: var(--color-surface-footer);
