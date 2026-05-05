@@ -203,7 +203,7 @@
   margin: 0;
   color: var(--color-heading);
   font-family: var(--font-display);
-  font-size: clamp(3rem, 4.25vw, 3.875rem);
+  font-size: clamp(2.75rem, 3.95vw, 3.625rem);
   font-weight: 500;
   line-height: 1.05;
   letter-spacing: 0;
@@ -214,7 +214,7 @@
   margin: 0;
   color: var(--color-black);
   font-family: var(--font-body);
-  font-size: clamp(1.05rem, 1.45vw, 1.375rem);
+  font-size: clamp(1rem, 1.32vw, 1.25rem);
   line-height: 1.32;
 }
 
@@ -249,7 +249,7 @@
   margin: 0;
   color: var(--color-heading);
   font-family: var(--font-display);
-  font-size: clamp(2.7rem, 4.3vw, 4rem);
+  font-size: clamp(2.45rem, 3.85vw, 3.55rem);
   font-weight: 600;
   line-height: 1.05;
   letter-spacing: 0;
@@ -268,7 +268,7 @@
   border-bottom: 2px solid var(--color-white);
   color: var(--color-heading);
   font-family: var(--font-body);
-  font-size: clamp(1.25rem, 1.75vw, 1.65rem);
+  font-size: clamp(1.12rem, 1.55vw, 1.45rem);
   line-height: 1.35;
 }
 
@@ -1054,11 +1054,11 @@
   }
 
   .co-branded-page__what-is-card h3 {
-    font-size: 40px;
+    font-size: 36px;
   }
 
   .co-branded-page__what-is-card li {
-    font-size: 22px;
+    font-size: 20px;
   }
 
   .co-branded-page__track-header {
