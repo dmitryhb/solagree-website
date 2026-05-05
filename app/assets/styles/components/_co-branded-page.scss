@@ -115,15 +115,14 @@
 }
 
 .co-branded-page__feature-strip {
-  width: calc(100% + clamp(2rem, 10vw, 8rem));
-  margin-inline: calc(clamp(1rem, 5vw, 4rem) * -1);
+  width: 100vw;
+  margin-inline: calc(50% - 50vw);
   padding: clamp(1.1rem, 1.75vw, 1.45rem) clamp(1rem, 5vw, 4rem);
   background: #d6caef;
 }
 
 .co-branded-page--embed .co-branded-page__feature-strip {
-  width: 100%;
-  margin-inline: 0;
+  margin-inline: calc(50% - 50vw);
 }
 
 .co-branded-page__feature-strip ul {
@@ -151,12 +150,18 @@
 }
 
 .co-branded-page__feature-strip li::after {
-  display: block;
-  width: 1rem;
-  height: 1rem;
+  display: inline-flex;
+  width: 1.05rem;
+  height: 1.05rem;
   flex: 0 0 auto;
-  background: url("/icons/co-branded-check-dark.svg") center / contain no-repeat;
-  content: "";
+  align-items: center;
+  justify-content: center;
+  color: currentcolor;
+  content: "✓";
+  font-family: var(--font-ui);
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1;
 }
 
 .co-branded-page__primary-cta {
@@ -1100,7 +1105,6 @@
   }
 
   .co-branded-page__feature-strip {
-    margin-inline: -1rem;
     padding-inline: 1rem;
   }
 
