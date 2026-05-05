@@ -239,7 +239,6 @@
 .co-branded-page__what-is {
   display: grid;
   gap: clamp(3rem, 5vw, 4.75rem);
-  padding-block: clamp(4.5rem, 7vw, 6.5rem) clamp(3.75rem, 6vw, 5.5rem);
 }
 
 .co-branded-page__what-is-heading {
@@ -334,7 +333,7 @@
 .co-branded-page__how-it-works {
   display: grid;
   gap: clamp(3.25rem, 5vw, 4.75rem);
-  padding-block: clamp(4rem, 5.8vw, 5.875rem);
+  padding-block: clamp(4rem, 5.8vw, 4.875rem);
 }
 
 .co-branded-page__how-it-works h2 {
