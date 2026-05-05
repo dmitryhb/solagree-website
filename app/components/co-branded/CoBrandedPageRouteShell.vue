@@ -38,9 +38,14 @@ const {
 const routeClass = computed(() => ['co-branded-page-route', props.wrapperClass].filter(Boolean))
 const isLoadingCoBrandedPage = computed(() => pending.value || status.value === 'idle' || status.value === 'pending')
 const isCoBrandedPageUnavailable = computed(() => status.value === 'error' || (status.value === 'success' && !coBrandedPage.value))
+const coBrandedSeoTitle = computed(() => {
+  const companyName = coBrandedPage.value?.companyName?.trim() || 'Solagree partner'
+
+  return `${companyName} | Solagree.com - A flat-fee, virtual alternative to traditional divorce litigation with a structured path to resolution`
+})
 
 useSolagreeSeo({
-  title: 'Co-branded Solagree page',
+  title: coBrandedSeoTitle,
   description: 'Start a structured Solagree divorce planning quiz from a partner co-branded page.',
   noIndex: props.noIndex,
   path: props.seoPath

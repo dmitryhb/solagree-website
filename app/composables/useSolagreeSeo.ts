@@ -1,3 +1,4 @@
+import { computed, toValue } from 'vue'
 import type { SolagreeSeoInput } from '~/types/seo'
 
 const DEFAULT_SOCIAL_IMAGE = '/images/splash-bg.webp'
@@ -48,40 +49,45 @@ export const useSolagreeSeo = (input: SolagreeSeoInput) => {
   const route = useRoute()
   const runtimeConfig = useRuntimeConfig()
   const siteUrl = runtimeConfig.public.siteUrl
-  const path = input.path ?? route.path
-  const canonicalUrl = resolveSiteUrl(siteUrl, path)
-  const imageUrl = resolveImageUrl(siteUrl, input.image ?? DEFAULT_SOCIAL_IMAGE)
-  const title = input.title.includes(SITE_NAME) ? input.title : `${input.title} | ${SITE_NAME}`
-  const robots = input.noIndex ? 'noindex, nofollow' : 'index, follow'
+  const path = computed(() => toValue(input.path) ?? route.path)
+  const canonicalUrl = computed(() => resolveSiteUrl(siteUrl, path.value))
+  const imageUrl = computed(() => resolveImageUrl(siteUrl, toValue(input.image) ?? DEFAULT_SOCIAL_IMAGE))
+  const title = computed(() => {
+    const rawTitle = toValue(input.title)
 
-  useHead({
+    return rawTitle.includes(SITE_NAME) ? rawTitle : `${rawTitle} | ${SITE_NAME}`
+  })
+  const description = computed(() => toValue(input.description))
+  const robots = computed(() => toValue(input.noIndex) ? 'noindex, nofollow' : 'index, follow')
+
+  useHead(() => ({
     htmlAttrs: {
       lang: 'en-US'
     },
     link: [
       {
         rel: 'canonical',
-        href: canonicalUrl
+        href: canonicalUrl.value
       }
     ],
     script: input.structuredData?.map((item) => ({
       type: 'application/ld+json',
       children: JSON.stringify(item)
     })) ?? []
-  })
+  }))
 
   useSeoMeta({
     title,
-    description: input.description,
+    description,
     robots,
     ogTitle: title,
-    ogDescription: input.description,
+    ogDescription: description,
     ogImage: imageUrl,
     ogSiteName: SITE_NAME,
     ogType: input.type ?? 'website',
     ogUrl: canonicalUrl,
     twitterCard: TWITTER_CARD_TYPE,
-    twitterDescription: input.description,
+    twitterDescription: description,
     twitterImage: imageUrl,
     twitterTitle: title
   })

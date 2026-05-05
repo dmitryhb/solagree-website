@@ -1,3 +1,5 @@
+import type { MaybeRefOrGetter } from 'vue'
+
 export type SeoPageType = 'article' | 'profile' | 'website'
 
 export interface StructuredDataObject {
@@ -7,11 +9,11 @@ export interface StructuredDataObject {
 }
 
 export interface SolagreeSeoInput {
-  description: string
-  image?: string
-  noIndex?: boolean
-  path?: string
+  description: MaybeRefOrGetter<string>
+  image?: MaybeRefOrGetter<string>
+  noIndex?: MaybeRefOrGetter<boolean>
+  path?: MaybeRefOrGetter<string>
   structuredData?: StructuredDataObject[]
-  title: string
+  title: MaybeRefOrGetter<string>
   type?: SeoPageType
 }
