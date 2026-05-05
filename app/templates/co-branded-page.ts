@@ -21,6 +21,27 @@ const solagreeBasicTemplate = Handlebars.compile<CoBrandedPageTemplateContext>(`
       {{/unless}}
     </header>
 
+    <section class="co-branded-page__hero" aria-labelledby="co-branded-hero-title">
+      <div class="co-branded-page__hero-content">
+        <p class="co-branded-page__hero-eyebrow">A Better Way Forward</p>
+        <h1 id="co-branded-hero-title">A Structured Path to<br>Divorce Resolution</h1>
+        <p class="co-branded-page__hero-copy">
+          Your attorney provides access to Solagree &ndash; a structured alternative to traditional court litigation.
+        </p>
+        <a class="co-branded-page__primary-cta co-branded-page__primary-cta--light co-branded-page__primary-cta--arrow co-branded-page__hero-cta" href="{{ctaUrl}}">
+          Schedule a Consultation
+          <img class="button-arrow-icon" src="/icons/arrow.svg" alt="">
+        </a>
+        <p class="co-branded-page__hero-note">Consultation is complimentary for clients of {{attorneyDisplayName}}</p>
+      </div>
+
+      <img
+        class="co-branded-page__hero-image"
+        src="/images/co-branded-hero.webp"
+        alt="Attorney in a consultation"
+      >
+    </section>
+
     <section class="co-branded-page__feature-strip" aria-label="Solagree benefits">
       <ul>
         <li>Resolve Faster</li>
