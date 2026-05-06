@@ -148,7 +148,7 @@
   padding:
     clamp(4rem, 6.25vw, 5.5rem)
     var(--co-branded-page-hero-edge)
-    clamp(6.4rem, 8.25vw, 7.85rem);
+    clamp(4rem, 6.25vw, 5.5rem);
   background: var(--color-surface-dark);
   color: var(--color-surface-footer);
 }
@@ -1176,7 +1176,7 @@
     padding:
       clamp(3rem, 10vw, 4.25rem)
       clamp(1rem, 6vw, 2rem)
-      clamp(3.25rem, 10vw, 4.5rem);
+      clamp(3rem, 10vw, 4.25rem);
   }
 
   .co-branded-page__hero-content {
