@@ -55,10 +55,10 @@
         class="attorney-hero-section__media"
       >
         <img
-          src="/images/kids.webp"
-          alt="Parent crouching beside a child in a family home."
-          width="1050"
-          height="1288"
+          src="/images/attorney-hero.webp"
+          alt="Attorney reviewing case materials at a desk."
+          width="968"
+          height="772"
           loading="eager"
           decoding="async"
         >

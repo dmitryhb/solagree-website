@@ -33,10 +33,10 @@
         class="attorney-more-cases-section__media"
       >
         <img
-          src="/images/kids.webp"
-          alt="Parent crouching beside a child in a family home."
-          width="1050"
-          height="1288"
+          src="/images/attorney-handle-more-cases.webp"
+          alt="Attorney working on case documents at a laptop."
+          width="1012"
+          height="766"
           loading="lazy"
           decoding="async"
         >

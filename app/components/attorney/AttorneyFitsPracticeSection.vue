@@ -34,8 +34,8 @@
           class="attorney-fits-practice-section__media"
         >
           <img
-            src="/images/fits-practice.webp"
-            alt="Two professionals reviewing work together at a desk."
+            src="/images/attorney-see-if-fits.webp"
+            alt="Attorney partner consultation workspace."
             width="1218"
             height="545"
             loading="lazy"
