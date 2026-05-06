@@ -653,13 +653,18 @@
   gap: 16px;
 }
 
+.co-branded-page--standard .co-branded-page__tracks-grid {
+  width: min(calc(100vw - 4rem), 1296px);
+  margin-inline: calc(50% - min(calc(50vw - 2rem), 648px));
+}
+
 .co-branded-page__track-card {
   display: flex;
-  min-height: 31.25rem;
+  min-height: 591px;
   flex-direction: column;
-  gap: 26px;
+  gap: 32px;
   padding: 32px;
-  border-radius: 8px;
+  border-radius: 16px;
   background: var(--color-surface-cool);
   color: #27241f;
   transition:
@@ -679,7 +684,7 @@
 
 .co-branded-page__track-header {
   display: flex;
-  min-height: 30px;
+  min-height: 40px;
   align-items: flex-start;
   justify-content: space-between;
   gap: 1rem;
@@ -698,18 +703,18 @@
 .co-branded-page__track-header h3 {
   margin: 0;
   padding-top: 4px;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
 }
 
 .co-branded-page__track-badge {
   display: inline-flex;
-  min-height: 28px;
+  min-height: 30px;
   align-items: center;
   justify-content: center;
   border: 1px solid rgba(39, 36, 31, 0.16);
-  border-radius: 6px;
-  padding: 7px 13px;
+  border-radius: 8px;
+  padding: 8px 13px;
   background: var(--color-badge-warm);
   color: var(--color-white);
   font-family: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
@@ -718,7 +723,7 @@
 }
 
 .co-branded-page__track-eyebrow {
-  margin: -12px 0 -20px;
+  margin: -22px 0 -22px;
   font-size: 12px;
 }
 
@@ -733,13 +738,13 @@
   font-family: var(--font-display);
   font-size: 44px;
   font-weight: 500;
-  line-height: 1.1;
+  line-height: 1.18;
 }
 
 .co-branded-page__track-cadence {
-  padding-bottom: 8px;
+  padding-bottom: 10px;
   font-family: var(--font-nav);
-  font-size: 11px;
+  font-size: 13px;
   line-height: 1;
   letter-spacing: 0.075em;
   text-transform: uppercase;
@@ -763,7 +768,7 @@
 
 .co-branded-page__track-includes {
   display: grid;
-  gap: 18px;
+  gap: 24px;
 }
 
 .co-branded-page__track-includes-title {
@@ -773,7 +778,7 @@
 
 .co-branded-page__track-features {
   display: grid;
-  gap: 14px;
+  gap: 16px;
   padding: 0;
   margin: 0;
   list-style: none;
@@ -782,10 +787,10 @@
 .co-branded-page__track-features li {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 16px;
   font-family: var(--font-body);
-  font-size: 14px;
-  line-height: 1.45;
+  font-size: 16px;
+  line-height: 1.5;
 }
 
 .co-branded-page__track-features li::before {
@@ -804,7 +809,7 @@
 .co-branded-page__track-note {
   margin-top: auto;
   color: rgba(39, 36, 31, 0.64);
-  font-size: 12px;
+  font-size: 14px;
   line-height: 1.43;
 }
 
@@ -1212,6 +1217,11 @@
 
   .co-branded-page__tracks-grid {
     max-width: 640px;
+    margin-inline: auto;
+  }
+
+  .co-branded-page--standard .co-branded-page__tracks-grid {
+    width: 100%;
     margin-inline: auto;
   }
 
