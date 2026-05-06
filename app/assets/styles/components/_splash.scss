@@ -1,7 +1,7 @@
 .splash-section {
   position: relative;
   display: flex;
-  min-height: min(900px, calc(100svh - 32px));
+  min-height: min(1000px, calc(100svh - 32px));
   align-items: flex-end;
   overflow: hidden;
   isolation: isolate;
@@ -80,7 +80,6 @@
   min-width: 202px;
   padding: 16px 26px;
   font-size: 18px;
-  font-weight: 700;
   line-height: 1;
 }
 
