@@ -3,34 +3,34 @@ import type { AccordionItem } from '~/types/accordion'
 
 const commonQuestionItems: AccordionItem[] = [
   {
-    label: 'Question 1',
-    value: 'question-1',
+    label: "What if we can't agree on everything?",
+    value: 'what-if-we-cant-agree-on-everything',
     content:
-      "Unlike traditional mediation where either party can walk away, Solagree includes binding arbitration. Both parties commit to the process upfront. Where mediation doesn't resolve issues, an arbitrator decides. You reach resolution."
+      "That's exactly why binding arbitration is built into the process. You don't have to agree on everything to move forward. If you get stuck after mediation, a neutral arbitrator makes the final decisions. You still reach resolution - you're not starting over with court litigation."
   },
   {
-    label: 'Question 2',
-    value: 'question-2',
+    label: 'How do I get my spouse on board with Solagree?',
+    value: 'how-do-i-get-my-spouse-on-board-with-solagree',
     content:
-      'Solagree combines structured mediation, financial guidance, and a clear decision path so couples can keep the process moving.'
+      "Here are a few approaches:\nShare this website so they can explore Solagree on their own\nFocus on the benefits - faster resolution, less conflict, predictable costs\nConnect them with their own attorney - We can refer them to a network attorney who works with Solagree\nSchedule a consultation to discuss the best approach for your situation, and we'll help you navigate next steps."
   },
   {
-    label: 'Question 3',
-    value: 'question-3',
+    label: 'How is Solagree different from traditional divorce?',
+    value: 'how-is-solagree-different-from-traditional-divorce',
     content:
-      'The process is designed for couples who need expert support and want to avoid the cost and uncertainty of traditional litigation.'
+      "Solagree is entirely online with a structured three-phase process: expert information gathering, mediation, and binding arbitration if needed. Both parties are bound from the start to complete the process, so you're guaranteed to reach resolution. You work with professional neutrals (not judges), and the fees are predictable."
   },
   {
-    label: 'Question 4',
-    value: 'question-4',
+    label: 'Do we both need attorneys?',
+    value: 'do-we-both-need-attorneys',
     content:
-      'Independent professionals help guide the process while Solagree provides the framework for reaching a final resolution.'
+      'Not required, but recommended. We can connect you with network attorneys who specialize in Solagree cases, or you can work with your own attorney. Having legal guidance helps protect your interests throughout the process.'
   },
   {
-    label: 'Question 5',
-    value: 'question-5',
+    label: 'Is the arbitration binding?',
+    value: 'is-the-arbitration-binding',
     content:
-      'The quiz is the fastest way to understand whether the Solagree process may fit your situation.'
+      "Yes, in most states. The arbitration award becomes a legally binding resolution that's filed with the court. This ensures both parties reach a final outcome."
   }
 ]
 </script>
@@ -77,7 +77,7 @@ const commonQuestionItems: AccordionItem[] = [
         v-appear="{ delay: 100 }"
         class="common-questions-section__accordion"
         :items="commonQuestionItems"
-        default-value="question-1"
+        default-value="what-if-we-cant-agree-on-everything"
         numbered
       />
     </div>
