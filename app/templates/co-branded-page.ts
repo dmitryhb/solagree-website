@@ -236,7 +236,7 @@ const solagreeBasicTemplate = Handlebars.compile<CoBrandedPageTemplateContext>(`
           </div>
 
           <p class="co-branded-page__track-description">
-            Combines expert parenting and CDFA® financial guidance in one comprehensive process - with neutral mediation and arbitration.
+            Combines expert parenting and CDFA® financial guidance—with neutral mediation and arbitration.
           </p>
 
           <div class="co-branded-page__track-includes">
