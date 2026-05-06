@@ -36,7 +36,7 @@ export const pricingPlans: PricingPlan[] = [
     price: '$5,990',
     cadence: '/ per person',
     description:
-      'Combines expert parenting and CDFA® financial guidance in one comprehensive process - with neutral mediation and arbitration.',
+      'Combines expert parenting and CDFA® financial guidance—with neutral mediation and arbitration.',
     features: [
       'Child custody, schedules, and co-parenting',
       'Property division and asset distribution',
