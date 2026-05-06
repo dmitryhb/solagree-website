@@ -31,15 +31,16 @@ useSolagreeSeo({
 <template>
   <main class="min-h-screen bg-[var(--color-surface-footer)]">
     <SplashSection />
-    <WhatYouGetSection />
-    <HowItWorksSection />
-    <GetStartedSection />
-    <KidsSection />
-    <ChoosePathSection />
-    <HomeQuizSection />
-    <PricingSection />
-    <CommonQuestionsSection />
-    <ForProfessionalsSection />
-    <SiteFooter />
+    <div id="main-content">
+      <WhatYouGetSection />
+      <HowItWorksSection />
+      <GetStartedSection />
+      <KidsSection />
+      <HomeQuizSection />
+      <PricingSection />
+      <CommonQuestionsSection />
+      <ForProfessionalsSection />
+      <SiteFooter />
+    </div>
   </main>
 </template>

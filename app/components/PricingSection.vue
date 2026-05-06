@@ -33,10 +33,11 @@ import { pricingPlans } from '~/data/pricing-plans'
         />
       </div>
 
-      <p class="pricing-section__note">
-        Your attorney continues to provide strategic guidance throughout the Solagree process.<br>
-        Discuss their fee structure directly with your attorney.
-      </p>
+      <div class="pricing-section__note">
+        <h2 class="section-title">Need legal guidance?</h2>
+        <p>We recommend working with an attorney throughout the Solagree process. We can connect you with network attorneys who specialize in Solagree cases.</p>
+        <p>For higher-conflict cases requiring extended support, <strong>Solagree Advanced is available.</strong><br><NuxtLink to="/book-a-solagree-consult">Schedule a consultation</NuxtLink> to learn more.</p>
+      </div>
     </div>
   </section>
 </template>
