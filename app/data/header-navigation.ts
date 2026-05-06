@@ -2,15 +2,15 @@ import type { AppLink } from '~/types/links'
 
 export const headerPrimaryLinks = [
   {
-    label: 'For Couples',
+    label: 'Getting Divorced',
     to: '/#how-it-works'
   },
   {
-    label: 'For Professionals',
+    label: 'Attorneys',
     to: '/#for-professionals'
   },
   {
-    label: 'Employers/EAP',
+    label: 'CDFAs & Advisors',
     to: '/#for-professionals'
   }
 ] as const satisfies readonly AppLink[]
