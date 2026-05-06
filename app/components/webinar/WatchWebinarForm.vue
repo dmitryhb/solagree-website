@@ -175,7 +175,7 @@ const handleSubmit = () => {
 
     <p class="watch-webinar-form__contact">
       Looking for other information?
-      <NuxtLink to="/">
+      <NuxtLink to="/contact">
         Get in touch.
       </NuxtLink>
     </p>

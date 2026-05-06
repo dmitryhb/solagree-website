@@ -7,7 +7,7 @@ export const headerPrimaryLinks = [
   },
   {
     label: 'Attorneys',
-    to: '/#for-professionals'
+    to: '/attorneys'
   },
   {
     label: 'CDFAs & Advisors',

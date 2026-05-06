@@ -49,7 +49,7 @@ import { webinarFeatures } from '~/data/webinar-registration'
       >
 
       <figcaption class="webinar-registration-intro__caption">
-        <strong>Amanda</strong> - Solagree co-founder
+        <strong>Amanda Mason</strong> - Co-Founder &amp; CEO
       </figcaption>
     </figure>
   </section>
