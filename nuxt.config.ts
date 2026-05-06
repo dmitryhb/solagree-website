@@ -2,6 +2,24 @@ const DEV_PORTAL_API_BASE_URL = 'http://solagree-portal.local:3004'
 const isProduction = process.env.NODE_ENV === 'production'
 const portalApiBaseUrl = process.env.NUXT_PUBLIC_PORTAL_API_BASE_URL?.trim()
   || (isProduction ? '' : DEV_PORTAL_API_BASE_URL)
+const ignoredSourcemapWarningPlugins = new Set([
+  'nuxt:module-preload-polyfill',
+  '@tailwindcss/vite:generate:build'
+])
+
+const isIgnoredSourcemapWarning = (warning: { message?: string, plugin?: string }): boolean => {
+  if (warning.message?.includes('Sourcemap is likely to be incorrect') !== true) {
+    return false
+  }
+
+  return (warning.plugin !== undefined && ignoredSourcemapWarningPlugins.has(warning.plugin))
+    || [...ignoredSourcemapWarningPlugins].some(plugin => warning.message?.includes(plugin) === true)
+}
+
+const shouldSuppressSourcemapWarningMessage = (message: string): boolean => {
+  return message.includes('Sourcemap is likely to be incorrect')
+    && [...ignoredSourcemapWarningPlugins].some(plugin => message.includes(plugin))
+}
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -31,6 +49,36 @@ export default defineNuxtConfig({
         '@vue/devtools-core',
         '@vue/devtools-kit'
       ]
+    },
+    build: {
+      rollupOptions: {
+        onwarn(warning, warn) {
+          if (isIgnoredSourcemapWarning(warning)) {
+            return
+          }
+
+          warn(warning)
+        }
+      }
+    }
+  },
+  hooks: {
+    'vite:extendConfig'(config) {
+      const logger = config.customLogger
+
+      if (!logger) {
+        return
+      }
+
+      const warn = logger.warn.bind(logger)
+
+      logger.warn = (message, options) => {
+        if (typeof message === 'string' && shouldSuppressSourcemapWarningMessage(message)) {
+          return
+        }
+
+        warn(message, options)
+      }
     }
   },
   runtimeConfig: {
