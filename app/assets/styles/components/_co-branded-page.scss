@@ -262,17 +262,11 @@
 
 .co-branded-page__feature-strip li::after {
   display: inline-flex;
-  width: 1.05rem;
-  height: 1.05rem;
+  width: 1rem;
+  height: 1rem;
   flex: 0 0 auto;
-  align-items: center;
-  justify-content: center;
-  color: currentcolor;
-  content: "✓";
-  font-family: var(--font-ui);
-  font-size: 1rem;
-  font-weight: 700;
-  line-height: 1;
+  background: url("/icons/co-branded-feature-check.svg") center / contain no-repeat;
+  content: "";
 }
 
 .co-branded-page__primary-cta {
