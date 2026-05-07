@@ -8,13 +8,13 @@ export const attorneyValueCards = [
       "Practice statewide wherever you're licensed - entirely virtual. We handle the process so you serve more clients without adding staff."
   },
   {
-    iconSrc: '/icons/growth-icon.svg',
+    iconSrc: '/icons/revenue-stream.svg',
     title: 'Steady Revenue Stream',
     description:
       'Flat-fee client work means predictable income. Add Solagree referrals for additional revenue without marketing spend.'
   },
   {
-    iconSrc: '/icons/growth-icon.svg',
+    iconSrc: '/icons/predictable-scope.svg',
     title: 'Predictable Scope',
     description:
       'No endless discovery. No court delays. A structured process that can help resolve cases in months, not years.'
