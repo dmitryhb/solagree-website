@@ -15,8 +15,7 @@
   position: absolute;
   inset: 0;
   z-index: -1;
-  width: min(100%, 1500px);
-  margin-inline: auto;
+  width: 100%;
   background:
     linear-gradient(
       180deg,
@@ -24,7 +23,7 @@
       rgba(255, 253, 249, 0) 42%,
       rgba(42, 43, 47, 0.32) 100%
     ),
-    url("/images/splash-bg.webp") center / cover no-repeat;
+    url("/images/home-hero.png") center / cover no-repeat;
 }
 
 .splash-section__inner {
