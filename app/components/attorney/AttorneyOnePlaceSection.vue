@@ -13,10 +13,10 @@ import { attorneyOnePlaceBenefits } from '~/data/attorney-benefits'
         class="attorney-one-place-section__media"
       >
         <img
-          src="/images/kids.webp"
-          alt="Parent crouching beside a child in a family home."
+          src="/images/attorney-everything-one-place.webp"
+          alt="Attorney reviewing Solagree case materials."
           width="1050"
-          height="1288"
+          height="1286"
           loading="lazy"
           decoding="async"
         >
