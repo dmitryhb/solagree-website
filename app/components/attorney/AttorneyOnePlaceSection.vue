@@ -15,7 +15,7 @@ import { attorneyOnePlaceBenefits } from '~/data/attorney-benefits'
         <img
           src="/images/attorney-everything-one-place.webp"
           alt="Attorney reviewing Solagree case materials."
-          width="1050"
+          width="1188"
           height="1286"
           loading="lazy"
           decoding="async"
