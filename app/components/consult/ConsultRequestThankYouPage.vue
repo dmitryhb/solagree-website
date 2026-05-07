@@ -13,17 +13,17 @@
         </h1>
 
         <div class="consult-request-sent__copy">
-          <p>Within 1 business day, you'll receive:</p>
+          <p><strong>Within 1 business day, you'll receive:</strong></p>
           <ul>
-            <li>A secure payment link for the $60 consultation fee</li>
-            <li>Your calendar invite and meeting details (sent after payment)</li>
+            <li>• A secure payment link for the $60 consultation fee</li>
+            <li>• Your calendar invite and meeting details (sent after payment)</li>
           </ul>
 
-          <p>On the call, we'll:</p>
+          <p><strong>On the call, we'll:</strong></p>
           <ul>
-            <li>Answer your questions about the Solagree process</li>
-            <li>Help you determine if it's a fit for your situation</li>
-            <li>Discuss next steps if you decide to move forward</li>
+            <li>• Answer your questions about the Solagree process</li>
+            <li>• Help you determine if it's a fit for your situation</li>
+            <li>• Discuss next steps if you decide to move forward</li>
           </ul>
 
           <p>Looking forward to connecting!</p>

@@ -33,6 +33,7 @@
 .consult-request-sent {
   max-width: 1040px;
   margin-inline: auto;
+  text-align: left;
 }
 
 .consult-request-form__title,
@@ -46,13 +47,12 @@
 }
 
 .consult-request-sent__title {
-  font-size: clamp(2.1667rem, 5.4vw, 4.5rem);
+  font-size: clamp(2.1667rem, 5.4vw, 3.5rem);
 }
 
 .consult-request-form__copy,
 .consult-request-sent__copy {
-  max-width: 620px;
-  margin: 0 auto;
+  max-width: 1040px;
   color: var(--color-ink);
   font-family: var(--font-nav);
   font-size: clamp(1rem, 1.8vw, 1.25rem);
@@ -63,6 +63,7 @@
   display: grid;
   gap: 1rem;
   text-align: left;
+  margin-top: 30px;
 }
 
 .consult-request-sent__copy p,
