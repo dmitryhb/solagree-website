@@ -32,10 +32,10 @@ const homeQuizHostConfig: QuizHostConfigInput = {
           id="home-quiz-title"
           class="home-quiz-section__title"
         >
-          Find the right Solagree divorce plan in minutes.
+          See if Solagree is right for your situation.
         </h2>
         <p class="home-quiz-section__intro">
-          Answer a few questions and we'll suggest a plan to fit your unique needs.
+          Answer a few questions (takes less than a minute) and we’ll let you know if you’re a fit—and recommend your next step.
         </p>
       </header>
 
