@@ -43,7 +43,7 @@
 
           <SiteButton
             class="for-professionals-section__cta"
-            to="#for-professionals"
+            to="/attorneys"
             size="sm"
           >
             Learn More
