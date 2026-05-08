@@ -2,6 +2,7 @@
 import { solagreeSocialLinks } from '~/data/social-links'
 
 const currentYear = new Date().getFullYear()
+const portalLoginHref = usePortalLoginHref()
 </script>
 
 <template>
@@ -130,9 +131,9 @@ const currentYear = new Date().getFullYear()
                 </NuxtLink>
               </li>
               <li>
-                <NuxtLink to="/">
+                <a :href="portalLoginHref">
                   Account Login
-                </NuxtLink>
+                </a>
               </li>
             </ul>
           </div>

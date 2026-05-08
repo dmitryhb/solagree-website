@@ -62,10 +62,15 @@ npx eslint app/components/ExampleComponent.vue app/utils/example.ts
 ## Portal API integration
 
 The attorney application and Solagree consult forms submit to the Solagree Portal API.
+The header login link points to the Solagree Portal web app.
 
 ```bash
+NUXT_PUBLIC_PORTAL_URL=http://solagree-portal.local:3004
 NUXT_PUBLIC_PORTAL_API_BASE_URL=http://solagree-portal.local:3004
 ```
+
+Configure `NUXT_PUBLIC_PORTAL_URL` as the Portal application origin used for
+browser navigation. The header appends `/login` to this origin.
 
 Configure `NUXT_PUBLIC_PORTAL_API_BASE_URL` as the Portal application origin, not the
 individual API route. The website app appends the API path itself.
@@ -73,6 +78,7 @@ individual API route. The website app appends the API path itself.
 Correct local configuration:
 
 ```bash
+NUXT_PUBLIC_PORTAL_URL=http://solagree-portal.local:3004
 NUXT_PUBLIC_PORTAL_API_BASE_URL=http://solagree-portal.local:3004
 ```
 
@@ -101,15 +107,17 @@ For local development:
 - Run the website on `http://solagree.local:3003`.
 - Run the portal on `http://solagree-portal.local:3004`.
 - Set `NUXT_PUBLIC_SITE_URL=http://solagree.local:3003` in the website `.env`.
+- Set `NUXT_PUBLIC_PORTAL_URL=http://solagree-portal.local:3004` in the website `.env`.
 - Set `NUXT_PUBLIC_PORTAL_API_BASE_URL=http://solagree-portal.local:3004` in the website `.env`.
 - Ensure the portal allows the website origin for public form API requests, for example `http://solagree.local:3003,http://localhost:3003,http://127.0.0.1:3003`.
 
-For production, set `NUXT_PUBLIC_PORTAL_API_BASE_URL` to the public Portal origin that serves the Nitro API routes. If the website calls the Portal from a different origin, the Portal must include the website origin in the public form allowlist configuration.
+For production, set `NUXT_PUBLIC_PORTAL_URL` to the public Portal web origin and `NUXT_PUBLIC_PORTAL_API_BASE_URL` to the public Portal origin that serves the Nitro API routes. If the website calls the Portal from a different origin, the Portal must include the website origin in the public form allowlist configuration.
 
 For staging deployment, `npm run deploy:staging` defaults to:
 
 ```bash
 NUXT_PUBLIC_SITE_URL=https://solagree.qamachine.com
+NUXT_PUBLIC_PORTAL_URL=https://solagree-portal.qamachine.com
 NUXT_PUBLIC_PORTAL_API_BASE_URL=https://solagree-portal.qamachine.com
 ```
 

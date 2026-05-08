@@ -16,9 +16,8 @@ export const headerPrimaryLinks = [
 ] as const satisfies readonly AppLink[]
 
 export const headerLoginLink = {
-  label: 'Log in',
-  to: '/'
-} as const satisfies AppLink
+  label: 'Log in'
+} as const satisfies Pick<AppLink, 'label'>
 
 export const headerQuizLink = {
   label: 'Is This Right for You?',

@@ -2,6 +2,8 @@ const DEV_PORTAL_API_BASE_URL = 'http://solagree-portal.local:3004'
 const isProduction = process.env.NODE_ENV === 'production'
 const portalApiBaseUrl = process.env.NUXT_PUBLIC_PORTAL_API_BASE_URL?.trim()
   || (isProduction ? '' : DEV_PORTAL_API_BASE_URL)
+const portalUrl = process.env.NUXT_PUBLIC_PORTAL_URL?.trim()
+  || portalApiBaseUrl
 const ignoredSourcemapWarningPlugins = new Set([
   'nuxt:module-preload-polyfill',
   '@tailwindcss/vite:generate:build'
@@ -84,6 +86,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'https://www.solagree.com',
+      portalUrl,
       portalApiBaseUrl,
       solagreeQuiz: {
         hostId: 'solagree-quiz',

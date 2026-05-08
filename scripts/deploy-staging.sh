@@ -9,6 +9,7 @@ SSH_USER="${SSH_USER:-qa_solagree}"
 SSH_HOST="${SSH_HOST:-solagree.qamachine.com}"
 REMOTE_PATH="${REMOTE_PATH:-/home/qa_solagree/public_html/}"
 STAGING_SITE_URL="${NUXT_PUBLIC_SITE_URL:-https://solagree.qamachine.com}"
+STAGING_PORTAL_URL="${NUXT_PUBLIC_PORTAL_URL:-https://solagree-portal.qamachine.com}"
 STAGING_PORTAL_API_BASE_URL="${NUXT_PUBLIC_PORTAL_API_BASE_URL:-https://solagree-portal.qamachine.com}"
 
 DRY_RUN=false
@@ -37,8 +38,10 @@ done
 if [ "$SKIP_BUILD" = false ]; then
   echo "Generating static output..."
   export NUXT_PUBLIC_SITE_URL="$STAGING_SITE_URL"
+  export NUXT_PUBLIC_PORTAL_URL="$STAGING_PORTAL_URL"
   export NUXT_PUBLIC_PORTAL_API_BASE_URL="$STAGING_PORTAL_API_BASE_URL"
   echo "Using site URL: $NUXT_PUBLIC_SITE_URL"
+  echo "Using portal URL: $NUXT_PUBLIC_PORTAL_URL"
   echo "Using portal API base URL: $NUXT_PUBLIC_PORTAL_API_BASE_URL"
   npm run generate
 fi

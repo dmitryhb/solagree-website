@@ -9,6 +9,7 @@ const isResettingHomeScroll = ref(false)
 const isHomeRoute = computed(() => currentRoute.value.path === '/')
 const isSolidHeader = computed(() => !isHomeRoute.value)
 const menuToggleLabel = computed(() => (isMobileMenuOpen.value ? 'Close navigation menu' : 'Open navigation menu'))
+const portalLoginHref = usePortalLoginHref()
 const scrollUpdateTimers: number[] = []
 
 const clearScrollUpdateTimers = () => {
@@ -141,13 +142,12 @@ watch(
       </nav>
 
       <div class="site-header__actions">
-        <NuxtLink
+        <a
           class="site-header__login"
-          :to="headerLoginLink.to"
-          :aria-current="currentRoute.path === headerLoginLink.to ? 'page' : undefined"
+          :href="portalLoginHref"
         >
           {{ headerLoginLink.label }}
-        </NuxtLink>
+        </a>
 
         <SiteButton
           class="site-header__cta"
@@ -195,14 +195,13 @@ watch(
         </nav>
 
         <div class="site-header__mobile-actions">
-          <NuxtLink
+          <a
             class="site-header__mobile-login"
-            :to="headerLoginLink.to"
-            :aria-current="currentRoute.path === headerLoginLink.to ? 'page' : undefined"
+            :href="portalLoginHref"
             @click="closeMobileMenu"
           >
             {{ headerLoginLink.label }}
-          </NuxtLink>
+          </a>
 
           <SiteButton
             class="site-header__mobile-cta"
