@@ -32,7 +32,7 @@ const homeQuizHostConfig: QuizHostConfigInput = {
           id="home-quiz-title"
           class="home-quiz-section__title"
         >
-          See if Solagree is right for your situation.
+          See if Solagree is right for you.
         </h2>
         <p class="home-quiz-section__intro">
           Answer a few questions (takes less than a minute) and we’ll let you know if you’re a fit—and recommend your next step.

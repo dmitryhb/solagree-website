@@ -17,7 +17,7 @@ import { pricingPlans } from '~/data/pricing-plans'
           id="pricing-title"
           class="pricing-section__title"
         >
-          Choose Your Track
+          Find Your Track
         </h2>
         <p class="pricing-section__intro">
           Solagree's platform fees include the core process: neutral experts, mediation, arbitration, and final award.

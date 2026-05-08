@@ -163,7 +163,7 @@ const solagreeBasicTemplate = Handlebars.compile<CoBrandedPageTemplateContext>(`
     </section>
 
     <section class="co-branded-page__tracks" aria-labelledby="co-branded-tracks-title">
-      <h2 id="co-branded-tracks-title">Choose Your Track</h2>
+      <h2 id="co-branded-tracks-title">Find Your Track</h2>
       <p class="co-branded-page__tracks-intro">
         Solagree's platform fees include the core process: neutral experts, mediation, arbitration, and final award.
       </p>
