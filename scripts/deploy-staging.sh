@@ -9,8 +9,8 @@ SSH_USER="${SSH_USER:-qa_solagree}"
 SSH_HOST="${SSH_HOST:-solagree.qamachine.com}"
 REMOTE_PATH="${REMOTE_PATH:-/home/qa_solagree/public_html/}"
 STAGING_SITE_URL="${NUXT_PUBLIC_SITE_URL:-https://solagree.qamachine.com}"
-STAGING_PORTAL_URL="${NUXT_PUBLIC_PORTAL_URL:-https://solagree-portal.qamachine.com}"
-STAGING_PORTAL_API_BASE_URL="${NUXT_PUBLIC_PORTAL_API_BASE_URL:-https://solagree-portal.qamachine.com}"
+STAGING_PORTAL_URL="${NUXT_PUBLIC_PORTAL_URL:-https://solagree-portal.qamachine.com/}"
+STAGING_PORTAL_API_BASE_URL="${NUXT_PUBLIC_PORTAL_API_BASE_URL:-https://solagree-portal.qamachine.com/}"
 
 DRY_RUN=false
 SKIP_BUILD=false

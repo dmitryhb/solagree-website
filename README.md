@@ -117,8 +117,8 @@ For staging deployment, `npm run deploy:staging` defaults to:
 
 ```bash
 NUXT_PUBLIC_SITE_URL=https://solagree.qamachine.com
-NUXT_PUBLIC_PORTAL_URL=https://solagree-portal.qamachine.com
-NUXT_PUBLIC_PORTAL_API_BASE_URL=https://solagree-portal.qamachine.com
+NUXT_PUBLIC_PORTAL_URL=https://solagree-portal.qamachine.com/
+NUXT_PUBLIC_PORTAL_API_BASE_URL=https://solagree-portal.qamachine.com/
 ```
 
 These values are exported before `nuxt generate` so the generated static website sends attorney application and consult requests to:
