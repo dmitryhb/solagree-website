@@ -4,6 +4,6 @@ export const usePortalLoginHref = () => {
   return computed(() => {
     const portalUrl = String(runtimeConfig.public.portalUrl || '').trim().replace(/\/+$/, '')
 
-    return portalUrl ? `${portalUrl}/login` : '/login'
+    return portalUrl || '/'
   })
 }

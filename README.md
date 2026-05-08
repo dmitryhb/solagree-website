@@ -70,7 +70,7 @@ NUXT_PUBLIC_PORTAL_API_BASE_URL=http://solagree-portal.local:3004
 ```
 
 Configure `NUXT_PUBLIC_PORTAL_URL` as the Portal application origin used for
-browser navigation. The header appends `/login` to this origin.
+browser navigation.
 
 Configure `NUXT_PUBLIC_PORTAL_API_BASE_URL` as the Portal application origin, not the
 individual API route. The website app appends the API path itself.
