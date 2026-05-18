@@ -12,7 +12,7 @@ export const solagreeQuizQuestions = [
   {
     id: 'state',
     kind: 'select',
-    title: 'Which state will your divorce be filed in?',
+    title: 'Where will your divorce be filed?',
     description: 'Select the U.S. state or district connected to your divorce filing.',
     placeholder: 'Choose a state',
     options: solagreeStateOptions
@@ -79,7 +79,7 @@ export const solagreeQuizQuestions = [
   {
     id: 'spouseContact',
     kind: 'single-select',
-    title: 'Can you contact your spouse right now?',
+    title: 'Do you and your spouse have contact with each other these days?',
     options: [
       { id: 'direct-contact', label: 'Yes' },
       { id: 'cannot-find', label: 'No, I can’t find them' },
@@ -111,7 +111,7 @@ export const solagreeQuizQuestions = [
   {
     id: 'paymentReadiness',
     kind: 'single-select',
-    title: 'Are you ready to pay for divorce support now?',
+    title: 'Do you have the ability to pay for a service to help you?',
     options: [
       { id: 'ready-now', label: 'Yes, I am ready now' },
       { id: 'need-payment-plan', label: 'I would need a payment plan' },
