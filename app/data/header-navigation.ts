@@ -2,7 +2,7 @@ import type { AppLink } from '~/types/links'
 
 export const headerPrimaryLinks = [
   {
-    label: 'Getting Divorced',
+    label: 'Considering Divorce',
     to: '/#how-it-works'
   },
   {
