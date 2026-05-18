@@ -15,7 +15,7 @@ import { webinarFeatures } from '~/data/webinar-registration'
     </h1>
 
     <p class="webinar-registration-intro__summary">
-      <strong>Attorney Partner Overview:</strong>
+      <strong>Attorney Network Overview:</strong>
       More cases, more referrals, and new revenue opportunities - without adding overhead or complexity.
     </p>
 
