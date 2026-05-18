@@ -5,7 +5,7 @@ export const attorneyFaqItems: AccordionItem[] = [
     label: 'Do I have to bring my own cases?',
     value: 'bring-own-cases',
     content:
-      'Not at all. Most attorneys start by taking referrals from Solagree - we match you with clients who need consultation or representation. Once you see how efficiently cases resolve, many choose to bring their own clients through the system.'
+      'Not necessarily. We welcome and encourage you to identify cases that would be a good fit, though it is not required and we do not have minimum quotas. For every case referred into our system, we have the opportunity to refer to four attorneys, and we certainly appreciate our early adopters. We match you with clients who need consultation or representation. Once you see how efficiently cases resolve, we feel confident you will choose to bring more of your clients through the system.'
   },
   {
     label: 'Do I need more staff?',
