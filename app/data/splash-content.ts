@@ -2,12 +2,12 @@ import type { SplashFeature } from '~/types/splash'
 
 export const splashFeatures: SplashFeature[] = [
   {
-    label: 'Flat Fee Pricing'
+    label: 'Virtual Process'
   },
   {
-    label: 'No Court Required'
+    label: 'Flexible Pricing'
   },
   {
-    label: 'Online Process'
+    label: 'Faster Resolution'
   }
 ]
