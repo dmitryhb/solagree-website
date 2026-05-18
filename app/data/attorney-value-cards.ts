@@ -5,7 +5,7 @@ export const attorneyValueCards = [
     iconSrc: '/icons/expand-capacity.svg',
     title: 'Expand Your Capacity',
     description:
-      "Practice statewide wherever you're licensed - entirely virtual. We handle the process so you serve more clients without adding staff."
+      "Practice statewide wherever you're licensed - entirely virtual. We handle much of the process so you serve more clients without adding staff."
   },
   {
     iconSrc: '/icons/revenue-stream.svg',
