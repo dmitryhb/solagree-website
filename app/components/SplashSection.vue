@@ -14,8 +14,7 @@ import { splashFeatures } from '~/data/splash-content'
           id="splash-title"
           class="splash-section__title"
         >
-          Divorce without court.
-          <span>Decisions without drama.</span>
+          Divorce without drama.
         </h1>
 
         <p class="splash-section__intro">
