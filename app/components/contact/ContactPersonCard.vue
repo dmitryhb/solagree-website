@@ -29,7 +29,10 @@ defineProps<{
         <a :href="`mailto:${person.email}`">
           {{ person.email }}
         </a>
-        <a :href="`tel:${person.phone.replace(/[^+\d]/g, '')}`">
+        <a
+          v-if="person.phone"
+          :href="`tel:${person.phone.replace(/[^+\d]/g, '')}`"
+        >
           {{ person.phone }}
         </a>
       </div>

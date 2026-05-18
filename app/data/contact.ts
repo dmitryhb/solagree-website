@@ -4,16 +4,16 @@ export const contactPerson: ContactPerson = {
   name: 'Name of Person',
   role: 'Head of Client Services',
   email: 'support@solagree.com',
-  phone: '+1 999-999-99',
+  phone: '',
   imageSrc: '/images/contact-person.webp'
 }
 
 export const directContactItems: DirectContactItem[] = [
   {
-    title: 'Call',
-    detail: '+1 (800) 123-4567',
-    actionLabel: 'Call Us',
-    href: 'tel:+18001234567',
+    title: 'Schedule a Consult',
+    detail: '',
+    actionLabel: 'Book',
+    href: '/book-a-solagree-consult',
     iconSrc: '/images/faster-resolution.webp'
   },
   {
