@@ -10,7 +10,7 @@ export const headerPrimaryLinks = [
     to: '/attorneys'
   },
   {
-    label: 'CDFAs & Advisors',
+    label: 'CDFAs® & Advisors',
     to: '/#for-professionals'
   }
 ] as const satisfies readonly AppLink[]
