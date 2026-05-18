@@ -45,7 +45,7 @@ import { howItWorksPhases } from '~/data/how-it-works-phases'
               {{ phase.title }}
             </h3>
             <p
-              v-for="(paragraph, paragraphIndex) in phase.description.split('\\n\\n')"
+              v-for="(paragraph, paragraphIndex) in phase.description.split('\n\n')"
               :key="`${phase.title}-${paragraphIndex}`"
               class="how-it-works-section__phase-description"
             >
