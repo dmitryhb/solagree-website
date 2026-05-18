@@ -52,7 +52,15 @@ const accordionUi = {
     </template>
 
     <template #body="{ item }">
-      <p class="base-accordion__text">
+      <p
+        v-if="item.contentHtml"
+        class="base-accordion__text"
+        v-html="item.contentHtml"
+      />
+      <p
+        v-else
+        class="base-accordion__text"
+      >
         {{ item.content }}
       </p>
     </template>

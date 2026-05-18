@@ -83,6 +83,15 @@
   white-space: pre-line;
 }
 
+.base-accordion__text a {
+  text-decoration: underline;
+  color: inherit;
+}
+
+.base-accordion__text a:hover {
+  text-decoration: none;
+}
+
 @media (max-width: 767px) {
   .base-accordion__label {
     font-size: 17px;
