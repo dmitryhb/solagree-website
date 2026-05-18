@@ -9,7 +9,7 @@ const commonQuestionItems: AccordionItem[] = [
       '<a href="/book-a-solagree-consult">Schedule a consultation</a>'
   },
   {
-    label: 'How is Solagree different from traditional divorce?',
+    label: 'How is Solagree Different?',
     value: 'how-is-solagree-different-from-traditional-divorce',
     content:
       'Solagree is entirely virtual with a structured three-phase process: expert information gathering, mediation, and arbitration to finalize your binding document. Both parties are bound from the start to complete the process, so you\'re more assured to reach resolution. You work with professional neutrals (not judges), and the fees are predictable.'
