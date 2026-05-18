@@ -641,6 +641,10 @@
   margin-top: -18px;
 }
 
+.co-branded-page__tracks-note p {
+  margin: 0;
+}
+
 .co-branded-page__tracks-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));

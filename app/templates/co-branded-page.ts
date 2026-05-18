@@ -253,10 +253,10 @@ const solagreeBasicTemplate = Handlebars.compile<CoBrandedPageTemplateContext>(`
         </article>
       </div>
 
-      <p class="co-branded-page__tracks-note">
-        Your attorney continues to provide strategic guidance throughout the Solagree process.<br>
-        Discuss their fee structure directly with {{attorneyDisplayNameWithPeriod}}
-      </p>
+      <div class="co-branded-page__tracks-note">
+        <p>Your attorney continues to provide strategic guidance throughout the Solagree process.</p>
+        <p>For higher-conflict or complex cases requiring extended support, the SOLAGREE Compass Program is available.</p>
+      </div>
     </section>
 
     <section class="co-branded-page__questions" aria-labelledby="co-branded-questions-title">
