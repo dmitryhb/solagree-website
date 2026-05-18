@@ -56,7 +56,7 @@ const portalLoginHref = usePortalLoginHref()
               </li>
               <li>
                 <NuxtLink to="/">
-                  Solagree vs Traditional
+                  Solagree Core vs.Compass
                 </NuxtLink>
               </li>
               <li>
@@ -84,17 +84,7 @@ const portalLoginHref = usePortalLoginHref()
               </li>
               <li>
                 <NuxtLink to="/">
-                  Financial Advisors
-                </NuxtLink>
-              </li>
-              <li>
-                <NuxtLink to="/">
-                  Counselors
-                </NuxtLink>
-              </li>
-              <li>
-                <NuxtLink to="/">
-                  Employers/EAP
+                  CDFAs® & Advisors
                 </NuxtLink>
               </li>
               <li>
@@ -123,11 +113,6 @@ const portalLoginHref = usePortalLoginHref()
               <li>
                 <NuxtLink to="/contact">
                   Contact Us
-                </NuxtLink>
-              </li>
-              <li>
-                <NuxtLink to="/">
-                  Learn
                 </NuxtLink>
               </li>
               <li>
