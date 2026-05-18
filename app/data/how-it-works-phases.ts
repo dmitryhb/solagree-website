@@ -3,8 +3,9 @@ import type { HowItWorksPhase } from '~/types/how-it-works'
 export const howItWorksPhases: HowItWorksPhase[] = [
   {
     eyebrow: 'Phase 1:',
-    title: 'Assessment',
-    description: 'Your CDFA® helps you organize finances and document where you already agree.'
+    title: 'Evaluation',
+    description:
+      "For our financial track, Your CDFA® helps you organize finances, become more educated about options, and summarize where you already agree."
   },
   {
     eyebrow: 'Phase 2:',
