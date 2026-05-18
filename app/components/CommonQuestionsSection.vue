@@ -3,12 +3,6 @@ import type { AccordionItem } from '~/types/accordion'
 
 const commonQuestionItems: AccordionItem[] = [
   {
-    label: "What if we can't agree on everything?",
-    value: 'what-if-we-cant-agree-on-everything',
-    content:
-      "That's exactly why binding arbitration is built into the process. You don't have to agree on everything to move forward. If you get stuck after mediation, a neutral arbitrator makes the final decisions. You still reach resolution - you're not starting over with court litigation."
-  },
-  {
     label: 'How do I get my spouse to agree?',
     value: 'how-do-i-get-my-spouse-on-board-with-solagree',
     contentHtml:
@@ -77,7 +71,7 @@ const commonQuestionItems: AccordionItem[] = [
         v-appear="{ delay: 100 }"
         class="common-questions-section__accordion"
         :items="commonQuestionItems"
-        default-value="what-if-we-cant-agree-on-everything"
+        default-value="how-do-i-get-my-spouse-on-board-with-solagree"
         numbered
       />
     </div>
