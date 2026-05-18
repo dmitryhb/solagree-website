@@ -18,7 +18,7 @@ export const attorneyPartnerPaths = [
     ]
   },
   {
-    title: 'Bring You Own Clients',
+    title: 'Bring Your Own Clients',
     description: 'Guide your clients through the Solagree process as their advisor. Set your own fees.',
     details: [
       'Act as a Strategic advisor',
