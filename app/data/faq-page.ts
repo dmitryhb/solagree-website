@@ -109,7 +109,7 @@ export const faqPageContent = {
           label: 'What if we have children? Can SOLAGREE handle custody issues?',
           value: 'what-if-we-have-children-can-solagree-handle-custody-issues',
           content:
-            'Yes. A Child Custody Intake Specialist is part of the intake team and helps gather information and identify areas of agreement related to parenting time, custody arrangements, and child support. These matters are then addressed in the mediation and arbitration steps.'
+            'Yes. A Child Custody Intake Specialist is part of the intake team and helps gather information and identify areas of agreement related to parenting time and custody arrangements. These matters are then addressed in the mediation and, in states where available, arbitration steps.'
         },
         {
           label: 'What if my spouse and I cannot agree on anything?',
