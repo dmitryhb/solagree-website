@@ -1,0 +1,211 @@
+<script setup lang="ts">
+import {
+  cdfaCertificationStatusOptions,
+  cdfaClientExperienceOptions,
+  cdfaClientSourceOptions,
+  cdfaConsultationInterestOptions
+} from '~/data/cdfa-application'
+
+const {
+  formEl,
+  form,
+  hasSpecializationError,
+  submitting,
+  submissionResult,
+  handleSubmit
+} = useCdfaApplicationForm()
+</script>
+
+<template>
+  <section
+    class="attorney-application-form"
+    aria-labelledby="cdfa-application-title"
+  >
+    <h1
+      id="cdfa-application-title"
+      class="attorney-application-form__title"
+    >
+      CDFA® Network
+    </h1>
+
+    <form
+      ref="formEl"
+      class="attorney-application-form__form"
+      novalidate
+      @submit.prevent="handleSubmit"
+    >
+      <AttorneyApplicationTextField
+        id="cdfa-name"
+        v-model="form.name"
+        label="Name"
+        name="name"
+        autocomplete="name"
+        required
+      />
+
+      <AttorneyApplicationTextField
+        id="cdfa-company"
+        v-model="form.company"
+        label="Company"
+        name="company"
+        autocomplete="organization"
+        required
+      />
+
+      <AttorneyApplicationTextField
+        id="cdfa-email"
+        v-model="form.email"
+        label="Email"
+        name="email"
+        type="email"
+        autocomplete="email"
+        placeholder="hello@example.com..."
+        required
+      />
+
+      <AttorneyApplicationTextField
+        id="cdfa-phone"
+        v-model="form.phone"
+        label="Phone Number"
+        name="phone"
+        type="tel"
+        autocomplete="tel-national"
+        inputmode="tel"
+        pattern="\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}"
+        title="Use a 10-digit US phone number, e.g. 415-555-1234."
+        placeholder="415-555-1234..."
+        required
+      />
+
+      <AttorneyApplicationTextField
+        id="cdfa-address"
+        v-model="form.address"
+        label="Address"
+        name="address"
+        autocomplete="street-address"
+        multiline
+        required
+      />
+
+      <AttorneyApplicationSelectField
+        id="cdfa-certification-status"
+        v-model="form.certificationStatus"
+        label="Are you a Certified Divorce Financial Analyst (CDFA®)?"
+        name="certificationStatus"
+        :options="cdfaCertificationStatusOptions"
+        required
+      />
+
+      <AttorneyApplicationTextField
+        id="cdfa-certification-number"
+        v-model="form.certificationNumber"
+        label="CDFA® Certification Number"
+        name="certificationNumber"
+      />
+
+      <AttorneyApplicationSelectField
+        id="cdfa-client-experience"
+        v-model="form.clientExperience"
+        label="How many years have you been working with divorcing clients?"
+        name="clientExperience"
+        :options="cdfaClientExperienceOptions"
+        required
+      />
+
+      <AttorneyApplicationTextField
+        id="cdfa-service-area"
+        v-model="form.serviceArea"
+        label="What geographic area do you primarily serve?"
+        name="serviceArea"
+        placeholder="e.g., &quot;San Francisco Bay Area&quot; or &quot;Remote/National&quot;"
+        required
+      />
+      <p
+        id="cdfa-service-area-hint"
+        class="attorney-application-form__hint"
+      >
+        CDFAs can work remotely nationwide, but we match based on client preference
+      </p>
+
+      <CdfaApplicationSpecializationsFieldset
+        v-model="form.specializations"
+        :has-error="hasSpecializationError"
+      />
+
+      <AttorneyApplicationTextField
+        id="cdfa-adr-networks"
+        v-model="form.adrNetworks"
+        label="Have you participated in other ADR family law networks or organizations?"
+        name="adrNetworks"
+        placeholder="If so, please list them here..."
+        multiline
+      />
+
+      <AttorneyApplicationSelectField
+        id="cdfa-client-source"
+        v-model="form.clientSource"
+        label="Do you currently have divorcing clients you'd like to bring into the Solagree process?"
+        name="clientSource"
+        :options="cdfaClientSourceOptions"
+        required
+      />
+
+      <AttorneyApplicationSelectField
+        id="cdfa-consultation-interest"
+        v-model="form.consultationInterest"
+        label="Are you interested in taking 30-45 min fee ($50) pre-enrollment consultation calls as a CDFA® advisor?"
+        name="consultationInterest"
+        :options="cdfaConsultationInterestOptions"
+        required
+      />
+
+      <label class="attorney-application-form__terms">
+        <input
+          v-model="form.termsAccepted"
+          name="termsAccepted"
+          type="checkbox"
+          required
+        >
+        <span>
+          I have read and agree to the
+          <NuxtLink
+            to="/legal/terms-of-service"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            terms and conditions
+          </NuxtLink>.
+        </span>
+      </label>
+
+      <button
+        class="attorney-application-form__submit"
+        type="submit"
+        :disabled="submitting"
+      >
+        <span>{{ submitting ? 'SENDING...' : 'SEND' }}</span>
+        <img
+          class="attorney-application-form__submit-icon"
+          src="/icons/send.svg"
+          alt=""
+          width="16"
+          height="16"
+          aria-hidden="true"
+        >
+      </button>
+
+      <div
+        v-if="submissionResult"
+        class="attorney-application-form__result"
+        :class="`attorney-application-form__result--${submissionResult.kind}`"
+        role="status"
+        aria-live="polite"
+      >
+        <p class="attorney-application-form__result-title">
+          {{ submissionResult.title }}
+        </p>
+        <p>{{ submissionResult.message }}</p>
+      </div>
+    </form>
+  </section>
+</template>
