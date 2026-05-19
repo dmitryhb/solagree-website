@@ -30,9 +30,3 @@ export interface CdfaApplicationFormState {
   consultationInterest: CdfaConsultationInterest
   termsAccepted: boolean
 }
-
-export interface CdfaApplicationResult {
-  kind: 'success' | 'error'
-  title: string
-  message: string
-}

@@ -12,11 +12,6 @@ export interface ConsultRequestFormState {
   bestTimeOfDay: ConsultBestTimeOfDay | ''
 }
 
-export interface ConsultSelectOption<TValue extends string = string> {
-  label: string
-  value: TValue
-}
-
 export interface ConsultRequestResult {
   title: string
   message: string

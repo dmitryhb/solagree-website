@@ -5,13 +5,12 @@ import {
   getAttorneyApplicationSubmissionErrorMessage,
   submitAttorneyApplication
 } from '~/services/attorney-application-api'
-import { isPortalApiConfigurationError } from '~/services/portal-api'
 import type { AttorneyApplicationFetcher } from '~/services/attorney-application-api'
 import type {
   AttorneyApplicationFormState,
-  AttorneyApplicationResult,
   AttorneyLicenseNumberRow
 } from '~/types/attorney-application'
+import type { ApplicationResult } from '~/types/form-options'
 
 type AttorneyApplicationFormModel = Omit<AttorneyApplicationFormState, 'licenseNumbers'> & {
   licenseNumbers: AttorneyLicenseNumberRow[]
@@ -25,7 +24,7 @@ export interface UseAttorneyApplicationFormReturn {
   hasBarStateError: ComputedRef<boolean>
   hasLicenseNumberError: ComputedRef<boolean>
   submitting: Ref<boolean>
-  submissionResult: Ref<AttorneyApplicationResult | null>
+  submissionResult: Ref<ApplicationResult | null>
   addLicenseNumber: () => void
   removeLicenseNumber: (id: string) => void
   updateLicenseNumber: (id: string, value: string) => void
@@ -37,8 +36,6 @@ export const useAttorneyApplicationForm = (): UseAttorneyApplicationFormReturn =
   const runtimeConfig = useRuntimeConfig()
   const formEl = ref<HTMLFormElement | null>(null)
   const hasAttemptedSubmit = ref(false)
-  const submitting = ref(false)
-  const submissionResult = ref<AttorneyApplicationResult | null>(null)
   let nextLicenseRowId = 0
 
   const createLicenseNumberRow = (value = ''): AttorneyLicenseNumberRow => {
@@ -109,13 +106,21 @@ export const useAttorneyApplicationForm = (): UseAttorneyApplicationFormReturn =
     }
   }
 
-  const handleSubmit = async () => {
-    if (submitting.value) {
-      return
-    }
+  const submission = useApplicationSubmission<AttorneyApplicationFormState, unknown>({
+    getFormState: createSubmissionState,
+    submit: (formState) => submitAttorneyApplication(formState, {
+      portalApiBaseUrl: runtimeConfig.public.portalApiBaseUrl,
+      fetcher: $fetch as unknown as AttorneyApplicationFetcher
+    }),
+    onSuccess: async () => {
+      await navigateTo('/attorney-application/sent')
+    },
+    getErrorMessage: getAttorneyApplicationSubmissionErrorMessage
+  })
 
+  const handleSubmit = async () => {
     hasAttemptedSubmit.value = true
-    submissionResult.value = null
+    submission.resetSubmissionResult()
 
     const hasCustomErrors = hasBarStateError.value || hasLicenseNumberError.value
 
@@ -124,28 +129,7 @@ export const useAttorneyApplicationForm = (): UseAttorneyApplicationFormReturn =
       return
     }
 
-    submitting.value = true
-
-    try {
-      await submitAttorneyApplication(createSubmissionState(), {
-        portalApiBaseUrl: runtimeConfig.public.portalApiBaseUrl,
-        fetcher: $fetch as unknown as AttorneyApplicationFetcher
-      })
-
-      await navigateTo('/attorney-application/sent')
-    } catch (error) {
-      if (isPortalApiConfigurationError(error)) {
-        console.error(error)
-      }
-
-      submissionResult.value = {
-        kind: 'error',
-        title: 'Submission failed',
-        message: getAttorneyApplicationSubmissionErrorMessage(error)
-      }
-    } finally {
-      submitting.value = false
-    }
+    await submission.handleSubmit()
   }
 
   return {
@@ -155,8 +139,8 @@ export const useAttorneyApplicationForm = (): UseAttorneyApplicationFormReturn =
     hasAttemptedSubmit,
     hasBarStateError,
     hasLicenseNumberError,
-    submitting,
-    submissionResult,
+    submitting: submission.submitting,
+    submissionResult: submission.submissionResult,
     addLicenseNumber,
     removeLicenseNumber,
     updateLicenseNumber,

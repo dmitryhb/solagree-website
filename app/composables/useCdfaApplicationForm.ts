@@ -3,12 +3,9 @@ import {
   getCdfaApplicationSubmissionErrorMessage,
   submitCdfaApplication
 } from '~/services/cdfa-application-api'
-import { isPortalApiConfigurationError } from '~/services/portal-api'
 import type { CdfaApplicationFetcher } from '~/services/cdfa-application-api'
-import type {
-  CdfaApplicationFormState,
-  CdfaApplicationResult
-} from '~/types/cdfa-application'
+import type { CdfaApplicationFormState } from '~/types/cdfa-application'
+import type { ApplicationResult } from '~/types/form-options'
 
 export interface UseCdfaApplicationFormReturn {
   formEl: Ref<HTMLFormElement | null>
@@ -16,7 +13,7 @@ export interface UseCdfaApplicationFormReturn {
   hasAttemptedSubmit: Ref<boolean>
   hasSpecializationError: ComputedRef<boolean>
   submitting: Ref<boolean>
-  submissionResult: Ref<CdfaApplicationResult | null>
+  submissionResult: Ref<ApplicationResult | null>
   handleSubmit: () => Promise<void>
 }
 
@@ -24,8 +21,6 @@ export const useCdfaApplicationForm = (): UseCdfaApplicationFormReturn => {
   const runtimeConfig = useRuntimeConfig()
   const formEl = ref<HTMLFormElement | null>(null)
   const hasAttemptedSubmit = ref(false)
-  const submitting = ref(false)
-  const submissionResult = ref<CdfaApplicationResult | null>(null)
 
   const form = reactive<CdfaApplicationFormState>({
     ...cdfaApplicationInitialState,
@@ -45,13 +40,21 @@ export const useCdfaApplicationForm = (): UseCdfaApplicationFormReturn => {
     firstSpecializationInput?.focus()
   }
 
-  const handleSubmit = async () => {
-    if (submitting.value) {
-      return
-    }
+  const submission = useApplicationSubmission<CdfaApplicationFormState, unknown>({
+    getFormState: () => form,
+    submit: (formState) => submitCdfaApplication(formState, {
+      portalApiBaseUrl: runtimeConfig.public.portalApiBaseUrl,
+      fetcher: $fetch as unknown as CdfaApplicationFetcher
+    }),
+    onSuccess: async () => {
+      await navigateTo('/cdfa-application/sent')
+    },
+    getErrorMessage: getCdfaApplicationSubmissionErrorMessage
+  })
 
+  const handleSubmit = async () => {
     hasAttemptedSubmit.value = true
-    submissionResult.value = null
+    submission.resetSubmissionResult()
 
     const hasCustomErrors = hasSpecializationError.value
 
@@ -65,28 +68,7 @@ export const useCdfaApplicationForm = (): UseCdfaApplicationFormReturn => {
       return
     }
 
-    submitting.value = true
-
-    try {
-      await submitCdfaApplication(form, {
-        portalApiBaseUrl: runtimeConfig.public.portalApiBaseUrl,
-        fetcher: $fetch as unknown as CdfaApplicationFetcher
-      })
-
-      await navigateTo('/cdfa-application/sent')
-    } catch (error) {
-      if (isPortalApiConfigurationError(error)) {
-        console.error(error)
-      }
-
-      submissionResult.value = {
-        kind: 'error',
-        title: 'Submission failed',
-        message: getCdfaApplicationSubmissionErrorMessage(error)
-      }
-    } finally {
-      submitting.value = false
-    }
+    await submission.handleSubmit()
   }
 
   return {
@@ -94,8 +76,8 @@ export const useCdfaApplicationForm = (): UseCdfaApplicationFormReturn => {
     form,
     hasAttemptedSubmit,
     hasSpecializationError,
-    submitting,
-    submissionResult,
+    submitting: submission.submitting,
+    submissionResult: submission.submissionResult,
     handleSubmit
   }
 }

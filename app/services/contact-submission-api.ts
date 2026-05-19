@@ -2,6 +2,7 @@ import {
   getPortalSubmissionErrorMessage,
   normalizePortalApiBaseUrl
 } from '~/services/portal-api'
+import type { PortalFetcher, PortalSubmitOptions } from '~/services/portal-api'
 import type {
   ContactSubmissionApiErrorResponse,
   ContactSubmissionApiResponse,
@@ -14,28 +15,12 @@ const DEFAULT_SUBMISSION_ERROR_MESSAGE = 'We could not submit your message. Plea
 
 type ContactSubmissionApiResult = ContactSubmissionApiResponse | ContactSubmissionApiErrorResponse
 
-interface ContactSubmissionFetchOptions {
-  method: 'POST'
-  body: ContactSubmissionPayload
-}
-
-export type ContactSubmissionFetcher = <TResponse>(
-  request: string,
-  options: ContactSubmissionFetchOptions
-) => Promise<TResponse>
+export type ContactSubmissionFetcher = PortalFetcher<ContactSubmissionPayload>
 
 /**
  * Dependencies required to submit a contact form message.
  */
-export interface SubmitContactSubmissionOptions {
-  /**
-   * Base URL for the external portal API, usually from runtime config.
-   */
-  portalApiBaseUrl: string
-  /**
-   * Fetch implementation used by the caller. Nuxt components should pass `$fetch`.
-   */
-  fetcher: ContactSubmissionFetcher
+export interface SubmitContactSubmissionOptions extends PortalSubmitOptions<ContactSubmissionPayload> {
   /**
    * Optional source URL for operational attribution.
    */

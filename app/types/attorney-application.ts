@@ -30,14 +30,3 @@ export interface AttorneyLicenseNumberRow {
   id: string
   value: string
 }
-
-export interface AttorneySelectOption<TValue extends string = string> {
-  label: string
-  value: TValue
-}
-
-export interface AttorneyApplicationResult {
-  kind: 'success' | 'error'
-  title: string
-  message: string
-}

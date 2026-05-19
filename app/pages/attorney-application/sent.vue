@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import AttorneyApplicationSentPage from '~/components/attorney/AttorneyApplicationSentPage.vue'
-
 useSolagreeSeo({
   title: 'Application Received',
   description: 'Your Solagree attorney partner application has been received.',
@@ -10,5 +8,8 @@ useSolagreeSeo({
 </script>
 
 <template>
-  <AttorneyApplicationSentPage />
+  <ApplicationSentPage
+    title-id="attorney-application-sent-title"
+    description="Our team will review your application and email you with next steps. We usually respond within 1-2 business days."
+  />
 </template>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { AttorneySelectOption } from '~/types/attorney-application'
+import type { SelectOption } from '~/types/form-options'
 
 const model = defineModel<string>({ required: true })
 
@@ -7,7 +7,7 @@ withDefaults(defineProps<{
   id: string
   label: string
   name: string
-  options: readonly AttorneySelectOption[]
+  options: readonly SelectOption[]
   hint?: string
   hintId?: string
   required?: boolean

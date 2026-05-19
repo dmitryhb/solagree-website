@@ -34,7 +34,7 @@ const {
       novalidate
       @submit.prevent="handleSubmit"
     >
-      <AttorneyApplicationTextField
+      <ApplicationTextField
         id="cdfa-name"
         v-model="form.name"
         label="Name"
@@ -43,7 +43,7 @@ const {
         required
       />
 
-      <AttorneyApplicationTextField
+      <ApplicationTextField
         id="cdfa-company"
         v-model="form.company"
         label="Company"
@@ -52,7 +52,7 @@ const {
         required
       />
 
-      <AttorneyApplicationTextField
+      <ApplicationTextField
         id="cdfa-email"
         v-model="form.email"
         label="Email"
@@ -63,7 +63,7 @@ const {
         required
       />
 
-      <AttorneyApplicationTextField
+      <ApplicationTextField
         id="cdfa-phone"
         v-model="form.phone"
         label="Phone Number"
@@ -77,7 +77,7 @@ const {
         required
       />
 
-      <AttorneyApplicationTextField
+      <ApplicationTextField
         id="cdfa-address"
         v-model="form.address"
         label="Address"
@@ -87,7 +87,7 @@ const {
         required
       />
 
-      <AttorneyApplicationSelectField
+      <ApplicationSelectField
         id="cdfa-certification-status"
         v-model="form.certificationStatus"
         label="Are you a Certified Divorce Financial Analyst (CDFA®)?"
@@ -96,14 +96,14 @@ const {
         required
       />
 
-      <AttorneyApplicationTextField
+      <ApplicationTextField
         id="cdfa-certification-number"
         v-model="form.certificationNumber"
         label="CDFA® Certification Number"
         name="certificationNumber"
       />
 
-      <AttorneyApplicationSelectField
+      <ApplicationSelectField
         id="cdfa-client-experience"
         v-model="form.clientExperience"
         label="How many years have you been working with divorcing clients?"
@@ -112,7 +112,7 @@ const {
         required
       />
 
-      <AttorneyApplicationTextField
+      <ApplicationTextField
         id="cdfa-service-area"
         v-model="form.serviceArea"
         label="What geographic area do you primarily serve?"
@@ -132,7 +132,7 @@ const {
         :has-error="hasSpecializationError"
       />
 
-      <AttorneyApplicationTextField
+      <ApplicationTextField
         id="cdfa-adr-networks"
         v-model="form.adrNetworks"
         label="Have you participated in other ADR family law networks or organizations?"
@@ -141,7 +141,7 @@ const {
         multiline
       />
 
-      <AttorneyApplicationSelectField
+      <ApplicationSelectField
         id="cdfa-client-source"
         v-model="form.clientSource"
         label="Do you currently have divorcing clients you'd like to bring into the Solagree process?"
@@ -150,7 +150,7 @@ const {
         required
       />
 
-      <AttorneyApplicationSelectField
+      <ApplicationSelectField
         id="cdfa-consultation-interest"
         v-model="form.consultationInterest"
         label="Are you interested in taking 30-45 min fee ($50) pre-enrollment consultation calls as a CDFA® advisor?"

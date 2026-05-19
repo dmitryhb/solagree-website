@@ -1,3 +1,9 @@
+import {
+  CDFA_CERTIFICATION_STATUS_VALUES,
+  CDFA_CLIENT_EXPERIENCE_VALUES,
+  CDFA_CLIENT_SOURCE_VALUES,
+  CDFA_CONSULTATION_INTEREST_VALUES
+} from '#shared/types/cdfa-application'
 import type {
   CdfaApplicationApiErrorResponse,
   CdfaApplicationApiResponse,
@@ -12,49 +18,32 @@ import {
   getPortalSubmissionErrorMessage,
   normalizePortalApiBaseUrl
 } from '~/services/portal-api'
+import type { PortalFetcher, PortalSubmitOptions } from '~/services/portal-api'
+import { isMember } from '~/utils/is-member'
 
 const CDFA_APPLICATIONS_ENDPOINT = '/api/cdfa-applications'
 const DEFAULT_SUBMISSION_ERROR_MESSAGE = 'We could not submit your application. Please try again.'
 
 type CdfaApplicationApiResult = CdfaApplicationApiResponse | CdfaApplicationApiErrorResponse
 
-interface CdfaApplicationFetchOptions {
-  method: 'POST'
-  body: CdfaApplicationSubmissionPayload
-}
+export type CdfaApplicationFetcher = PortalFetcher<CdfaApplicationSubmissionPayload>
 
-export type CdfaApplicationFetcher = <TResponse>(
-  request: string,
-  options: CdfaApplicationFetchOptions
-) => Promise<TResponse>
-
-export interface SubmitCdfaApplicationOptions {
-  portalApiBaseUrl: string
-  fetcher: CdfaApplicationFetcher
-}
+export type SubmitCdfaApplicationOptions = PortalSubmitOptions<CdfaApplicationSubmissionPayload>
 
 const isCdfaCertificationStatusValue = (value: string): value is CdfaCertificationStatusValue => {
-  return value === 'active_cdfa'
-    || value === 'divorce_financial_advisor'
-    || value === 'pursuing_certification'
+  return isMember(CDFA_CERTIFICATION_STATUS_VALUES, value)
 }
 
 const isCdfaClientExperienceValue = (value: string): value is CdfaClientExperienceValue => {
-  return value === 'less_than_1_year'
-    || value === '1_to_3_years'
-    || value === '3_to_5_years'
-    || value === '5_to_10_years'
-    || value === '10_plus_years'
+  return isMember(CDFA_CLIENT_EXPERIENCE_VALUES, value)
 }
 
 const isCdfaClientSourceValue = (value: string): value is CdfaClientSourceValue => {
-  return value === 'existing_clients'
-    || value === 'referrals'
-    || value === 'clients_and_referrals'
+  return isMember(CDFA_CLIENT_SOURCE_VALUES, value)
 }
 
 const isCdfaConsultationInterestValue = (value: string): value is CdfaConsultationInterestValue => {
-  return value === 'yes' || value === 'no' || value === 'maybe'
+  return isMember(CDFA_CONSULTATION_INTEREST_VALUES, value)
 }
 
 export const createCdfaApplicationSubmissionPayload = (

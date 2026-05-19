@@ -1,3 +1,7 @@
+import {
+  ATTORNEY_MEDIATION_EXPERIENCE_VALUES,
+  ATTORNEY_YES_NO_ANSWERS
+} from '#shared/types/attorney-application'
 import type {
   AttorneyApplicationApiErrorResponse,
   AttorneyApplicationApiResponse,
@@ -12,42 +16,27 @@ import {
   getPortalSubmissionErrorMessage,
   normalizePortalApiBaseUrl
 } from '~/services/portal-api'
+import type { PortalFetcher, PortalSubmitOptions } from '~/services/portal-api'
+import { isMember } from '~/utils/is-member'
 
 const ATTORNEY_APPLICATIONS_ENDPOINT = '/api/attorney-applications'
 const DEFAULT_SUBMISSION_ERROR_MESSAGE = 'We could not submit your application. Please try again.'
 
 type AttorneyApplicationApiResult = AttorneyApplicationApiResponse | AttorneyApplicationApiErrorResponse
 
-interface AttorneyApplicationFetchOptions {
-  method: 'POST'
-  body: AttorneyApplicationSubmissionPayload
-}
-
-export type AttorneyApplicationFetcher = <TResponse>(
-  request: string,
-  options: AttorneyApplicationFetchOptions
-) => Promise<TResponse>
+export type AttorneyApplicationFetcher = PortalFetcher<AttorneyApplicationSubmissionPayload>
 
 /**
  * Dependencies required to submit an attorney application.
  */
-export interface SubmitAttorneyApplicationOptions {
-  /**
-   * Base URL for the external portal API, usually from runtime config.
-   */
-  portalApiBaseUrl: string
-  /**
-   * Fetch implementation used by the caller. Nuxt components should pass `$fetch`.
-   */
-  fetcher: AttorneyApplicationFetcher
-}
+export type SubmitAttorneyApplicationOptions = PortalSubmitOptions<AttorneyApplicationSubmissionPayload>
 
 const isAttorneyYesNoAnswer = (value: string): value is AttorneyYesNoAnswer => {
-  return value === 'yes' || value === 'no'
+  return isMember(ATTORNEY_YES_NO_ANSWERS, value)
 }
 
 const isAttorneyMediationExperienceValue = (value: string): value is AttorneyMediationExperienceValue => {
-  return value === 'none' || value === 'certification' || value === 'practice' || value === 'both'
+  return isMember(ATTORNEY_MEDIATION_EXPERIENCE_VALUES, value)
 }
 
 /**

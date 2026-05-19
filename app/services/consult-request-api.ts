@@ -2,6 +2,11 @@ import {
   getPortalSubmissionErrorMessage,
   normalizePortalApiBaseUrl
 } from '~/services/portal-api'
+import type { PortalFetcher, PortalSubmitOptions } from '~/services/portal-api'
+import {
+  CONSULT_BEST_TIMES_OF_DAY,
+  CONSULT_PREFERRED_CONTACT_METHODS
+} from '#shared/types/consult-request'
 import type {
   ConsultBestTimeOfDay,
   ConsultPreferredContactMethod,
@@ -11,34 +16,19 @@ import type {
   ConsultRequestSubmissionPayload
 } from '#shared/types/consult-request'
 import type { ConsultRequestFormState } from '~/types/consult-request'
+import { isMember } from '~/utils/is-member'
 
 const CONSULT_REQUESTS_ENDPOINT = '/api/consult-requests'
 const DEFAULT_SUBMISSION_ERROR_MESSAGE = 'We could not submit your consult request. Please try again.'
 
 type ConsultRequestApiResult = ConsultRequestApiResponse | ConsultRequestApiErrorResponse
 
-interface ConsultRequestFetchOptions {
-  method: 'POST'
-  body: ConsultRequestSubmissionPayload
-}
-
-export type ConsultRequestFetcher = <TResponse>(
-  request: string,
-  options: ConsultRequestFetchOptions
-) => Promise<TResponse>
+export type ConsultRequestFetcher = PortalFetcher<ConsultRequestSubmissionPayload>
 
 /**
  * Dependencies required to submit a consult request.
  */
-export interface SubmitConsultRequestOptions {
-  /**
-   * Base URL for the external portal API, usually from runtime config.
-   */
-  portalApiBaseUrl: string
-  /**
-   * Fetch implementation used by the caller. Nuxt components should pass `$fetch`.
-   */
-  fetcher: ConsultRequestFetcher
+export interface SubmitConsultRequestOptions extends PortalSubmitOptions<ConsultRequestSubmissionPayload> {
   /**
    * Optional referral code preserved from the public quiz URL.
    */
@@ -61,11 +51,11 @@ export const getConsultRequestSubmissionErrorMessage = (error: unknown): string 
 }
 
 const isConsultPreferredContactMethod = (value: string): value is ConsultPreferredContactMethod => {
-  return value === 'email' || value === 'phone' || value === 'text'
+  return isMember(CONSULT_PREFERRED_CONTACT_METHODS, value)
 }
 
 const isConsultBestTimeOfDay = (value: string): value is ConsultBestTimeOfDay => {
-  return value === 'morning' || value === 'afternoon' || value === 'evening' || value === 'anytime'
+  return isMember(CONSULT_BEST_TIMES_OF_DAY, value)
 }
 
 /**

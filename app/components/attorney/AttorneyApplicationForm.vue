@@ -38,7 +38,7 @@ const {
       novalidate
       @submit.prevent="handleSubmit"
     >
-      <AttorneyApplicationTextField
+      <ApplicationTextField
         id="attorney-name"
         v-model="form.name"
         label="Name"
@@ -47,7 +47,7 @@ const {
         required
       />
 
-      <AttorneyApplicationTextField
+      <ApplicationTextField
         id="attorney-company"
         v-model="form.company"
         label="Company"
@@ -56,7 +56,7 @@ const {
         required
       />
 
-      <AttorneyApplicationTextField
+      <ApplicationTextField
         id="attorney-email"
         v-model="form.email"
         label="Email"
@@ -67,7 +67,7 @@ const {
         required
       />
 
-      <AttorneyApplicationTextField
+      <ApplicationTextField
         id="attorney-phone"
         v-model="form.phone"
         label="Phone Number"
@@ -78,7 +78,7 @@ const {
         required
       />
 
-      <AttorneyApplicationTextField
+      <ApplicationTextField
         id="attorney-address"
         v-model="form.address"
         label="Address"
@@ -102,7 +102,7 @@ const {
         @update="updateLicenseNumber"
       />
 
-      <AttorneyApplicationTextField
+      <ApplicationTextField
         id="attorney-licensure-year"
         v-model="form.initialLicensureYear"
         label="Year of initial licensure"
@@ -115,7 +115,7 @@ const {
         required
       />
 
-      <AttorneyApplicationSelectField
+      <ApplicationSelectField
         id="attorney-good-standing"
         v-model="form.goodStanding"
         label="License in good standing"
@@ -124,7 +124,7 @@ const {
         required
       />
 
-      <AttorneyApplicationSelectField
+      <ApplicationSelectField
         id="attorney-disciplinary-finding"
         v-model="form.disciplinaryFinding"
         label="Have you ever been subject to a disciplinary finding?"
@@ -135,7 +135,7 @@ const {
         required
       />
 
-      <AttorneyApplicationTextField
+      <ApplicationTextField
         v-if="form.disciplinaryFinding === 'yes'"
         id="attorney-disciplinary-explanation"
         v-model="form.disciplinaryExplanation"
@@ -145,7 +145,7 @@ const {
         required
       />
 
-      <AttorneyApplicationSelectField
+      <ApplicationSelectField
         id="attorney-mediation-experience"
         v-model="form.mediationExperience"
         label="Do you have a mediation certification or a mediation practice?"
@@ -154,7 +154,7 @@ const {
         required
       />
 
-      <AttorneyApplicationSelectField
+      <ApplicationSelectField
         id="attorney-neutral-interest"
         v-model="form.neutralInterest"
         label="Interested in Solagree cases as a neutral mediator or arbitrator?"
@@ -163,7 +163,7 @@ const {
         required
       />
 
-      <AttorneyApplicationTextField
+      <ApplicationTextField
         id="attorney-adr-networks"
         v-model="form.adrNetworks"
         label="Have you participated in other ADR family law networks or organizations?"
@@ -172,7 +172,7 @@ const {
         multiline
       />
 
-      <AttorneyApplicationSelectField
+      <ApplicationSelectField
         id="attorney-consultation-interest"
         v-model="form.consultationInterest"
         label="Are you interested in taking 30-45 min flat fee ($250) pre-enrollment consultation calls as an attorney advocate?"

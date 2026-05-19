@@ -2,6 +2,7 @@ import {
   getPortalSubmissionErrorMessage,
   normalizePortalApiBaseUrl
 } from '~/services/portal-api'
+import type { PortalFetcher, PortalSubmitOptions } from '~/services/portal-api'
 import type {
   ContactSubmissionApiErrorResponse,
   ContactSubmissionApiResponse,
@@ -15,28 +16,12 @@ const DEFAULT_SUBMISSION_ERROR_MESSAGE = 'We could not register you for the webi
 type WebinarRegistrationApiResult = ContactSubmissionApiResponse | ContactSubmissionApiErrorResponse
 type WebinarSubmissionType = WebinarRegistrationContent['submissionType']
 
-interface WebinarRegistrationFetchOptions {
-  method: 'POST'
-  body: WebinarRegistrationSubmissionPayload
-}
-
-export type WebinarRegistrationFetcher = <TResponse>(
-  request: string,
-  options: WebinarRegistrationFetchOptions
-) => Promise<TResponse>
+export type WebinarRegistrationFetcher = PortalFetcher<WebinarRegistrationSubmissionPayload>
 
 /**
  * Dependencies required to submit a webinar registration to the Portal.
  */
-export interface SubmitWebinarRegistrationOptions {
-  /**
-   * Base URL for the external portal API, usually from runtime config.
-   */
-  portalApiBaseUrl: string
-  /**
-   * Fetch implementation used by the caller. Nuxt components should pass `$fetch`.
-   */
-  fetcher: WebinarRegistrationFetcher
+export interface SubmitWebinarRegistrationOptions extends PortalSubmitOptions<WebinarRegistrationSubmissionPayload> {
   /**
    * Portal contact-submission type used to distinguish webinar audiences.
    */

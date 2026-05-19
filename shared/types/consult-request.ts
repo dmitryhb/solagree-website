@@ -1,6 +1,10 @@
-export type ConsultPreferredContactMethod = 'email' | 'phone' | 'text'
+export const CONSULT_PREFERRED_CONTACT_METHODS = ['email', 'phone', 'text'] as const
 
-export type ConsultBestTimeOfDay = 'morning' | 'afternoon' | 'evening' | 'anytime'
+export type ConsultPreferredContactMethod = (typeof CONSULT_PREFERRED_CONTACT_METHODS)[number]
+
+export const CONSULT_BEST_TIMES_OF_DAY = ['morning', 'afternoon', 'evening', 'anytime'] as const
+
+export type ConsultBestTimeOfDay = (typeof CONSULT_BEST_TIMES_OF_DAY)[number]
 
 /**
  * Public quiz answer snapshot sent with a consult request for portal-side intake context.

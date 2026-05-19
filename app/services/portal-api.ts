@@ -8,6 +8,27 @@ export class PortalApiConfigurationError extends Error {
   }
 }
 
+export interface PortalFetchOptions<TBody> {
+  method: 'POST'
+  body: TBody
+}
+
+/**
+ * Fetch implementation used by portal submission services.
+ */
+export type PortalFetcher<TBody> = <TResponse>(
+  request: string,
+  options: PortalFetchOptions<TBody>
+) => Promise<TResponse>
+
+/**
+ * Shared dependencies required by portal submission services.
+ */
+export interface PortalSubmitOptions<TBody> {
+  portalApiBaseUrl: string
+  fetcher: PortalFetcher<TBody>
+}
+
 export const isPortalApiConfigurationError = (error: unknown): error is PortalApiConfigurationError => {
   return error instanceof PortalApiConfigurationError
 }
