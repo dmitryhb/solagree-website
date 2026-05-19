@@ -1,3 +1,16 @@
+<script setup lang="ts">
+import { attorneyFitsPracticeContent } from '~/data/attorney-landing-content'
+import type { AttorneyFitsPracticeContent } from '~/types/attorney-landing'
+
+interface AttorneyFitsPracticeSectionProps {
+  content?: AttorneyFitsPracticeContent
+}
+
+withDefaults(defineProps<AttorneyFitsPracticeSectionProps>(), {
+  content: () => attorneyFitsPracticeContent
+})
+</script>
+
 <template>
   <section
     class="attorney-fits-practice-section"
@@ -9,7 +22,7 @@
         v-appear
         class="attorney-fits-practice-section__title"
       >
-        See If Solagree Fits Your Practice
+        {{ content.title }}
       </h2>
 
       <div class="attorney-fits-practice-section__grid">
@@ -18,14 +31,14 @@
           class="attorney-fits-practice-section__panel"
         >
           <p class="attorney-fits-practice-section__copy">
-            Watch the briefing to understand the revenue model and decide if this partnership makes sense for you.
+            {{ content.body }}
           </p>
 
           <SiteButton
             class="attorney-fits-practice-section__cta"
-            to="/webinar/"
+            :to="content.ctaTo"
           >
-            Watch Now
+            {{ content.ctaLabel }}
           </SiteButton>
         </div>
 
@@ -34,10 +47,10 @@
           class="attorney-fits-practice-section__media"
         >
           <img
-            src="/images/attorney-see-if-fits.webp"
-            alt="Attorney partner consultation workspace."
-            width="1218"
-            height="545"
+            :src="content.image.src"
+            :alt="content.image.alt"
+            :width="content.image.width"
+            :height="content.image.height"
             loading="lazy"
             decoding="async"
           >

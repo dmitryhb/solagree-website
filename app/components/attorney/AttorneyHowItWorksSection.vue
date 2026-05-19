@@ -1,5 +1,15 @@
 <script setup lang="ts">
 import WebinarVideoFrame from '~/components/webinar/WebinarVideoFrame.vue'
+import { attorneyHowItWorksContent } from '~/data/attorney-landing-content'
+import type { AttorneyHowItWorksContent } from '~/types/attorney-landing'
+
+interface AttorneyHowItWorksSectionProps {
+  content?: AttorneyHowItWorksContent
+}
+
+withDefaults(defineProps<AttorneyHowItWorksSectionProps>(), {
+  content: () => attorneyHowItWorksContent
+})
 </script>
 
 <template>
@@ -16,32 +26,34 @@ import WebinarVideoFrame from '~/components/webinar/WebinarVideoFrame.vue'
           id="attorney-how-it-works-title"
           class="attorney-how-it-works-section__title"
         >
-          See How It Works
+          {{ content.title }}
         </h2>
 
         <p class="attorney-how-it-works-section__intro">
-          Watch how the partnership works and what makes this different - in 90 seconds.
+          {{ content.intro }}
         </p>
       </header>
 
       <WebinarVideoFrame
         v-appear="{ variant: 'scale' }"
         class="attorney-how-it-works-section__video"
+        :image-src="content.videoImageSrc"
+        :image-alt="content.videoImageAlt"
       />
 
       <SiteButton
         v-appear="{ delay: 80 }"
         class="attorney-how-it-works-section__cta"
-        to="/webinar/"
+        :to="content.ctaTo"
       >
-        Watch the full Partner Briefing
+        {{ content.ctaLabel }}
       </SiteButton>
 
       <blockquote
         v-appear="{ delay: 140 }"
         class="attorney-how-it-works-section__quote"
       >
-        &ldquo;I can finally offer my clients a better path without sacrificing my own quality of life.&rdquo;
+        &ldquo;{{ content.quote }}&rdquo;
       </blockquote>
     </div>
   </section>

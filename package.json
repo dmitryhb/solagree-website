@@ -6,6 +6,7 @@
     "build": "node ./scripts/build.mjs",
     "dev": "nuxt dev --host solagree.local --port 3003",
     "deploy:staging": "./scripts/deploy-staging.sh",
+    "deploy:production": "./scripts/deploy-production.sh",
     "generate": "nuxt generate",
     "lint": "eslint .",
     "typecheck": "nuxt typecheck",

@@ -1,3 +1,16 @@
+<script setup lang="ts">
+import { attorneyMoreCasesContent } from '~/data/attorney-landing-content'
+import type { AttorneyMoreCasesContent } from '~/types/attorney-landing'
+
+interface AttorneyMoreCasesSectionProps {
+  content?: AttorneyMoreCasesContent
+}
+
+withDefaults(defineProps<AttorneyMoreCasesSectionProps>(), {
+  content: () => attorneyMoreCasesContent
+})
+</script>
+
 <template>
   <section
     class="attorney-more-cases-section"
@@ -12,19 +25,22 @@
           id="attorney-more-cases-title"
           class="attorney-more-cases-section__title"
         >
-          Handle More Cases - Without More Staff
+          {{ content.title }}
         </h2>
 
-        <p class="attorney-more-cases-section__body">
-          Use our trained case coordinators and paralegals to handle document collection and logistics while you focus
-          on strategic legal work. No hiring. No training.
+        <p
+          v-for="paragraph in content.body.split('\n\n')"
+          :key="paragraph"
+          class="attorney-more-cases-section__body"
+        >
+          {{ paragraph }}
         </p>
 
         <p class="attorney-more-cases-section__link-copy">
-          Learn more in&nbsp;<NuxtLink
+          {{ content.linkPrefix }}<NuxtLink
             class="attorney-more-cases-section__link"
-            to="/webinar/"
-          >the briefing</NuxtLink>.
+            :to="content.linkTo"
+          >{{ content.linkLabel }}</NuxtLink>{{ content.linkSuffix }}
         </p>
       </div>
 
@@ -33,10 +49,10 @@
         class="attorney-more-cases-section__media"
       >
         <img
-          src="/images/attorney-handle-more-cases.webp"
-          alt="Attorney working on case documents at a laptop."
-          width="1012"
-          height="766"
+          :src="content.image.src"
+          :alt="content.image.alt"
+          :width="content.image.width"
+          :height="content.image.height"
           loading="lazy"
           decoding="async"
         >

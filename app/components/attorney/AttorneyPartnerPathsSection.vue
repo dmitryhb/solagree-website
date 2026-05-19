@@ -1,5 +1,14 @@
 <script setup lang="ts">
-import { attorneyPartnerPaths } from '~/data/attorney-partner-paths'
+import { attorneyPartnerPathsContent } from '~/data/attorney-landing-content'
+import type { AttorneyPartnerPathsContent } from '~/types/attorney-landing'
+
+interface AttorneyPartnerPathsSectionProps {
+  content?: AttorneyPartnerPathsContent
+}
+
+withDefaults(defineProps<AttorneyPartnerPathsSectionProps>(), {
+  content: () => attorneyPartnerPathsContent
+})
 </script>
 
 <template>
@@ -16,18 +25,18 @@ import { attorneyPartnerPaths } from '~/data/attorney-partner-paths'
           id="attorney-partner-paths-title"
           class="attorney-partner-paths-section__title"
         >
-          Three Ways to Partner
+          {{ content.title }}
         </h2>
 
         <p class="attorney-partner-paths-section__intro">
-          Choose what fits your practice - or do all three.
+          {{ content.intro }}
         </p>
 
         <SiteButton
           class="attorney-partner-paths-section__cta"
-          to="/webinar/"
+          :to="content.ctaTo"
         >
-          Watch the Partner Briefing
+          {{ content.ctaLabel }}
           <img
             class="button-arrow-icon"
             src="/icons/arrow.svg"
@@ -41,7 +50,7 @@ import { attorneyPartnerPaths } from '~/data/attorney-partner-paths'
 
       <div class="attorney-partner-paths-section__grid">
         <article
-          v-for="(path, index) in attorneyPartnerPaths"
+          v-for="(path, index) in content.paths"
           :key="path.title"
           v-appear="{ delay: index * 80, variant: 'scale' }"
           class="attorney-partner-card"

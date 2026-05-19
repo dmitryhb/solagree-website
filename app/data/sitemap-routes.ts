@@ -18,7 +18,17 @@ const publicRoutes: SitemapRoute[] = [
     priority: 0.7
   },
   {
+    path: '/webinar/cdfa',
+    changefreq: 'monthly',
+    priority: 0.7
+  },
+  {
     path: '/webinar/view',
+    changefreq: 'monthly',
+    priority: 0.6
+  },
+  {
+    path: '/webinar/cdfa/view',
     changefreq: 'monthly',
     priority: 0.6
   },
@@ -28,7 +38,17 @@ const publicRoutes: SitemapRoute[] = [
     priority: 0.7
   },
   {
+    path: '/cdfa',
+    changefreq: 'monthly',
+    priority: 0.7
+  },
+  {
     path: '/attorney-application',
+    changefreq: 'monthly',
+    priority: 0.7
+  },
+  {
+    path: '/cdfa-application',
     changefreq: 'monthly',
     priority: 0.7
   },

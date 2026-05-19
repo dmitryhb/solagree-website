@@ -1,5 +1,14 @@
 <script setup lang="ts">
-import { webinarFeatures } from '~/data/webinar-registration'
+import { attorneyWebinarRegistrationContent } from '~/data/webinar-registration'
+import type { WebinarRegistrationContent } from '~/types/webinar'
+
+interface WebinarRegistrationIntroProps {
+  content?: WebinarRegistrationContent
+}
+
+withDefaults(defineProps<WebinarRegistrationIntroProps>(), {
+  content: () => attorneyWebinarRegistrationContent
+})
 </script>
 
 <template>
@@ -11,12 +20,12 @@ import { webinarFeatures } from '~/data/webinar-registration'
       id="webinar-registration-title"
       class="webinar-registration-intro__title"
     >
-      What Could Solagree Add to Your Practice?
+      {{ content.title }}
     </h1>
 
     <p class="webinar-registration-intro__summary">
-      <strong>Attorney Network Overview:</strong>
-      More cases, more referrals, and new revenue opportunities - without adding overhead or complexity.
+      <strong>{{ content.summaryLabel }}</strong>
+      {{ content.summary }}
     </p>
 
     <div class="webinar-registration-intro__includes">
@@ -26,7 +35,7 @@ import { webinarFeatures } from '~/data/webinar-registration'
 
       <ul class="webinar-registration-intro__features">
         <li
-          v-for="feature in webinarFeatures"
+          v-for="feature in content.features"
           :key="feature.label"
           class="webinar-registration-intro__feature"
         >
@@ -42,14 +51,15 @@ import { webinarFeatures } from '~/data/webinar-registration'
     <figure class="webinar-registration-intro__presenter">
       <img
         class="webinar-registration-intro__presenter-image"
-        src="/images/amanda.webp"
-        alt="Amanda, Solagree co-founder"
-        width="762"
-        height="562"
+        :src="content.presenter.imageSrc"
+        :alt="content.presenter.imageAlt"
+        :width="content.presenter.imageWidth"
+        :height="content.presenter.imageHeight"
       >
 
       <figcaption class="webinar-registration-intro__caption">
-        <strong>Amanda Mason</strong> - Co-Founder &amp; CEO
+        <strong>{{ content.presenter.name }}</strong>
+        {{ content.presenter.captionSeparator ?? '-' }} {{ content.presenter.title }}
       </figcaption>
     </figure>
   </section>

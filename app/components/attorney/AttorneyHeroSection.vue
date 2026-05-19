@@ -1,3 +1,16 @@
+<script setup lang="ts">
+import { attorneyHeroContent } from '~/data/attorney-landing-content'
+import type { AttorneyHeroContent } from '~/types/attorney-landing'
+
+interface AttorneyHeroSectionProps {
+  content?: AttorneyHeroContent
+}
+
+withDefaults(defineProps<AttorneyHeroSectionProps>(), {
+  content: () => attorneyHeroContent
+})
+</script>
+
 <template>
   <section
     class="attorney-hero-section"
@@ -9,28 +22,29 @@
         class="attorney-hero-section__content"
       >
         <p class="attorney-hero-section__eyebrow">
-          A Better Way to Practice Family Law
+          {{ content.eyebrow }}
         </p>
 
         <h1
           id="attorney-hero-title"
           class="attorney-hero-section__title"
         >
-          <span>Expand Your Practice.</span>
-          <span>Reclaim Your Time.</span>
+          <span
+            v-for="line in content.titleLines"
+            :key="line"
+          >{{ line }}</span>
         </h1>
 
         <p class="attorney-hero-section__intro">
-          Receive qualified referrals in your state, explore neutral opportunities, and bring your own divorce cases -
-          all while earning predictable revenue without adding overhead.
+          {{ content.intro }}
         </p>
 
         <div class="attorney-hero-section__actions">
           <SiteButton
             class="attorney-hero-section__primary"
-            to="/webinar/"
+            :to="content.primaryCtaTo"
           >
-            Watch the Partner Briefing
+            {{ content.primaryCtaLabel }}
             <img
               class="button-arrow-icon"
               src="/icons/arrow.svg"
@@ -43,9 +57,9 @@
 
           <NuxtLink
             class="attorney-hero-section__secondary"
-            to="/attorney-application"
+            :to="content.secondaryCtaTo"
           >
-            Join the free Network
+            {{ content.secondaryCtaLabel }}
           </NuxtLink>
         </div>
       </div>
@@ -55,10 +69,10 @@
         class="attorney-hero-section__media"
       >
         <img
-          src="/images/attorney-hero.webp"
-          alt="Attorney reviewing case materials at a desk."
-          width="968"
-          height="772"
+          :src="content.image.src"
+          :alt="content.image.alt"
+          :width="content.image.width"
+          :height="content.image.height"
           loading="eager"
           decoding="async"
         >

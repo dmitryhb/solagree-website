@@ -1,5 +1,14 @@
 <script setup lang="ts">
-import { attorneyOnePlaceBenefits } from '~/data/attorney-benefits'
+import { attorneyOnePlaceContent } from '~/data/attorney-landing-content'
+import type { AttorneyOnePlaceContent } from '~/types/attorney-landing'
+
+interface AttorneyOnePlaceSectionProps {
+  content?: AttorneyOnePlaceContent
+}
+
+withDefaults(defineProps<AttorneyOnePlaceSectionProps>(), {
+  content: () => attorneyOnePlaceContent
+})
 </script>
 
 <template>
@@ -13,10 +22,10 @@ import { attorneyOnePlaceBenefits } from '~/data/attorney-benefits'
         class="attorney-one-place-section__media"
       >
         <img
-          src="/images/attorney-everything-one-place.webp"
-          alt="Attorney reviewing Solagree case materials."
-          width="1188"
-          height="1266"
+          :src="content.image.src"
+          :alt="content.image.alt"
+          :width="content.image.width"
+          :height="content.image.height"
           loading="lazy"
           decoding="async"
         >
@@ -31,22 +40,22 @@ import { attorneyOnePlaceBenefits } from '~/data/attorney-benefits'
             id="attorney-one-place-title"
             class="attorney-one-place-section__title"
           >
-            Everything You Need in One Place
+            {{ content.title }}
           </h2>
 
           <p class="attorney-one-place-section__intro">
-            Track cases, access marketing materials, and manage your partnership in one place.
+            {{ content.intro }}
           </p>
         </div>
 
         <div class="attorney-one-place-section__benefits">
           <p class="attorney-one-place-section__benefits-title">
-            What you get:
+            {{ content.benefitsTitle }}
           </p>
 
           <ul class="attorney-one-place-section__list">
             <li
-              v-for="benefit in attorneyOnePlaceBenefits"
+              v-for="benefit in content.benefits"
               :key="benefit.title"
             >
               <strong>{{ benefit.title }}</strong> - {{ benefit.description }}
@@ -56,10 +65,10 @@ import { attorneyOnePlaceBenefits } from '~/data/attorney-benefits'
 
         <SiteButton
           class="attorney-one-place-section__cta"
-          to="/webinar/"
+          :to="content.ctaTo"
           size="sm"
         >
-          Watch the Partner Briefing
+          {{ content.ctaLabel }}
           <img
             class="button-arrow-icon"
             src="/icons/arrow.svg"

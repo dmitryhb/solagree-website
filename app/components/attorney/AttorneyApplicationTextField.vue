@@ -10,9 +10,11 @@ withDefaults(defineProps<{
   max?: number | string
   min?: number | string
   multiline?: boolean
+  pattern?: string
   placeholder?: string
   required?: boolean
   rows?: number | string
+  title?: string
   type?: string
 }>(), {
   autocomplete: undefined,
@@ -20,9 +22,11 @@ withDefaults(defineProps<{
   max: undefined,
   min: undefined,
   multiline: false,
+  pattern: undefined,
   placeholder: 'Type here...',
   required: false,
   rows: 3,
+  title: undefined,
   type: 'text'
 })
 </script>
@@ -55,8 +59,10 @@ withDefaults(defineProps<{
       :inputmode="inputmode"
       :min="min"
       :max="max"
+      :pattern="pattern"
       :placeholder="placeholder"
       :required="required"
+      :title="title"
     >
   </div>
 </template>

@@ -1,7 +1,28 @@
 <script setup lang="ts">
 import { stateOptions } from '~/data/us-states'
-import type { WebinarFormState } from '~/types/webinar'
+import { attorneyWebinarRegistrationContent } from '~/data/webinar-registration'
+import {
+  getWebinarRegistrationErrorMessage,
+  submitWebinarRegistration
+} from '~/services/webinar-registration-api'
+import { isPortalApiConfigurationError } from '~/services/portal-api'
+import type { WebinarRegistrationFetcher } from '~/services/webinar-registration-api'
+import type { WebinarFormState, WebinarRegistrationContent } from '~/types/webinar'
 
+interface WatchWebinarFormProps {
+  subtitle?: string
+  redirectPath?: string
+  submissionType?: WebinarRegistrationContent['submissionType']
+}
+
+const props = withDefaults(defineProps<WatchWebinarFormProps>(), {
+  subtitle: attorneyWebinarRegistrationContent.formSubtitle,
+  redirectPath: attorneyWebinarRegistrationContent.formRedirectPath,
+  submissionType: attorneyWebinarRegistrationContent.submissionType
+})
+
+const runtimeConfig = useRuntimeConfig()
+const formEl = ref<HTMLFormElement | null>(null)
 const form = reactive<WebinarFormState>({
   businessEmail: '',
   firstName: '',
@@ -10,10 +31,49 @@ const form = reactive<WebinarFormState>({
   state: ''
 })
 
+const submitting = ref(false)
 const statusMessage = ref('')
 
-const handleSubmit = () => {
-  statusMessage.value = 'Thanks. We will send the webinar access details shortly.'
+const getSourceUrl = (): string | null => {
+  if (!import.meta.client) {
+    return null
+  }
+
+  return window.location.href
+}
+
+const handleSubmit = async () => {
+  if (submitting.value) {
+    return
+  }
+
+  statusMessage.value = ''
+
+  if (!formEl.value?.checkValidity()) {
+    formEl.value?.reportValidity()
+    return
+  }
+
+  submitting.value = true
+
+  try {
+    await submitWebinarRegistration(form, {
+      portalApiBaseUrl: runtimeConfig.public.portalApiBaseUrl,
+      fetcher: $fetch as unknown as WebinarRegistrationFetcher,
+      submissionType: props.submissionType,
+      sourceUrl: getSourceUrl()
+    })
+
+    await navigateTo(props.redirectPath)
+  } catch (error) {
+    if (isPortalApiConfigurationError(error)) {
+      console.error(error)
+    }
+
+    statusMessage.value = getWebinarRegistrationErrorMessage(error)
+  } finally {
+    submitting.value = false
+  }
 }
 </script>
 
@@ -30,10 +90,11 @@ const handleSubmit = () => {
     </h2>
 
     <p class="watch-webinar-form__subtitle">
-      Less than 10 minutes to see how it works for you.
+      {{ subtitle }}
     </p>
 
     <form
+      ref="formEl"
       class="watch-webinar-form__form"
       @submit.prevent="handleSubmit"
     >
@@ -153,8 +214,9 @@ const handleSubmit = () => {
       <button
         class="watch-webinar-form__submit"
         type="submit"
+        :disabled="submitting"
       >
-        <span>Watch Now</span>
+        <span>{{ submitting ? 'Submitting...' : 'Watch Now' }}</span>
         <span
           class="watch-webinar-form__submit-icon"
           aria-hidden="true"
@@ -163,12 +225,12 @@ const handleSubmit = () => {
         </span>
       </button>
 
-    <p
-      v-if="statusMessage"
-      class="watch-webinar-form__status"
-      role="status"
-      aria-live="polite"
-    >
+      <p
+        v-if="statusMessage"
+        class="watch-webinar-form__status"
+        role="status"
+        aria-live="polite"
+      >
         {{ statusMessage }}
       </p>
     </form>

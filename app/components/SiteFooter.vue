@@ -83,7 +83,7 @@ const portalLoginHref = usePortalLoginHref()
                 </NuxtLink>
               </li>
               <li>
-                <NuxtLink to="/">
+                <NuxtLink to="/cdfa">
                   CDFAs® & Advisors
                 </NuxtLink>
               </li>

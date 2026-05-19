@@ -1,5 +1,14 @@
 <script setup lang="ts">
-import { attorneyValueCards } from '~/data/attorney-value-cards'
+import { attorneyValueContent } from '~/data/attorney-landing-content'
+import type { AttorneyValueContent } from '~/types/attorney-landing'
+
+interface AttorneyValueSectionProps {
+  content?: AttorneyValueContent
+}
+
+withDefaults(defineProps<AttorneyValueSectionProps>(), {
+  content: () => attorneyValueContent
+})
 </script>
 
 <template>
@@ -16,17 +25,17 @@ import { attorneyValueCards } from '~/data/attorney-value-cards'
           id="attorney-value-title"
           class="attorney-value-section__title"
         >
-          What's In It For You
+          {{ content.title }}
         </h2>
 
         <p class="attorney-value-section__intro">
-          Beyond the courtroom - a smarter way to serve clients.
+          {{ content.intro }}
         </p>
       </header>
 
       <div class="attorney-value-section__grid">
         <article
-          v-for="(card, index) in attorneyValueCards"
+          v-for="(card, index) in content.cards"
           :key="card.title"
           v-appear="{ delay: index * 80, variant: 'scale' }"
           class="attorney-value-card"

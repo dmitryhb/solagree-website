@@ -1,5 +1,14 @@
 <script setup lang="ts">
-import { attorneyFaqItems } from '~/data/attorney-faq'
+import { attorneyFaqContent } from '~/data/attorney-landing-content'
+import type { AttorneyFaqContent } from '~/types/attorney-landing'
+
+interface AttorneyFaqSectionProps {
+  content?: AttorneyFaqContent
+}
+
+withDefaults(defineProps<AttorneyFaqSectionProps>(), {
+  content: () => attorneyFaqContent
+})
 </script>
 
 <template>
@@ -16,21 +25,22 @@ import { attorneyFaqItems } from '~/data/attorney-faq'
           id="attorney-faq-title"
           class="attorney-faq-section__title"
         >
-          Common Attorney Partner Questions
+          {{ content.title }}
         </h2>
 
-        <p class="attorney-faq-section__intro">
-          As a partner attorney, you provide strategic counsel, receive referrals, or serve as a neutral - without the
-          administrative burden. Cases resolve faster, fees are predictable, and you can serve more clients without
-          adding staff.
+        <p
+          v-if="content.intro"
+          class="attorney-faq-section__intro"
+        >
+          {{ content.intro }}
         </p>
       </div>
 
       <BaseAccordion
         v-appear="{ delay: 100 }"
         class="attorney-faq-section__accordion"
-        :items="attorneyFaqItems"
-        default-value="bring-own-cases"
+        :items="content.items"
+        :default-value="content.defaultValue"
         numbered
       />
     </div>
