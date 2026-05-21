@@ -8,6 +8,63 @@
   min-height: 0;
 }
 
+.about-founder-video-section {
+  background: #000000;
+  padding: clamp(4.75rem, 7vw, 5.75rem) 1.25rem clamp(6rem, 10vw, 8rem);
+}
+
+.about-founder-video-section__inner {
+  display: grid;
+  justify-items: center;
+  width: min(100%, 1532px);
+  margin-inline: auto;
+}
+
+.about-founder-video-section__title {
+  margin: 0;
+  color: var(--color-surface-dark);
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 6vw, 5rem);
+  font-weight: 500;
+  line-height: 1.08;
+  text-align: center;
+}
+
+.about-founder-video-section__video.webinar-video-frame {
+  width: min(100%, 1532px);
+  margin-top: clamp(4.25rem, 8vw, 7.5rem);
+  border-radius: 16px;
+}
+
+.about-founder-video-section__quote {
+  display: grid;
+  justify-items: center;
+  width: min(100%, 884px);
+  margin: clamp(4.75rem, 7vw, 5.75rem) auto 0;
+  padding-top: clamp(2.25rem, 4vw, 3rem);
+  border-top: 8px solid var(--color-page);
+  color: rgba(255, 255, 255, 0.18);
+  font-family: var(--font-body);
+  text-align: center;
+}
+
+.about-founder-video-section__quote p {
+  margin: 0;
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  font-style: italic;
+  font-weight: 700;
+  line-height: 1.42;
+}
+
+.about-founder-video-section__quote cite {
+  display: block;
+  margin-top: clamp(1.5rem, 3vw, 2rem);
+  font-size: clamp(1.125rem, 2.45vw, 2rem);
+  font-style: normal;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
 .about-process-section {
   background: var(--color-page);
   padding: clamp(4rem, 6vw, 5.75rem) 1.25rem clamp(4rem, 6vw, 5.25rem);
@@ -298,6 +355,32 @@
 }
 
 @media (max-width: 640px) {
+  .about-founder-video-section {
+    padding: 3.75rem 1rem 5rem;
+  }
+
+  .about-founder-video-section__title {
+    font-size: clamp(2.5rem, 12vw, 3.25rem);
+  }
+
+  .about-founder-video-section__video.webinar-video-frame {
+    margin-top: 2.75rem;
+  }
+
+  .about-founder-video-section__quote {
+    margin-top: 3.5rem;
+    padding-top: 2rem;
+    border-top-width: 5px;
+  }
+
+  .about-founder-video-section__quote p {
+    font-size: 1.5rem;
+  }
+
+  .about-founder-video-section__quote cite {
+    font-size: 1.05rem;
+  }
+
   .about-process-section {
     padding: 3rem 1rem;
   }
