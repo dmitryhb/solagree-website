@@ -125,8 +125,6 @@
   justify-items: center;
   width: min(100%, 760px);
   margin: clamp(2.25rem, 4vw, 3.25rem) auto 0;
-  padding-top: clamp(2rem, 3.5vw, 2.5rem);
-  border-top: 8px solid var(--color-white);
   color: #171616;
   font-family: var(--font-body);
   text-align: center;
@@ -489,8 +487,6 @@
 
   .about-founder-video-section__quote {
     margin-top: 3.5rem;
-    padding-top: 2rem;
-    border-top-width: 5px;
   }
 
   .about-founder-video-section__quote p {
