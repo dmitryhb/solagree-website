@@ -83,8 +83,8 @@
 }
 
 .about-founder-video-section {
-  background: #000000;
-  padding: clamp(4.75rem, 7vw, 5.75rem) 1.25rem clamp(6rem, 10vw, 8rem);
+  background: var(--color-page);
+  padding: clamp(1.5rem, 2.5vw, 2rem) 1.25rem clamp(5.5rem, 8vw, 7rem);
 }
 
 .about-founder-video-section__inner {
@@ -96,17 +96,26 @@
 
 .about-founder-video-section__title {
   margin: 0;
-  color: var(--color-surface-dark);
+  color: var(--color-ink);
   font-family: var(--font-display);
-  font-size: clamp(3rem, 6vw, 5rem);
+  font-size: clamp(3.5rem, 5.85vw, 5rem);
   font-weight: 500;
-  line-height: 1.08;
+  line-height: 1.05;
+  text-align: center;
+}
+
+.about-founder-video-section__intro {
+  margin: clamp(1.125rem, 2vw, 1.5rem) 0 0;
+  color: #171616;
+  font-family: var(--font-body);
+  font-size: clamp(1.25rem, 1.9vw, 1.75rem);
+  line-height: 1.36;
   text-align: center;
 }
 
 .about-founder-video-section__video.webinar-video-frame {
-  width: min(100%, 1532px);
-  margin-top: clamp(4.25rem, 8vw, 7.5rem);
+  width: min(75vw, 1532px);
+  margin-top: clamp(2.75rem, 5vw, 3.5rem);
   border-radius: 16px;
 }
 
@@ -114,10 +123,10 @@
   display: grid;
   justify-items: center;
   width: min(100%, 884px);
-  margin: clamp(4.75rem, 7vw, 5.75rem) auto 0;
+  margin: clamp(5rem, 7vw, 6rem) auto 0;
   padding-top: clamp(2.25rem, 4vw, 3rem);
-  border-top: 8px solid var(--color-page);
-  color: rgba(255, 255, 255, 0.18);
+  border-top: 8px solid var(--color-white);
+  color: #171616;
   font-family: var(--font-body);
   text-align: center;
 }
@@ -126,7 +135,7 @@
   margin: 0;
   font-size: clamp(1.8rem, 4vw, 3rem);
   font-style: italic;
-  font-weight: 700;
+  font-weight: 400;
   line-height: 1.42;
 }
 
@@ -461,14 +470,19 @@
   }
 
   .about-founder-video-section {
-    padding: 3.75rem 1rem 5rem;
+    padding: 3rem 1rem 5rem;
   }
 
   .about-founder-video-section__title {
     font-size: clamp(2.5rem, 12vw, 3.25rem);
   }
 
+  .about-founder-video-section__intro {
+    font-size: 1.125rem;
+  }
+
   .about-founder-video-section__video.webinar-video-frame {
+    width: 100%;
     margin-top: 2.75rem;
   }
 

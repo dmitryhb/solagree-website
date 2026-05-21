@@ -16,6 +16,13 @@ import WebinarVideoFrame from '~/components/webinar/WebinarVideoFrame.vue'
         Why We Built Solagree
       </h2>
 
+      <p
+        v-appear="{ delay: 40 }"
+        class="about-founder-video-section__intro"
+      >
+        Hear why we're building a different path forward for separating families.
+      </p>
+
       <WebinarVideoFrame
         v-appear="{ delay: 80, variant: 'scale' }"
         class="about-founder-video-section__video"
