@@ -11,6 +11,7 @@ SSH_HOST="${SSH_HOST:-15.204.253.205}"
 REMOTE_PATH="${REMOTE_PATH:-/home/solagree/public_html/}"
 REMOTE_OWNER="${REMOTE_OWNER:-solagree:solagree}"
 REMOTE_LEGACY_REDIRECTS_SNIPPET="${REMOTE_LEGACY_REDIRECTS_SNIPPET:-/etc/nginx/snippets/solagree-legacy-redirects.conf}"
+REMOTE_NGINX_SITE_CONFIG="${REMOTE_NGINX_SITE_CONFIG:-/etc/nginx/sites-available/solagree-website}"
 
 PRODUCTION_SITE_URL="${NUXT_PUBLIC_SITE_URL:-https://www.solagree.com}"
 PRODUCTION_PORTAL_URL="${NUXT_PUBLIC_PORTAL_URL:-https://portal.solagree.com}"
@@ -79,6 +80,37 @@ if [ "$DRY_RUN" = false ]; then
   echo "Installing nginx legacy redirect snippet at ${REMOTE_LEGACY_REDIRECTS_SNIPPET}"
   ssh "$SSH_TARGET" "sudo -n install -d -m 755 '$(dirname "$REMOTE_LEGACY_REDIRECTS_SNIPPET")'"
   ssh "$SSH_TARGET" "sudo -n tee '${REMOTE_LEGACY_REDIRECTS_SNIPPET}' >/dev/null" < "$LEGACY_REDIRECTS_SNIPPET"
+  ssh "$SSH_TARGET" "REMOTE_NGINX_SITE_CONFIG='${REMOTE_NGINX_SITE_CONFIG}' REMOTE_LEGACY_REDIRECTS_SNIPPET='${REMOTE_LEGACY_REDIRECTS_SNIPPET}' bash -s" <<'REMOTE_SCRIPT'
+set -euo pipefail
+
+LEGACY_REDIRECT_INCLUDE="include ${REMOTE_LEGACY_REDIRECTS_SNIPPET};"
+
+if ! sudo -n grep -Fq "$LEGACY_REDIRECT_INCLUDE" "$REMOTE_NGINX_SITE_CONFIG"; then
+  echo "Adding legacy redirect include to ${REMOTE_NGINX_SITE_CONFIG}"
+  sudo -n cp "$REMOTE_NGINX_SITE_CONFIG" "${REMOTE_NGINX_SITE_CONFIG}.bak"
+  sudo -n awk -v snippet="    ${LEGACY_REDIRECT_INCLUDE}" '
+    /^[[:space:]]*server_name[[:space:]]+www[.]solagree[.]com;/ {
+      in_www_server = 1
+    }
+
+    in_www_server && !inserted && /^[[:space:]]*root[[:space:]]/ {
+      print snippet
+      inserted = 1
+    }
+
+    {
+      print
+    }
+
+    END {
+      if (!inserted) {
+        exit 2
+      }
+    }
+  ' "$REMOTE_NGINX_SITE_CONFIG" | sudo -n tee "${REMOTE_NGINX_SITE_CONFIG}.tmp" >/dev/null
+  sudo -n mv "${REMOTE_NGINX_SITE_CONFIG}.tmp" "$REMOTE_NGINX_SITE_CONFIG"
+fi
+REMOTE_SCRIPT
   ssh "$SSH_TARGET" "sudo -n nginx -t && sudo -n systemctl reload nginx"
 fi
 
