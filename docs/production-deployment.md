@@ -33,9 +33,25 @@ Overridable env vars: `SSH_USER`, `SSH_HOST`, `REMOTE_PATH`, `REMOTE_OWNER`, `RO
 
 - HTTP→HTTPS redirect (with `/.well-known/acme-challenge/` carve-out for future certbot)
 - `https://www.solagree.com` root → `/home/solagree/public_html`, with SPA fallback `try_files $uri $uri/ /200.html;` so dynamic Nuxt paths (`/go/:slug`) work after a static deploy
+- legacy pre-Nuxt URLs → 301 redirects via `/etc/nginx/snippets/solagree-legacy-redirects.conf`
 - `https://solagree.com` → 301 to `https://www.solagree.com`
 - `_nuxt/*` immutable cache headers
 - TLS via `/etc/nginx/snippets/solagree-ssl.conf` (currently the self-signed cert at `/etc/ssl/solagree/`; flip to Let's Encrypt on DNS cutover)
+
+The production deploy script installs `config/nginx/legacy-redirects.conf` to
+`/etc/nginx/snippets/solagree-legacy-redirects.conf`, tests nginx, reloads it,
+and verifies that `/about/` returns a true HTTP 301 to `/about-us`.
+
+The `www.solagree.com` server block must include the snippet before the SPA
+fallback:
+
+```nginx
+include /etc/nginx/snippets/solagree-legacy-redirects.conf;
+
+location / {
+    try_files $uri $uri/ /200.html;
+}
+```
 
 ## Pre-DNS testing
 

@@ -4,11 +4,13 @@ set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 OUTPUT_DIR="$ROOT_DIR/.output/public/"
+LEGACY_REDIRECTS_SNIPPET="$ROOT_DIR/config/nginx/legacy-redirects.conf"
 
 SSH_USER="${SSH_USER:-ubuntu}"
 SSH_HOST="${SSH_HOST:-15.204.253.205}"
 REMOTE_PATH="${REMOTE_PATH:-/home/solagree/public_html/}"
 REMOTE_OWNER="${REMOTE_OWNER:-solagree:solagree}"
+REMOTE_LEGACY_REDIRECTS_SNIPPET="${REMOTE_LEGACY_REDIRECTS_SNIPPET:-/etc/nginx/snippets/solagree-legacy-redirects.conf}"
 
 PRODUCTION_SITE_URL="${NUXT_PUBLIC_SITE_URL:-https://www.solagree.com}"
 PRODUCTION_PORTAL_URL="${NUXT_PUBLIC_PORTAL_URL:-https://portal.solagree.com}"
@@ -73,6 +75,11 @@ rsync "${RSYNC_ARGS[@]}" "$OUTPUT_DIR" "${SSH_TARGET}:${REMOTE_PATH}"
 if [ "$DRY_RUN" = false ]; then
   # Re-apply ownership to the app user in case rsync ran as root via sudo.
   ssh "$SSH_TARGET" "sudo -n chown -R ${REMOTE_OWNER} ${REMOTE_PATH}"
+
+  echo "Installing nginx legacy redirect snippet at ${REMOTE_LEGACY_REDIRECTS_SNIPPET}"
+  ssh "$SSH_TARGET" "sudo -n install -d -m 755 '$(dirname "$REMOTE_LEGACY_REDIRECTS_SNIPPET")'"
+  ssh "$SSH_TARGET" "sudo -n tee '${REMOTE_LEGACY_REDIRECTS_SNIPPET}' >/dev/null" < "$LEGACY_REDIRECTS_SNIPPET"
+  ssh "$SSH_TARGET" "sudo -n nginx -t && sudo -n systemctl reload nginx"
 fi
 
 if [ "$DRY_RUN" = false ] && [ "$SKIP_ROUTE_CHECK" = false ]; then
@@ -96,4 +103,29 @@ MESSAGE
   fi
 
   echo "Route check passed: $ROUTE_CHECK_URL returned HTTP $ROUTE_CHECK_STATUS"
+
+  LEGACY_REDIRECT_CHECK_URL="https://${ROUTE_CHECK_HOST}/about/"
+  LEGACY_REDIRECT_CHECK_RESULT="$(curl -sS -o /dev/null -k \
+    --resolve "${ROUTE_CHECK_HOST}:443:${ROUTE_CHECK_RESOLVE_IP}" \
+    -w "%{http_code} %{redirect_url}" "$LEGACY_REDIRECT_CHECK_URL" || true)"
+  LEGACY_REDIRECT_CHECK_STATUS="${LEGACY_REDIRECT_CHECK_RESULT%% *}"
+  LEGACY_REDIRECT_CHECK_TARGET="${LEGACY_REDIRECT_CHECK_RESULT#* }"
+  EXPECTED_LEGACY_REDIRECT_TARGET="https://${ROUTE_CHECK_HOST}/about-us"
+
+  if [ "$LEGACY_REDIRECT_CHECK_STATUS" != "301" ] \
+    || [ "$LEGACY_REDIRECT_CHECK_TARGET" != "$EXPECTED_LEGACY_REDIRECT_TARGET" ]; then
+    cat >&2 <<MESSAGE
+Production legacy redirect check failed: $LEGACY_REDIRECT_CHECK_URL returned
+HTTP $LEGACY_REDIRECT_CHECK_STATUS with Location "$LEGACY_REDIRECT_CHECK_TARGET".
+
+The nginx server block for $ROUTE_CHECK_HOST must include:
+
+  include ${REMOTE_LEGACY_REDIRECTS_SNIPPET};
+
+Place the include before the SPA fallback location.
+MESSAGE
+    exit 1
+  fi
+
+  echo "Legacy redirect check passed: $LEGACY_REDIRECT_CHECK_URL returned 301 to $LEGACY_REDIRECT_CHECK_TARGET"
 fi
