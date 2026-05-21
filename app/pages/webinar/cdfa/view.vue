@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import WebinarViewPage from '~/components/webinar/WebinarViewPage.vue'
+import { solagreeVimeoVideos } from '~/data/video-embeds'
 
 const cdfaWebinarImage = '/images/for-professionals.webp'
 
@@ -14,7 +15,7 @@ useSolagreeSeo({
 
 <template>
   <WebinarViewPage
-    :video-image-src="cdfaWebinarImage"
-    video-image-alt="Solagree CDFA and advisor webinar video preview."
+    :video-src="solagreeVimeoVideos.cdfaWebinar.src"
+    :video-title="solagreeVimeoVideos.cdfaWebinar.title"
   />
 </template>

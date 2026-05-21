@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import WebinarVideoFrame from '~/components/webinar/WebinarVideoFrame.vue'
 import { howItWorksPhases } from '~/data/how-it-works-phases'
 </script>
 
@@ -55,19 +56,10 @@ import { howItWorksPhases } from '~/data/how-it-works-phases'
         </ol>
       </div>
 
-      <figure
+      <WebinarVideoFrame
         v-appear="{ variant: 'scale' }"
         class="how-it-works-section__video"
-      >
-        <img
-          src="/images/video-placeholder.webp"
-          alt="Video placeholder for Solagree: How It Works."
-          width="2152"
-          height="1210"
-          loading="lazy"
-          decoding="async"
-        >
-      </figure>
+      />
     </div>
   </section>
 </template>

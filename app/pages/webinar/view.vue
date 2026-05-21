@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import WebinarViewPage from '~/components/webinar/WebinarViewPage.vue'
+import { solagreeVimeoVideos } from '~/data/video-embeds'
 
 useSolagreeSeo({
   title: 'Watch the Attorney Partner Webinar',
@@ -11,5 +12,8 @@ useSolagreeSeo({
 </script>
 
 <template>
-  <WebinarViewPage />
+  <WebinarViewPage
+    :video-src="solagreeVimeoVideos.attorneyWebinar.src"
+    :video-title="solagreeVimeoVideos.attorneyWebinar.title"
+  />
 </template>

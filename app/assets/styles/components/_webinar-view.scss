@@ -20,11 +20,19 @@
   background: var(--color-surface-stone);
 }
 
-.webinar-video-frame__image {
+.webinar-video-frame__image,
+.webinar-video-frame__embed {
   display: block;
   width: 100%;
   aspect-ratio: 1076 / 605;
+}
+
+.webinar-video-frame__image {
   object-fit: cover;
+}
+
+.webinar-video-frame__embed {
+  border: 0;
 }
 
 .webinar-join-prompt {

@@ -47,6 +47,8 @@ export interface AttorneyPartnerPathsContent {
 export interface AttorneyHowItWorksContent {
   title: string
   intro: string
+  videoSrc?: string
+  videoTitle?: string
   videoImageSrc?: string
   videoImageAlt?: string
   ctaLabel: string

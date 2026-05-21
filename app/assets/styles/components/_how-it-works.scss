@@ -114,10 +114,14 @@
   background: var(--color-surface-stone);
 }
 
-.how-it-works-section__video img {
+.how-it-works-section__video .webinar-video-frame__image,
+.how-it-works-section__video .webinar-video-frame__embed {
   display: block;
   width: 100%;
   aspect-ratio: 1076 / 605;
+}
+
+.how-it-works-section__video .webinar-video-frame__image {
   object-fit: cover;
 }
 

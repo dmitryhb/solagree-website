@@ -37,6 +37,8 @@ withDefaults(defineProps<AttorneyHowItWorksSectionProps>(), {
       <WebinarVideoFrame
         v-appear="{ variant: 'scale' }"
         class="attorney-how-it-works-section__video"
+        :video-src="content.videoSrc"
+        :video-title="content.videoTitle"
         :image-src="content.videoImageSrc"
         :image-alt="content.videoImageAlt"
       />
