@@ -74,14 +74,19 @@ echo "Deploying $OUTPUT_DIR to ${SSH_TARGET}:${REMOTE_PATH}"
 rsync "${RSYNC_ARGS[@]}" "$OUTPUT_DIR" "${SSH_TARGET}:${REMOTE_PATH}"
 
 if [ "$DRY_RUN" = false ]; then
-  # Re-apply ownership to the app user in case rsync ran as root via sudo.
-  ssh "$SSH_TARGET" "sudo -n chown -R ${REMOTE_OWNER} ${REMOTE_PATH}"
+  LEGACY_REDIRECTS_SNIPPET_B64="$(base64 < "$LEGACY_REDIRECTS_SNIPPET" | tr -d '\n')"
 
   echo "Installing nginx legacy redirect snippet at ${REMOTE_LEGACY_REDIRECTS_SNIPPET}"
-  ssh "$SSH_TARGET" "sudo -n install -d -m 755 '$(dirname "$REMOTE_LEGACY_REDIRECTS_SNIPPET")'"
-  ssh "$SSH_TARGET" "sudo -n tee '${REMOTE_LEGACY_REDIRECTS_SNIPPET}' >/dev/null" < "$LEGACY_REDIRECTS_SNIPPET"
-  ssh "$SSH_TARGET" "REMOTE_NGINX_SITE_CONFIG='${REMOTE_NGINX_SITE_CONFIG}' REMOTE_LEGACY_REDIRECTS_SNIPPET='${REMOTE_LEGACY_REDIRECTS_SNIPPET}' bash -s" <<'REMOTE_SCRIPT'
+  ssh "$SSH_TARGET" "REMOTE_OWNER='${REMOTE_OWNER}' REMOTE_PATH='${REMOTE_PATH}' REMOTE_NGINX_SITE_CONFIG='${REMOTE_NGINX_SITE_CONFIG}' REMOTE_LEGACY_REDIRECTS_SNIPPET='${REMOTE_LEGACY_REDIRECTS_SNIPPET}' LEGACY_REDIRECTS_SNIPPET_B64='${LEGACY_REDIRECTS_SNIPPET_B64}' bash -s" <<'REMOTE_SCRIPT'
 set -euo pipefail
+
+# Re-apply ownership to the app user in case rsync ran as root via sudo.
+sudo -n chown -R "$REMOTE_OWNER" "$REMOTE_PATH"
+
+sudo -n install -d -m 755 "$(dirname "$REMOTE_LEGACY_REDIRECTS_SNIPPET")"
+printf '%s' "$LEGACY_REDIRECTS_SNIPPET_B64" \
+  | base64 --decode \
+  | sudo -n tee "$REMOTE_LEGACY_REDIRECTS_SNIPPET" >/dev/null
 
 LEGACY_REDIRECT_INCLUDE="include ${REMOTE_LEGACY_REDIRECTS_SNIPPET};"
 
@@ -110,8 +115,10 @@ if ! sudo -n grep -Fq "$LEGACY_REDIRECT_INCLUDE" "$REMOTE_NGINX_SITE_CONFIG"; th
   ' "$REMOTE_NGINX_SITE_CONFIG" | sudo -n tee "${REMOTE_NGINX_SITE_CONFIG}.tmp" >/dev/null
   sudo -n mv "${REMOTE_NGINX_SITE_CONFIG}.tmp" "$REMOTE_NGINX_SITE_CONFIG"
 fi
+
+sudo -n nginx -t
+sudo -n systemctl reload nginx
 REMOTE_SCRIPT
-  ssh "$SSH_TARGET" "sudo -n nginx -t && sudo -n systemctl reload nginx"
 fi
 
 if [ "$DRY_RUN" = false ] && [ "$SKIP_ROUTE_CHECK" = false ]; then

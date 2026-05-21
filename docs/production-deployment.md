@@ -38,10 +38,11 @@ Overridable env vars: `SSH_USER`, `SSH_HOST`, `REMOTE_PATH`, `REMOTE_OWNER`, `RO
 - `_nuxt/*` immutable cache headers
 - TLS via `/etc/nginx/snippets/solagree-ssl.conf` (currently the self-signed cert at `/etc/ssl/solagree/`; flip to Let's Encrypt on DNS cutover)
 
-The production deploy script installs `config/nginx/legacy-redirects.conf` to
-`/etc/nginx/snippets/solagree-legacy-redirects.conf`, ensures the
-`www.solagree.com` server block includes it before the SPA fallback, tests
-nginx, reloads it, and verifies that `/about/` returns a true HTTP 301 to
+After syncing static files, the production deploy script uses one SSH session to
+re-apply ownership, install `config/nginx/legacy-redirects.conf` to
+`/etc/nginx/snippets/solagree-legacy-redirects.conf`, ensure the
+`www.solagree.com` server block includes it before the SPA fallback, test nginx,
+and reload it. It then verifies that `/about/` returns a true HTTP 301 to
 `/about-us`.
 
 The `www.solagree.com` server block must include the snippet before the SPA
