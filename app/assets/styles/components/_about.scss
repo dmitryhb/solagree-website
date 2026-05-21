@@ -8,6 +8,69 @@
   min-height: 0;
 }
 
+.about-attorney-guidance-section {
+  background: var(--color-page);
+  padding: clamp(4rem, 6vw, 5.75rem) 1.25rem clamp(4rem, 6vw, 5.25rem);
+}
+
+.about-attorney-guidance-section__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 500px) minmax(0, 506px);
+  align-items: start;
+  justify-content: center;
+  gap: clamp(2.5rem, 4.9vw, 4.25rem);
+  width: min(100%, 1076px);
+  margin-inline: auto;
+}
+
+.about-attorney-guidance-section__content {
+  display: grid;
+  justify-items: start;
+  padding-top: clamp(0rem, 2vw, 1.95rem);
+}
+
+.about-attorney-guidance-section__title {
+  max-width: 527px;
+  margin: 0;
+  color: var(--color-heading);
+  font-family: var(--font-display);
+  font-size: clamp(2.75rem, 4.6vw, 3.375rem);
+  font-weight: 500;
+  line-height: 1.011;
+  letter-spacing: -0.01em;
+}
+
+.about-attorney-guidance-section__copy {
+  display: grid;
+  gap: clamp(2rem, 4vw, 3.25rem);
+  max-width: 500px;
+  margin-top: 1.65rem;
+  color: var(--color-heading);
+  font-family: var(--font-body);
+  font-size: clamp(1.125rem, 2vw, 1.5rem);
+  line-height: 1.335;
+}
+
+.about-attorney-guidance-section__copy p {
+  margin: 0;
+}
+
+.about-attorney-guidance-section__media {
+  overflow: hidden;
+  width: min(100%, 506px);
+  margin: 0;
+  border-radius: 16px;
+  background: var(--color-surface-stone);
+}
+
+.about-attorney-guidance-section__media img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 506 / 424;
+  object-fit: cover;
+  object-position: center;
+}
+
 .about-audience-section {
   background: var(--color-surface-footer);
   padding: clamp(3.75rem, 6.4vw, 6.75rem) 1.25rem clamp(4rem, 6.8vw, 7.25rem);
@@ -120,6 +183,19 @@
 }
 
 @media (max-width: 900px) {
+  .about-attorney-guidance-section__inner {
+    grid-template-columns: 1fr;
+    width: min(100%, 620px);
+  }
+
+  .about-attorney-guidance-section__content {
+    padding-top: 0;
+  }
+
+  .about-attorney-guidance-section__media {
+    justify-self: center;
+  }
+
   .about-audience-section__inner {
     grid-template-columns: 1fr;
     width: min(100%, 620px);
@@ -136,6 +212,25 @@
 }
 
 @media (max-width: 640px) {
+  .about-attorney-guidance-section {
+    padding: 3rem 1rem;
+  }
+
+  .about-attorney-guidance-section__inner {
+    gap: 2rem;
+  }
+
+  .about-attorney-guidance-section__title {
+    font-size: clamp(2.35rem, 12vw, 3rem);
+  }
+
+  .about-attorney-guidance-section__copy {
+    gap: 1.5rem;
+    margin-top: 1.25rem;
+    font-size: 1.0625rem;
+    line-height: 1.48;
+  }
+
   .about-audience-section {
     padding: 3rem 1rem 3.5rem;
   }

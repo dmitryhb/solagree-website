@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import AboutAudienceSection from '~/components/about/AboutAudienceSection.vue'
+import AboutAttorneyGuidanceSection from '~/components/about/AboutAttorneyGuidanceSection.vue'
 import AboutPage from '~/components/about/AboutPage.vue'
 
 useSolagreeSeo({
@@ -12,6 +13,7 @@ useSolagreeSeo({
 
 <template>
   <AboutPage>
+    <AboutAttorneyGuidanceSection />
     <AboutAudienceSection />
   </AboutPage>
 </template>
