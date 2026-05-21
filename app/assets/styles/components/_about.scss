@@ -8,6 +8,79 @@
   min-height: 0;
 }
 
+.about-process-section {
+  background: var(--color-page);
+  padding: clamp(4rem, 6vw, 5.75rem) 1.25rem clamp(4rem, 6vw, 5.25rem);
+}
+
+.about-process-section__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 525px) minmax(0, 552px);
+  align-items: start;
+  justify-content: center;
+  gap: clamp(2.5rem, 4.9vw, 4.25rem);
+  width: min(100%, 1127px);
+  margin-inline: auto;
+}
+
+.about-process-section__media {
+  overflow: hidden;
+  width: min(100%, 525px);
+  margin: 0;
+  border-radius: 16px;
+  background: var(--color-surface-stone);
+}
+
+.about-process-section__media img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 525 / 644;
+  object-fit: cover;
+  object-position: center;
+}
+
+.about-process-section__content {
+  display: grid;
+  justify-items: start;
+  padding-top: clamp(0rem, 2vw, 1.95rem);
+}
+
+.about-process-section__title {
+  max-width: 552px;
+  margin: 0;
+  color: var(--color-heading);
+  font-family: var(--font-display);
+  font-size: clamp(2.75rem, 4.6vw, 3.375rem);
+  font-weight: 500;
+  line-height: 1.011;
+  letter-spacing: -0.01em;
+}
+
+.about-process-section__copy {
+  display: grid;
+  gap: clamp(2rem, 4vw, 3.25rem);
+  max-width: 500px;
+  margin-top: 1.65rem;
+  color: var(--color-heading);
+  font-family: var(--font-body);
+  font-size: clamp(1.125rem, 2vw, 1.5rem);
+  line-height: 1.335;
+}
+
+.about-process-section__copy p {
+  margin: 0;
+}
+
+.about-process-section__button.sol-button {
+  min-height: 44px;
+  margin-top: clamp(2.25rem, 5vw, 3.5rem);
+  padding: 11px 24px 12px;
+  color: var(--color-ink);
+  font-size: 0.96875rem;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
 .about-attorney-guidance-section {
   background: var(--color-page);
   padding: clamp(4rem, 6vw, 5.75rem) 1.25rem clamp(4rem, 6vw, 5.25rem);
@@ -183,6 +256,19 @@
 }
 
 @media (max-width: 900px) {
+  .about-process-section__inner {
+    grid-template-columns: 1fr;
+    width: min(100%, 620px);
+  }
+
+  .about-process-section__media {
+    justify-self: center;
+  }
+
+  .about-process-section__content {
+    padding-top: 0;
+  }
+
   .about-attorney-guidance-section__inner {
     grid-template-columns: 1fr;
     width: min(100%, 620px);
@@ -212,6 +298,29 @@
 }
 
 @media (max-width: 640px) {
+  .about-process-section {
+    padding: 3rem 1rem;
+  }
+
+  .about-process-section__inner {
+    gap: 2rem;
+  }
+
+  .about-process-section__title {
+    font-size: clamp(2.35rem, 12vw, 3rem);
+  }
+
+  .about-process-section__copy {
+    gap: 1.5rem;
+    margin-top: 1.25rem;
+    font-size: 1.0625rem;
+    line-height: 1.48;
+  }
+
+  .about-process-section__button.sol-button {
+    width: min(100%, 260px);
+  }
+
   .about-attorney-guidance-section {
     padding: 3rem 1rem;
   }

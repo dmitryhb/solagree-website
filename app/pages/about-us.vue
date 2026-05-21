@@ -2,6 +2,7 @@
 import AboutAudienceSection from '~/components/about/AboutAudienceSection.vue'
 import AboutAttorneyGuidanceSection from '~/components/about/AboutAttorneyGuidanceSection.vue'
 import AboutPage from '~/components/about/AboutPage.vue'
+import AboutProcessSection from '~/components/about/AboutProcessSection.vue'
 
 useSolagreeSeo({
   title: 'About Us',
@@ -13,6 +14,7 @@ useSolagreeSeo({
 
 <template>
   <AboutPage>
+    <AboutProcessSection />
     <AboutAttorneyGuidanceSection />
     <AboutAudienceSection />
   </AboutPage>
