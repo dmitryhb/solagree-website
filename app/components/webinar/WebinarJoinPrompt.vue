@@ -1,3 +1,13 @@
+<script setup lang="ts">
+interface WebinarJoinPromptProps {
+  joinTo?: string
+}
+
+withDefaults(defineProps<WebinarJoinPromptProps>(), {
+  joinTo: '/attorney-application'
+})
+</script>
+
 <template>
   <section
     class="webinar-join-prompt"
@@ -12,7 +22,9 @@
 
     <NuxtLink
       class="webinar-join-prompt__cta"
-      to="/#quiz"
+      :to="joinTo"
+      target="_blank"
+      rel="noopener noreferrer"
     >
       <span>Join Now</span>
       <span

@@ -15,5 +15,6 @@ useSolagreeSeo({
   <WebinarViewPage
     :video-src="solagreeVimeoVideos.attorneyWebinar.src"
     :video-title="solagreeVimeoVideos.attorneyWebinar.title"
+    join-to="/attorney-application"
   />
 </template>

@@ -6,11 +6,13 @@ import { solagreeVimeoVideos } from '~/data/video-embeds'
 interface WebinarViewPageProps {
   videoSrc?: string
   videoTitle?: string
+  joinTo?: string
 }
 
 withDefaults(defineProps<WebinarViewPageProps>(), {
   videoSrc: solagreeVimeoVideos.attorneyWebinar.src,
-  videoTitle: solagreeVimeoVideos.attorneyWebinar.title
+  videoTitle: solagreeVimeoVideos.attorneyWebinar.title,
+  joinTo: '/attorney-application'
 })
 </script>
 
@@ -22,7 +24,10 @@ withDefaults(defineProps<WebinarViewPageProps>(), {
         :video-src="videoSrc"
         :video-title="videoTitle"
       />
-      <WebinarJoinPrompt v-appear="{ delay: 120 }" />
+      <WebinarJoinPrompt
+        v-appear="{ delay: 120 }"
+        :join-to="joinTo"
+      />
     </div>
 
     <SiteFooter />

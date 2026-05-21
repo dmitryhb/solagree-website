@@ -17,5 +17,6 @@ useSolagreeSeo({
   <WebinarViewPage
     :video-src="solagreeVimeoVideos.cdfaWebinar.src"
     :video-title="solagreeVimeoVideos.cdfaWebinar.title"
+    join-to="/cdfa-application"
   />
 </template>
