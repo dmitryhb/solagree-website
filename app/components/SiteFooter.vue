@@ -101,7 +101,7 @@ const portalLoginHref = usePortalLoginHref()
             </p>
             <ul class="site-footer__links">
               <li>
-                <NuxtLink to="/">
+                <NuxtLink to="/about-us">
                   About Us
                 </NuxtLink>
               </li>

@@ -1,0 +1,160 @@
+.about-page {
+  min-height: 100vh;
+  background: var(--color-page);
+  color: var(--color-ink);
+}
+
+.about-page__content {
+  min-height: 0;
+}
+
+.about-audience-section {
+  background: var(--color-surface-footer);
+  padding: clamp(3.75rem, 6.4vw, 6.75rem) 1.25rem clamp(4rem, 6.8vw, 7.25rem);
+}
+
+.about-audience-section__inner {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1.25rem, 2vw, 1.75rem);
+  width: min(100%, 1224px);
+  margin-inline: auto;
+}
+
+.about-audience-card {
+  display: grid;
+  min-height: 645px;
+  align-content: space-between;
+  justify-items: center;
+  padding: clamp(1.5rem, 2.6vw, 2rem);
+  border-radius: 16px;
+  background: var(--color-surface-stone);
+  text-align: center;
+}
+
+.about-audience-card__content {
+  display: grid;
+  justify-items: center;
+  width: 100%;
+}
+
+.about-audience-card__title {
+  max-width: 100%;
+  margin: 0;
+  color: #171616;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 3.2vw, 2.25rem);
+  font-weight: 500;
+  line-height: 1.08;
+}
+
+.about-audience-card__image {
+  display: block;
+  width: min(100%, 473px);
+  aspect-ratio: 946 / 544;
+  margin-top: clamp(1rem, 2.15vw, 1.35rem);
+  border-radius: 16px;
+  object-fit: cover;
+}
+
+.about-audience-card__copy {
+  display: grid;
+  justify-items: center;
+  max-width: 438px;
+  margin-top: clamp(1.35rem, 2.2vw, 1.65rem);
+  color: #171616;
+  font-family: var(--font-nav);
+  font-size: clamp(1.0625rem, 1.55vw, 1.25rem);
+  line-height: 1.68;
+}
+
+.about-audience-card__heading,
+.about-audience-card__body,
+.about-audience-card__helper {
+  margin: 0;
+}
+
+.about-audience-card__heading {
+  font-size: inherit;
+  font-weight: 700;
+  line-height: inherit;
+}
+
+.about-audience-card__body {
+  font-weight: 500;
+}
+
+.about-audience-card__helper {
+  font-weight: 500;
+}
+
+.about-audience-card__helper a {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+.about-audience-card__helper a:hover {
+  color: var(--color-heading);
+}
+
+.about-audience-card__button.sol-button {
+  min-width: 153px;
+  min-height: 49px;
+  margin-top: 2.75rem;
+  padding: 14px 24px 15px;
+  color: var(--color-heading);
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.about-audience-card__button--secondary.sol-button {
+  border-color: var(--color-ink);
+  background: transparent;
+}
+
+.about-audience-card__button--secondary.sol-button:hover {
+  border-color: var(--color-heading);
+  background: rgba(255, 253, 249, 0.34);
+}
+
+@media (max-width: 900px) {
+  .about-audience-section__inner {
+    grid-template-columns: 1fr;
+    width: min(100%, 620px);
+  }
+
+  .about-audience-card {
+    min-height: 0;
+    gap: 2rem;
+  }
+
+  .about-audience-card__button.sol-button {
+    margin-top: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .about-audience-section {
+    padding: 3rem 1rem 3.5rem;
+  }
+
+  .about-audience-card {
+    padding: 1.25rem;
+  }
+
+  .about-audience-card__title {
+    font-size: clamp(1.75rem, 9vw, 2rem);
+  }
+
+  .about-audience-card__copy {
+    font-size: 1rem;
+    line-height: 1.58;
+  }
+
+  .about-audience-card__button.sol-button {
+    width: min(100%, 210px);
+    font-size: 1rem;
+  }
+}

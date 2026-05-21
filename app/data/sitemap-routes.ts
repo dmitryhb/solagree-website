@@ -58,6 +58,11 @@ const publicRoutes: SitemapRoute[] = [
     priority: 0.6
   },
   {
+    path: '/about-us',
+    changefreq: 'monthly',
+    priority: 0.6
+  },
+  {
     path: '/faq',
     changefreq: 'monthly',
     priority: 0.6
