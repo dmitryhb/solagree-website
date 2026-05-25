@@ -134,6 +134,15 @@
   font-weight: 700;
 }
 
+.webinar-registration-intro__caption-title {
+  display: inline;
+}
+
+.webinar-registration-intro__caption-title--block {
+  display: block;
+  margin-top: 0.15rem;
+}
+
 .watch-webinar-form {
   display: grid;
   align-content: start;

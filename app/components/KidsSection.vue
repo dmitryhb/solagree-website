@@ -11,7 +11,7 @@
       >
         <img
           src="/images/kids.webp"
-          alt="Parent crouching beside a child in a family home."
+          alt="A father kneeling on a hardwood floor inside a house, smiling warmly at his young daughter who is holding a book over her head."
           width="1050"
           height="1288"
           loading="eager"

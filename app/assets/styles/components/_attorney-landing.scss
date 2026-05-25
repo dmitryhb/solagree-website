@@ -116,6 +116,30 @@
   object-position: center;
 }
 
+.cdfa-landing-page .attorney-hero-section {
+  background: #9b6a58;
+}
+
+.cdfa-landing-page .attorney-hero-section__eyebrow {
+  background: #e4e1f0;
+  color: var(--color-ink);
+}
+
+.cdfa-landing-page .attorney-hero-section__primary.sol-button {
+  border-color: #3e4059;
+  background: #3e4059;
+  color: var(--color-white);
+}
+
+.cdfa-landing-page .attorney-hero-section__primary.sol-button:hover {
+  border-color: #323449;
+  background: #323449;
+}
+
+.cdfa-landing-page .attorney-hero-section__primary .button-arrow-icon {
+  filter: brightness(0) invert(1);
+}
+
 .attorney-partner-paths-section {
   background: var(--color-page);
   padding: 94px 2rem 90px;
@@ -907,7 +931,7 @@
   }
 
   .attorney-hero-section__title {
-    font-size: 40px;
+    font-size: 38px;
   }
 
   .attorney-hero-section__intro {
@@ -941,7 +965,7 @@
   }
 
   .attorney-partner-paths-section__title {
-    font-size: 40px;
+    font-size: 38px;
   }
 
   .attorney-partner-paths-section__intro,

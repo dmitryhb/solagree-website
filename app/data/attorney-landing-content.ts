@@ -29,7 +29,7 @@ export const attorneyHeroContent = {
   secondaryCtaTo: '/attorney-application',
   image: {
     src: '/images/attorney-hero.webp',
-    alt: 'Attorney reviewing case materials at a desk.',
+    alt: 'A professional blonde woman wearing glasses, a pinstripe blazer, and a pearl necklace smiling confidently while working on a laptop at an executive office desk.',
     width: 968,
     height: 772
   }
@@ -37,18 +37,18 @@ export const attorneyHeroContent = {
 
 export const cdfaHeroContent = {
   eyebrow: 'Where Divorce Starts with the Numbers',
-  titleLines: ['Lead with Financial Clarity.', 'Build Your Practice.'],
+  titleLines: ['Financials First.', 'Build Your Practice.'],
   intro:
     'Help divorcing couples make better financial decisions from day one – with a structured process that puts your CDFA® expertise at the foundation, not fighting your way into the legal process.',
-  primaryCtaLabel: 'Watch Our Partner Briefing',
+  primaryCtaLabel: 'Watch the Partner Briefing',
   primaryCtaTo: cdfaWebinarPath,
   secondaryCtaLabel: 'Join the Partner Network',
   secondaryCtaTo: '/cdfa-application',
   image: {
-    src: '/images/for-professionals.webp',
-    alt: 'CDFA professional at a desk.',
-    width: 1056,
-    height: 1086
+    src: '/images/cdfa-hero.webp',
+    alt: 'A confident female professional in a grey suit jacket and glasses smiling in a brightly lit, open-concept office background.',
+    width: 968,
+    height: 772
   }
 } satisfies AttorneyHeroContent
 
@@ -196,7 +196,7 @@ export const attorneyMoreCasesContent = {
   linkTo: attorneyWebinarPath,
   image: {
     src: '/images/attorney-handle-more-cases.webp',
-    alt: 'Attorney working on case documents at a laptop.',
+    alt: 'A smiling professional man with glasses sitting at an office desk, holding a white document and looking forward in a modern office with a potted plant.',
     width: 1012,
     height: 766
   }
@@ -205,14 +205,14 @@ export const attorneyMoreCasesContent = {
 export const cdfaMoreCasesContent = {
   title: 'Get Qualified Referrals - Not Just Any Clients',
   body:
-    "Solagree pre-qualifies every client before matching them with a CDFA. You receive referrals for Solagree Compass cases—clients who already understand they need financial expertise and are committed to the process.\n\nNo more cold calls. No more trying to convince skeptical attorneys. Just qualified clients ready to work with you.",
+    'Skip the marketing headache and chasing dead ends. Solagree delivers pre-screened client referrals who understand the value of a CDFA® and are ready to move forward.',
   linkPrefix: 'Learn more in ',
   linkLabel: 'the briefing',
   linkSuffix: '.',
   linkTo: cdfaWebinarPath,
   image: {
-    src: '/images/attorney-handle-more-cases.webp',
-    alt: 'Financial professional reviewing client documents.',
+    src: '/images/cdfa-qualified-referrals.webp',
+    alt: 'An approachable male professional in a dark long-sleeve shirt smiling and waving during a video conference call from his office desk.',
     width: 1012,
     height: 766
   }
@@ -278,7 +278,7 @@ export const attorneyFitsPracticeContent = {
   ctaTo: attorneyWebinarPath,
   image: {
     src: '/images/attorney-see-if-fits.webp',
-    alt: 'Attorney partner consultation workspace.',
+    alt: 'A close-up cropped view of a professional wearing a geometric patterned blouse sitting at a light wooden desk, with their hand resting on a silver laptop trackpad next to an open notebook.',
     width: 1218,
     height: 545
   }
@@ -291,8 +291,8 @@ export const cdfaFitsPracticeContent = {
   ctaLabel: 'Watch Now',
   ctaTo: cdfaWebinarPath,
   image: {
-    src: '/images/attorney-see-if-fits.webp',
-    alt: 'CDFA partner consultation workspace.',
+    src: '/images/cdfa-practice-integration.webp',
+    alt: 'A close-up cropped view of a professional wearing a geometric patterned blouse sitting at a light wooden desk, with their hand resting on a silver laptop trackpad next to an open notebook.',
     width: 1218,
     height: 545
   }

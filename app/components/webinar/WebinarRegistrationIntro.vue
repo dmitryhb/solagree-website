@@ -59,7 +59,17 @@ withDefaults(defineProps<WebinarRegistrationIntroProps>(), {
 
       <figcaption class="webinar-registration-intro__caption">
         <strong>{{ content.presenter.name }}</strong>
-        {{ content.presenter.captionSeparator ?? '-' }} {{ content.presenter.title }}
+        <span
+          :class="{ 'webinar-registration-intro__caption-title--block': content.presenter.titleLineBreak }"
+          class="webinar-registration-intro__caption-title"
+        >
+          <template v-if="content.presenter.titleLineBreak">
+            {{ content.presenter.title }}
+          </template>
+          <template v-else>
+            {{ content.presenter.captionSeparator ?? '-' }} {{ content.presenter.title }}
+          </template>
+        </span>
       </figcaption>
     </figure>
   </section>

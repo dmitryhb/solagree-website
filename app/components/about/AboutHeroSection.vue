@@ -30,7 +30,7 @@
       >
         <img
           src="/images/about-hero.png"
-          alt="Parent greeting their child at the door."
+          alt="A man in a tan suit holding a briefcase stands by an open wooden front door, holding his young daughter's hand as she waves goodbye to a woman standing in the foreground inside a home."
           width="968"
           height="930"
           loading="eager"

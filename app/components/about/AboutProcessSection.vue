@@ -10,7 +10,7 @@
       >
         <img
           src="/images/about-process-around-people.png"
-          alt="Person relaxing at home with a mug."
+          alt="A smiling blonde woman wearing a light green knit turtleneck sweater sits on a brown leather couch, holding a colorful ceramic mug while looking warmly at her brown and white boxer dog."
           width="1050"
           height="1288"
           loading="lazy"

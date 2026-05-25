@@ -10,6 +10,7 @@ export interface WebinarPresenter {
   name: string
   title: string
   captionSeparator?: string
+  titleLineBreak?: boolean
 }
 
 export interface WebinarRegistrationContent {

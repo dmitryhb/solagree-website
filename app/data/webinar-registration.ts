@@ -56,13 +56,13 @@ export const cdfaWebinarRegistrationContent = {
     'More cases, steady referrals, and predictable revenue – without adding overhead or marketing spend.',
   features: cdfaWebinarFeatures,
   presenter: {
-    imageSrc: '/images/for-professionals.webp',
+    imageSrc: '/images/courtney-cdfa-co-founder.png',
     imageAlt: 'Courtney Lutz-McLellan, CDFA, Solagree co-founder',
-    imageWidth: 1056,
-    imageHeight: 1086,
+    imageWidth: 826,
+    imageHeight: 562,
     name: 'Courtney Lutz-McLellan, CDFA®',
     title: 'Co-Founder Solagree',
-    captionSeparator: '–'
+    titleLineBreak: true
   },
   formSubtitle: 'Less than 5 minutes to see how it works for you.',
   formRedirectPath: '/webinar/cdfa/view',

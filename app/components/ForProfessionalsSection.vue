@@ -56,7 +56,7 @@
         >
           <img
             src="/images/for-professionals.webp"
-            alt="Professional advisor seated at a desk."
+            alt="A professional blonde woman wearing glasses and a black blouse sitting at a wooden conference table, smiling warmly next to a clipboard and a modern bookshelf."
             width="1056"
             height="1086"
             loading="eager"

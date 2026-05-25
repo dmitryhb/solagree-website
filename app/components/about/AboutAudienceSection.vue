@@ -14,11 +14,11 @@ interface AboutAudienceCard {
     to: string
     suffix: string
   }
-  cta: {
+  ctas: readonly {
     label: string
     to: string
     variant: 'primary' | 'secondary'
-  }
+  }[]
 }
 
 const audienceCards: readonly AboutAudienceCard[] = [
@@ -26,7 +26,7 @@ const audienceCards: readonly AboutAudienceCard[] = [
     title: 'Considering Divorce',
     image: {
       src: '/images/about-considering-divorce.png',
-      alt: 'Person seated on a sofa using a laptop.',
+      alt: 'A young Black man wearing glasses sits cross-legged on a bed with pillows, holding a white coffee mug while looking down at an open silver laptop.',
       width: 946,
       height: 544
     },
@@ -37,27 +37,36 @@ const audienceCards: readonly AboutAudienceCard[] = [
       to: '/book-a-solagree-consult',
       suffix: ' or'
     },
-    cta: {
-      label: 'Take the Quiz',
-      to: '/quiz',
-      variant: 'primary'
-    }
+    ctas: [
+      {
+        label: 'Take the Quiz',
+        to: '/quiz',
+        variant: 'primary'
+      }
+    ]
   },
   {
     title: 'Attorneys & CDFAs',
     image: {
       src: '/images/about-attorneys-cdfas.png',
-      alt: 'Professional advisor working from a desk during a virtual call.',
+      alt: 'A blonde woman in a light blue blouse sits at a rustic wooden desk with a white coffee mug, smiling thoughtfully while looking at a laptop screen and writing with a pen.',
       width: 946,
       height: 544
     },
     heading: 'Join Our Network',
     body: "We're partnering with Attorneys and CDFAs nationwide who believe there's a better way to serve divorcing families.",
-    cta: {
-      label: 'Attorneys',
-      to: '/attorneys',
-      variant: 'secondary'
-    }
+    ctas: [
+      {
+        label: 'Attorneys',
+        to: '/attorneys',
+        variant: 'secondary'
+      },
+      {
+        label: 'CDFAs',
+        to: '/cdfa',
+        variant: 'secondary'
+      }
+    ]
   }
 ] as const
 </script>
@@ -107,14 +116,18 @@ const audienceCards: readonly AboutAudienceCard[] = [
           </div>
         </div>
 
-        <SiteButton
-          class="about-audience-card__button"
-          :class="`about-audience-card__button--${card.cta.variant}`"
-          :to="card.cta.to"
-          :variant="card.cta.variant"
-        >
-          {{ card.cta.label }}
-        </SiteButton>
+        <div class="about-audience-card__actions">
+          <SiteButton
+            v-for="cta in card.ctas"
+            :key="cta.label"
+            class="about-audience-card__button"
+            :class="`about-audience-card__button--${cta.variant}`"
+            :to="cta.to"
+            :variant="cta.variant"
+          >
+            {{ cta.label }}
+          </SiteButton>
+        </div>
       </article>
     </div>
   </section>

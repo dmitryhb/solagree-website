@@ -29,7 +29,7 @@ useSolagreeSeo({
 </script>
 
 <template>
-  <AttorneyLandingPage>
+  <AttorneyLandingPage class="cdfa-landing-page">
     <AttorneyHeroSection :content="cdfaHeroContent" />
     <AttorneyPartnerPathsSection :content="cdfaPartnerPathsContent" />
     <AttorneyHowItWorksSection :content="cdfaHowItWorksContent" />

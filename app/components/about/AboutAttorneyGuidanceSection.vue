@@ -31,7 +31,7 @@
       >
         <img
           src="/images/about-attorney-guidance.png"
-          alt="Attorney speaking with clients at a conference table."
+          alt="A professional middle-aged man with a graying beard, glasses, and a gray tweed blazer sitting at a wooden desk, speaking directly forward while gesturing with his hands open."
           width="1012"
           height="848"
           loading="lazy"

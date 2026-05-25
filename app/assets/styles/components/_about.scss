@@ -373,10 +373,17 @@
   color: var(--color-heading);
 }
 
+.about-audience-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 2.75rem;
+}
+
 .about-audience-card__button.sol-button {
   min-width: 153px;
   min-height: 49px;
-  margin-top: 2.75rem;
   padding: 14px 24px 15px;
   color: var(--color-heading);
   font-size: 1.125rem;
@@ -444,7 +451,7 @@
     gap: 2rem;
   }
 
-  .about-audience-card__button.sol-button {
+  .about-audience-card__actions {
     margin-top: 0;
   }
 }
@@ -459,7 +466,7 @@
   }
 
   .about-hero-section__title {
-    font-size: 3rem;
+    font-size: clamp(2.35rem, 10vw, 2.75rem);
     line-height: 1.08;
   }
 
@@ -559,5 +566,9 @@
   .about-audience-card__button.sol-button {
     width: min(100%, 210px);
     font-size: 1rem;
+  }
+
+  .about-audience-card__actions {
+    width: 100%;
   }
 }

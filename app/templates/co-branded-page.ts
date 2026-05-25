@@ -40,7 +40,7 @@ const solagreeBasicTemplate = Handlebars.compile<CoBrandedPageTemplateContext>(`
       <img
         class="co-branded-page__hero-image"
         src="/images/co-branded-hero.webp"
-        alt="Attorney in a consultation"
+        alt="A professional woman with dark hair, a pink turtleneck, and a grey blazer sitting at a white desk with a keyboard, speaking and gesturing warmly during a video consultation."
       >
     </section>
 
@@ -66,7 +66,7 @@ const solagreeBasicTemplate = Handlebars.compile<CoBrandedPageTemplateContext>(`
         <img
           class="co-branded-page__what-is-image"
           src="/images/co-branded-who-its-for.webp"
-          alt="Family smiling while looking at a phone together"
+          alt="A smiling father with a graying beard sits on a white couch alongside his two sons, all laughing together while looking at a smartphone held by the younger boy."
         >
 
         <div class="co-branded-page__what-is-card">
@@ -139,7 +139,7 @@ const solagreeBasicTemplate = Handlebars.compile<CoBrandedPageTemplateContext>(`
       <img
         class="co-branded-page__attorney-guide-image"
         src="/images/co-branded-attorney-guides.webp"
-        alt="Attorney reviewing documents at a laptop"
+        alt="An East Asian professional woman wearing glasses and a grey blazer sits at a conference table, holding a white document in one hand while using a pen to navigate her open silver laptop."
       >
 
       <div class="co-branded-page__attorney-guide-content">
@@ -350,7 +350,7 @@ const solagreeBasicTemplate = Handlebars.compile<CoBrandedPageTemplateContext>(`
         <img
           class="co-branded-page__next-steps-image"
           src="/images/co-branded-next-steps.webp"
-          alt="Woman speaking by phone"
+          alt="A close-up view of a blonde woman wearing a crisp white button-down shirt, holding a black smartphone to her ear while listening intently during a call."
         >
       </div>
     </section>
