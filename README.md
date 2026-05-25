@@ -128,6 +128,25 @@ https://solagree-portal.qamachine.com/api/attorney-applications
 https://solagree-portal.qamachine.com/api/consult-requests
 ```
 
+## Admin intake pages
+
+Direct-share intake form pages are served under:
+
+```text
+/c/:slug
+/c/:slug/thank-you
+```
+
+The website verifies the slug against the Portal public API before rendering:
+
+```text
+${NUXT_PUBLIC_PORTAL_API_BASE_URL}/api/public/admin-intakes/:slug
+```
+
+Unknown slugs render the site's standard 404 page — no form is shown and no
+PII is exposed. These pages carry a `noindex` meta tag and are not linked from
+the website navigation, footer, or sitemap.
+
 ## Co-branded partner pages
 
 Published co-branded partner pages are served by the website under:
