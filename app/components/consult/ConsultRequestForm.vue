@@ -12,10 +12,15 @@ import {
 import { isPortalApiConfigurationError } from '~/services/portal-api'
 import type { ConsultRequestFetcher } from '~/services/consult-request-api'
 import type {
+  ConsultRequestPageContent,
   ConsultRequestFormState,
   ConsultRequestResult
 } from '~/types/consult-request'
 import { getStoredConsultQuizAnswers } from '~/utils/consult-quiz-answers'
+
+const props = defineProps<{
+  content: ConsultRequestPageContent
+}>()
 
 const runtimeConfig = useRuntimeConfig()
 const route = useRoute()
@@ -39,7 +44,7 @@ const referralCode = computed(() => {
 })
 
 const thankYouPath = computed(() => ({
-  path: '/book-a-solagree-consult/thank-you',
+  path: props.content.thankYouPath,
   query: referralCode.value ? { ref: referralCode.value } : undefined
 }))
 
@@ -72,6 +77,7 @@ const handleSubmit = async () => {
     await submitConsultRequest(form, {
       portalApiBaseUrl: runtimeConfig.public.portalApiBaseUrl,
       fetcher: $fetch as unknown as ConsultRequestFetcher,
+      consultType: props.content.consultType,
       referralCode: referralCode.value,
       sourceUrl: getSourceUrl(),
       quizAnswers: getStoredConsultQuizAnswers()
@@ -100,16 +106,16 @@ const handleSubmit = async () => {
   >
     <div class="consult-request-form__intro">
       <p class="eyebrow">
-        Solagree Consult
+        {{ content.eyebrow }}
       </p>
       <h1
         id="consult-request-title"
         class="consult-request-form__title"
       >
-        Book a Solagree Consult
+        {{ content.title }}
       </h1>
       <p class="consult-request-form__copy">
-        Share your contact details and we will follow up to schedule a 30-45 minute consult.
+        {{ content.description }}
       </p>
     </div>
 

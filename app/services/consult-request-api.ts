@@ -13,7 +13,8 @@ import type {
   ConsultRequestApiErrorResponse,
   ConsultRequestApiResponse,
   ConsultRequestQuizAnswer,
-  ConsultRequestSubmissionPayload
+  ConsultRequestSubmissionPayload,
+  ConsultType
 } from '#shared/types/consult-request'
 import type { ConsultRequestFormState } from '~/types/consult-request'
 import { isMember } from '~/utils/is-member'
@@ -29,6 +30,10 @@ export type ConsultRequestFetcher = PortalFetcher<ConsultRequestSubmissionPayloa
  * Dependencies required to submit a consult request.
  */
 export interface SubmitConsultRequestOptions extends PortalSubmitOptions<ConsultRequestSubmissionPayload> {
+  /**
+   * Public consult flow selected by the route that submitted the request.
+   */
+  consultType: ConsultType
   /**
    * Optional referral code preserved from the public quiz URL.
    */
@@ -65,7 +70,7 @@ const isConsultBestTimeOfDay = (value: string): value is ConsultBestTimeOfDay =>
  */
 export const createConsultRequestSubmissionPayload = (
   form: ConsultRequestFormState,
-  options: Pick<SubmitConsultRequestOptions, 'referralCode' | 'sourceUrl' | 'quizAnswers'> = {}
+  options: Pick<SubmitConsultRequestOptions, 'consultType' | 'referralCode' | 'sourceUrl' | 'quizAnswers'>
 ): ConsultRequestSubmissionPayload => {
   const preferredContactMethod = form.preferredContactMethod.trim()
   const bestTimeOfDay = form.bestTimeOfDay.trim()
@@ -81,6 +86,7 @@ export const createConsultRequestSubmissionPayload = (
     state: form.state.trim(),
     preferredContactMethod,
     bestTimeOfDay,
+    consultType: options.consultType,
     referralCode: options.referralCode?.trim() || null,
     sourceUrl: options.sourceUrl?.trim() || null,
     quizAnswers: options.quizAnswers ?? []

@@ -1,6 +1,7 @@
 import type {
   ConsultBestTimeOfDay,
-  ConsultPreferredContactMethod
+  ConsultPreferredContactMethod,
+  ConsultType
 } from '#shared/types/consult-request'
 
 export interface ConsultRequestFormState {
@@ -15,4 +16,18 @@ export interface ConsultRequestFormState {
 export interface ConsultRequestResult {
   title: string
   message: string
+}
+
+export interface ConsultRequestPageContent {
+  consultType: ConsultType
+  eyebrow: string
+  title: string
+  description: string
+  thankYouPath: string
+}
+
+export interface ConsultRequestThankYouContent {
+  title: string
+  paymentItem: string
+  callItems: string[]
 }

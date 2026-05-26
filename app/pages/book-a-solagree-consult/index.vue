@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import ConsultRequestPage from '~/components/consult/ConsultRequestPage.vue'
+import { initialConsultRequestContent } from '~/data/consult-request'
 
 useSolagreeSeo({
   title: 'Book a Solagree Consult',
@@ -9,5 +10,5 @@ useSolagreeSeo({
 </script>
 
 <template>
-  <ConsultRequestPage />
+  <ConsultRequestPage :content="initialConsultRequestContent" />
 </template>

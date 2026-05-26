@@ -10,7 +10,7 @@ const defaultQuizCtaTargets = {
     href: '/book-a-solagree-consult'
   },
   'attorney-consult': {
-    href: '/book-a-solagree-consult'
+    href: '/book-an-attorney-consult'
   },
   'fallback-resources': {
     href: '#fallback-resources'

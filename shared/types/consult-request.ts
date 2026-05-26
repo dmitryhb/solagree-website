@@ -6,6 +6,10 @@ export const CONSULT_BEST_TIMES_OF_DAY = ['morning', 'afternoon', 'evening', 'an
 
 export type ConsultBestTimeOfDay = (typeof CONSULT_BEST_TIMES_OF_DAY)[number]
 
+export const CONSULT_TYPES = ['initial', 'attorney'] as const
+
+export type ConsultType = (typeof CONSULT_TYPES)[number]
+
 /**
  * Public quiz answer snapshot sent with a consult request for portal-side intake context.
  */
@@ -26,6 +30,7 @@ export interface ConsultRequestSubmissionPayload {
   state: string
   preferredContactMethod: ConsultPreferredContactMethod
   bestTimeOfDay: ConsultBestTimeOfDay
+  consultType: ConsultType
   referralCode?: string | null
   sourceUrl?: string | null
   quizAnswers?: ConsultRequestQuizAnswer[] | null

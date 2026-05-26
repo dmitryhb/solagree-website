@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import ConsultRequestThankYouPage from '~/components/consult/ConsultRequestThankYouPage.vue'
+import { initialConsultThankYouContent } from '~/data/consult-request'
 
 useSolagreeSeo({
   title: 'Consult Request Received',
@@ -10,5 +11,5 @@ useSolagreeSeo({
 </script>
 
 <template>
-  <ConsultRequestThankYouPage />
+  <ConsultRequestThankYouPage :content="initialConsultThankYouContent" />
 </template>
