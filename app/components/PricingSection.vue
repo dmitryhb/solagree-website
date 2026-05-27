@@ -20,7 +20,7 @@ import { pricingPlans } from '~/data/pricing-plans'
           Find Your Track
         </h2>
         <p class="pricing-section__intro">
-          Solagree's platform fees include the core process: neutral experts, mediation, arbitration, and final award.
+          Discover Solagree-CORE. These baseline pricing tiers include our structured flat-fee process: neutral experts, mediation, arbitration, and your final award.
         </p>
       </header>
 
@@ -36,7 +36,7 @@ import { pricingPlans } from '~/data/pricing-plans'
       <div class="pricing-section__note">
         <h2 class="section-title">Need legal guidance?</h2>
         <p>We recommend working with an attorney throughout the Solagree process. We can connect you with network attorneys who specialize in Solagree cases.</p>
-        <p>For higher-conflict or complex cases requiring extended support, the SOLAGREE Compass Program is available.</p>
+        <p>For higher-conflict or complex cases requiring extended support, the Solagree-COMPASS program is available.</p>
       </div>
     </div>
   </section>

@@ -33,17 +33,17 @@ export const consultBestTimeOfDayOptions = [
 
 export const initialConsultRequestContent = {
   consultType: 'initial',
-  eyebrow: 'Solagree Consult',
-  title: 'Book a Solagree Consult',
-  description: 'Share your contact details and we will follow up to schedule a 30-45 minute consult.',
+  eyebrow: '30-45 minutes. • $60',
+  title: 'Book a Solagree Initial Consult',
+  description: 'Talk with our team about your unique situation and learn if Solagree is right for you. We\'ll explain the process, answer your questions, and give you a personalized price range.',
   thankYouPath: '/book-a-solagree-consult/thank-you'
 } as const satisfies ConsultRequestPageContent
 
 export const attorneyConsultRequestContent = {
   consultType: 'attorney',
-  eyebrow: 'Attorney Consult',
+  eyebrow: '1 hour • $250',
   title: 'Book an Attorney Consult',
-  description: 'Share your contact details and we will follow up to schedule a 30-45 minute attorney consult.',
+  description: 'Talk with a licensed attorney in your state who works with Solagree cases. Discuss your situation, ask questions about assets, custody, and support, and learn how Solagree would work for your case.',
   thankYouPath: '/book-an-attorney-consult/thank-you'
 } as const satisfies ConsultRequestPageContent
 

@@ -6,7 +6,7 @@ const commonQuestionItems: AccordionItem[] = [
     label: 'How do I get my spouse to agree?',
     value: 'how-do-i-get-my-spouse-on-board-with-solagree',
     contentHtml:
-      '<a href="/book-a-solagree-consult">Schedule a consultation</a>'
+      '<a href="/book-a-solagree-consult">Schedule a consultation</a> to discuss the best approach for your situation, and we&apos;ll help you navigate next steps.'
   },
   {
     label: 'How is Solagree Different?',

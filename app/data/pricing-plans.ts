@@ -13,7 +13,7 @@ export const pricingPlans: PricingPlan[] = [
       'Holiday and vacation planning',
       'Co-parenting communication plans'
     ],
-    note: 'Best for couples focused on children under 18'
+    note: 'Best for couples with children or ongoing parenting responsibilities.'
   },
   {
     name: 'Financial Track',
@@ -27,12 +27,11 @@ export const pricingPlans: PricingPlan[] = [
       'Retirement accounts and pensions',
       'Spousal support calculations'
     ],
-    note: 'Best for couples with assets to divide',
+    note: 'Best for couples with property, assets, or financial support to resolve.',
     badge: 'Popular'
   },
   {
     name: 'Parenting + Financial',
-    eyebrow: 'Save over $1,000 each',
     price: '$5,990',
     cadence: '/ per person',
     description:
@@ -43,7 +42,8 @@ export const pricingPlans: PricingPlan[] = [
       'Businesses, pensions, retirement accounts',
       'Spousal support calculations'
     ],
-    note: 'For couples with both parenting and financial concerns',
+    note: 'Best for couples who need both tracks, with significant savings.',
+    badge: 'Save $1,000 Each',
     featured: true
   }
 ]
