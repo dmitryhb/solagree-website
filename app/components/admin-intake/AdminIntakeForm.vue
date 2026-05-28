@@ -29,7 +29,7 @@ const form = reactive<AdminIntakeFormState>({
   ...adminIntakeInitialState
 })
 
-const thankYouPath = computed(() => `/c/${encodeURIComponent(props.slug)}/${adminIntakePageContent.thankYouPath}`)
+const thankYouPath = computed(() => `/meet/${encodeURIComponent(props.slug)}/${adminIntakePageContent.thankYouPath}`)
 
 const getSourceUrl = (): string | null => {
   if (!import.meta.client) {
@@ -106,7 +106,7 @@ const handleSubmit = async () => {
     >
       <fieldset class="admin-intake-form__fieldset">
         <legend class="admin-intake-form__fieldset-legend">
-          Primary party
+          Your Information
         </legend>
 
         <div class="consult-request-form__field">
@@ -159,7 +159,7 @@ const handleSubmit = async () => {
 
       <fieldset class="admin-intake-form__fieldset">
         <legend class="admin-intake-form__fieldset-legend">
-          Spouse / other party
+          Your Spouse’s Information
         </legend>
 
         <div class="consult-request-form__field">
@@ -196,7 +196,7 @@ const handleSubmit = async () => {
 
         <div class="consult-request-form__field">
           <label for="intake-spouse-email">
-            Email<span aria-hidden="true">*</span>
+            Email
           </label>
           <input
             id="intake-spouse-email"
@@ -205,7 +205,6 @@ const handleSubmit = async () => {
             type="email"
             autocomplete="off"
             placeholder="hello@example.com"
-            required
           >
         </div>
       </fieldset>

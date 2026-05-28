@@ -26,8 +26,8 @@ export const adminIntakeInitialState = {
  */
 export const adminIntakePageContent: AdminIntakePageContent = {
   eyebrow: 'Solagree Intake',
-  title: 'Start Your Solagree Process',
-  description: 'Enter both parties\' contact details so we can prepare your file. Your privacy preference controls when we reach out to your spouse.',
+  title: 'Let’s Talk',
+  description: 'Just the basics to get started. Your spouse won’t be contacted without your permission',
   thankYouPath: 'thank-you'
 }
 

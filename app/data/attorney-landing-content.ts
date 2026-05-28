@@ -90,8 +90,8 @@ export const cdfaPartnerPathsContent = {
 export const attorneyHowItWorksContent = {
   title: 'See How It Works',
   intro: 'Watch how the partnership works and what makes this different - in 90 seconds.',
-  videoSrc: solagreeVimeoVideos.attorneyWebinar.src,
-  videoTitle: solagreeVimeoVideos.attorneyWebinar.title,
+  videoSrc: solagreeVimeoVideos.attorneyIntro.src,
+  videoTitle: solagreeVimeoVideos.attorneyIntro.title,
   ctaLabel: 'Watch the full Partner Briefing',
   ctaTo: attorneyWebinarPath,
   quote: 'I can finally offer my clients a better path without sacrificing my own quality of life.'
@@ -100,8 +100,8 @@ export const attorneyHowItWorksContent = {
 export const cdfaHowItWorksContent = {
   title: 'See How It Works',
   intro: 'Watch how the partnership works and what makes this different – in 90 seconds.',
-  videoSrc: solagreeVimeoVideos.cdfaWebinar.src,
-  videoTitle: solagreeVimeoVideos.cdfaWebinar.title,
+  videoSrc: solagreeVimeoVideos.cdfaIntro.src,
+  videoTitle: solagreeVimeoVideos.cdfaIntro.title,
   videoImageSrc: '/images/for-professionals.webp',
   videoImageAlt: 'CDFA webinar video preview with Courtney speaking.',
   ctaLabel: 'Watch the full Partner Briefing',

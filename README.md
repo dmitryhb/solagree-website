@@ -133,9 +133,11 @@ https://solagree-portal.qamachine.com/api/consult-requests
 Direct-share intake form pages are served under:
 
 ```text
-/c/:slug
-/c/:slug/thank-you
+/meet/:slug
+/meet/:slug/thank-you
 ```
+
+Legacy `/c/:slug` URLs redirect to `/meet/:slug`.
 
 The website verifies the slug against the Portal public API before rendering:
 
