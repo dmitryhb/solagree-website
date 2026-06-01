@@ -607,145 +607,88 @@
 
 .co-branded-page__tracks {
   display: grid;
-  gap: 48px;
-  padding-block: clamp(2.25rem, 3.6vw, 3.25rem) clamp(1.5rem, 3vw, 2.5rem);
+  gap: 0;
+  padding-block: clamp(5rem, 5.45vw, 7rem) clamp(4.5rem, 4.45vw, 5.75rem);
 }
 
 .co-branded-page__tracks h2 {
   margin: 0;
   color: var(--color-heading);
   font-family: var(--font-display);
-  font-size: 54px;
+  font-size: clamp(3.25rem, 3.15vw, 4rem);
   font-weight: 500;
-  line-height: 1.067;
+  line-height: 1.06;
   text-align: center;
 }
 
 .co-branded-page__tracks-intro,
 .co-branded-page__tracks-note {
-  max-width: 62rem;
+  max-width: 66rem;
   margin: 0 auto;
   color: var(--color-black);
   font-family: var(--font-body);
-  font-size: 18px;
-  line-height: 1.35;
+  font-size: clamp(1.125rem, 1.08vw, 1.375rem);
+  line-height: 1.28;
   text-align: center;
 }
 
 .co-branded-page__tracks-intro {
-  margin-top: -28px;
+  margin-top: 1rem;
 }
 
 .co-branded-page__tracks-note {
-  max-width: 58rem;
-  margin-top: -18px;
+  max-width: 82rem;
+  margin-top: 2.25rem;
+  font-size: clamp(1.125rem, 1.08vw, 1.375rem);
+  line-height: 1.35;
 }
 
 .co-branded-page__tracks-note p {
   margin: 0;
 }
 
+.co-branded-page__tracks-note strong {
+  font-weight: 800;
+}
+
 .co-branded-page__tracks-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(2, minmax(0, 420px));
+  justify-content: center;
+  gap: 24px;
+  margin-top: clamp(3.5rem, 3.4vw, 4.5rem);
 }
 
 .co-branded-page--standard .co-branded-page__tracks-grid {
-  width: min(calc(100vw - 4rem), 1296px);
-  margin-inline: calc(50% - min(calc(50vw - 2rem), 648px));
+  width: min(calc(100vw - 4rem), 864px);
+  margin-inline: calc(50% - min(calc(50vw - 2rem), 432px));
 }
 
 .co-branded-page__track-card {
   display: flex;
-  min-height: 591px;
+  min-height: clamp(37rem, 34.4vw, 44rem);
   flex-direction: column;
-  gap: 32px;
-  padding: 32px;
-  border-radius: 16px;
+  padding: clamp(2rem, 2.25vw, 2.875rem) clamp(2rem, 2.25vw, 2.875rem) clamp(2.75rem, 2.65vw, 3.375rem);
+  border-radius: 22px;
   background: var(--color-surface-cool);
   color: #27241f;
-  transition:
-    box-shadow 220ms ease,
-    transform 220ms ease;
 }
 
-.co-branded-page__track-card:hover {
-  box-shadow: 0 18px 48px rgba(62, 64, 89, 0.1);
-  transform: translateY(-4px);
-}
-
-.co-branded-page__track-card--featured {
-  background: var(--color-surface-muted-dark);
-  color: var(--color-surface-footer);
-}
-
-.co-branded-page__track-header {
-  display: flex;
-  min-height: 40px;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 1rem;
-}
-
-.co-branded-page__track-header h3,
-.co-branded-page__track-badge,
-.co-branded-page__track-eyebrow,
+.co-branded-page__track-card h3,
 .co-branded-page__track-includes-title {
   font-family: var(--font-nav);
-  line-height: 1.2;
+  line-height: 1.1;
   letter-spacing: 0.075em;
   text-transform: uppercase;
 }
 
-.co-branded-page__track-header h3 {
+.co-branded-page__track-card h3 {
   margin: 0;
-  padding-top: 4px;
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.co-branded-page__track-badge {
-  display: inline-flex;
-  min-height: 30px;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid rgba(39, 36, 31, 0.16);
-  border-radius: 8px;
-  padding: 8px 13px;
-  background: var(--color-badge-warm);
-  color: var(--color-white);
-  font-family: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
-  font-size: 10px;
+  color: #27241f;
+  font-size: clamp(1.625rem, 1.46vw, 1.875rem);
+  font-weight: 600;
+  text-align: center;
   white-space: nowrap;
-}
-
-.co-branded-page__track-eyebrow {
-  margin: -22px 0 -22px;
-  font-size: 12px;
-}
-
-.co-branded-page__track-price {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  gap: 8px;
-}
-
-.co-branded-page__track-amount {
-  font-family: var(--font-display);
-  font-size: 44px;
-  font-weight: 500;
-  line-height: 1.18;
-}
-
-.co-branded-page__track-cadence {
-  padding-bottom: 10px;
-  font-family: var(--font-nav);
-  font-size: 13px;
-  line-height: 1;
-  letter-spacing: 0.075em;
-  text-transform: uppercase;
 }
 
 .co-branded-page__track-description,
@@ -755,28 +698,29 @@
 }
 
 .co-branded-page__track-description {
-  color: rgba(39, 36, 31, 0.88);
-  font-size: 16px;
-  line-height: 1.5;
-}
-
-.co-branded-page__track-card--featured .co-branded-page__track-description {
-  color: rgba(238, 233, 225, 0.88);
+  max-width: 31.5rem;
+  margin-top: clamp(2.5rem, 2.35vw, 3rem);
+  color: rgba(39, 36, 31, 0.8);
+  font-size: clamp(1.0625rem, 0.98vw, 1.25rem);
+  line-height: 1.42;
 }
 
 .co-branded-page__track-includes {
   display: grid;
-  gap: 24px;
+  gap: clamp(1.625rem, 1.75vw, 2.25rem);
+  margin-top: clamp(2rem, 1.9vw, 2.375rem);
 }
 
 .co-branded-page__track-includes-title {
   margin: 0;
-  font-size: 10px;
+  color: #27241f;
+  font-size: clamp(0.75rem, 0.7vw, 0.875rem);
+  font-weight: 400;
 }
 
 .co-branded-page__track-features {
   display: grid;
-  gap: 16px;
+  gap: clamp(1rem, 1.2vw, 1.5rem);
   padding: 0;
   margin: 0;
   list-style: none;
@@ -785,34 +729,27 @@
 .co-branded-page__track-features li {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 22px;
+  color: #27241f;
   font-family: var(--font-body);
-  font-size: 16px;
+  font-size: clamp(1.0625rem, 0.98vw, 1.25rem);
   line-height: 1.5;
 }
 
 .co-branded-page__track-features li::before {
   content: "";
   display: inline-flex;
-  width: 24px;
-  height: 24px;
+  width: 34px;
+  height: 34px;
   flex: 0 0 auto;
   background: url("/icons/co-branded-check-light.svg") center / contain no-repeat;
 }
 
-.co-branded-page__track-card--featured .co-branded-page__track-features li::before {
-  background-image: url("/icons/co-branded-check-dark.svg");
-}
-
 .co-branded-page__track-note {
   margin-top: auto;
-  color: rgba(39, 36, 31, 0.64);
-  font-size: 14px;
-  line-height: 1.43;
-}
-
-.co-branded-page__track-card--featured .co-branded-page__track-note {
-  color: rgba(238, 233, 225, 0.64);
+  color: rgba(39, 36, 31, 0.58);
+  font-size: clamp(1.0625rem, 0.98vw, 1.25rem);
+  line-height: 1.15;
 }
 
 .co-branded-page__questions {
@@ -1293,7 +1230,7 @@
   }
 
   .co-branded-page__tracks {
-    gap: 36px;
+    gap: 0;
   }
 
   .co-branded-page__tracks h2 {
@@ -1304,6 +1241,14 @@
 
   .co-branded-page__track-card {
     padding: 28px 24px;
+  }
+
+  .co-branded-page__track-description {
+    margin-top: 2.25rem;
+  }
+
+  .co-branded-page__track-includes {
+    margin-top: 2rem;
   }
 
   .co-branded-page__feature-strip {
@@ -1326,16 +1271,6 @@
 
   .co-branded-page__what-is-card li {
     font-size: 20px;
-  }
-
-  .co-branded-page__track-header {
-    flex-direction: column;
-    min-height: 0;
-    gap: 0.75rem;
-  }
-
-  .co-branded-page__track-amount {
-    font-size: 40px;
   }
 
   .co-branded-page__questions-copy .co-branded-page__primary-cta {

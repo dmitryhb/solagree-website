@@ -162,99 +162,55 @@ const solagreeBasicTemplate = Handlebars.compile<CoBrandedPageTemplateContext>(`
     </section>
 
     <section class="co-branded-page__tracks" aria-labelledby="co-branded-tracks-title">
-      <h2 id="co-branded-tracks-title">Find Your Track</h2>
+      <h2 id="co-branded-tracks-title">Two Paths to Resolution</h2>
       <p class="co-branded-page__tracks-intro">
-        Solagree's platform fees include the core process: neutral experts, mediation, arbitration, and final award.
+        Both paths include neutral experts, mediation, and binding arbitration.<br>
+        We'll recommend the right fit for your case.
       </p>
 
       <div class="co-branded-page__tracks-grid">
         <article class="co-branded-page__track-card">
-          <header class="co-branded-page__track-header">
-            <h3>Parenting Track</h3>
-          </header>
-
-          <div class="co-branded-page__track-price">
-            <span class="co-branded-page__track-amount">$2,250</span>
-            <span class="co-branded-page__track-cadence">/ per person</span>
-          </div>
-
+          <h3>SOLAGREE &ndash; CORE</h3>
           <p class="co-branded-page__track-description">
-            Guided by parenting specialists and neutral mediators who help you create a sustainable parenting plan.
+            A streamlined path with predictable attorney fees, designed for standard cases that can move efficiently to resolution.
           </p>
 
           <div class="co-branded-page__track-includes">
             <p class="co-branded-page__track-includes-title">For cases involving</p>
             <ul class="co-branded-page__track-features">
-              <li>Custody and parenting time schedules</li>
-              <li>Decision-making responsibilities</li>
-              <li>Holiday and vacation planning</li>
-              <li>Co-parenting communication plans</li>
+              <li>Standard financial matters</li>
+              <li>Cooperative parenting plans</li>
+              <li>Lower-conflict situations</li>
+              <li>Flat-fee attorney structure</li>
             </ul>
           </div>
 
-          <p class="co-branded-page__track-note">Best for couples focused on children under 18</p>
+          <p class="co-branded-page__track-note">Best for couples ready to move efficiently through the process.</p>
         </article>
 
         <article class="co-branded-page__track-card">
-          <header class="co-branded-page__track-header">
-            <h3>Financial Track</h3>
-            <span class="co-branded-page__track-badge">Popular</span>
-          </header>
-
-          <div class="co-branded-page__track-price">
-            <span class="co-branded-page__track-amount">$4,800</span>
-            <span class="co-branded-page__track-cadence">/ per person</span>
-          </div>
-
+          <h3>SOLAGREE &ndash; COMPASS</h3>
           <p class="co-branded-page__track-description">
-            Guided by CDFA® financial experts and neutral mediators who help you navigate complex financial decisions.
+            An extended path with hourly attorney support, designed for complex cases requiring additional time and expertise.
           </p>
 
           <div class="co-branded-page__track-includes">
             <p class="co-branded-page__track-includes-title">For cases involving</p>
             <ul class="co-branded-page__track-features">
-              <li>Property division and asset distribution</li>
-              <li>Business ownership and valuation</li>
-              <li>Retirement accounts and pensions</li>
-              <li>Spousal support calculations</li>
+              <li>Complex financial or business assets</li>
+              <li>Challenging custody or co-parenting needs</li>
+              <li>Higher-conflict situations</li>
+              <li>Hourly attorney support</li>
             </ul>
           </div>
 
-          <p class="co-branded-page__track-note">Best for couples with assets to divide</p>
-        </article>
-
-        <article class="co-branded-page__track-card co-branded-page__track-card--featured">
-          <header class="co-branded-page__track-header">
-            <h3>Parenting + Financial</h3>
-          </header>
-
-          <p class="co-branded-page__track-eyebrow">Save over $1,000 each</p>
-          <div class="co-branded-page__track-price">
-            <span class="co-branded-page__track-amount">$5,990</span>
-            <span class="co-branded-page__track-cadence">/ per person</span>
-          </div>
-
-          <p class="co-branded-page__track-description">
-            Combines expert parenting and CDFA® financial guidance—with neutral mediation and arbitration.
-          </p>
-
-          <div class="co-branded-page__track-includes">
-            <p class="co-branded-page__track-includes-title">For cases involving</p>
-            <ul class="co-branded-page__track-features">
-              <li>Child custody, schedules, and co-parenting</li>
-              <li>Property division and asset distribution</li>
-              <li>Businesses, pensions, retirement accounts</li>
-              <li>Spousal support calculations</li>
-            </ul>
-          </div>
-
-          <p class="co-branded-page__track-note">For couples with both parenting and financial concerns</p>
+          <p class="co-branded-page__track-note">Best for cases requiring extended support and specialized expertise.</p>
         </article>
       </div>
 
       <div class="co-branded-page__tracks-note">
-        <p>Your attorney continues to provide strategic guidance throughout the Solagree process.</p>
-        <p>For higher-conflict or complex cases requiring extended support, the SOLAGREE Compass Program is available.</p>
+        <p><strong>We continue to provide strategic guidance throughout the Solagree process.</strong></p>
+        <p>Solagree platform fees are separate from attorney fees. We'll discuss both during your consultation.</p>
       </div>
     </section>
 
