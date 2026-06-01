@@ -3,10 +3,30 @@ import { solagreeSocialLinks } from '~/data/social-links'
 
 const currentYear = new Date().getFullYear()
 const portalLoginHref = usePortalLoginHref()
+const isNetworkChooserOpen = ref(false)
+const networkChooserDialog = ref<HTMLElement | null>(null)
+const networkChooserTrigger = ref<HTMLButtonElement | null>(null)
+
+const openNetworkChooser = async () => {
+  isNetworkChooserOpen.value = true
+
+  await nextTick()
+  networkChooserDialog.value?.focus()
+}
+
+const closeNetworkChooser = async () => {
+  isNetworkChooserOpen.value = false
+
+  await nextTick()
+  networkChooserTrigger.value?.focus()
+}
 </script>
 
 <template>
-  <footer class="site-footer">
+  <footer
+    class="site-footer"
+    @keydown.esc="closeNetworkChooser"
+  >
     <div class="site-footer__inner">
       <div class="site-footer__top">
         <div class="site-footer__brand">
@@ -45,7 +65,7 @@ const portalLoginHref = usePortalLoginHref()
             </p>
             <ul class="site-footer__links">
               <li>
-                <NuxtLink to="/">
+                <NuxtLink to="/#how-it-works">
                   How It Works
                 </NuxtLink>
               </li>
@@ -55,12 +75,12 @@ const portalLoginHref = usePortalLoginHref()
                 </NuxtLink>
               </li>
               <li>
-                <NuxtLink to="/">
-                  Solagree Core vs.Compass
+                <NuxtLink to="/#pricing">
+                  Solagree Core vs. Compass
                 </NuxtLink>
               </li>
               <li>
-                <NuxtLink to="/">
+                <NuxtLink to="/#pricing">
                   Pricing
                 </NuxtLink>
               </li>
@@ -88,9 +108,16 @@ const portalLoginHref = usePortalLoginHref()
                 </NuxtLink>
               </li>
               <li>
-                <NuxtLink to="/attorney-application">
+                <button
+                  ref="networkChooserTrigger"
+                  class="site-footer__link-button"
+                  type="button"
+                  aria-haspopup="dialog"
+                  :aria-expanded="isNetworkChooserOpen"
+                  @click="openNetworkChooser"
+                >
                   Join the Network
-                </NuxtLink>
+                </button>
               </li>
             </ul>
           </div>
@@ -179,5 +206,74 @@ const portalLoginHref = usePortalLoginHref()
         </p>
       </div>
     </div>
+
+    <Teleport to="body">
+      <Transition name="site-footer-network-chooser">
+        <div
+          v-if="isNetworkChooserOpen"
+          class="network-chooser"
+          role="presentation"
+          @keydown.esc="closeNetworkChooser"
+        >
+          <button
+            class="network-chooser__backdrop"
+            type="button"
+            aria-label="Close network chooser"
+            @click="closeNetworkChooser"
+          />
+
+          <section
+            class="network-chooser__dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="network-chooser-title"
+            tabindex="-1"
+            ref="networkChooserDialog"
+          >
+            <button
+              class="network-chooser__close"
+              type="button"
+              aria-label="Close network chooser"
+              @click="closeNetworkChooser"
+            >
+              <span aria-hidden="true" />
+            </button>
+
+            <p class="network-chooser__eyebrow">
+              Join the Network
+            </p>
+            <h2
+              id="network-chooser-title"
+              class="network-chooser__title"
+            >
+              Choose your application
+            </h2>
+            <p class="network-chooser__intro">
+              Select the professional track that matches your practice.
+            </p>
+
+            <div class="network-chooser__actions">
+              <NuxtLink
+                class="network-chooser__option"
+                to="/attorney-application"
+                @click="closeNetworkChooser"
+              >
+                <span class="network-chooser__option-title">Attorney Application</span>
+                <span class="network-chooser__option-copy">For attorneys and legal professionals.</span>
+              </NuxtLink>
+
+              <NuxtLink
+                class="network-chooser__option network-chooser__option--accent"
+                to="/cdfa-application"
+                @click="closeNetworkChooser"
+              >
+                <span class="network-chooser__option-title">CDFA Application</span>
+                <span class="network-chooser__option-copy">For CDFAs and financial advisors.</span>
+              </NuxtLink>
+            </div>
+          </section>
+        </div>
+      </Transition>
+    </Teleport>
   </footer>
 </template>

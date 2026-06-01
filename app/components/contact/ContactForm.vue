@@ -4,6 +4,7 @@ import {
   submitContactSubmission
 } from '~/services/contact-submission-api'
 import { isPortalApiConfigurationError } from '~/services/portal-api'
+import { useSourceUrl } from '~/composables/useSourceUrl'
 import type { ContactSubmissionFetcher } from '~/services/contact-submission-api'
 import type { ContactFormState } from '~/types/contact'
 
@@ -20,16 +21,7 @@ const form = reactive<ContactFormState>({
   message: ''
 })
 
-const getSourceUrl = (): string | null => {
-  if (!import.meta.client) {
-    return null
-  }
-
-  const sourceUrl = new URL(window.location.href)
-  sourceUrl.hash = ''
-
-  return sourceUrl.toString()
-}
+const sourceUrl = useSourceUrl()
 
 const handleSubmit = async () => {
   if (submitting.value) {
@@ -49,7 +41,7 @@ const handleSubmit = async () => {
     await submitContactSubmission(form, {
       portalApiBaseUrl: runtimeConfig.public.portalApiBaseUrl,
       fetcher: $fetch as unknown as ContactSubmissionFetcher,
-      sourceUrl: getSourceUrl()
+      sourceUrl: sourceUrl
     })
 
     submitted.value = true
@@ -147,21 +139,10 @@ const handleSubmit = async () => {
       required
     />
 
-    <button
-      class="contact-form__submit"
-      type="submit"
-      :disabled="submitting"
-    >
-      <span>{{ submitting ? 'SENDING...' : 'SEND' }}</span>
-      <img
-        class="contact-form__submit-icon"
-        src="/icons/send.svg"
-        alt=""
-        width="16"
-        height="16"
-        aria-hidden="true"
-      >
-    </button>
+    <SiteFormSubmit
+      label="SEND"
+      :submitting="submitting"
+    />
 
     <p
       v-if="statusMessage"

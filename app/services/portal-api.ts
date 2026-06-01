@@ -102,3 +102,28 @@ export const getPortalSubmissionErrorMessage = (
 
   return fallbackMessage
 }
+
+/**
+ * Shared POST submission helper used by all portal submission services.
+ * Each service benefits from calling this instead of duplicating URL
+ * construction, fetch, and error checking.
+ */
+export const submitToPortal = async <TPayload, TResponse extends { error?: boolean; message?: string }>(
+  options: PortalSubmitOptions<TPayload> & {
+    endpoint: string
+    payload: TPayload
+  }
+): Promise<TResponse> => {
+  const portalApiBaseUrl = normalizePortalApiBaseUrl(options.portalApiBaseUrl)
+
+  const response = await options.fetcher<TResponse>(
+    `${portalApiBaseUrl}${options.endpoint}`,
+    { method: 'POST', body: options.payload }
+  )
+
+  if ('error' in response && response.error) {
+    throw new Error(response.message || DEFAULT_PORTAL_SUBMISSION_ERROR_MESSAGE)
+  }
+
+  return response
+}

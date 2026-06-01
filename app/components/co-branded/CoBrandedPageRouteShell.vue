@@ -25,10 +25,18 @@ const {
   status
 } = await useAsyncData(
   asyncDataKey,
-  () => fetchCoBrandedPageConfig({
-    portalApiBaseUrl: runtimeConfig.public.portalApiBaseUrl,
-    slug: slug.value
-  }),
+  async () => {
+    const config = await fetchCoBrandedPageConfig({
+      portalApiBaseUrl: runtimeConfig.public.portalApiBaseUrl,
+      slug: slug.value
+    })
+
+    if (!config) {
+      throw createError({ statusCode: 404, fatal: true })
+    }
+
+    return config
+  },
   {
     server: false,
     watch: [slug]

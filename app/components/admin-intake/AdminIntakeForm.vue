@@ -9,6 +9,7 @@ import {
   submitAdminIntake
 } from '~/services/admin-intake-api'
 import { isPortalApiConfigurationError } from '~/services/portal-api'
+import { useSourceUrl } from '~/composables/useSourceUrl'
 import type { AdminIntakeFetcher } from '~/services/admin-intake-api'
 import type {
   AdminIntakeFormState,
@@ -31,16 +32,7 @@ const form = reactive<AdminIntakeFormState>({
 
 const thankYouPath = computed(() => `/meet/${encodeURIComponent(props.slug)}/${adminIntakePageContent.thankYouPath}`)
 
-const getSourceUrl = (): string | null => {
-  if (!import.meta.client) {
-    return null
-  }
-
-  const sourceUrl = new URL(window.location.href)
-  sourceUrl.hash = ''
-
-  return sourceUrl.toString()
-}
+const sourceUrl = useSourceUrl()
 
 const handleSubmit = async () => {
   if (submitting.value) {
@@ -60,7 +52,7 @@ const handleSubmit = async () => {
     await submitAdminIntake(form, props.slug, {
       portalApiBaseUrl: runtimeConfig.public.portalApiBaseUrl,
       fetcher: $fetch as unknown as AdminIntakeFetcher,
-      sourceUrl: getSourceUrl()
+      sourceUrl: sourceUrl
     })
 
     await navigateTo(thankYouPath.value)
@@ -240,21 +232,10 @@ const handleSubmit = async () => {
         </div>
       </div>
 
-      <button
-        class="consult-request-form__submit"
-        type="submit"
-        :disabled="submitting"
-      >
-        <span>{{ submitting ? 'SENDING...' : 'SUBMIT' }}</span>
-        <img
-          class="consult-request-form__submit-icon"
-          src="/icons/send.svg"
-          alt=""
-          width="16"
-          height="16"
-          aria-hidden="true"
-        >
-      </button>
+      <SiteFormSubmit
+        label="SUBMIT"
+        :submitting="submitting"
+      />
 
       <div
         v-if="submissionResult"

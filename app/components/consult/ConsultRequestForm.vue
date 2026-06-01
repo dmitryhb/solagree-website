@@ -48,16 +48,7 @@ const thankYouPath = computed(() => ({
   query: referralCode.value ? { ref: referralCode.value } : undefined
 }))
 
-const getSourceUrl = (): string | null => {
-  if (!import.meta.client) {
-    return null
-  }
-
-  const sourceUrl = new URL(window.location.href)
-  sourceUrl.hash = ''
-
-  return sourceUrl.toString()
-}
+const sourceUrl = useSourceUrl()
 
 const handleSubmit = async () => {
   if (submitting.value) {
@@ -79,7 +70,7 @@ const handleSubmit = async () => {
       fetcher: $fetch as unknown as ConsultRequestFetcher,
       consultType: props.content.consultType,
       referralCode: referralCode.value,
-      sourceUrl: getSourceUrl(),
+      sourceUrl: sourceUrl,
       quizAnswers: getStoredConsultQuizAnswers()
     })
 
@@ -251,21 +242,10 @@ const handleSubmit = async () => {
         </select>
       </div>
 
-      <button
-        class="consult-request-form__submit"
-        type="submit"
-        :disabled="submitting"
-      >
-        <span>{{ submitting ? 'SENDING...' : 'SEND REQUEST' }}</span>
-        <img
-          class="consult-request-form__submit-icon"
-          src="/icons/send.svg"
-          alt=""
-          width="16"
-          height="16"
-          aria-hidden="true"
-        >
-      </button>
+      <SiteFormSubmit
+        label="SEND REQUEST"
+        :submitting="submitting"
+      />
 
       <div
         v-if="submissionResult"

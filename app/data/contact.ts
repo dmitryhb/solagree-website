@@ -1,8 +1,8 @@
 import type { ContactPerson, DirectContactItem } from '~/types/contact'
 
 export const contactPerson: ContactPerson = {
-  name: 'Name of Person',
-  role: 'Head of Client Services',
+  name: 'Allison Terrill',
+  role: 'Chief Experience Officer',
   email: 'support@solagree.com',
   phone: '',
   imageSrc: '/images/contact-person.webp'

@@ -248,48 +248,11 @@
   text-underline-offset: 3px;
 }
 
-.attorney-application-form__submit {
-  display: inline-flex;
-  width: 100%;
-  min-height: 45px;
-  align-items: center;
-  justify-content: center;
-  gap: 0.65rem;
-  border: 0;
-  border-radius: var(--radius-pill);
-  background: var(--color-ink);
-  color: var(--color-white);
-  cursor: pointer;
-  font-family: var(--font-nav);
-  font-size: 0.8125rem;
-  font-weight: 500;
-  line-height: 1;
-  padding: 0.75rem 1.5rem;
-  transition: background-color 160ms ease;
-}
-
-.attorney-application-form__submit:hover {
-  background: #323449;
-}
-
-.attorney-application-form__submit:disabled {
-  cursor: wait;
-  opacity: 0.72;
-}
-
-.attorney-application-form__submit:focus-visible,
 .attorney-application-form__small-action:focus-visible,
 .attorney-application-form__add-license:focus-visible,
 .attorney-application-form__terms a:focus-visible {
   outline: 2px solid var(--color-ink);
   outline-offset: 3px;
-}
-
-.attorney-application-form__submit-icon {
-  display: block;
-  width: 16px;
-  height: 16px;
-  flex: 0 0 auto;
 }
 
 .attorney-application-form__result {
