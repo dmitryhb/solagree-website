@@ -28,13 +28,12 @@ const solagreeBasicTemplate = Handlebars.compile<CoBrandedPageTemplateContext>(`
           <span>Divorce Resolution</span>
         </h1>
         <p class="co-branded-page__hero-copy">
-          Your attorney provides access to Solagree &ndash; a structured alternative to traditional court litigation.
+          We partner with Solagree to give you a virtual alternative to court litigation – with predictable platform fees and expert guidance at every phase.
         </p>
         <a class="co-branded-page__primary-cta co-branded-page__primary-cta--light co-branded-page__primary-cta--arrow co-branded-page__hero-cta" href="{{ctaUrl}}">
-          Schedule a Consultation
+          Request a Consultation
           <img class="button-arrow-icon" src="/icons/arrow.svg" alt="">
         </a>
-        <p class="co-branded-page__hero-note">Consultation is complimentary for clients of {{attorneyDisplayName}}</p>
       </div>
 
       <img
@@ -47,7 +46,7 @@ const solagreeBasicTemplate = Handlebars.compile<CoBrandedPageTemplateContext>(`
     <section class="co-branded-page__feature-strip" aria-label="Solagree benefits">
       <ul>
         <li>Resolve Faster</li>
-        <li>Flat-Fee Pricing</li>
+        <li>Predictable Pricing</li>
         <li>Entirely Virtual</li>
         <li>Binding Process</li>
       </ul>
@@ -76,7 +75,7 @@ const solagreeBasicTemplate = Handlebars.compile<CoBrandedPageTemplateContext>(`
             <li>Cases from moderate to complex (financial and/or parenting issues)</li>
             <li>Both parties willing to participate in good faith even if they don&rsquo;t agree</li>
           </ul>
-          <a class="co-branded-page__primary-cta co-branded-page__primary-cta--light" href="{{ctaUrl}}">Schedule a Free Consultation</a>
+          <a class="co-branded-page__primary-cta co-branded-page__primary-cta--light" href="{{ctaUrl}}">Request a Consultation</a>
         </div>
       </div>
     </section>
@@ -143,20 +142,20 @@ const solagreeBasicTemplate = Handlebars.compile<CoBrandedPageTemplateContext>(`
       >
 
       <div class="co-branded-page__attorney-guide-content">
-        <h2 id="co-branded-attorney-guide-title">How Your Attorney Guides You</h2>
+        <h2 id="co-branded-attorney-guide-title">How We Guide You</h2>
         <p class="co-branded-page__attorney-guide-lede">
-          Your attorney works alongside the Solagree process at every phase:
+          We work alongside the Solagree process at every phase:
         </p>
 
         <ul class="co-branded-page__attorney-guide-list">
-          <li><strong>Before you start</strong> - ensures you understand the process and answers your initial questions</li>
-          <li><strong>Before mediation</strong> - reviews expert summaries, identifies issues, and helps you prepare your strategy</li>
-          <li><strong>Before arbitration</strong> - helps you present your position effectively and advises on what matters most</li>
-          <li><strong>After resolution</strong> - reviews the final award, walks you through the outcome, and handles all court filing</li>
+          <li><strong>Before you start</strong> - Ensuring you understand the process and answering your questions</li>
+          <li><strong>Before mediation</strong> - Reviewing expert summaries and helping prepare your strategy</li>
+          <li><strong>Before arbitration</strong> - Helping you present your position and advising on what matters most</li>
+          <li><strong>After resolution</strong> - Reviewing the final award and handling all court filing</li>
         </ul>
 
         <a class="co-branded-page__primary-cta co-branded-page__primary-cta--light co-branded-page__primary-cta--arrow" href="{{ctaUrl}}">
-          Schedule a Free Consultation
+          Request a Consultation
           <img class="button-arrow-icon" src="/icons/arrow.svg" alt="">
         </a>
       </div>
@@ -270,7 +269,7 @@ const solagreeBasicTemplate = Handlebars.compile<CoBrandedPageTemplateContext>(`
             Our process is designed for couples who can't agree on everything but want to avoid lengthy court battles and reach resolution efficiently.
           </p>
         </div>
-        <a class="co-branded-page__primary-cta co-branded-page__primary-cta--light" href="{{ctaUrl}}">Schedule a Consultation</a>
+        <a class="co-branded-page__primary-cta co-branded-page__primary-cta--light" href="{{ctaUrl}}">Request a Consultation</a>
       </div>
 
       <div class="co-branded-page__questions-accordion">
@@ -336,15 +335,15 @@ const solagreeBasicTemplate = Handlebars.compile<CoBrandedPageTemplateContext>(`
       <div class="co-branded-page__section-heading">
         <h2 id="co-branded-next-steps-title">Your Next Steps</h2>
         <p>
-          Ready to see if Solagree is right for your situation? Schedule a consultation to get your questions answered and map out your path forward.
+          The first step is a conversation. We'll discuss your situation and help you understand the right path forward.
         </p>
       </div>
 
       <div class="co-branded-page__next-steps-grid">
         <div class="co-branded-page__next-steps-card">
-          <h3>Schedule Your Complimentary Solagree Consultation ($60 value)</h3>
-          <p>Meet with a Solagree expert to confirm fit, answer questions, and map out the process for you.</p>
-          <a class="co-branded-page__primary-cta co-branded-page__primary-cta--light" href="{{ctaUrl}}">Schedule a Consultation</a>
+          <h3>Let's Talk About Your Situation</h3>
+          <p>Request a consultation to learn more about Solagree and discuss whether it's the right approach for your case.</p>
+          <a class="co-branded-page__primary-cta co-branded-page__primary-cta--light" href="{{ctaUrl}}">Request a Consultation</a>
         </div>
 
         <img
