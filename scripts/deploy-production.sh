@@ -122,26 +122,33 @@ REMOTE_SCRIPT
 fi
 
 if [ "$DRY_RUN" = false ] && [ "$SKIP_ROUTE_CHECK" = false ]; then
-  ROUTE_CHECK_URL="https://${ROUTE_CHECK_HOST}/go/__co-branded-route-check__"
-  ROUTE_CHECK_STATUS="$(curl -sS -o /dev/null -k \
-    --resolve "${ROUTE_CHECK_HOST}:443:${ROUTE_CHECK_RESOLVE_IP}" \
-    -w "%{http_code}" "$ROUTE_CHECK_URL" || true)"
+  ROUTE_CHECK_PATHS=(
+    "/go/__co-branded-route-check__"
+    "/cdfa/go/__co-branded-route-check__"
+  )
 
-  if [ "$ROUTE_CHECK_STATUS" = "404" ]; then
-    cat >&2 <<MESSAGE
+  for route_check_path in "${ROUTE_CHECK_PATHS[@]}"; do
+    ROUTE_CHECK_URL="https://${ROUTE_CHECK_HOST}${route_check_path}"
+    ROUTE_CHECK_STATUS="$(curl -sS -o /dev/null -k \
+      --resolve "${ROUTE_CHECK_HOST}:443:${ROUTE_CHECK_RESOLVE_IP}" \
+      -w "%{http_code}" "$ROUTE_CHECK_URL" || true)"
+
+    if [ "$ROUTE_CHECK_STATUS" = "404" ]; then
+      cat >&2 <<MESSAGE
 Production route check failed: $ROUTE_CHECK_URL returned HTTP 404.
 
 The static website nginx server block for $ROUTE_CHECK_HOST must route dynamic
-Nuxt paths such as /go/:slug to /200.html. Confirm the nginx config has:
+Nuxt paths such as /go/:slug and /cdfa/go/:slug to /200.html. Confirm the nginx config has:
 
   location / {
       try_files \$uri \$uri/ /200.html;
   }
 MESSAGE
-    exit 1
-  fi
+      exit 1
+    fi
 
-  echo "Route check passed: $ROUTE_CHECK_URL returned HTTP $ROUTE_CHECK_STATUS"
+    echo "Route check passed: $ROUTE_CHECK_URL returned HTTP $ROUTE_CHECK_STATUS"
+  done
 
   LEGACY_REDIRECT_CHECK_URL="https://${ROUTE_CHECK_HOST}/about/"
   LEGACY_REDIRECT_CHECK_RESULT="$(curl -sS -o /dev/null -k \

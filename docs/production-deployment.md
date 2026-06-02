@@ -17,13 +17,13 @@ The script will:
    - `NUXT_PUBLIC_PORTAL_API_BASE_URL=https://portal.solagree.com`
 2. `rsync -avz --delete` `.output/public/` to `/home/solagree/public_html/` (via `sudo -n rsync` over SSH as `ubuntu`)
 3. Re-`chown solagree:solagree`
-4. Probe `https://www.solagree.com/go/__co-branded-route-check__` (against the server IP via `--resolve`, since DNS isn't pointed yet) to ensure the nginx SPA fallback is intact
+4. Probe `https://www.solagree.com/go/__co-branded-route-check__` and `https://www.solagree.com/cdfa/go/__co-branded-route-check__` (against the server IP via `--resolve`, since DNS isn't pointed yet) to ensure the nginx SPA fallback is intact
 
 Flags:
 
 - `--dry-run` — skip the rsync write
 - `--skip-build` — reuse existing `.output/public/`
-- `--skip-route-check` — don't probe `/go/*` after upload
+- `--skip-route-check` — don't probe `/go/*` and `/cdfa/go/*` after upload
 
 Overridable env vars: `SSH_USER`, `SSH_HOST`, `REMOTE_PATH`, `REMOTE_OWNER`, `ROUTE_CHECK_HOST`, `ROUTE_CHECK_RESOLVE_IP`.
 
@@ -32,7 +32,7 @@ Overridable env vars: `SSH_USER`, `SSH_HOST`, `REMOTE_PATH`, `REMOTE_OWNER`, `RO
 `/etc/nginx/sites-available/solagree-website` defines:
 
 - HTTP→HTTPS redirect (with `/.well-known/acme-challenge/` carve-out for future certbot)
-- `https://www.solagree.com` root → `/home/solagree/public_html`, with SPA fallback `try_files $uri $uri/ /200.html;` so dynamic Nuxt paths (`/go/:slug`) work after a static deploy
+- `https://www.solagree.com` root → `/home/solagree/public_html`, with SPA fallback `try_files $uri $uri/ /200.html;` so dynamic Nuxt paths (`/go/:slug`, `/cdfa/go/:slug`) work after a static deploy
 - legacy pre-Nuxt URLs → 301 redirects via `/etc/nginx/snippets/solagree-legacy-redirects.conf`
 - `https://solagree.com` → 301 to `https://www.solagree.com`
 - `_nuxt/*` immutable cache headers

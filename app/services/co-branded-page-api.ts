@@ -1,8 +1,12 @@
 import { normalizePortalApiBaseUrl } from '~/services/portal-api'
 import type { CoBrandedPagePublicConfig, CoBrandedPageTemplateId } from '#shared/types/co-branded-page'
 
-const CO_BRANDED_PAGE_ENDPOINT_PREFIX = '/api/public/co-branded-pages'
+const CO_BRANDED_PAGE_ENDPOINT_PREFIX_BY_TYPE = {
+  standard: '/api/public/co-branded-pages',
+  cdfa: '/api/public/cdfa-co-branded-pages'
+} as const
 const DEFAULT_TEMPLATE_ID: CoBrandedPageTemplateId = 'solagree-basic-v1'
+const CO_BRANDED_PAGE_TEMPLATE_IDS = ['solagree-basic-v1', 'cdfa-basic-v1'] as const
 const APPROVED_CO_BRANDED_CTA_PATHS = ['/quiz', '/book-a-solagree-consult']
 const APPROVED_CO_BRANDED_CTA_HOSTS = ['solagree.com', 'www.solagree.com']
 const APPROVED_CO_BRANDED_URL_PROTOCOLS = ['http:', 'https:']
@@ -28,6 +32,7 @@ interface RawCoBrandedPagePublicConfig {
 export interface FetchCoBrandedPageOptions {
   portalApiBaseUrl: string
   slug: string
+  pageType?: keyof typeof CO_BRANDED_PAGE_ENDPOINT_PREFIX_BY_TYPE
 }
 
 const isRecord = (value: unknown): value is RawCoBrandedPagePublicConfig => {
@@ -39,7 +44,9 @@ const normalizeOptionalString = (value: unknown): string | null => {
 }
 
 const normalizeTemplateId = (value: unknown): CoBrandedPageTemplateId => {
-  return value === DEFAULT_TEMPLATE_ID ? value : DEFAULT_TEMPLATE_ID
+  return typeof value === 'string' && (CO_BRANDED_PAGE_TEMPLATE_IDS as readonly string[]).includes(value)
+    ? value as CoBrandedPageTemplateId
+    : DEFAULT_TEMPLATE_ID
 }
 
 const getDefaultCtaUrl = (slug: string): string => {
@@ -180,6 +187,7 @@ export const fetchCoBrandedPageConfig = async (
 ): Promise<CoBrandedPagePublicConfig | null> => {
   const portalApiBaseUrl = normalizePortalApiBaseUrl(options.portalApiBaseUrl)
   const slug = options.slug.trim()
+  const endpointPrefix = CO_BRANDED_PAGE_ENDPOINT_PREFIX_BY_TYPE[options.pageType ?? 'standard']
 
   if (!slug) {
     return null
@@ -187,7 +195,7 @@ export const fetchCoBrandedPageConfig = async (
 
   try {
     const payload = await $fetch<unknown>(
-      `${portalApiBaseUrl}${CO_BRANDED_PAGE_ENDPOINT_PREFIX}/${encodeURIComponent(slug)}`
+      `${portalApiBaseUrl}${endpointPrefix}/${encodeURIComponent(slug)}`
     )
 
     return normalizeCoBrandedPageConfig(payload, slug, portalApiBaseUrl)

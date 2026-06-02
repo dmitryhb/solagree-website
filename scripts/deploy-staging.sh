@@ -64,15 +64,21 @@ echo "Deploying $OUTPUT_DIR to ${SSH_USER}@${SSH_HOST}:${REMOTE_PATH}"
 rsync "${RSYNC_ARGS[@]}" "$OUTPUT_DIR" "${SSH_USER}@${SSH_HOST}:${REMOTE_PATH}"
 
 if [ "$DRY_RUN" = false ] && [ "$SKIP_ROUTE_CHECK" = false ]; then
-  ROUTE_CHECK_URL="${STAGING_SITE_URL%/}/go/__co-branded-route-check__"
-  ROUTE_CHECK_STATUS="$(curl -sS -o /dev/null -w "%{http_code}" "$ROUTE_CHECK_URL" || true)"
+  ROUTE_CHECK_PATHS=(
+    "/go/__co-branded-route-check__"
+    "/cdfa/go/__co-branded-route-check__"
+  )
 
-  if [ "$ROUTE_CHECK_STATUS" = "404" ]; then
-    cat >&2 <<MESSAGE
+  for route_check_path in "${ROUTE_CHECK_PATHS[@]}"; do
+    ROUTE_CHECK_URL="${STAGING_SITE_URL%/}${route_check_path}"
+    ROUTE_CHECK_STATUS="$(curl -sS -o /dev/null -w "%{http_code}" "$ROUTE_CHECK_URL" || true)"
+
+    if [ "$ROUTE_CHECK_STATUS" = "404" ]; then
+      cat >&2 <<MESSAGE
 Staging route check failed: $ROUTE_CHECK_URL returned HTTP 404.
 
 The generated static website must route dynamic Nuxt paths such as /go/:slug
-to /200.html. Update the nginx server block for $STAGING_SITE_URL with:
+and /cdfa/go/:slug to /200.html. Update the nginx server block for $STAGING_SITE_URL with:
 
   location / {
       try_files \$uri \$uri/ /200.html;
@@ -80,8 +86,9 @@ to /200.html. Update the nginx server block for $STAGING_SITE_URL with:
 
 Then reload nginx and rerun this deployment.
 MESSAGE
-    exit 1
-  fi
+      exit 1
+    fi
 
-  echo "Route check passed: $ROUTE_CHECK_URL returned HTTP $ROUTE_CHECK_STATUS"
+    echo "Route check passed: $ROUTE_CHECK_URL returned HTTP $ROUTE_CHECK_STATUS"
+  done
 fi

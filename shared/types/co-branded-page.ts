@@ -1,4 +1,4 @@
-export type CoBrandedPageTemplateId = 'solagree-basic-v1'
+export type CoBrandedPageTemplateId = 'solagree-basic-v1' | 'cdfa-basic-v1'
 
 /**
  * Public configuration returned by the portal for rendering a published co-branded page.

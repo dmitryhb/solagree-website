@@ -224,6 +224,34 @@
   object-fit: cover;
 }
 
+.co-branded-page--cdfa .co-branded-page__hero {
+  background: #9b6a58;
+  color: var(--color-white);
+}
+
+.co-branded-page--cdfa .co-branded-page__hero-eyebrow {
+  background: #e4e1f0;
+  color: var(--color-ink);
+}
+
+.co-branded-page--cdfa .co-branded-page__hero .co-branded-page__primary-cta--light {
+  background: var(--color-ink);
+  color: var(--color-white);
+}
+
+.co-branded-page--cdfa .co-branded-page__hero .co-branded-page__primary-cta--light:hover {
+  background: var(--color-ink-hover);
+  color: var(--color-white);
+}
+
+.co-branded-page--cdfa .co-branded-page__hero .co-branded-page__primary-cta:focus-visible {
+  outline-color: rgba(228, 225, 240, 0.68);
+}
+
+.co-branded-page--cdfa .co-branded-page__hero .button-arrow-icon {
+  filter: brightness(0) invert(1);
+}
+
 .co-branded-page__feature-strip {
   width: 100vw;
   margin-top: 0;

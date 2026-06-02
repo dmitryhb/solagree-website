@@ -6,9 +6,11 @@ import type { CoBrandedPageRenderMode } from '~/types/co-branded-page'
 const props = withDefaults(defineProps<{
   mode: CoBrandedPageRenderMode
   seoPath: string
+  pageType?: 'standard' | 'cdfa'
   noIndex?: boolean
   wrapperClass?: string
 }>(), {
+  pageType: 'standard',
   noIndex: false,
   wrapperClass: ''
 })
@@ -16,7 +18,7 @@ const props = withDefaults(defineProps<{
 const route = useRoute()
 const runtimeConfig = useRuntimeConfig()
 const slug = computed(() => String(route.params.slug || '').trim())
-const asyncDataKey = computed(() => `co-branded-page:${props.mode}:${slug.value}`)
+const asyncDataKey = computed(() => `co-branded-page:${props.pageType}:${props.mode}:${slug.value}`)
 
 const {
   data: coBrandedPage,
@@ -28,7 +30,8 @@ const {
   async () => {
     const config = await fetchCoBrandedPageConfig({
       portalApiBaseUrl: runtimeConfig.public.portalApiBaseUrl,
-      slug: slug.value
+      slug: slug.value,
+      pageType: props.pageType
     })
 
     if (!config) {
