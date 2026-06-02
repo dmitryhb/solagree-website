@@ -19,7 +19,7 @@ export const attorneyCoBrandedPageTemplateSource = `
         <p class="co-branded-page__hero-copy">
           We partner with Solagree to give you a virtual alternative to court litigation – with predictable platform fees and expert guidance at every phase.
         </p>
-        <a class="co-branded-page__primary-cta co-branded-page__primary-cta--light co-branded-page__primary-cta--arrow co-branded-page__hero-cta" href="{{ctaUrl}}">
+        <a class="co-branded-page__primary-cta co-branded-page__primary-cta--light co-branded-page__primary-cta--arrow co-branded-page__hero-cta" href="/attorney-application">
           Request a Consultation
           <img class="button-arrow-icon" src="/icons/arrow.svg" alt="">
         </a>
@@ -64,7 +64,7 @@ export const attorneyCoBrandedPageTemplateSource = `
             <li>Cases from moderate to complex (financial and/or parenting issues)</li>
             <li>Both parties willing to participate in good faith even if they don&rsquo;t agree</li>
           </ul>
-          <a class="co-branded-page__primary-cta co-branded-page__primary-cta--light" href="{{ctaUrl}}">Request a Consultation</a>
+          <a class="co-branded-page__primary-cta co-branded-page__primary-cta--light" href="/attorney-application">Request a Consultation</a>
         </div>
       </div>
     </section>
@@ -143,7 +143,7 @@ export const attorneyCoBrandedPageTemplateSource = `
           <li><strong>After resolution</strong> - Reviewing the final award and handling all court filing</li>
         </ul>
 
-        <a class="co-branded-page__primary-cta co-branded-page__primary-cta--light co-branded-page__primary-cta--arrow" href="{{ctaUrl}}">
+        <a class="co-branded-page__primary-cta co-branded-page__primary-cta--light co-branded-page__primary-cta--arrow" href="/attorney-application">
           Request a Consultation
           <img class="button-arrow-icon" src="/icons/arrow.svg" alt="">
         </a>
@@ -214,7 +214,7 @@ export const attorneyCoBrandedPageTemplateSource = `
             Our process is designed for couples who can't agree on everything but want to avoid lengthy court battles and reach resolution efficiently.
           </p>
         </div>
-        <a class="co-branded-page__primary-cta co-branded-page__primary-cta--light" href="{{ctaUrl}}">Request a Consultation</a>
+        <a class="co-branded-page__primary-cta co-branded-page__primary-cta--light" href="/attorney-application">Request a Consultation</a>
       </div>
 
       <div class="co-branded-page__questions-accordion">
@@ -288,7 +288,7 @@ export const attorneyCoBrandedPageTemplateSource = `
         <div class="co-branded-page__next-steps-card">
           <h3>Let's Talk About Your Situation</h3>
           <p>Request a consultation to learn more about Solagree and discuss whether it's the right approach for your case.</p>
-          <a class="co-branded-page__primary-cta co-branded-page__primary-cta--light" href="{{ctaUrl}}">Request a Consultation</a>
+          <a class="co-branded-page__primary-cta co-branded-page__primary-cta--light" href="/attorney-application">Request a Consultation</a>
         </div>
 
         <img

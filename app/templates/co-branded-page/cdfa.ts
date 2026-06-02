@@ -19,7 +19,7 @@ export const cdfaCoBrandedPageTemplateSource = `
         <p class="co-branded-page__hero-copy">
           We partner with Solagree to offer you a complete divorce resolution process &ndash; starting with financial clarity, supported by expert mediation, and finalized through binding arbitration.
         </p>
-        <a class="co-branded-page__primary-cta co-branded-page__primary-cta--light co-branded-page__primary-cta--arrow co-branded-page__hero-cta" href="{{ctaUrl}}">
+        <a class="co-branded-page__primary-cta co-branded-page__primary-cta--light co-branded-page__primary-cta--arrow co-branded-page__hero-cta" href="/cdfa-application">
           Request a Consultation
           <img class="button-arrow-icon" src="/icons/arrow.svg" alt="">
         </a>
@@ -63,7 +63,7 @@ export const cdfaCoBrandedPageTemplateSource = `
             <li>Cases from moderate to complex (financial and/or parenting issues)</li>
             <li>Both parties willing to participate in good faith even if they don&rsquo;t agree</li>
           </ul>
-          <a class="co-branded-page__primary-cta co-branded-page__primary-cta--light" href="{{ctaUrl}}">Request a Consultation</a>
+          <a class="co-branded-page__primary-cta co-branded-page__primary-cta--light" href="/cdfa-application">Request a Consultation</a>
         </div>
       </div>
     </section>
@@ -142,7 +142,7 @@ export const cdfaCoBrandedPageTemplateSource = `
           <li><strong>After resolution</strong> - Continuing to provide financial guidance to help you implement your settlement and plan for your future</li>
         </ul>
 
-        <a class="co-branded-page__primary-cta co-branded-page__primary-cta--light co-branded-page__primary-cta--arrow" href="{{ctaUrl}}">
+        <a class="co-branded-page__primary-cta co-branded-page__primary-cta--light co-branded-page__primary-cta--arrow" href="/cdfa-application">
           Request a Consultation
           <img class="button-arrow-icon" src="/icons/arrow.svg" alt="">
         </a>
@@ -204,14 +204,10 @@ export const cdfaCoBrandedPageTemplateSource = `
       <div class="co-branded-page__questions-copy">
         <h2 id="co-branded-questions-title">Common Questions</h2>
         <div class="co-branded-page__questions-intro">
-          <p>
-            Solagree offers a structured alternative to traditional divorce litigation - combining expert financial guidance, mediation, and binding arbitration.
-          </p>
-          <p>
-            Our process is designed for couples who can't agree on everything but want to avoid lengthy court battles and reach resolution efficiently.
-          </p>
+          <p>Solagree offers a structured alternative to traditional divorce litigation – combining expert guidance, mediation, and binding arbitration.</p>
+          <p>Our process is designed for couples who want to avoid lengthy, costly court battles and reach resolution efficiently, even when you don't agree on everything.</p>
         </div>
-        <a class="co-branded-page__primary-cta co-branded-page__primary-cta--light" href="{{ctaUrl}}">Request a Consultation</a>
+        <a class="co-branded-page__primary-cta co-branded-page__primary-cta--light" href="/cdfa-application">Request a Consultation</a>
       </div>
 
       <div class="co-branded-page__questions-accordion">
@@ -221,14 +217,30 @@ export const cdfaCoBrandedPageTemplateSource = `
             <span class="co-branded-page__accordion-icon" aria-hidden="true"></span>
           </summary>
           <div class="co-branded-page__accordion-content">
-            <p>Here are a few approaches:</p>
-            <ul>
-              <li>Share this page so they can explore Solagree on their own</li>
-              <li>Focus on the benefits - faster resolution, less conflict, predictable costs</li>
-              <li>Connect them with their own advisor - We can help both spouses find appropriate professional support</li>
-              <li>Schedule a consultation to discuss the best strategy for your situation, and we'll help you navigate next steps.</li>
-            </ul>
+            <p>
+              Schedule a consultation to discuss the best strategy for your situation, and we’ll help you navigate next steps. Common approaches include focusing on the benefits of faster resolution and predictable costs, or connecting your spouse with their own advisor.
+            </p>
           </div>
+        </details>
+
+        <details class="co-branded-page__accordion-item">
+          <summary>
+            <span>What if we can’t agree on everything?</span>
+            <span class="co-branded-page__accordion-icon" aria-hidden="true"></span>
+          </summary>
+          <p>
+            That’s exactly why binding arbitration is built into the process. You don’t have to agree on everything to move forward. If you get stuck after mediation, a neutral arbitrator makes the final decisions. You still reach resolution—you’re not starting over with court litigation.
+          </p>
+        </details>
+
+        <details class="co-branded-page__accordion-item">
+          <summary>
+            <span>Why start with a CDFA® instead of going straight to mediation?</span>
+            <span class="co-branded-page__accordion-icon" aria-hidden="true"></span>
+          </summary>
+          <p>
+            When couples have financial clarity from day one, they make better decisions and reach resolution faster. We organize your finances, identify areas of agreement, and prepare you for productive mediation. Financial understanding drives the entire process and leads to better outcomes.
+          </p>
         </details>
 
         <details class="co-branded-page__accordion-item">
@@ -250,26 +262,6 @@ export const cdfaCoBrandedPageTemplateSource = `
             Yes, in most states. The arbitration award becomes a legally binding resolution that can be filed with the court without appearing.
           </p>
         </details>
-
-        <details class="co-branded-page__accordion-item">
-          <summary>
-            <span>Are payment plans available?</span>
-            <span class="co-branded-page__accordion-icon" aria-hidden="true"></span>
-          </summary>
-          <p>
-            Yes. Payment plan options are available. Schedule a consultation to discuss the best payment structure for your situation.
-          </p>
-        </details>
-
-        <details class="co-branded-page__accordion-item">
-          <summary>
-            <span>What happens after the Solagree process?</span>
-            <span class="co-branded-page__accordion-icon" aria-hidden="true"></span>
-          </summary>
-          <p>
-            The final agreement or arbitration award is filed with the court to make it legally binding. In most cases, no courtroom appearance is required. Your financial advisor can help you implement your post-divorce financial plan.
-          </p>
-        </details>
       </div>
     </section>
 
@@ -285,7 +277,7 @@ export const cdfaCoBrandedPageTemplateSource = `
         <div class="co-branded-page__next-steps-card">
           <h3>Let's Talk About Your Situation</h3>
           <p>Request a consultation to learn more about Solagree and discuss whether it's the right approach for your case.</p>
-          <a class="co-branded-page__primary-cta co-branded-page__primary-cta--light" href="{{ctaUrl}}">Request a Consultation</a>
+          <a class="co-branded-page__primary-cta co-branded-page__primary-cta--light" href="/cdfa-application">Request a Consultation</a>
         </div>
 
         <img
