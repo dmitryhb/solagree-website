@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import CoBrandedConsultModal from '~/components/co-branded/CoBrandedConsultModal.vue'
 import { renderCoBrandedPageTemplate } from '~/templates/co-branded-page'
 import type { CoBrandedPagePublicConfig } from '#shared/types/co-branded-page'
+import type { ConsultType } from '#shared/types/consult-request'
 import type { CoBrandedPageRenderMode } from '~/types/co-branded-page'
 
 const props = defineProps<{
@@ -9,7 +11,19 @@ const props = defineProps<{
 }>()
 
 const rendererRef = ref<HTMLElement | null>(null)
+const isConsultModalOpen = ref(false)
 const renderedTemplate = computed(() => renderCoBrandedPageTemplate(props.config, props.mode))
+const coBrandedConsultType = computed<ConsultType>(() => (
+  props.config.templateId === 'solagree-basic-v1' ? 'attorney' : 'initial'
+))
+
+const openConsultModal = (): void => {
+  isConsultModalOpen.value = true
+}
+
+const closeConsultModal = (): void => {
+  isConsultModalOpen.value = false
+}
 
 /**
  * Keeps template-rendered FAQ details panels in sync with the single-open
@@ -35,12 +49,28 @@ const handleAccordionToggle = (event: Event): void => {
     })
 }
 
+const handleTemplateClick = (event: MouseEvent): void => {
+  const target = event.target instanceof Element
+    ? event.target
+    : null
+  const trigger = target?.closest('[data-co-branded-consult-trigger]')
+
+  if (!trigger) {
+    return
+  }
+
+  event.preventDefault()
+  openConsultModal()
+}
+
 onMounted(() => {
   rendererRef.value?.addEventListener('toggle', handleAccordionToggle, true)
+  rendererRef.value?.addEventListener('click', handleTemplateClick)
 })
 
 onBeforeUnmount(() => {
   rendererRef.value?.removeEventListener('toggle', handleAccordionToggle, true)
+  rendererRef.value?.removeEventListener('click', handleTemplateClick)
 })
 </script>
 
@@ -53,5 +83,13 @@ onBeforeUnmount(() => {
   <div
     ref="rendererRef"
     v-html="renderedTemplate"
+  />
+
+  <CoBrandedConsultModal
+    :open="isConsultModalOpen"
+    :company-name="config.companyName"
+    :partner-slug="config.slug"
+    :consult-type="coBrandedConsultType"
+    @close="closeConsultModal"
   />
 </template>

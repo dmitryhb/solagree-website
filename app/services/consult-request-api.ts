@@ -48,6 +48,18 @@ export interface SubmitConsultRequestOptions extends PortalSubmitOptions<Consult
   quizAnswers?: ConsultRequestQuizAnswer[] | null
 }
 
+export interface CoBrandedConsultRequestFormState {
+  firstName: string
+  lastName: string
+  email: string
+}
+
+export interface SubmitCoBrandedConsultRequestOptions extends PortalSubmitOptions<ConsultRequestSubmissionPayload> {
+  consultType: ConsultType
+  referralCode: string
+  sourceUrl?: string | null
+}
+
 /**
  * Converts Nuxt/fetch/native errors into a consult-request submission message.
  */
@@ -108,6 +120,38 @@ export const submitConsultRequest = async (
     {
       method: 'POST',
       body: createConsultRequestSubmissionPayload(form, options)
+    }
+  )
+
+  if ('error' in response) {
+    throw new Error(response.message)
+  }
+
+  return response
+}
+
+/**
+ * Submits the compact co-branded consultation popup form with partner attribution.
+ */
+export const submitCoBrandedConsultRequest = async (
+  form: CoBrandedConsultRequestFormState,
+  options: SubmitCoBrandedConsultRequestOptions
+): Promise<ConsultRequestApiResponse> => {
+  const portalApiBaseUrl = normalizePortalApiBaseUrl(options.portalApiBaseUrl)
+  const response = await options.fetcher<ConsultRequestApiResult>(
+    `${portalApiBaseUrl}${CONSULT_REQUESTS_ENDPOINT}`,
+    {
+      method: 'POST',
+      body: {
+        firstName: form.firstName.trim(),
+        lastName: form.lastName.trim(),
+        fullName: `${form.firstName.trim()} ${form.lastName.trim()}`.trim(),
+        email: form.email.trim(),
+        consultType: options.consultType,
+        referralCode: options.referralCode.trim(),
+        sourceUrl: options.sourceUrl?.trim() || null,
+        quizAnswers: []
+      }
     }
   )
 

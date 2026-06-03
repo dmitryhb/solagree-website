@@ -24,12 +24,14 @@ export interface ConsultRequestQuizAnswer {
  * Normalized request body submitted to the Solagree portal consult request endpoint.
  */
 export interface ConsultRequestSubmissionPayload {
-  fullName: string
+  firstName?: string | null
+  lastName?: string | null
+  fullName?: string | null
   email: string
-  phone: string
-  state: string
-  preferredContactMethod: ConsultPreferredContactMethod
-  bestTimeOfDay: ConsultBestTimeOfDay
+  phone?: string | null
+  state?: string | null
+  preferredContactMethod?: ConsultPreferredContactMethod | null
+  bestTimeOfDay?: ConsultBestTimeOfDay | null
   consultType: ConsultType
   referralCode?: string | null
   sourceUrl?: string | null

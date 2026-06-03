@@ -1087,6 +1087,167 @@
   }
 }
 
+.co-branded-consult-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  font-family: var(--font-body);
+}
+
+.co-branded-consult-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  background: rgba(31, 34, 54, 0.58);
+  cursor: pointer;
+}
+
+.co-branded-consult-modal__panel {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 480px);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 24px 80px rgba(31, 34, 54, 0.24);
+  color: #33354d;
+}
+
+.co-branded-consult-modal__close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 50%;
+  background: #f4f4f7;
+  cursor: pointer;
+}
+
+.co-branded-consult-modal__close span,
+.co-branded-consult-modal__close span::after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 16px;
+  height: 2px;
+  border-radius: 999px;
+  background: #3e4059;
+  content: "";
+}
+
+.co-branded-consult-modal__close span {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.co-branded-consult-modal__close span::after {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.co-branded-consult-modal__close:focus-visible,
+.co-branded-consult-modal__submit:focus-visible,
+.co-branded-consult-modal__fields input:focus {
+  outline: 3px solid rgba(62, 64, 89, 0.28);
+  outline-offset: 2px;
+}
+
+.co-branded-consult-modal__form,
+.co-branded-consult-modal__state {
+  display: grid;
+  gap: 22px;
+  padding: 38px;
+}
+
+.co-branded-consult-modal__header,
+.co-branded-consult-modal__state {
+  text-align: left;
+}
+
+.co-branded-consult-modal__eyebrow {
+  margin: 0 0 8px;
+  color: #8a6a25;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.co-branded-consult-modal h2 {
+  margin: 0;
+  max-width: 360px;
+  color: #33354d;
+  font-family: var(--font-heading);
+  font-size: 32px;
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: 0;
+}
+
+.co-branded-consult-modal__state p {
+  margin: 0;
+  color: #5b5d72;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.co-branded-consult-modal__fields {
+  display: grid;
+  gap: 16px;
+}
+
+.co-branded-consult-modal__fields label {
+  display: grid;
+  gap: 8px;
+  color: #3e4059;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.co-branded-consult-modal__fields input {
+  width: 100%;
+  min-height: 48px;
+  border: 1px solid #d8d9e4;
+  border-radius: 6px;
+  background: #fff;
+  color: #33354d;
+  font: inherit;
+  font-weight: 500;
+  padding: 0 14px;
+}
+
+.co-branded-consult-modal__error {
+  margin: 0;
+  border-radius: 6px;
+  background: #fff1f1;
+  color: #9a3030;
+  font-size: 14px;
+  line-height: 1.5;
+  padding: 12px 14px;
+}
+
+.co-branded-consult-modal__submit {
+  justify-self: start;
+  min-height: 48px;
+  border: 0;
+  border-radius: 999px;
+  background: #3e4059;
+  color: #fff;
+  cursor: pointer;
+  font: inherit;
+  font-size: 16px;
+  font-weight: 800;
+  padding: 0 24px;
+}
+
+.co-branded-consult-modal__submit:disabled,
+.co-branded-consult-modal__close:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
 @media (max-width: 1024px) {
   .co-branded-page__how-steps {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1236,6 +1397,24 @@
 }
 
 @media (max-width: 480px) {
+  .co-branded-consult-modal {
+    padding: 14px;
+  }
+
+  .co-branded-consult-modal__form,
+  .co-branded-consult-modal__state {
+    gap: 18px;
+    padding: 32px 22px 24px;
+  }
+
+  .co-branded-consult-modal h2 {
+    font-size: 26px;
+  }
+
+  .co-branded-consult-modal__submit {
+    width: 100%;
+  }
+
   .co-branded-page__solagree-logo {
     width: min(38vw, 9rem);
   }

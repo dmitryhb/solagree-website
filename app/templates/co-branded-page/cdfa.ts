@@ -19,7 +19,7 @@ export const cdfaCoBrandedPageTemplateSource = `
         <p class="co-branded-page__hero-copy">
           We partner with Solagree to offer you a complete divorce resolution process &ndash; starting with financial clarity, supported by expert mediation, and finalized through binding arbitration.
         </p>
-        <a class="co-branded-page__primary-cta co-branded-page__primary-cta--light co-branded-page__primary-cta--arrow co-branded-page__hero-cta" href="/cdfa-application">
+        <a class="co-branded-page__primary-cta co-branded-page__primary-cta--light co-branded-page__primary-cta--arrow co-branded-page__hero-cta" href="{{ctaUrl}}" data-co-branded-consult-trigger="true">
           Request a Consultation
           <img class="button-arrow-icon" src="/icons/arrow.svg" alt="">
         </a>
@@ -63,7 +63,7 @@ export const cdfaCoBrandedPageTemplateSource = `
             <li>Cases from moderate to complex (financial and/or parenting issues)</li>
             <li>Both parties willing to participate in good faith even if they don&rsquo;t agree</li>
           </ul>
-          <a class="co-branded-page__primary-cta co-branded-page__primary-cta--light" href="/cdfa-application">Request a Consultation</a>
+          <a class="co-branded-page__primary-cta co-branded-page__primary-cta--light" href="{{ctaUrl}}" data-co-branded-consult-trigger="true">Request a Consultation</a>
         </div>
       </div>
     </section>
@@ -142,7 +142,7 @@ export const cdfaCoBrandedPageTemplateSource = `
           <li><strong>After resolution</strong> - Continuing to provide financial guidance to help you implement your settlement and plan for your future</li>
         </ul>
 
-        <a class="co-branded-page__primary-cta co-branded-page__primary-cta--light co-branded-page__primary-cta--arrow" href="/cdfa-application">
+        <a class="co-branded-page__primary-cta co-branded-page__primary-cta--light co-branded-page__primary-cta--arrow" href="{{ctaUrl}}" data-co-branded-consult-trigger="true">
           Request a Consultation
           <img class="button-arrow-icon" src="/icons/arrow.svg" alt="">
         </a>
@@ -207,7 +207,7 @@ export const cdfaCoBrandedPageTemplateSource = `
           <p>Solagree offers a structured alternative to traditional divorce litigation – combining expert guidance, mediation, and binding arbitration.</p>
           <p>Our process is designed for couples who want to avoid lengthy, costly court battles and reach resolution efficiently, even when you don't agree on everything.</p>
         </div>
-        <a class="co-branded-page__primary-cta co-branded-page__primary-cta--light" href="/cdfa-application">Request a Consultation</a>
+        <a class="co-branded-page__primary-cta co-branded-page__primary-cta--light" href="{{ctaUrl}}" data-co-branded-consult-trigger="true">Request a Consultation</a>
       </div>
 
       <div class="co-branded-page__questions-accordion">
@@ -277,7 +277,7 @@ export const cdfaCoBrandedPageTemplateSource = `
         <div class="co-branded-page__next-steps-card">
           <h3>Let's Talk About Your Situation</h3>
           <p>Request a consultation to learn more about Solagree and discuss whether it's the right approach for your case.</p>
-          <a class="co-branded-page__primary-cta co-branded-page__primary-cta--light" href="/cdfa-application">Request a Consultation</a>
+          <a class="co-branded-page__primary-cta co-branded-page__primary-cta--light" href="{{ctaUrl}}" data-co-branded-consult-trigger="true">Request a Consultation</a>
         </div>
 
         <img
