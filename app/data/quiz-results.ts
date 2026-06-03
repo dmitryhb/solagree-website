@@ -37,12 +37,12 @@ export const solagreeQuizResultContent = {
   },
   'attorney-consult-first': {
     eyebrow: 'Recommended next step',
-    title: 'An attorney consult should happen first.',
+    title: 'We recommend working with an advising attorney throughout the Solagree process.',
     body:
-      'Your answers point to questions or risk factors that should be clarified with an attorney before choosing the next Solagree step.',
+      'We can connect you with network attorneys who specialize in Solagree cases. You can book an attorney consultation here.',
     primaryCta: {
       actionId: 'attorney-consult',
-      label: 'Book an attorney consult',
+      label: 'Book an attorney consultation',
       href: '#attorney-consult-placeholder',
       note: 'Placeholder destination until production booking links are wired.',
       isPlaceholder: true
@@ -52,6 +52,20 @@ export const solagreeQuizResultContent = {
     resourceBody:
       'These national resources can help you explore legal aid and self-help options while you prepare for the right next step.',
     resources: phaseOneFallbackResources
+  },
+  'payment-options-consult': {
+    eyebrow: 'Recommended next step',
+    title: 'You may have more options than you think.',
+    body:
+      'Solagree fees are typically paid in 3 installments, and qualified applicants may be eligible for third-party financing (unaffiliated with Solagree). Schedule an introductory consultation to explore your options.',
+    primaryCta: {
+      actionId: 'solagree-consult',
+      label: 'Schedule an introductory consultation',
+      href: '#solagree-consult-placeholder',
+      note: 'Placeholder destination until production booking links are wired.',
+      isPlaceholder: true
+    },
+    resetLabel: 'Start again'
   },
   'not-fit-right-now': {
     eyebrow: 'Recommended next step',

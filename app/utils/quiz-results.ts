@@ -102,14 +102,6 @@ export const evaluateQuizAnswers = (answers: Readonly<QuizAnswerMap>): QuizEvalu
     }
   }
 
-  if (answers.paymentReadiness === 'not-ready') {
-    return {
-      kind: 'resolved',
-      outcome: 'not-fit-right-now',
-      metadata
-    }
-  }
-
   if (answers.legalAdvice === 'yes') {
     return {
       kind: 'resolved',
@@ -134,12 +126,17 @@ export const evaluateQuizAnswers = (answers: Readonly<QuizAnswerMap>): QuizEvalu
     }
   }
 
+  if (answers.paymentReadiness === 'need-payment-plan' || answers.paymentReadiness === 'not-ready') {
+    return {
+      kind: 'resolved',
+      outcome: 'payment-options-consult',
+      metadata
+    }
+  }
+
   return {
     kind: 'resolved',
-    outcome:
-      answers.paymentReadiness === 'need-payment-plan'
-        ? solagreeQuizResolvedPolicy.paymentPlanEligibleOutcome
-        : 'solagree-fit',
+    outcome: 'solagree-fit',
     metadata
   }
 }

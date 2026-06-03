@@ -3,18 +3,16 @@ import type { QuizOpenPolicy, QuizOutcomeId, QuizSpouseContactAnswer } from '~/d
 export const solagreeQuizResolvedPolicy = {
   legalAdviceYesOutcome: 'attorney-consult-first',
   legalAdviceNotSureOutcome: 'attorney-consult-first',
-  paymentPlanEligibleOutcome: 'solagree-fit',
   spouseContactOutcomes: {
     'direct-contact': null,
-    'cannot-find': 'not-fit-right-now',
-    'unknown-whereabouts': 'not-fit-right-now',
-    'know-where-not-communicating': 'not-fit-right-now'
+    'cannot-find': 'attorney-consult-first',
+    'unknown-whereabouts': 'attorney-consult-first',
+    'know-where-not-communicating': 'attorney-consult-first'
   },
   genericFallbackResources: true
 } as const satisfies {
   legalAdviceYesOutcome: QuizOutcomeId
   legalAdviceNotSureOutcome: QuizOutcomeId
-  paymentPlanEligibleOutcome: QuizOutcomeId
   spouseContactOutcomes: Record<QuizSpouseContactAnswer, QuizOutcomeId | null>
   genericFallbackResources: boolean
 }

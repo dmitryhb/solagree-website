@@ -145,6 +145,7 @@ export type QuizSessionPhase = 'question' | 'result'
 export type QuizOutcomeId =
   | 'solagree-fit'
   | 'attorney-consult-first'
+  | 'payment-options-consult'
   | 'not-fit-right-now'
 
 export type QuizCtaActionId =

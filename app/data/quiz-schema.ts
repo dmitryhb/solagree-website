@@ -20,7 +20,7 @@ export const solagreeQuizQuestions = [
   {
     id: 'children',
     kind: 'single-select',
-    title: 'Do you have children under 18?',
+    title: 'Do you have children under 21?',
     options: [
       { id: 'yes', label: 'Yes' },
       { id: 'no', label: 'No' }
@@ -54,7 +54,7 @@ export const solagreeQuizQuestions = [
   {
     id: 'financialScreener',
     kind: 'single-select',
-    title: 'Are there financial issues that may complicate your divorce?',
+    title: 'Do you have financial questions about your divorce?',
     options: [
       { id: 'yes', label: 'Yes' },
       { id: 'no', label: 'No' }
@@ -79,12 +79,11 @@ export const solagreeQuizQuestions = [
   {
     id: 'spouseContact',
     kind: 'single-select',
-    title: 'Do you and your spouse have contact with each other these days?',
+    title: 'Do you have contact information for your spouse (we will not ask you to provide it at this time)?',
     options: [
       { id: 'direct-contact', label: 'Yes' },
-      { id: 'cannot-find', label: 'No, I can’t find them' },
-      { id: 'know-where-not-communicating', label: 'No, we have no contact' },
-      { id: 'unknown-whereabouts', label: 'Not sure' }
+      { id: 'cannot-find', label: 'No' },
+      { id: 'unknown-whereabouts', label: 'Not Sure' }
     ]
   },
   {
