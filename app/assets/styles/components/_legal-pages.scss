@@ -110,6 +110,16 @@
   text-transform: uppercase;
 }
 
+.legal-document__revision {
+  max-width: 100%;
+  margin: -0.5rem 0 0;
+  color: #4d463d;
+  font-family: var(--font-nav);
+  font-size: 0.9rem;
+  font-weight: 400;
+  line-height: 1.45;
+}
+
 .legal-document__body {
   color: #27241f;
   font-family: var(--font-body);
@@ -141,7 +151,7 @@
   display: grid;
   gap: 0.75rem;
   padding-left: 1.35rem;
-  margin: 0;
+  margin: 0 0 1.35rem;
   color: var(--color-ink);
 }
 

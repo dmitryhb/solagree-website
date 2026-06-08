@@ -15,6 +15,9 @@ defineProps<{
       <p class="legal-document__source">
         {{ page.sourceLabel }}
       </p>
+      <p class="legal-document__revision">
+        {{ page.revisionLabel }}
+      </p>
     </header>
 
     <div class="legal-document__body">
