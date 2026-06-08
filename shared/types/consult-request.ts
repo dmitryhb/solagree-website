@@ -29,6 +29,7 @@ export interface ConsultRequestSubmissionPayload {
   fullName?: string | null
   email: string
   phone?: string | null
+  smsOptIn?: boolean | null
   state?: string | null
   preferredContactMethod?: ConsultPreferredContactMethod | null
   bestTimeOfDay?: ConsultBestTimeOfDay | null

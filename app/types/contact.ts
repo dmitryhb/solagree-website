@@ -2,6 +2,7 @@ export interface ContactFormState {
   name: string
   email: string
   phone: string
+  smsOptIn: boolean
   message: string
 }
 

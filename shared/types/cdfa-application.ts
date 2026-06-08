@@ -49,6 +49,7 @@ export interface CdfaApplicationSubmissionPayload {
   company: string
   email: string
   phone: string
+  smsOptIn?: boolean | null
   address: string
   certificationStatus: CdfaCertificationStatusValue
   certificationNumber: string

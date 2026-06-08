@@ -13,6 +13,7 @@ export const consultRequestInitialState = {
   fullName: '',
   email: '',
   phone: '',
+  smsOptIn: false,
   state: '',
   preferredContactMethod: '',
   bestTimeOfDay: ''

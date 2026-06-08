@@ -21,6 +21,7 @@ export const attorneyApplicationInitialState = {
   company: '',
   email: '',
   phone: '',
+  smsOptIn: false,
   address: '',
   barStates: [],
   licenseNumbers: [''],

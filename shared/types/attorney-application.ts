@@ -19,6 +19,7 @@ export interface AttorneyApplicationSubmissionPayload {
   company: string
   email: string
   phone: string
+  smsOptIn?: boolean | null
   address: string
   barStates: string[]
   licenseNumbers: string[]

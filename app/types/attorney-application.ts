@@ -12,6 +12,7 @@ export interface AttorneyApplicationFormState {
   company: string
   email: string
   phone: string
+  smsOptIn: boolean
   address: string
   barStates: string[]
   licenseNumbers: string[]

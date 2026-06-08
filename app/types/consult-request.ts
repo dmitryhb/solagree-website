@@ -8,6 +8,7 @@ export interface ConsultRequestFormState {
   fullName: string
   email: string
   phone: string
+  smsOptIn: boolean
   state: string
   preferredContactMethod: ConsultPreferredContactMethod | ''
   bestTimeOfDay: ConsultBestTimeOfDay | ''

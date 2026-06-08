@@ -95,6 +95,7 @@ export const createConsultRequestSubmissionPayload = (
     fullName: form.fullName.trim(),
     email: form.email.trim(),
     phone: form.phone.trim(),
+    smsOptIn: form.smsOptIn,
     state: form.state.trim(),
     preferredContactMethod,
     bestTimeOfDay,

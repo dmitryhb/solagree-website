@@ -49,6 +49,7 @@ export const cdfaApplicationInitialState = {
   company: '',
   email: '',
   phone: '',
+  smsOptIn: false,
   address: '',
   certificationStatus: '',
   certificationNumber: '',

@@ -64,6 +64,7 @@ export const createCdfaApplicationSubmissionPayload = (
     company: form.company,
     email: form.email,
     phone: form.phone,
+    smsOptIn: form.smsOptIn,
     address: form.address,
     certificationStatus: form.certificationStatus,
     certificationNumber: form.certificationNumber,

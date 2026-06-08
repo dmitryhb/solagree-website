@@ -39,6 +39,7 @@ export const createContactSubmissionPayload = (
     email: form.email.trim(),
     message: form.message.trim(),
     phone: form.phone.trim() || null,
+    smsOptIn: form.smsOptIn,
     sourceUrl: options.sourceUrl?.trim() || null
   }
 }

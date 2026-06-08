@@ -19,6 +19,7 @@ export interface CdfaApplicationFormState {
   company: string
   email: string
   phone: string
+  smsOptIn: boolean
   address: string
   certificationStatus: CdfaCertificationStatus
   certificationNumber: string

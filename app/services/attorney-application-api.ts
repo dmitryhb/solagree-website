@@ -62,6 +62,7 @@ export const createAttorneyApplicationSubmissionPayload = (
     company: form.company,
     email: form.email,
     phone: form.phone,
+    smsOptIn: form.smsOptIn,
     address: form.address,
     barStates: form.barStates,
     licenseNumbers: form.licenseNumbers.map((licenseNumber) => licenseNumber.trim()),

@@ -242,6 +242,11 @@ const handleSubmit = async () => {
         </select>
       </div>
 
+      <FormSmsOptInField
+        id="consult-sms-opt-in"
+        v-model="form.smsOptIn"
+      />
+
       <SiteFormSubmit
         label="SEND REQUEST"
         :submitting="submitting"

@@ -18,6 +18,7 @@ const form = reactive<ContactFormState>({
   name: '',
   email: '',
   phone: '',
+  smsOptIn: false,
   message: ''
 })
 
@@ -137,6 +138,11 @@ const handleSubmit = async () => {
       rows="5"
       placeholder="Message"
       required
+    />
+
+    <FormSmsOptInField
+      id="contact-sms-opt-in"
+      v-model="form.smsOptIn"
     />
 
     <SiteFormSubmit

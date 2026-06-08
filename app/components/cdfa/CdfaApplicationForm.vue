@@ -159,6 +159,11 @@ const {
         required
       />
 
+      <FormSmsOptInField
+        id="cdfa-sms-opt-in"
+        v-model="form.smsOptIn"
+      />
+
       <label class="attorney-application-form__terms">
         <input
           v-model="form.termsAccepted"

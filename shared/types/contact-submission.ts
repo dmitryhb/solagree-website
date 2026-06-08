@@ -6,6 +6,7 @@ export interface ContactSubmissionPayload {
   email: string
   message: string
   phone?: string | null
+  smsOptIn?: boolean | null
   sourceUrl?: string | null
 }
 
