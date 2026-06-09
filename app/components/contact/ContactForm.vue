@@ -9,6 +9,7 @@ import type { ContactSubmissionFetcher } from '~/services/contact-submission-api
 import type { ContactFormState } from '~/types/contact'
 
 const runtimeConfig = useRuntimeConfig()
+const { trackEvent } = useGoogleAnalytics()
 const formEl = ref<HTMLFormElement | null>(null)
 const submitting = ref(false)
 const submitted = ref(false)
@@ -43,6 +44,10 @@ const handleSubmit = async () => {
       portalApiBaseUrl: runtimeConfig.public.portalApiBaseUrl,
       fetcher: $fetch as unknown as ContactSubmissionFetcher,
       sourceUrl: sourceUrl
+    })
+
+    trackEvent('contact_form_submitted', {
+      source: 'contact_form'
     })
 
     submitted.value = true

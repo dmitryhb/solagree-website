@@ -25,7 +25,7 @@ export const defaultQuizHostRuntimeConfig = {
     showExplainer: true
   },
   analytics: {
-    enabled: false,
+    enabled: true,
     namespace: 'solagree.quiz'
   },
   bridge: {

@@ -28,7 +28,9 @@ export const useQuizHost = (
   options: UseQuizHostOptions = {}
 ) => {
   const runtimeConfig = useRuntimeConfig()
+  const { trackEvent } = useGoogleAnalytics()
   const sessionId = ref(createQuizHostSessionId())
+  const hasTrackedQuizStart = ref(false)
   const hostConfig = computed(() => {
     return resolveQuizHostConfig(
       runtimeConfig.public.solagreeQuiz as QuizHostConfigInput | undefined,
@@ -72,6 +74,27 @@ export const useQuizHost = (
       trackingId: hostConfig.value.analytics.trackingId,
       timestamp: new Date().toISOString()
     } as const
+  }
+
+  const buildAnalyticsContext = () => {
+    return {
+      host_id: hostConfig.value.hostId,
+      quiz_mode: hostConfig.value.mode,
+      quiz_session_id: sessionId.value,
+      tracking_id: hostConfig.value.analytics.trackingId
+    }
+  }
+
+  const trackQuizStarted = (questionId: QuizQuestionId) => {
+    if (!hostConfig.value.analytics.enabled || hasTrackedQuizStart.value) {
+      return
+    }
+
+    hasTrackedQuizStart.value = true
+    trackEvent('quiz_started', {
+      question_id: questionId,
+      ...buildAnalyticsContext()
+    })
   }
 
   const trackQuestionViewed = (questionId: QuizQuestionId, progress: number) => {
@@ -122,6 +145,7 @@ export const useQuizHost = (
 
     const nextValue = getTrackedAnswerValue(questionId)
     if (nextValue !== undefined) {
+      trackQuizStarted(questionId)
       trackQuestionAnswered(questionId, nextValue)
     }
   }
@@ -131,6 +155,7 @@ export const useQuizHost = (
 
     const nextValue = getTrackedAnswerValue(questionId)
     if (nextValue !== undefined) {
+      trackQuizStarted(questionId)
       trackQuestionAnswered(questionId, nextValue)
     }
   }
@@ -160,6 +185,7 @@ export const useQuizHost = (
 
   const handleReset = () => {
     quizSession.reset()
+    hasTrackedQuizStart.value = false
 
     if (!shouldEmitEvents()) {
       return
@@ -220,6 +246,16 @@ export const useQuizHost = (
         progress: quizSession.progressValue.value,
         ...buildEventContext()
       })
+
+      if (hostConfig.value.analytics.enabled) {
+        trackEvent('quiz_completed', {
+          outcome: evaluation.kind === 'resolved' ? evaluation.outcome : 'open-policy',
+          policy_id: evaluation.kind === 'open-policy' ? evaluation.policyId : undefined,
+          progress: quizSession.progressValue.value,
+          tag_ids: evaluation.metadata.tags.join(','),
+          ...buildAnalyticsContext()
+        })
+      }
     }
   )
 

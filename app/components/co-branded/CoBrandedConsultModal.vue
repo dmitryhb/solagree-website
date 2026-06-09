@@ -20,6 +20,7 @@ const emit = defineEmits<{
 
 const runtimeConfig = useRuntimeConfig()
 const sourceUrl = useSourceUrl()
+const { trackEvent } = useGoogleAnalytics()
 
 const formEl = ref<HTMLFormElement | null>(null)
 const firstNameInput = ref<HTMLInputElement | null>(null)
@@ -75,6 +76,12 @@ const handleSubmit = async (): Promise<void> => {
       consultType: props.consultType,
       referralCode: props.partnerSlug,
       sourceUrl
+    })
+
+    trackEvent('consultation_booked', {
+      consult_type: props.consultType,
+      referral_code: props.partnerSlug,
+      source: 'co_branded_consult_modal'
     })
 
     submitted.value = true

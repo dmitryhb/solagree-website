@@ -15,6 +15,7 @@ The script will:
    - `NUXT_PUBLIC_SITE_URL=https://www.solagree.com`
    - `NUXT_PUBLIC_PORTAL_URL=https://portal.solagree.com`
    - `NUXT_PUBLIC_PORTAL_API_BASE_URL=https://portal.solagree.com`
+   - `NUXT_PUBLIC_GA_MEASUREMENT_ID=G-TCGL2PDNNY`
 2. `rsync -avz --delete` `.output/public/` to `/home/solagree/public_html/` (via `sudo -n rsync` over SSH as `ubuntu`)
 3. Re-`chown solagree:solagree`
 4. Probe `https://www.solagree.com/go/__co-branded-route-check__` and `https://www.solagree.com/cdfa/go/__co-branded-route-check__` (against the server IP via `--resolve`, since DNS isn't pointed yet) to ensure the nginx SPA fallback is intact
@@ -25,7 +26,7 @@ Flags:
 - `--skip-build` — reuse existing `.output/public/`
 - `--skip-route-check` — don't probe `/go/*` and `/cdfa/go/*` after upload
 
-Overridable env vars: `SSH_USER`, `SSH_HOST`, `REMOTE_PATH`, `REMOTE_OWNER`, `ROUTE_CHECK_HOST`, `ROUTE_CHECK_RESOLVE_IP`.
+Overridable env vars: `SSH_USER`, `SSH_HOST`, `REMOTE_PATH`, `REMOTE_OWNER`, `ROUTE_CHECK_HOST`, `ROUTE_CHECK_RESOLVE_IP`, `NUXT_PUBLIC_GA_MEASUREMENT_ID`.
 
 ## nginx
 

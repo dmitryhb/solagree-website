@@ -16,6 +16,7 @@ REMOTE_NGINX_SITE_CONFIG="${REMOTE_NGINX_SITE_CONFIG:-/etc/nginx/sites-available
 PRODUCTION_SITE_URL="${NUXT_PUBLIC_SITE_URL:-https://www.solagree.com}"
 PRODUCTION_PORTAL_URL="${NUXT_PUBLIC_PORTAL_URL:-https://portal.solagree.com}"
 PRODUCTION_PORTAL_API_BASE_URL="${NUXT_PUBLIC_PORTAL_API_BASE_URL:-https://portal.solagree.com}"
+PRODUCTION_GA_MEASUREMENT_ID="${NUXT_PUBLIC_GA_MEASUREMENT_ID:-G-TCGL2PDNNY}"
 
 # Pre-DNS testing: when the DNS hasn't switched yet we still want to verify the
 # deploy actually landed on the production server. ROUTE_CHECK_HOST overrides
@@ -47,9 +48,11 @@ if [ "$SKIP_BUILD" = false ]; then
   export NUXT_PUBLIC_SITE_URL="$PRODUCTION_SITE_URL"
   export NUXT_PUBLIC_PORTAL_URL="$PRODUCTION_PORTAL_URL"
   export NUXT_PUBLIC_PORTAL_API_BASE_URL="$PRODUCTION_PORTAL_API_BASE_URL"
+  export NUXT_PUBLIC_GA_MEASUREMENT_ID="$PRODUCTION_GA_MEASUREMENT_ID"
   echo "  Site URL:            $NUXT_PUBLIC_SITE_URL"
   echo "  Portal URL:          $NUXT_PUBLIC_PORTAL_URL"
   echo "  Portal API base URL: $NUXT_PUBLIC_PORTAL_API_BASE_URL"
+  echo "  GA Measurement ID:   $NUXT_PUBLIC_GA_MEASUREMENT_ID"
   npm run generate
 fi
 

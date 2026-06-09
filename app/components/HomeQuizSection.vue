@@ -8,9 +8,6 @@ const homeQuizHostConfig: QuizHostConfigInput = {
     showShellHeader: false,
     showExplainer: true
   },
-  analytics: {
-    enabled: false
-  },
   bridge: {
     postMessage: false
   }

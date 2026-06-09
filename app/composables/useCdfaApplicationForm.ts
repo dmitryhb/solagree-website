@@ -19,6 +19,7 @@ export interface UseCdfaApplicationFormReturn {
 
 export const useCdfaApplicationForm = (): UseCdfaApplicationFormReturn => {
   const runtimeConfig = useRuntimeConfig()
+  const { trackEvent } = useGoogleAnalytics()
   const formEl = ref<HTMLFormElement | null>(null)
   const hasAttemptedSubmit = ref(false)
 
@@ -47,6 +48,11 @@ export const useCdfaApplicationForm = (): UseCdfaApplicationFormReturn => {
       fetcher: $fetch as unknown as CdfaApplicationFetcher
     }),
     onSuccess: async () => {
+      trackEvent('partner_application_submitted', {
+        partner_type: 'cdfa',
+        source: 'cdfa_application_form'
+      })
+
       await navigateTo('/cdfa-application/sent')
     },
     getErrorMessage: getCdfaApplicationSubmissionErrorMessage

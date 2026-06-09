@@ -1,9 +1,12 @@
 const DEV_PORTAL_API_BASE_URL = 'http://solagree-portal.local:3004'
+const PRODUCTION_GA_MEASUREMENT_ID = 'G-TCGL2PDNNY'
 const isProduction = process.env.NODE_ENV === 'production'
 const portalApiBaseUrl = process.env.NUXT_PUBLIC_PORTAL_API_BASE_URL?.trim()
   || (isProduction ? '' : DEV_PORTAL_API_BASE_URL)
 const portalUrl = process.env.NUXT_PUBLIC_PORTAL_URL?.trim()
   || portalApiBaseUrl
+const gaMeasurementId = process.env.NUXT_PUBLIC_GA_MEASUREMENT_ID?.trim()
+  || (isProduction ? PRODUCTION_GA_MEASUREMENT_ID : '')
 const ignoredSourcemapWarningPlugins = new Set([
   'nuxt:module-preload-polyfill',
   '@tailwindcss/vite:generate:build'
@@ -36,7 +39,23 @@ export default defineNuxtConfig({
         { rel: 'icon', type: 'image/png', sizes: '96x96', href: '/favicon-96x96.png' },
         { rel: 'apple-touch-icon', sizes: '180x180', href: '/apple-touch-icon.png' },
         { rel: 'manifest', href: '/site.webmanifest' }
-      ]
+      ],
+      script: gaMeasurementId
+        ? [
+            {
+              src: `https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`,
+              async: true
+            },
+            {
+              innerHTML: `
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', '${gaMeasurementId}', { send_page_view: false });
+`
+            }
+          ]
+        : []
     }
   },
   experimental: {
@@ -88,6 +107,7 @@ export default defineNuxtConfig({
       siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'https://www.solagree.com',
       portalUrl,
       portalApiBaseUrl,
+      gaMeasurementId,
       solagreeQuiz: {
         hostId: 'solagree-quiz',
         mode: 'standalone',
@@ -96,8 +116,9 @@ export default defineNuxtConfig({
           showExplainer: true
         },
         analytics: {
-          enabled: false,
-          namespace: 'solagree.quiz'
+          enabled: true,
+          namespace: 'solagree.quiz',
+          trackingId: gaMeasurementId || undefined
         },
         bridge: {
           postMessage: false,

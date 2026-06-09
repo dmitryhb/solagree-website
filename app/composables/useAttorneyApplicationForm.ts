@@ -34,6 +34,7 @@ export interface UseAttorneyApplicationFormReturn {
 export const useAttorneyApplicationForm = (): UseAttorneyApplicationFormReturn => {
   const currentYear = new Date().getFullYear()
   const runtimeConfig = useRuntimeConfig()
+  const { trackEvent } = useGoogleAnalytics()
   const formEl = ref<HTMLFormElement | null>(null)
   const hasAttemptedSubmit = ref(false)
   let nextLicenseRowId = 0
@@ -113,6 +114,11 @@ export const useAttorneyApplicationForm = (): UseAttorneyApplicationFormReturn =
       fetcher: $fetch as unknown as AttorneyApplicationFetcher
     }),
     onSuccess: async () => {
+      trackEvent('partner_application_submitted', {
+        partner_type: 'attorney',
+        source: 'attorney_application_form'
+      })
+
       await navigateTo('/attorney-application/sent')
     },
     getErrorMessage: getAttorneyApplicationSubmissionErrorMessage

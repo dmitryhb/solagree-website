@@ -24,6 +24,7 @@ const props = defineProps<{
 
 const runtimeConfig = useRuntimeConfig()
 const route = useRoute()
+const { trackEvent } = useGoogleAnalytics()
 
 const formEl = ref<HTMLFormElement | null>(null)
 const submitting = ref(false)
@@ -72,6 +73,12 @@ const handleSubmit = async () => {
       referralCode: referralCode.value,
       sourceUrl: sourceUrl,
       quizAnswers: getStoredConsultQuizAnswers()
+    })
+
+    trackEvent('consultation_booked', {
+      consult_type: props.content.consultType,
+      referral_code: referralCode.value ?? undefined,
+      source: 'consult_request_form'
     })
 
     await navigateTo(thankYouPath.value)
