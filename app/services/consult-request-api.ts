@@ -91,6 +91,10 @@ export const createConsultRequestSubmissionPayload = (
     throw new Error('Please complete all required fields.')
   }
 
+  if (preferredContactMethod === 'text' && !form.smsOptIn) {
+    throw new Error('SMS opt-in is required when preferred contact method is text.')
+  }
+
   return {
     fullName: form.fullName.trim(),
     email: form.email.trim(),

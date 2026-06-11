@@ -34,6 +34,11 @@ const form = reactive<ConsultRequestFormState>({
   ...consultRequestInitialState
 })
 
+const contactMethodOptions = computed(() => consultPreferredContactMethodOptions.map(option => ({
+  ...option,
+  disabled: option.value === 'text' && !form.smsOptIn
+})))
+
 const referralCode = computed(() => {
   const refValue = route.query.ref
 
@@ -50,6 +55,15 @@ const thankYouPath = computed(() => ({
 }))
 
 const sourceUrl = useSourceUrl()
+
+watch(
+  () => form.smsOptIn,
+  (smsOptIn) => {
+    if (!smsOptIn && form.preferredContactMethod === 'text') {
+      form.preferredContactMethod = ''
+    }
+  }
+)
 
 const handleSubmit = async () => {
   if (submitting.value) {
@@ -197,6 +211,11 @@ const handleSubmit = async () => {
         </select>
       </div>
 
+      <FormSmsOptInField
+        id="consult-sms-opt-in"
+        v-model="form.smsOptIn"
+      />
+
       <div class="consult-request-form__field consult-request-form__field--select">
         <label for="consult-contact-method">
           Preferred contact method<span aria-hidden="true">*</span>
@@ -214,9 +233,10 @@ const handleSubmit = async () => {
             Select...
           </option>
           <option
-            v-for="option in consultPreferredContactMethodOptions"
+            v-for="option in contactMethodOptions"
             :key="option.value"
             :value="option.value"
+            :disabled="option.disabled"
           >
             {{ option.label }}
           </option>
@@ -248,11 +268,6 @@ const handleSubmit = async () => {
           </option>
         </select>
       </div>
-
-      <FormSmsOptInField
-        id="consult-sms-opt-in"
-        v-model="form.smsOptIn"
-      />
 
       <SiteFormSubmit
         label="SEND REQUEST"

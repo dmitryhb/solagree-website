@@ -42,7 +42,7 @@ export const initialConsultRequestContent = {
 
 export const attorneyConsultRequestContent = {
   consultType: 'attorney',
-  eyebrow: '1 hour • $250',
+  eyebrow: '30-45 mins • $250',
   title: 'Book an Attorney Consult',
   description: 'Talk with a licensed attorney in your state who works with Solagree cases. Discuss your situation, ask questions about assets, custody, and support, and learn how Solagree would work for your case.',
   thankYouPath: '/book-an-attorney-consult/thank-you'
