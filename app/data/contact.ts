@@ -1,11 +1,11 @@
 import type { ContactPerson, DirectContactItem } from '~/types/contact'
 
 export const contactPerson: ContactPerson = {
-  name: 'Allison Terrill',
-  role: 'Chief Experience Officer',
+  name: 'Courtney Lutz-McLellan',
+  role: 'Co-Founder & CDFA®',
   email: 'support@solagree.com',
   phone: '',
-  imageSrc: '/images/contact-person.webp'
+  imageSrc: '/images/lutz-mclellan.jpg'
 }
 
 export const directContactItems: DirectContactItem[] = [
