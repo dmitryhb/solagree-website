@@ -144,14 +144,9 @@ export type QuizSessionPhase = 'question' | 'result'
 
 export type QuizOutcomeId =
   | 'solagree-fit'
-  | 'attorney-consult-first'
   | 'payment-options-consult'
-  | 'not-fit-right-now'
 
-export type QuizCtaActionId =
-  | 'solagree-consult'
-  | 'attorney-consult'
-  | 'fallback-resources'
+export type QuizCtaActionId = 'solagree-consult'
 
 export type QuizInternalTag =
   | 'parenting'
@@ -206,20 +201,11 @@ export interface QuizResultCta {
   trackingId?: string
 }
 
-export interface QuizResultResourceLink {
-  label: string
-  href: string
-  description: string
-}
-
 export interface QuizResultViewModel {
   eyebrow: string
   title: string
   body: string
   primaryCta: QuizResultCta
-  resourceTitle?: string
-  resourceBody?: string
-  resources?: readonly QuizResultResourceLink[]
   resetLabel: string
 }
 

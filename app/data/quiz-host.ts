@@ -8,12 +8,6 @@ import type {
 const defaultQuizCtaTargets = {
   'solagree-consult': {
     href: '/book-a-solagree-consult'
-  },
-  'attorney-consult': {
-    href: '/book-an-attorney-consult'
-  },
-  'fallback-resources': {
-    href: '#fallback-resources'
   }
 } as const satisfies Record<QuizCtaActionId, { href: string }>
 

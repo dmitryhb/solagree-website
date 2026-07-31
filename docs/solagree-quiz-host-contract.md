@@ -28,10 +28,8 @@
 CTA routing is keyed by stable action ids instead of hardcoded page checks:
 
 - `solagree-consult`
-- `attorney-consult`
-- `fallback-resources`
 
-The result engine still decides *which* action id to show. The host layer decides the final destination URL.
+Every result displays the Initial Consult action. The host layer decides its final destination URL.
 
 ## Host Events
 

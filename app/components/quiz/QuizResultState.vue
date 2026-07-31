@@ -23,22 +23,9 @@ const referralCode = computed(() => {
   return typeof refValue === 'string' ? refValue.trim() || null : null
 })
 
-const consultActionIds = new Set<QuizResultViewModel['primaryCta']['actionId']>([
-  'solagree-consult',
-  'attorney-consult'
-])
-
-const primaryCtaHref = computed(() => {
-  if (!consultActionIds.has(props.result.primaryCta.actionId)) {
-    return props.result.primaryCta.href
-  }
-
-  return appendReferralToHref(props.result.primaryCta.href, referralCode.value)
-})
-
 const primaryCta = computed(() => ({
   ...props.result.primaryCta,
-  href: primaryCtaHref.value
+  href: appendReferralToHref(props.result.primaryCta.href, referralCode.value)
 }))
 </script>
 
@@ -105,43 +92,5 @@ const primaryCta = computed(() => ({
       </button>
     </div>
 
-    <div
-      v-if="result.resources?.length"
-      class="quiz-result-state__resources"
-      id="fallback-resources"
-    >
-      <h4
-        v-if="result.resourceTitle"
-        class="quiz-result-state__resources-title"
-      >
-        {{ result.resourceTitle }}
-      </h4>
-      <p
-        v-if="result.resourceBody"
-        class="quiz-result-state__resources-body"
-      >
-        {{ result.resourceBody }}
-      </p>
-
-      <ul class="quiz-result-state__resource-list">
-        <li
-          v-for="resource in result.resources"
-          :key="resource.href"
-          class="quiz-result-state__resource-item"
-        >
-          <a
-            class="quiz-result-state__resource-link"
-            :href="resource.href"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {{ resource.label }}
-          </a>
-          <p class="quiz-result-state__resource-description">
-            {{ resource.description }}
-          </p>
-        </li>
-      </ul>
-    </div>
   </div>
 </template>

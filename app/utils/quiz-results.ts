@@ -1,5 +1,5 @@
-import { solagreeQuizOpenPolicies, solagreeQuizResolvedPolicy } from '~/data/quiz-policies'
-import { solagreeQuizOpenPolicyContent, solagreeQuizResultContent } from '~/data/quiz-results'
+import { solagreeQuizOpenPolicies } from '~/data/quiz-policies'
+import { solagreeQuizResultContent } from '~/data/quiz-results'
 import type {
   QuizAnswerMap,
   QuizConsultMetadata,
@@ -8,14 +8,6 @@ import type {
   QuizOpenPolicy,
   QuizResultViewModel
 } from '~/data/quiz-types'
-
-const getResolvedSpouseContactOutcome = (answers: Readonly<QuizAnswerMap>) => {
-  if (!answers.spouseContact) {
-    return null
-  }
-
-  return solagreeQuizResolvedPolicy.spouseContactOutcomes[answers.spouseContact] ?? null
-}
 
 /**
  * Builds structured metadata used by quiz analytics and result routing.
@@ -92,39 +84,6 @@ export const buildQuizConsultMetadata = (answers: Readonly<QuizAnswerMap>): Quiz
  */
 export const evaluateQuizAnswers = (answers: Readonly<QuizAnswerMap>): QuizEvaluation => {
   const metadata = buildQuizConsultMetadata(answers)
-  const resolvedSpouseContactOutcome = getResolvedSpouseContactOutcome(answers)
-
-  if (resolvedSpouseContactOutcome) {
-    return {
-      kind: 'resolved',
-      outcome: resolvedSpouseContactOutcome,
-      metadata
-    }
-  }
-
-  if (answers.legalAdvice === 'yes') {
-    return {
-      kind: 'resolved',
-      outcome: solagreeQuizResolvedPolicy.legalAdviceYesOutcome,
-      metadata
-    }
-  }
-
-  if (answers.legalAdvice === 'not-sure') {
-    return {
-      kind: 'resolved',
-      outcome: solagreeQuizResolvedPolicy.legalAdviceNotSureOutcome,
-      metadata
-    }
-  }
-
-  if (answers.spouseCooperation === 'no') {
-    return {
-      kind: 'resolved',
-      outcome: 'attorney-consult-first',
-      metadata
-    }
-  }
 
   if (answers.paymentReadiness === 'need-payment-plan' || answers.paymentReadiness === 'not-ready') {
     return {
@@ -142,15 +101,11 @@ export const evaluateQuizAnswers = (answers: Readonly<QuizAnswerMap>): QuizEvalu
 }
 
 /**
- * Resolves display copy and CTA data for a quiz evaluation.
+ * Returns the Initial Consult recommendation displayed for every quiz outcome.
  */
-export const getQuizResultViewModel = (evaluation: QuizEvaluation): QuizResultViewModel => {
-  const content = evaluation.kind === 'resolved'
-    ? solagreeQuizResultContent[evaluation.outcome]
-    : solagreeQuizOpenPolicyContent[evaluation.policyId]
-
+export const getQuizResultViewModel = (): QuizResultViewModel => {
   return {
-    ...content
+    ...solagreeQuizResultContent
   }
 }
 

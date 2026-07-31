@@ -127,12 +127,6 @@ gtag('config', '${gaMeasurementId}', { send_page_view: false });
         ctas: {
           'solagree-consult': {
             href: '/book-a-solagree-consult'
-          },
-          'attorney-consult': {
-            href: '/book-an-attorney-consult'
-          },
-          'fallback-resources': {
-            href: '#fallback-resources'
           }
         }
       }

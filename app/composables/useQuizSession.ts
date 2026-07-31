@@ -81,7 +81,7 @@ export const useQuizSession = () => {
     return isQuizAnswerPresent(currentQuestionId.value, currentValue.value as QuizQuestionValue | undefined)
   })
   const evaluation = computed(() => evaluateQuizAnswers(answers.value))
-  const resultView = computed(() => getQuizResultViewModel(evaluation.value))
+  const resultView = computed(() => getQuizResultViewModel())
   const branchProgressValue = computed(() => {
     return getQuizProgressValue(currentQuestionId.value, answers.value, phase.value)
   })
