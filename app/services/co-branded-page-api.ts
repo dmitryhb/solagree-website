@@ -1,12 +1,14 @@
 import { normalizePortalApiBaseUrl } from '~/services/portal-api'
-import type { CoBrandedPagePublicConfig, CoBrandedPageTemplateId } from '#shared/types/co-branded-page'
+import type { CoBrandedPagePublicConfig } from '#shared/types/co-branded-page'
+import {
+  resolveCoBrandedPageTemplateId,
+  type CoBrandedPageType
+} from '#shared/co-branded-page-variant'
 
 const CO_BRANDED_PAGE_ENDPOINT_PREFIX_BY_TYPE = {
   standard: '/api/public/co-branded-pages',
   cdfa: '/api/public/cdfa-co-branded-pages'
-} as const
-const DEFAULT_TEMPLATE_ID: CoBrandedPageTemplateId = 'solagree-basic-v1'
-const CO_BRANDED_PAGE_TEMPLATE_IDS = ['solagree-basic-v1', 'cdfa-basic-v1'] as const
+} as const satisfies Record<CoBrandedPageType, string>
 const APPROVED_CO_BRANDED_CTA_PATHS = ['/book-a-solagree-consult', '/book-an-attorney-consult']
 const APPROVED_CO_BRANDED_CTA_HOSTS = ['solagree.com', 'www.solagree.com']
 const APPROVED_CO_BRANDED_URL_PROTOCOLS = ['http:', 'https:']
@@ -32,7 +34,7 @@ interface RawCoBrandedPagePublicConfig {
 export interface FetchCoBrandedPageOptions {
   portalApiBaseUrl: string
   slug: string
-  pageType?: keyof typeof CO_BRANDED_PAGE_ENDPOINT_PREFIX_BY_TYPE
+  pageType?: CoBrandedPageType
 }
 
 const isRecord = (value: unknown): value is RawCoBrandedPagePublicConfig => {
@@ -43,13 +45,7 @@ const normalizeOptionalString = (value: unknown): string | null => {
   return typeof value === 'string' && value.trim() ? value.trim() : null
 }
 
-const normalizeTemplateId = (value: unknown): CoBrandedPageTemplateId => {
-  return typeof value === 'string' && (CO_BRANDED_PAGE_TEMPLATE_IDS as readonly string[]).includes(value)
-    ? value as CoBrandedPageTemplateId
-    : DEFAULT_TEMPLATE_ID
-}
-
-const getDefaultCtaUrl = (slug: string, pageType: keyof typeof CO_BRANDED_PAGE_ENDPOINT_PREFIX_BY_TYPE): string => {
+const getDefaultCtaUrl = (slug: string, pageType: CoBrandedPageType): string => {
   const ctaPath = pageType === 'standard' ? '/book-an-attorney-consult' : '/book-a-solagree-consult'
 
   return `${ctaPath}?ref=${encodeURIComponent(slug)}`
@@ -74,7 +70,7 @@ const isApprovedCtaHost = (hostname: string): boolean => {
 export const normalizeCoBrandedCtaUrl = (
   value: unknown,
   fallbackSlug: string,
-  pageType: keyof typeof CO_BRANDED_PAGE_ENDPOINT_PREFIX_BY_TYPE
+  pageType: CoBrandedPageType
 ): string => {
   const ctaUrl = normalizeOptionalString(value)
   const fallbackUrl = getDefaultCtaUrl(fallbackSlug, pageType)
@@ -157,7 +153,7 @@ export const normalizeCoBrandedPageConfig = (
   payload: unknown,
   fallbackSlug: string,
   portalApiBaseUrl: string,
-  pageType: keyof typeof CO_BRANDED_PAGE_ENDPOINT_PREFIX_BY_TYPE = 'standard'
+  pageType: CoBrandedPageType = 'standard'
 ): CoBrandedPagePublicConfig => {
   if (!isRecord(payload)) {
     throw new Error('Co-branded page configuration is invalid.')
@@ -169,8 +165,9 @@ export const normalizeCoBrandedPageConfig = (
     ?? 'Solagree partner'
 
   return {
+    pageType,
     slug,
-    templateId: normalizeTemplateId(payload.templateId),
+    templateId: resolveCoBrandedPageTemplateId(payload.templateId, pageType),
     companyName,
     attorneyName: normalizeOptionalString(payload.attorneyName)
       ?? normalizeOptionalString(payload.contactName)

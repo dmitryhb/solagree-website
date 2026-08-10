@@ -14,7 +14,7 @@ const rendererRef = ref<HTMLElement | null>(null)
 const isConsultModalOpen = ref(false)
 const renderedTemplate = computed(() => renderCoBrandedPageTemplate(props.config, props.mode))
 const coBrandedConsultType = computed<ConsultType>(() => (
-  props.config.templateId === 'solagree-basic-v1' ? 'attorney' : 'initial'
+  props.config.pageType === 'standard' ? 'attorney' : 'initial'
 ))
 
 const openConsultModal = (): void => {
