@@ -270,7 +270,7 @@ export const attorneyCoBrandedPageTemplateSource = `
             <span class="co-branded-page__accordion-icon" aria-hidden="true"></span>
           </summary>
           <p>
-            The final agreement or arbitration award is filed with the court to make it legally binding. In most cases, no courtroom appearance is required. Your financial advisor can help you implement your post-divorce financial plan.
+            The final agreement or arbitration award is filed with the court to make it legally binding. In most cases, no courtroom appearance is required.
           </p>
         </details>
       </div>

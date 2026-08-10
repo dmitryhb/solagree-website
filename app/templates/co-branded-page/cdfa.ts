@@ -262,6 +262,16 @@ export const cdfaCoBrandedPageTemplateSource = `
             Yes, in most states. The arbitration award becomes a legally binding resolution that can be filed with the court without appearing.
           </p>
         </details>
+
+        <details class="co-branded-page__accordion-item">
+          <summary>
+            <span>What happens after the Solagree process?</span>
+            <span class="co-branded-page__accordion-icon" aria-hidden="true"></span>
+          </summary>
+          <p>
+            The final agreement or arbitration award is filed with the court to make it legally binding. In most cases, no courtroom appearance is required. Your financial advisor can help you implement your post-divorce financial plan.
+          </p>
+        </details>
       </div>
     </section>
 
