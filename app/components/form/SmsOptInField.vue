@@ -2,6 +2,8 @@
 const props = defineProps<{
   id: string
   modelValue: boolean
+  disabled?: boolean
+  label?: string
 }>()
 
 const emit = defineEmits<{
@@ -25,9 +27,10 @@ const updateValue = (event: Event) => {
         type="checkbox"
         name="smsOptIn"
         :checked="props.modelValue"
+        :disabled="props.disabled"
         @change="updateValue"
       >
-      <span>Yes, I agree to receive text messages from Solagree.</span>
+      <span>{{ props.label ?? 'Yes, I agree to receive text messages from Solagree.' }}</span>
     </label>
 
     <p class="sms-opt-in__disclaimer">

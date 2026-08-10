@@ -1,3 +1,5 @@
+import type { CoBrandedPageType } from '../co-branded-page-variant'
+
 export const CONSULT_PREFERRED_CONTACT_METHODS = ['email', 'phone', 'text'] as const
 
 export type ConsultPreferredContactMethod = (typeof CONSULT_PREFERRED_CONTACT_METHODS)[number]
@@ -26,6 +28,8 @@ export interface ConsultRequestQuizAnswer {
 export interface ConsultRequestSubmissionPayload {
   firstName?: string | null
   lastName?: string | null
+  spouseFirstName?: string | null
+  spouseLastName?: string | null
   fullName?: string | null
   email: string
   phone?: string | null
@@ -34,6 +38,7 @@ export interface ConsultRequestSubmissionPayload {
   preferredContactMethod?: ConsultPreferredContactMethod | null
   bestTimeOfDay?: ConsultBestTimeOfDay | null
   consultType: ConsultType
+  coBrandedPageType?: CoBrandedPageType | null
   referralCode?: string | null
   sourceUrl?: string | null
   quizAnswers?: ConsultRequestQuizAnswer[] | null

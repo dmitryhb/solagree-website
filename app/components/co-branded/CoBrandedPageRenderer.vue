@@ -2,7 +2,6 @@
 import CoBrandedConsultModal from '~/components/co-branded/CoBrandedConsultModal.vue'
 import { renderCoBrandedPageTemplate } from '~/templates/co-branded-page'
 import type { CoBrandedPagePublicConfig } from '#shared/types/co-branded-page'
-import type { ConsultType } from '#shared/types/consult-request'
 import type { CoBrandedPageRenderMode } from '~/types/co-branded-page'
 
 const props = defineProps<{
@@ -13,9 +12,6 @@ const props = defineProps<{
 const rendererRef = ref<HTMLElement | null>(null)
 const isConsultModalOpen = ref(false)
 const renderedTemplate = computed(() => renderCoBrandedPageTemplate(props.config, props.mode))
-const coBrandedConsultType = computed<ConsultType>(() => (
-  props.config.pageType === 'standard' ? 'attorney' : 'initial'
-))
 
 const openConsultModal = (): void => {
   isConsultModalOpen.value = true
@@ -89,7 +85,7 @@ onBeforeUnmount(() => {
     :open="isConsultModalOpen"
     :company-name="config.companyName"
     :partner-slug="config.slug"
-    :consult-type="coBrandedConsultType"
+    :page-type="config.pageType"
     @close="closeConsultModal"
   />
 </template>

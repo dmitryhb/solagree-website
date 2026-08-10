@@ -16,7 +16,9 @@ import type {
   ConsultRequestSubmissionPayload,
   ConsultType
 } from '#shared/types/consult-request'
-import type { ConsultRequestFormState } from '~/types/consult-request'
+import { createCoBrandedConsultRequestPayload } from '#shared/co-branded-consult-request'
+import type { CoBrandedPageType } from '#shared/co-branded-page-variant'
+import type { CoBrandedConsultRequestFormState, ConsultRequestFormState } from '~/types/consult-request'
 import { isMember } from '~/utils/is-member'
 
 const CONSULT_REQUESTS_ENDPOINT = '/api/consult-requests'
@@ -48,14 +50,8 @@ export interface SubmitConsultRequestOptions extends PortalSubmitOptions<Consult
   quizAnswers?: ConsultRequestQuizAnswer[] | null
 }
 
-export interface CoBrandedConsultRequestFormState {
-  firstName: string
-  lastName: string
-  email: string
-}
-
 export interface SubmitCoBrandedConsultRequestOptions extends PortalSubmitOptions<ConsultRequestSubmissionPayload> {
-  consultType: ConsultType
+  pageType: CoBrandedPageType
   referralCode: string
   sourceUrl?: string | null
 }
@@ -147,16 +143,7 @@ export const submitCoBrandedConsultRequest = async (
     `${portalApiBaseUrl}${CONSULT_REQUESTS_ENDPOINT}`,
     {
       method: 'POST',
-      body: {
-        firstName: form.firstName.trim(),
-        lastName: form.lastName.trim(),
-        fullName: `${form.firstName.trim()} ${form.lastName.trim()}`.trim(),
-        email: form.email.trim(),
-        consultType: options.consultType,
-        referralCode: options.referralCode.trim(),
-        sourceUrl: options.sourceUrl?.trim() || null,
-        quizAnswers: []
-      }
+      body: createCoBrandedConsultRequestPayload(form, options)
     }
   )
 

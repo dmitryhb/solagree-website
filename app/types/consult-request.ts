@@ -3,6 +3,7 @@ import type {
   ConsultPreferredContactMethod,
   ConsultType
 } from '#shared/types/consult-request'
+import type { CoBrandedConsultRequestFormValues } from '#shared/co-branded-consult-request'
 
 export interface ConsultRequestFormState {
   fullName: string
@@ -13,6 +14,9 @@ export interface ConsultRequestFormState {
   preferredContactMethod: ConsultPreferredContactMethod | ''
   bestTimeOfDay: ConsultBestTimeOfDay | ''
 }
+
+/** Mutable form state used by the Attorney and CDFA co-branded modal variants. */
+export type CoBrandedConsultRequestFormState = CoBrandedConsultRequestFormValues
 
 export interface ConsultRequestResult {
   title: string
