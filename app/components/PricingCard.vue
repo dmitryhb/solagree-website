@@ -68,8 +68,9 @@ defineProps<{
       {{ plan.ctaLabel }}
     </SiteButton>
 
-    <p class="pricing-card__note">
-      {{ plan.note }}
-    </p>
+    <div class="pricing-card__note">
+      <span class="pricing-card__note-label">Best for</span>
+      <p>{{ plan.note }}</p>
+    </div>
   </article>
 </template>
