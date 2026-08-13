@@ -17,6 +17,7 @@ const embedStatus = ref<EmbedStatus>('loading')
 const retryCount = ref(0)
 let loadTimeout: number | undefined
 let mountCount = 0
+let detachEmbedListeners: (() => void) | undefined
 
 /** Clears the current Cal.com DOM and starts a new namespaced inline embed. */
 const mountEmbed = (): void => {
@@ -25,6 +26,8 @@ const mountEmbed = (): void => {
   }
 
   window.clearTimeout(loadTimeout)
+  detachEmbedListeners?.()
+  detachEmbedListeners = undefined
   bookingEmbed.value.replaceChildren()
   embedStatus.value = 'loading'
   mountCount += 1
@@ -42,28 +45,35 @@ const mountEmbed = (): void => {
       throw new Error('Cal.com did not initialize the booking namespace.')
     }
 
+    const handleLinkReady = (): void => {
+      if (currentMount !== mountCount) {
+        return
+      }
+
+      embedStatus.value = 'ready'
+      window.clearTimeout(loadTimeout)
+    }
+    const handleLinkFailed = (): void => {
+      if (currentMount !== mountCount) {
+        return
+      }
+
+      embedStatus.value = 'error'
+      window.clearTimeout(loadTimeout)
+    }
+
     namespacedCal('on', {
       action: 'linkReady',
-      callback: () => {
-        if (currentMount !== mountCount) {
-          return
-        }
-
-        embedStatus.value = 'ready'
-        window.clearTimeout(loadTimeout)
-      }
+      callback: handleLinkReady
     })
     namespacedCal('on', {
       action: 'linkFailed',
-      callback: () => {
-        if (currentMount !== mountCount) {
-          return
-        }
-
-        embedStatus.value = 'error'
-        window.clearTimeout(loadTimeout)
-      }
+      callback: handleLinkFailed
     })
+    detachEmbedListeners = () => {
+      namespacedCal('off', { action: 'linkReady', callback: handleLinkReady })
+      namespacedCal('off', { action: 'linkFailed', callback: handleLinkFailed })
+    }
     namespacedCal('inline', {
       calLink: props.event.eventPath,
       elementOrSelector: bookingEmbed.value,
@@ -99,6 +109,7 @@ onMounted(mountEmbed)
 
 onBeforeUnmount(() => {
   window.clearTimeout(loadTimeout)
+  detachEmbedListeners?.()
   bookingEmbed.value?.replaceChildren()
 })
 </script>

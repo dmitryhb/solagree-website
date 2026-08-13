@@ -72,6 +72,7 @@ const handleOptionKeydown = (event: KeyboardEvent, index: number): void => {
         type="button"
         role="radio"
         :aria-checked="event.id === selectedId"
+        :tabindex="event.id === selectedId ? 0 : -1"
         :data-consultant-id="event.id"
         @click="selectOption(event.id)"
         @keydown="handleOptionKeydown($event, index)"
