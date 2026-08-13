@@ -108,6 +108,13 @@ gtag('config', '${gaMeasurementId}', { send_page_view: false });
       portalUrl,
       portalApiBaseUrl,
       gaMeasurementId,
+      initialConsultBooking: {
+        firstAvailableEventPath: process.env.NUXT_PUBLIC_CALCOM_INITIAL_CONSULT_FIRST_AVAILABLE_EVENT_PATH?.trim() || '',
+        tajEventPath: process.env.NUXT_PUBLIC_CALCOM_INITIAL_CONSULT_TAJ_EVENT_PATH?.trim() || '',
+        stacieEventPath: process.env.NUXT_PUBLIC_CALCOM_INITIAL_CONSULT_STACIE_EVENT_PATH?.trim() || '',
+        jessicaEventPath: process.env.NUXT_PUBLIC_CALCOM_INITIAL_CONSULT_JESSICA_EVENT_PATH?.trim() || '',
+        jamesEventPath: process.env.NUXT_PUBLIC_CALCOM_INITIAL_CONSULT_JAMES_EVENT_PATH?.trim() || ''
+      },
       solagreeQuiz: {
         hostId: 'solagree-quiz',
         mode: 'standalone',

@@ -101,6 +101,20 @@ The consult request form submits to:
 ${NUXT_PUBLIC_PORTAL_API_BASE_URL}/api/consult-requests
 ```
 
+## Initial Consult booking
+
+`/book-a-solagree-consult` uses Cal.com for Initial Consult availability, booking questions, and payment. Configure every event as a Cal.com path (not a full URL) before deploying; the page deliberately stays unavailable if any event path is missing or malformed.
+
+```bash
+NUXT_PUBLIC_CALCOM_INITIAL_CONSULT_FIRST_AVAILABLE_EVENT_PATH=solagree/initial-consults/initial-consult
+NUXT_PUBLIC_CALCOM_INITIAL_CONSULT_TAJ_EVENT_PATH=solagree/initial-consults/initial-consult-taj
+NUXT_PUBLIC_CALCOM_INITIAL_CONSULT_STACIE_EVENT_PATH=solagree/initial-consults/initial-consult-stacie
+NUXT_PUBLIC_CALCOM_INITIAL_CONSULT_JESSICA_EVENT_PATH=solagree/initial-consults/initial-consult-jessica
+NUXT_PUBLIC_CALCOM_INITIAL_CONSULT_JAMES_EVENT_PATH=solagree/initial-consults/initial-consult-james
+```
+
+The embed forwards only a compact allowlist of marketing identifiers: `ref`, `source`, and `utm_source`, `utm_medium`, `utm_campaign`, `utm_term`, and `utm_content`. Do not use the URL to pass contact details or other booking answers; Cal.com collects those in its own flow.
+
 For local development:
 
 - Add `127.0.0.1 solagree.local solagree-portal.local` to `/etc/hosts`.

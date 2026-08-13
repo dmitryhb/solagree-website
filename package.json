@@ -13,9 +13,11 @@
     "preview": "nuxt preview --host solagree.local --port 3003",
     "test:co-branded-page-variants": "node --experimental-strip-types --test tests/co-branded-page-variant.test.mts",
     "test:co-branded-consult-requests": "node --experimental-strip-types --test tests/co-branded-consult-request.test.mts",
+    "test:initial-consult-booking": "node --experimental-strip-types --test tests/initial-consult-booking.test.mts",
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@calcom/embed-snippet": "^1.3.3",
     "@nuxt/ui": "^4.6.1",
     "handlebars": "^4.7.9",
     "nuxt": "^4.4.2",
