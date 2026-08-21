@@ -17,6 +17,7 @@
     "test:initial-consult-booking-component": "vitest run tests/initial-consult-booking.component.test.ts",
     "test:initial-consult-booking-e2e": "playwright test -c playwright.initial-consult-booking.config.ts",
     "test:initial-consult-booking-lifecycle": "node --experimental-strip-types --test tests/initial-consult-booking-component.test.mts",
+    "test:resource-content-validation": "node --experimental-strip-types --test tests/resource-content-validation.test.mts",
     "postinstall": "nuxt prepare"
   },
   "dependencies": {

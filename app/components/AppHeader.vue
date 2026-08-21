@@ -109,6 +109,41 @@ const openResourcesMenu = async (focusPosition?: 'first' | 'last'): Promise<void
   target?.focus()
 }
 
+/** Moves focus between Resources menuitems without trapping Tab navigation. */
+const handleResourcesMenuKeydown = (event: KeyboardEvent): void => {
+  const menuItems = Array.from(resourcesMenu.value?.querySelectorAll<HTMLAnchorElement>('[role="menuitem"]') ?? [])
+
+  if (menuItems.length === 0) {
+    return
+  }
+
+  if (event.key === 'Escape') {
+    event.preventDefault()
+    event.stopPropagation()
+    closeResourcesMenu(true)
+    return
+  }
+
+  const currentIndex = menuItems.indexOf(event.target as HTMLAnchorElement)
+  const direction = event.key === 'ArrowDown'
+    ? 1
+    : event.key === 'ArrowUp'
+      ? -1
+      : 0
+  const target = event.key === 'Home'
+    ? menuItems[0]
+    : event.key === 'End'
+      ? menuItems.at(-1)
+      : direction !== 0 && currentIndex >= 0
+        ? menuItems[(currentIndex + direction + menuItems.length) % menuItems.length]
+        : undefined
+
+  if (target) {
+    event.preventDefault()
+    target.focus()
+  }
+}
+
 const closeResourcesMenuWhenFocusLeaves = (event: FocusEvent): void => {
   const container = event.currentTarget
   const nextFocusedElement = event.relatedTarget
@@ -218,6 +253,7 @@ watch(
             class="site-header__resources-menu"
             role="menu"
             aria-label="Resources"
+            @keydown="handleResourcesMenuKeydown"
           >
             <li
               v-for="link in headerResourcesMenu.links"
