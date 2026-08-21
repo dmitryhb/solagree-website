@@ -10,6 +10,7 @@ const router = useRouter()
 const currentRoute = computed(() => router.currentRoute.value)
 const isMobileMenuOpen = ref(false)
 const isResourcesMenuOpen = ref(false)
+const isResourcesMenuPinned = ref(false)
 const isScrolled = ref(false)
 const isResettingHomeScroll = ref(false)
 const resourcesMenuButton = ref<HTMLButtonElement | null>(null)
@@ -89,6 +90,7 @@ const closeMobileMenu = () => {
 
 const closeResourcesMenu = (returnFocus = false): void => {
   isResourcesMenuOpen.value = false
+  isResourcesMenuPinned.value = false
 
   if (returnFocus) {
     nextTick(() => resourcesMenuButton.value?.focus())
@@ -97,6 +99,10 @@ const closeResourcesMenu = (returnFocus = false): void => {
 
 const openResourcesMenu = async (focusPosition?: 'first' | 'last'): Promise<void> => {
   isResourcesMenuOpen.value = true
+
+  if (focusPosition) {
+    isResourcesMenuPinned.value = true
+  }
 
   if (!focusPosition) {
     return
@@ -107,6 +113,39 @@ const openResourcesMenu = async (focusPosition?: 'first' | 'last'): Promise<void
   const target = focusPosition === 'first' ? menuItems?.[0] : menuItems?.[menuItems.length - 1]
 
   target?.focus()
+}
+
+/** Opens the menu while a desktop pointer is over it without changing click-toggle state. */
+const openResourcesMenuOnHover = (): void => {
+  if (!isResourcesMenuPinned.value) {
+    isResourcesMenuOpen.value = true
+  }
+}
+
+/** Closes a hover-only menu while preserving a menu explicitly opened by click or keyboard. */
+const closeResourcesMenuOnHoverLeave = (): void => {
+  if (!isResourcesMenuPinned.value) {
+    closeResourcesMenu()
+  }
+}
+
+/**
+ * Makes the first pointer click after hover keep the menu open, then toggles it
+ * on subsequent clicks. This prevents hover-open from immediately cancelling a click.
+ */
+const toggleResourcesMenu = (): void => {
+  if (!isResourcesMenuOpen.value) {
+    isResourcesMenuOpen.value = true
+    isResourcesMenuPinned.value = true
+    return
+  }
+
+  if (!isResourcesMenuPinned.value) {
+    isResourcesMenuPinned.value = true
+    return
+  }
+
+  closeResourcesMenu()
 }
 
 /** Moves focus between Resources menuitems without trapping Tab navigation. */
@@ -223,8 +262,8 @@ watch(
           class="site-header__resources"
           :class="{ 'site-header__resources--open': isResourcesMenuOpen }"
           @focusout="closeResourcesMenuWhenFocusLeaves"
-          @mouseenter="() => openResourcesMenu()"
-          @mouseleave="() => closeResourcesMenu()"
+          @mouseenter="openResourcesMenuOnHover"
+          @mouseleave="closeResourcesMenuOnHoverLeave"
         >
           <button
             ref="resourcesMenuButton"
@@ -234,7 +273,7 @@ watch(
             aria-haspopup="menu"
             :aria-expanded="isResourcesMenuOpen"
             :class="{ 'site-header__nav-link--active': isResourceRoute }"
-            @click="isResourcesMenuOpen ? closeResourcesMenu() : openResourcesMenu()"
+            @click="toggleResourcesMenu"
             @keydown.down.prevent="openResourcesMenu('first')"
             @keydown.up.prevent="openResourcesMenu('last')"
             @keydown.esc.stop="closeResourcesMenu(true)"
