@@ -11,7 +11,7 @@ const { draftArticle, publishedArticle, routeState } = vi.hoisted(() => {
 
 Divorce decisions can benefit from *structured guidance* and [independent resources](https://example.com/resources).
 
-*This content originally appeared at [Source](https://example.com/source).*`,
+*This content originally appeared at [Source](https://example.com/source).*\n\n*Unsafe [source](javascript:alert(1)).*`,
     category: 'Mediation & Arbitration',
     featured: true,
     featuredImage: '/images/about-process-around-people.png',
@@ -109,6 +109,8 @@ describe('Blog article route runtime', () => {
     expect(sourceLink.attributes('target')).toBe('_blank')
     expect(sourceLink.attributes('rel')).toBe('noopener noreferrer')
     expect(sourceLink.element.parentElement?.tagName).toBe('STRONG')
+    expect(wrapper.find('a[href^="javascript:"]').exists()).toBe(false)
+    expect(wrapper.text()).toContain('Unsafe [source](javascript:alert(1)).')
     expect(warnSpy.mock.calls.some(args => args.join(' ').includes('Failed to resolve component'))).toBe(false)
   })
 
