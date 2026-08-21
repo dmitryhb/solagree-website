@@ -33,7 +33,6 @@ const validateRequiredText = (entry: ResourceContentEntry, errors: string[]): vo
     ['title', entry.title],
     ['author', entry.author],
     ['summary', entry.summary],
-    ['featuredImage', entry.featuredImage],
     ['seo.title', entry.seo.title],
     ['seo.description', entry.seo.description],
     ['social.title', entry.social.title],
@@ -99,8 +98,16 @@ export const getPublishedResourceEntries = (
 /** Narrows public entries to Solagree-hosted articles for internal routes and the sitemap. */
 export const getPublishedArticles = (
   entries: readonly ResourceContentEntry[]
-): readonly ResourceArticle[] => getPublishedResourceEntries(entries)
+): readonly ResourceArticle[] => [...getPublishedResourceEntries(entries)
   .filter((entry): entry is ResourceArticle => entry.kind === 'article')
+].sort((first, second) => second.publishedAt.localeCompare(first.publishedAt))
+
+/** Finds a public internal article by its exact slug for direct route resolution. */
+export const getPublishedArticleBySlug = (
+  entries: readonly ResourceContentEntry[],
+  slug: string
+): ResourceArticle | undefined => getPublishedArticles(entries)
+  .find(article => article.slug === slug)
 
 /** Narrows public entries to external coverage for News & Press lists. */
 export const getPublishedNewsItems = (
