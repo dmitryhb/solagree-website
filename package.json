@@ -14,6 +14,7 @@
     "test:co-branded-page-variants": "node --experimental-strip-types --test tests/co-branded-page-variant.test.mts",
     "test:co-branded-consult-requests": "node --experimental-strip-types --test tests/co-branded-consult-request.test.mts",
     "test:initial-consult-booking": "node --experimental-strip-types --test tests/initial-consult-booking.test.mts",
+    "test:initial-consult-booking-component": "node --experimental-strip-types --test tests/initial-consult-booking-component.test.mts",
     "postinstall": "nuxt prepare"
   },
   "dependencies": {

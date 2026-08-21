@@ -4,6 +4,7 @@ import type {
   InitialConsultBookingEvent,
   InitialConsultBookingTrackingContext
 } from '#shared/initial-consult-booking'
+import { createCalComBookingEmbedController } from '~/utils/calcom-booking-embed'
 
 type EmbedStatus = 'loading' | 'ready' | 'error'
 
@@ -16,8 +17,21 @@ const bookingEmbed = ref<HTMLElement | null>(null)
 const embedStatus = ref<EmbedStatus>('loading')
 const retryCount = ref(0)
 let loadTimeout: number | undefined
-let mountCount = 0
-let detachEmbedListeners: (() => void) | undefined
+let activeMountId = 0
+
+const bookingController = createCalComBookingEmbedController(
+  () => EmbedSnippet(),
+  {
+    onReady: () => {
+      embedStatus.value = 'ready'
+      window.clearTimeout(loadTimeout)
+    },
+    onFailed: () => {
+      embedStatus.value = 'error'
+      window.clearTimeout(loadTimeout)
+    }
+  }
+)
 
 /** Clears the current Cal.com DOM and starts a new namespaced inline embed. */
 const mountEmbed = (): void => {
@@ -26,62 +40,17 @@ const mountEmbed = (): void => {
   }
 
   window.clearTimeout(loadTimeout)
-  detachEmbedListeners?.()
-  detachEmbedListeners = undefined
-  bookingEmbed.value.replaceChildren()
   embedStatus.value = 'loading'
-  mountCount += 1
-  const currentMount = mountCount
 
   try {
-    const cal = EmbedSnippet()
-    const namespace = `solagree-initial-consult-${props.event.id}-${mountCount}`
-
-    cal('init', namespace, { origin: 'https://cal.com' })
-
-    const namespacedCal = cal.ns[namespace]
-
-    if (!namespacedCal) {
-      throw new Error('Cal.com did not initialize the booking namespace.')
-    }
-
-    const handleLinkReady = (): void => {
-      if (currentMount !== mountCount) {
-        return
-      }
-
-      embedStatus.value = 'ready'
-      window.clearTimeout(loadTimeout)
-    }
-    const handleLinkFailed = (): void => {
-      if (currentMount !== mountCount) {
-        return
-      }
-
-      embedStatus.value = 'error'
-      window.clearTimeout(loadTimeout)
-    }
-
-    namespacedCal('on', {
-      action: 'linkReady',
-      callback: handleLinkReady
-    })
-    namespacedCal('on', {
-      action: 'linkFailed',
-      callback: handleLinkFailed
-    })
-    detachEmbedListeners = () => {
-      namespacedCal('off', { action: 'linkReady', callback: handleLinkReady })
-      namespacedCal('off', { action: 'linkFailed', callback: handleLinkFailed })
-    }
-    namespacedCal('inline', {
-      calLink: props.event.eventPath,
-      elementOrSelector: bookingEmbed.value,
-      config: props.trackingContext
+    activeMountId = bookingController.mount({
+      event: props.event,
+      host: bookingEmbed.value,
+      trackingContext: props.trackingContext
     })
 
     loadTimeout = window.setTimeout(() => {
-      if (currentMount === mountCount && embedStatus.value === 'loading') {
+      if (bookingController.isActive(activeMountId) && embedStatus.value === 'loading') {
         embedStatus.value = 'error'
       }
     }, 15000)
@@ -109,7 +78,7 @@ onMounted(mountEmbed)
 
 onBeforeUnmount(() => {
   window.clearTimeout(loadTimeout)
-  detachEmbedListeners?.()
+  bookingController.unmount()
   bookingEmbed.value?.replaceChildren()
 })
 </script>
