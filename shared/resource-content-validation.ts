@@ -18,11 +18,11 @@ const isIsoDate = (value: string): boolean => {
   return !Number.isNaN(parsedDate.valueOf()) && parsedDate.toISOString().slice(0, 10) === value
 }
 
-const isAbsoluteHttpUrl = (value: string): boolean => {
+const isAbsoluteHttpsUrl = (value: string): boolean => {
   try {
     const url = new URL(value)
 
-    return url.protocol === 'http:' || url.protocol === 'https:'
+    return url.protocol === 'https:'
   } catch {
     return false
   }
@@ -62,7 +62,7 @@ const validateEntry = (entry: ResourceContentEntry, errors: string[]): void => {
     errors.push(`Article "${entry.slug || '(missing slug)'}" is missing body.`)
   }
 
-  if (entry.kind === 'news' && !isAbsoluteHttpUrl(entry.externalUrl)) {
+  if (entry.kind === 'news' && !isAbsoluteHttpsUrl(entry.externalUrl)) {
     errors.push(`News item "${entry.slug || '(missing slug)'}" has invalid externalUrl.`)
   }
 }

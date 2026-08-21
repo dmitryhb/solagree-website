@@ -74,3 +74,15 @@ test('content validation rejects duplicate slugs, invalid dates, and required me
     /duplicated|invalid publishedAt|missing seo\.description/
   )
 })
+
+test('content validation rejects non-HTTPS news destinations', () => {
+  const insecureNews = {
+    ...draftNews,
+    externalUrl: 'http://example.com/news'
+  } as ResourceContentEntry
+
+  assert.throws(
+    () => validateResourceContentEntries([insecureNews]),
+    /invalid externalUrl/
+  )
+})
