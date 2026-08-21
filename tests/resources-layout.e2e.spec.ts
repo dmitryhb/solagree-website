@@ -3,30 +3,37 @@ import { expect, test } from '@playwright/test'
 const blogPath = '/blog'
 
 test('keeps the desktop featured image inside its card without overlapping the copy', async ({ page }) => {
-  await page.setViewportSize({ height: 1000, width: 1440 })
-  await page.goto(blogPath, { waitUntil: 'domcontentloaded' })
+  for (const width of [1440, 1051, 901]) {
+    await page.setViewportSize({ height: 1000, width })
+    await page.goto(blogPath, { waitUntil: 'domcontentloaded' })
 
-  const geometry = await page.locator('.blog-featured').evaluate(card => {
-    const featuredImage = card.querySelector<HTMLElement>('.blog-featured__media-link')
-    const content = card.querySelector<HTMLElement>('.blog-featured__content')
-    const cardBounds = card.getBoundingClientRect()
-    const imageBounds = featuredImage?.getBoundingClientRect()
-    const contentBounds = content?.getBoundingClientRect()
+    const geometry = await page.locator('.blog-featured').evaluate(card => {
+      const featuredImage = card.querySelector<HTMLElement>('.blog-featured__media-link')
+      const media = card.querySelector<HTMLElement>('.blog-featured__media-link .blog-media')
+      const content = card.querySelector<HTMLElement>('.blog-featured__content')
+      const cardBounds = card.getBoundingClientRect()
+      const imageBounds = featuredImage?.getBoundingClientRect()
+      const mediaBounds = media?.getBoundingClientRect()
+      const contentBounds = content?.getBoundingClientRect()
 
-    return {
-      card: cardBounds.toJSON(),
-      content: contentBounds?.toJSON(),
-      image: imageBounds?.toJSON(),
-      scrollWidth: card.scrollWidth
-    }
-  })
+      return {
+        card: cardBounds.toJSON(),
+        content: contentBounds?.toJSON(),
+        image: imageBounds?.toJSON(),
+        media: mediaBounds?.toJSON(),
+        scrollWidth: card.scrollWidth
+      }
+    })
 
-  expect(geometry.image).toBeDefined()
-  expect(geometry.content).toBeDefined()
-  expect(geometry.image?.x).toBeGreaterThanOrEqual(geometry.card.x)
-  expect(geometry.image?.right).toBeLessThanOrEqual(geometry.content?.x ?? 0)
-  expect(geometry.content?.right).toBeLessThanOrEqual(geometry.card.right)
-  expect(geometry.scrollWidth).toBeLessThanOrEqual(Math.ceil(geometry.card.width))
+    expect(geometry.image).toBeDefined()
+    expect(geometry.media).toBeDefined()
+    expect(geometry.content).toBeDefined()
+    expect(geometry.image?.x).toBeGreaterThanOrEqual(geometry.card.x)
+    expect(geometry.image?.right).toBeLessThanOrEqual(geometry.content?.x ?? 0)
+    expect(geometry.media?.bottom).toBeCloseTo(geometry.card.bottom, 0)
+    expect(geometry.content?.right).toBeLessThanOrEqual(geometry.card.right)
+    expect(geometry.scrollWidth).toBeLessThanOrEqual(Math.ceil(geometry.card.width))
+  }
 })
 
 test('stacks Blog media at tablet and mobile widths without horizontal overflow', async ({ page }) => {
