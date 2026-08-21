@@ -25,18 +25,35 @@ describe('Blog content foundation', () => {
   })
 
   it('parses rich content safely without injecting unsafe links or raw HTML', () => {
-    const blocks = parseArticleBody(`${blogArticleFixtures[0].body}\n\n[unsafe](javascript:alert(1)) [protocol-relative](//example.com) <script>alert(1)</script>`)
+    const blocks = parseArticleBody(`${blogArticleFixtures[0].body}\n\n*This content originally appeared at [Source](https://example.com/source).*\n\n[unsafe](javascript:alert(1)) [protocol-relative](//example.com) <script>alert(1)</script>`)
 
-    expect(blocks.map(block => block.type)).toEqual(['heading', 'paragraph', 'list', 'list', 'paragraph'])
-    expect(blocks[1]).toMatchObject({
-      content: expect.arrayContaining([
-        { type: 'emphasis', value: 'structured guidance' },
-        { href: 'https://example.com/resources', type: 'link', value: 'independent resources' }
-      ])
-    })
+    expect(blocks.map(block => block.type)).toEqual(['heading', 'paragraph', 'list', 'list', 'paragraph', 'paragraph'])
+    const firstParagraph = blocks[1]
+
+    if (!firstParagraph || firstParagraph.type !== 'paragraph') {
+      throw new Error('Expected the first article body block to be a paragraph.')
+    }
+
+    expect(firstParagraph.content).toEqual(expect.arrayContaining([
+      { type: 'emphasis', value: 'structured guidance', tokens: [{ type: 'text', value: 'structured guidance' }] },
+      { href: 'https://example.com/resources', type: 'link', value: 'independent resources' }
+    ]))
     expect(JSON.stringify(blocks)).not.toContain('"href":"javascript:')
     expect(JSON.stringify(blocks)).not.toContain('"href":"//example.com"')
     expect(JSON.stringify(blocks)).toContain('<script>alert(1)</script>')
+    expect(blocks[4]).toMatchObject({
+      content: [
+        {
+          tokens: [
+            { type: 'text', value: 'This content originally appeared at ' },
+            { href: 'https://example.com/source', type: 'link', value: 'Source' },
+            { type: 'text', value: '.' }
+          ],
+          type: 'emphasis',
+          value: 'This content originally appeared at [Source](https://example.com/source).'
+        }
+      ]
+    })
   })
 
   it('uses only published internal article paths in sitemap records and Article schema', () => {

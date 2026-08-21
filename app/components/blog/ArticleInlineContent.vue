@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import type { ArticleInlineToken } from '~/types/article-rich-text'
 
+defineOptions({
+  name: 'ArticleInlineContent'
+})
+
 defineProps<{
   tokens: ArticleInlineToken[]
 }>()
@@ -20,7 +24,13 @@ const isExternalHttpLink = (href: string): boolean => /^https?:\/\//i.test(href)
       :target="isExternalHttpLink(token.href) ? '_blank' : undefined"
       :rel="isExternalHttpLink(token.href) ? 'noopener noreferrer' : undefined"
     >{{ token.value }}</a>
-    <strong v-else-if="token.type === 'emphasis'">{{ token.value }}</strong>
+    <strong v-else-if="token.type === 'emphasis'">
+      <ArticleInlineContent
+        v-if="token.tokens"
+        :tokens="token.tokens"
+      />
+      <template v-else>{{ token.value }}</template>
+    </strong>
     <template v-else>{{ token.value }}</template>
   </template>
 </template>
