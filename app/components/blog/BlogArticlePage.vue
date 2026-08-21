@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { formatArticleDate } from '~/utils/article-formatting'
-import type { ResourceArticle } from '../../../shared/types/resource-content'
+import type { ResourceArticle } from '#shared/types/resource-content'
 
 defineProps<{
   article: ResourceArticle

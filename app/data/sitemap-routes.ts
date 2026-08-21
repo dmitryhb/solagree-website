@@ -1,6 +1,6 @@
 import { legalNavItems } from '~/data/legal-pages'
 import { publishedArticles } from '~/data/resource-content'
-import type { ResourceArticle } from '../../shared/types/resource-content'
+import type { ResourceArticle } from '#shared/types/resource-content'
 import type { SitemapRoute } from '~/types/sitemap'
 
 const publicRoutes: SitemapRoute[] = [

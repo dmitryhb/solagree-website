@@ -6,7 +6,7 @@ const ORDERED_ITEM_PATTERN = /^\d+\.\s+(.+)$/
 const UNORDERED_ITEM_PATTERN = /^[-*]\s+(.+)$/
 
 const isSafeHref = (href: string): boolean => {
-  if (href.startsWith('/') || href.startsWith('#')) {
+  if ((href.startsWith('/') && !href.startsWith('//')) || href.startsWith('#')) {
     return true
   }
 

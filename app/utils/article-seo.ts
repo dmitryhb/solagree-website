@@ -1,5 +1,5 @@
 import type { StructuredDataObject } from '~/types/seo'
-import type { ResourceArticle } from '../../shared/types/resource-content'
+import type { ResourceArticle } from '#shared/types/resource-content'
 
 /** Returns the canonical internal path for a Solagree-hosted article. */
 export const getArticlePath = (article: Pick<ResourceArticle, 'slug'>): string => `/blog/${article.slug}`

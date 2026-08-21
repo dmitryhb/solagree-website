@@ -11,7 +11,9 @@
     "lint": "eslint .",
     "typecheck": "nuxt typecheck",
     "preview": "nuxt preview --host solagree.local --port 3003",
+    "validate:resource-content": "node scripts/validate-resource-content.mjs",
     "test:co-branded-page-variants": "node --experimental-strip-types --test tests/co-branded-page-variant.test.mts",
+    "test:blog-content": "vitest run tests/blog-content.test.ts",
     "test:co-branded-consult-requests": "node --experimental-strip-types --test tests/co-branded-consult-request.test.mts",
     "test:initial-consult-booking": "node --experimental-strip-types --test tests/initial-consult-booking.test.mts",
     "test:initial-consult-booking-component": "vitest run tests/initial-consult-booking.component.test.ts",
@@ -19,6 +21,7 @@
     "test:initial-consult-booking-lifecycle": "node --experimental-strip-types --test tests/initial-consult-booking-component.test.mts",
     "test:resource-content-validation": "node --experimental-strip-types --test tests/resource-content-validation.test.mts",
     "test:resources-navigation": "vitest run tests/resources-navigation.component.test.ts",
+    "prebuild": "npm run validate:resource-content",
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
@@ -37,6 +40,7 @@
     "@vitejs/plugin-vue": "^6.0.6",
     "@vue/test-utils": "^2.4.6",
     "eslint": "^9.39.4",
+    "jiti": "2.6.1",
     "jsdom": "^26.1.0",
     "sass": "^1.99.0",
     "vitest": "^3.2.4",
