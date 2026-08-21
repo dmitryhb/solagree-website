@@ -164,6 +164,7 @@ I entirely understand the desire to escape the nightmare of traditional litigati
   },
   {
     author: 'Amanda Mason',
+    category: 'Mediation & Arbitration',
     body: `For anyone navigating the overwhelming transition of separation, finding a pathway that preserves your peace, your finances, and your family’s dignity is paramount. You are looking for a new start, not a multi-year battle.
 
 When I graduated from law school in 2003, I entered the traditional court system ready to do exactly what I was trained to do: fight hard, push forward, and win cases. But over my years as a litigator, I began to notice something deeply unsettling. Even when my clients “won” in the courtroom, the collateral damage left behind was immense. After I personally experienced the trauma of taking the stand in my own custody trial, the reality of what we put families through became undeniable.

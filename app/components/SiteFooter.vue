@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { resourceNavigationLinks } from '~/data/resource-navigation'
 import { solagreeSocialLinks } from '~/data/social-links'
 
 const currentYear = new Date().getFullYear()
@@ -118,6 +119,22 @@ const closeNetworkChooser = async () => {
                 >
                   Join the Network
                 </button>
+              </li>
+            </ul>
+          </div>
+
+          <div class="site-footer__column">
+            <p class="site-footer__column-title">
+              Resources
+            </p>
+            <ul class="site-footer__links">
+              <li
+                v-for="link in resourceNavigationLinks"
+                :key="link.label"
+              >
+                <NuxtLink :to="link.to">
+                  {{ link.label }}
+                </NuxtLink>
               </li>
             </ul>
           </div>
