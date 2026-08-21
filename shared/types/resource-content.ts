@@ -23,7 +23,10 @@ export interface ResourceSocialMetadata {
 /** Fields shared by all repository-managed resource entries. */
 export interface ResourceContentBase {
   author: string
-  featuredImage: string
+  category?: string
+  /** Optional visual for cards and the article hero; the renderer supplies a fallback when absent. */
+  featuredImage?: string
+  featured?: boolean
   publishedAt: string
   seo: ResourceSeoMetadata
   slug: string
@@ -35,6 +38,7 @@ export interface ResourceContentBase {
 
 /** A Solagree-hosted article with body content and an internal route. */
 export interface ResourceArticle extends ResourceContentBase {
+  /** Markdown-like source rendered through the safe article renderer. */
   body: string
   kind: 'article'
   linkMode: 'internal'

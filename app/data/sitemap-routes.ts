@@ -1,4 +1,6 @@
 import { legalNavItems } from '~/data/legal-pages'
+import { publishedArticles } from '~/data/resource-content'
+import type { ResourceArticle } from '../../shared/types/resource-content'
 import type { SitemapRoute } from '~/types/sitemap'
 
 const publicRoutes: SitemapRoute[] = [
@@ -66,6 +68,16 @@ const publicRoutes: SitemapRoute[] = [
     path: '/faq',
     changefreq: 'monthly',
     priority: 0.6
+  },
+  {
+    path: '/blog',
+    changefreq: 'weekly',
+    priority: 0.7
+  },
+  {
+    path: '/news',
+    changefreq: 'weekly',
+    priority: 0.7
   }
 ]
 
@@ -75,4 +87,13 @@ const legalRoutes: SitemapRoute[] = legalNavItems.map((item) => ({
   priority: 0.4
 }))
 
-export const sitemapRoutes = [...publicRoutes, ...legalRoutes] as const satisfies readonly SitemapRoute[]
+/** Builds sitemap records only from public internal articles. */
+export const getArticleSitemapRoutes = (articles: readonly ResourceArticle[]): SitemapRoute[] => articles.map(article => ({
+  path: `/blog/${article.slug}`,
+  changefreq: 'monthly',
+  priority: 0.6
+}))
+
+const articleRoutes = getArticleSitemapRoutes(publishedArticles)
+
+export const sitemapRoutes = [...publicRoutes, ...legalRoutes, ...articleRoutes] as const satisfies readonly SitemapRoute[]
