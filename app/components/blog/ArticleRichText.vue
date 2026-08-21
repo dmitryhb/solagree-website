@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import ArticleInlineContent from '~/components/blog/ArticleInlineContent.vue'
 import { parseArticleBody } from '~/utils/article-content'
 
 const props = defineProps<{

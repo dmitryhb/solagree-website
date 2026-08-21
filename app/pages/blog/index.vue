@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import BlogIndexPage from '~/components/blog/BlogIndexPage.vue'
 import { publishedArticles } from '~/data/resource-content'
 
 useSolagreeSeo({

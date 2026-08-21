@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import ArticleRichText from '~/components/blog/ArticleRichText.vue'
+import BlogArticleCard from '~/components/blog/BlogArticleCard.vue'
+import BlogMedia from '~/components/blog/BlogMedia.vue'
+import BlogShareControls from '~/components/blog/BlogShareControls.vue'
 import { formatArticleDate } from '~/utils/article-formatting'
 import type { ResourceArticle } from '#shared/types/resource-content'
 
