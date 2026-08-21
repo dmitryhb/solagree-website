@@ -25,7 +25,7 @@ describe('Blog content foundation', () => {
   })
 
   it('parses rich content safely without injecting unsafe links or raw HTML', () => {
-    const blocks = parseArticleBody(`${blogArticleFixtures[0].body}\n\n[unsafe](javascript:alert(1)) <script>alert(1)</script>`)
+    const blocks = parseArticleBody(`${blogArticleFixtures[0].body}\n\n[unsafe](javascript:alert(1)) [protocol-relative](//example.com) <script>alert(1)</script>`)
 
     expect(blocks.map(block => block.type)).toEqual(['heading', 'paragraph', 'list', 'list', 'paragraph'])
     expect(blocks[1]).toMatchObject({
@@ -35,6 +35,7 @@ describe('Blog content foundation', () => {
       ])
     })
     expect(JSON.stringify(blocks)).not.toContain('"href":"javascript:')
+    expect(JSON.stringify(blocks)).not.toContain('"href":"//example.com"')
     expect(JSON.stringify(blocks)).toContain('<script>alert(1)</script>')
   })
 

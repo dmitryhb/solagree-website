@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { formatArticleDate } from '~/utils/article-formatting'
 import { getArticlePath } from '~/utils/article-seo'
-import type { ResourceArticle } from '../../../shared/types/resource-content'
+import type { ResourceArticle } from '#shared/types/resource-content'
 
 const props = defineProps<{
   articles: readonly ResourceArticle[]

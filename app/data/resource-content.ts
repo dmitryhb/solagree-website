@@ -2,8 +2,8 @@ import {
   getPublishedArticles,
   getPublishedNewsItems,
   validateResourceContentEntries
-} from '../../shared/resource-content-validation'
-import type { ResourceContentEntry } from '../../shared/types/resource-content'
+} from '#shared/resource-content-validation'
+import type { ResourceContentEntry } from '#shared/types/resource-content'
 
 /**
  * The Git-managed source for Blog articles and external News & Press entries.

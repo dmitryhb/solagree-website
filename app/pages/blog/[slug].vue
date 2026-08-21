@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { resourceContentEntries, publishedArticles } from '~/data/resource-content'
 import { getArticlePath, buildArticleStructuredData } from '~/utils/article-seo'
-import { getPublishedArticleBySlug } from '../../../shared/resource-content-validation'
+import { getPublishedArticleBySlug } from '#shared/resource-content-validation'
 
 const route = useRoute()
 const slug = typeof route.params.slug === 'string' ? route.params.slug : ''

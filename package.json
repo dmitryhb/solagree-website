@@ -11,8 +11,11 @@
     "lint": "eslint .",
     "typecheck": "nuxt typecheck",
     "preview": "nuxt preview --host solagree.local --port 3003",
+    "validate:resource-content": "node scripts/validate-resource-content.mjs",
+    "test:blog-content": "vitest run tests/blog-content.test.ts",
     "test:resource-content-validation": "node --experimental-strip-types --test tests/resource-content-validation.test.mts",
     "test:resources-navigation": "vitest run tests/resources-navigation.component.test.ts",
+    "prebuild": "npm run validate:resource-content",
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
@@ -27,7 +30,13 @@
     "@nuxt/eslint": "^1.15.2",
     "@types/node": "^25.6.0",
     "eslint": "^9.39.4",
+    "@playwright/test": "^1.55.0",
+    "jiti": "2.6.1",
+    "jsdom": "^26.1.0",
+    "@vitejs/plugin-vue": "^6.0.6",
+    "@vue/test-utils": "^2.4.6",
     "sass": "^1.99.0",
+    "vitest": "^3.2.4",
     "vue-tsc": "^3.2.7"
   }
 }
