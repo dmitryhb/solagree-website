@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import BlogArticlePage from '~/components/blog/BlogArticlePage.vue'
 import { resourceContentEntries, publishedArticles } from '~/data/resource-content'
 import { getArticlePath, buildArticleStructuredData } from '~/utils/article-seo'
 import { getPublishedArticleBySlug } from '#shared/resource-content-validation'

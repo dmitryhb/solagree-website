@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import BlogArticleCard from '~/components/blog/BlogArticleCard.vue'
+import BlogMedia from '~/components/blog/BlogMedia.vue'
 import { formatArticleDate } from '~/utils/article-formatting'
 import { getArticlePath } from '~/utils/article-seo'
 import type { ResourceArticle } from '#shared/types/resource-content'
