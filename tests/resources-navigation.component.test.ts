@@ -38,6 +38,10 @@ let headerWrapper: ReturnType<typeof mountHeader> | undefined
 
 describe('AppHeader Resources navigation', () => {
   beforeEach(() => {
+    currentRoute.value = {
+      fullPath: '/about-us',
+      path: '/about-us'
+    }
     Object.assign(window, {
       requestAnimationFrame: (callback: FrameRequestCallback) => window.setTimeout(callback, 0),
       scrollTo: () => undefined
@@ -100,5 +104,22 @@ describe('AppHeader Resources navigation', () => {
 
     expect(toggle.attributes('aria-expanded')).toBe('false')
     expect(document.activeElement).toBe(toggleElement)
+  })
+
+  it('closes a click-pinned menu after route navigation', async () => {
+    const wrapper = headerWrapper = mountHeader()
+    const toggle = wrapper.get('.site-header__resources-toggle')
+
+    await toggle.trigger('click')
+    expect(toggle.attributes('aria-expanded')).toBe('true')
+
+    currentRoute.value = {
+      fullPath: '/contact',
+      path: '/contact'
+    }
+    await nextTick()
+    await nextTick()
+
+    expect(toggle.attributes('aria-expanded')).toBe('false')
   })
 })
