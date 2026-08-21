@@ -13,6 +13,7 @@ const isResourcesMenuOpen = ref(false)
 const isResourcesMenuPinned = ref(false)
 const isScrolled = ref(false)
 const isResettingHomeScroll = ref(false)
+const resourcesMenuContainer = ref<HTMLElement | null>(null)
 const resourcesMenuButton = ref<HTMLButtonElement | null>(null)
 const resourcesMenu = ref<HTMLElement | null>(null)
 const isHomeRoute = computed(() => currentRoute.value.path === '/')
@@ -192,6 +193,15 @@ const closeResourcesMenuWhenFocusLeaves = (event: FocusEvent): void => {
   }
 }
 
+/** Dismisses a click-pinned Resources menu when a pointer starts outside its controls. */
+const closeResourcesMenuOnOutsidePointerDown = (event: PointerEvent): void => {
+  const target = event.target
+
+  if (resourcesMenuContainer.value && target instanceof Node && !resourcesMenuContainer.value.contains(target)) {
+    closeResourcesMenu()
+  }
+}
+
 const isResourceRoute = computed(() => headerResourcesMenu.links.some(({ to }) => (
   currentRoute.value.path === to || currentRoute.value.path.startsWith(`${to}/`)
 )))
@@ -199,11 +209,13 @@ const isResourceRoute = computed(() => headerResourcesMenu.links.some(({ to }) =
 onMounted(() => {
   scheduleScrolledStateUpdate()
   window.addEventListener('scroll', updateScrolledState, { passive: true })
+  document.addEventListener('pointerdown', closeResourcesMenuOnOutsidePointerDown)
 })
 
 onBeforeUnmount(() => {
   clearScrollUpdateTimers()
   window.removeEventListener('scroll', updateScrolledState)
+  document.removeEventListener('pointerdown', closeResourcesMenuOnOutsidePointerDown)
 })
 
 watch(
@@ -259,6 +271,7 @@ watch(
         </NuxtLink>
 
         <div
+          ref="resourcesMenuContainer"
           class="site-header__resources"
           :class="{ 'site-header__resources--open': isResourcesMenuOpen }"
           @focusout="closeResourcesMenuWhenFocusLeaves"
