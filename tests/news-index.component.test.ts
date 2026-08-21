@@ -32,6 +32,12 @@ describe('News & Press index', () => {
       'The Divorce You Deserve: Peaceful, Private, and Professional ↗',
       'Family Court Is Broken: Former Divorce Lawyer Amanda Mason on Attorney Red Flags, Divorce Advice & Healing After Divorce ↗'
     ])
+    expect(cards.map(card => card.get('.news-card__source').text().split('•')[0]?.trim())).toEqual([
+      'Doing Divorce Right Podcast',
+      'The Gray Divorce Podcast',
+      'The CDFA Hotline Podcast',
+      'Divorcing Strong Podcast'
+    ])
     expect(destinationLinks).toHaveLength(4)
     expect(destinationLinks.every(link => link.attributes('href')?.startsWith('https://'))).toBe(true)
     expect(destinationLinks.every(link => link.attributes('target') === '_blank')).toBe(true)
