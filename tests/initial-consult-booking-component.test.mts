@@ -1,6 +1,4 @@
 import assert from 'node:assert/strict'
-import { readFile } from 'node:fs/promises'
-import { resolve } from 'node:path'
 import test from 'node:test'
 import {
   createCalComBookingEmbedController,
@@ -18,10 +16,7 @@ const events = resolveInitialConsultBookingEvents({
   jamesEventPath: 'solagree/initial-consults/initial-consult-james'
 })
 
-const firstEvent = events[0]
-const tajEvent = events[1]
-
-if (!firstEvent || !tajEvent) {
+if (events.length !== 5) {
   throw new Error('Initial Consult test configuration must resolve booking events.')
 }
 
@@ -65,7 +60,7 @@ const createEmbedClientSpy = (): {
   return { calls, listeners, createClient }
 }
 
-test('remounts exactly one current Cal.com iframe when a selector option changes', () => {
+test('remounts each Cal.com event once and ignores callbacks from replaced embeds', () => {
   const host = {
     replaceChildrenCalls: 0,
     replaceChildren: (): void => {
@@ -80,38 +75,39 @@ test('remounts exactly one current Cal.com iframe when a selector option changes
     onFailed: () => { failureCount += 1 }
   })
 
-  const firstMountId = controller.mount({ event: firstEvent, host, trackingContext: {} })
-  const firstNamespace = `solagree-initial-consult-${firstEvent.id}-${firstMountId}`
-  const secondMountId = controller.mount({ event: tajEvent, host, trackingContext: {} })
-  const secondNamespace = `solagree-initial-consult-${tajEvent.id}-${secondMountId}`
+  const mounts = events.map(event => {
+    const mountId = controller.mount({ event, host, trackingContext: {} })
 
-  assert.equal(host.replaceChildrenCalls, 2)
+    return {
+      event,
+      namespace: `solagree-initial-consult-${event.id}-${mountId}`
+    }
+  })
+  const currentMount = mounts.at(-1)
+
+  if (!currentMount) {
+    throw new Error('Initial Consult test configuration must produce a current booking mount.')
+  }
+
+  assert.equal(host.replaceChildrenCalls, events.length)
   assert.deepEqual(
     cal.calls.filter(call => call.method === 'inline').map(call => [call.namespace, (call.options as { calLink: string }).calLink]),
-    [
-      [firstNamespace, firstEvent.eventPath],
-      [secondNamespace, tajEvent.eventPath]
-    ]
+    mounts.map(({ event, namespace }) => [namespace, event.eventPath])
   )
-  assert.equal(cal.calls.filter(call => call.method === 'off' && call.namespace === firstNamespace).length, 2)
-  assert.equal(cal.calls.filter(call => call.method === 'inline' && call.namespace === secondNamespace).length, 1)
+  assert.equal(
+    cal.calls.filter(call => call.method === 'inline' && call.namespace === currentMount.namespace).length,
+    1
+  )
+  for (const staleMount of mounts.slice(0, -1)) {
+    assert.equal(cal.calls.filter(call => call.method === 'off' && call.namespace === staleMount.namespace).length, 2)
 
-  cal.listeners.get(firstNamespace)?.find(listener => listener.action === 'linkReady')?.callback()
-  cal.listeners.get(firstNamespace)?.find(listener => listener.action === 'linkFailed')?.callback()
+    cal.listeners.get(staleMount.namespace)?.find(listener => listener.action === 'linkReady')?.callback()
+    cal.listeners.get(staleMount.namespace)?.find(listener => listener.action === 'linkFailed')?.callback()
+  }
   assert.equal(readyCount, 0)
   assert.equal(failureCount, 0)
 
-  cal.listeners.get(secondNamespace)?.find(listener => listener.action === 'linkReady')?.callback()
+  cal.listeners.get(currentMount.namespace)?.find(listener => listener.action === 'linkReady')?.callback()
   assert.equal(readyCount, 1)
   assert.equal(failureCount, 0)
-})
-
-test('connects a consultant selector choice to a keyed booking embed remount', async () => {
-  const pageSource = await readFile(resolve('app/components/consult/InitialConsultBookingPage.vue'), 'utf8')
-  const selectorSource = await readFile(resolve('app/components/consult/ConsultantSelector.vue'), 'utf8')
-
-  assert.match(selectorSource, /@click="selectOption\(event\.id\)"/)
-  assert.match(pageSource, /@select="handleSelection"/)
-  assert.match(pageSource, /:key="selectedEvent\.id"/)
-  assert.match(pageSource, /:event="selectedEvent"/)
 })

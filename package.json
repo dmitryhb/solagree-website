@@ -14,7 +14,9 @@
     "test:co-branded-page-variants": "node --experimental-strip-types --test tests/co-branded-page-variant.test.mts",
     "test:co-branded-consult-requests": "node --experimental-strip-types --test tests/co-branded-consult-request.test.mts",
     "test:initial-consult-booking": "node --experimental-strip-types --test tests/initial-consult-booking.test.mts",
-    "test:initial-consult-booking-component": "node --experimental-strip-types --test tests/initial-consult-booking-component.test.mts",
+    "test:initial-consult-booking-component": "vitest run tests/initial-consult-booking.component.test.ts",
+    "test:initial-consult-booking-e2e": "playwright test -c playwright.initial-consult-booking.config.ts",
+    "test:initial-consult-booking-lifecycle": "node --experimental-strip-types --test tests/initial-consult-booking-component.test.mts",
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
@@ -28,9 +30,14 @@
   },
   "devDependencies": {
     "@nuxt/eslint": "^1.15.2",
+    "@playwright/test": "^1.55.0",
     "@types/node": "^25.6.0",
+    "@vitejs/plugin-vue": "^6.0.6",
+    "@vue/test-utils": "^2.4.6",
     "eslint": "^9.39.4",
+    "jsdom": "^26.1.0",
     "sass": "^1.99.0",
+    "vitest": "^3.2.4",
     "vue-tsc": "^3.2.7"
   }
 }

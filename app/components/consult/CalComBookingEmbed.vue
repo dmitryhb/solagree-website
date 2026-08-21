@@ -112,6 +112,7 @@ onBeforeUnmount(() => {
       :key="retryCount"
       ref="bookingEmbed"
       class="calcom-booking-embed__frame"
+      :data-calcom-event-path="event.eventPath"
       :aria-busy="embedStatus === 'loading'"
     />
 
