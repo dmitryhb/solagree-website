@@ -11,7 +11,7 @@ import type { ResourceContentEntry } from '#shared/types/resource-content'
  */
 export const resourceContentEntries = [
   {
-    author: 'Doing Divorce Right by Chief PeaceKeeper™ Scott Levin',
+    author: 'Doing Divorce Right Podcast',
     category: 'Podcast',
     externalUrl: 'https://divorcemediationattorneyscottlevin.buzzsprout.com/2243813/episodes/19055580-rethinking-divorce-inside-the-solagree-process-with-amanda-mason?t=0',
     kind: 'news',
@@ -53,7 +53,7 @@ export const resourceContentEntries = [
     title: 'Solagree - An Alternative to Litigation with Amanda Mason'
   },
   {
-    author: 'Institute for Divorce Financial Analysts®',
+    author: 'The CDFA Hotline Podcast',
     category: 'Podcast',
     externalUrl: 'https://www.youtube.com/watch?v=aJo9Zw4ZF1w',
     kind: 'news',
@@ -75,7 +75,7 @@ export const resourceContentEntries = [
     title: 'The Divorce You Deserve: Peaceful, Private, and Professional'
   },
   {
-    author: 'Divorcing Strong',
+    author: 'Divorcing Strong Podcast',
     category: 'Podcast',
     externalUrl: 'https://music.amazon.com/es-us/podcasts/39d342b8-e78f-4731-a60c-2d2cf5a9d942/divorcing-strong',
     kind: 'news',
