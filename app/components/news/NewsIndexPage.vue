@@ -52,6 +52,7 @@ const getExternalLabel = (item: ExternalNewsItem): string => `Listen on ${item.a
               <BlogMedia
                 :src="item.featuredImage"
                 :alt="''"
+                fit="contain"
               />
               <p class="news-card__source">
                 {{ item.author }} <span aria-hidden="true">•</span> {{ formatArticleDate(item.publishedAt) }}

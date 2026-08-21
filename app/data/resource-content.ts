@@ -14,6 +14,7 @@ export const resourceContentEntries = [
     author: 'Doing Divorce Right Podcast',
     category: 'Podcast',
     externalUrl: 'https://divorcemediationattorneyscottlevin.buzzsprout.com/2243813/episodes/19055580-rethinking-divorce-inside-the-solagree-process-with-amanda-mason?t=0',
+    featuredImage: '/images/news-doing-divorce-right-rethinking-divorce.webp',
     kind: 'news',
     linkMode: 'external',
     publishedAt: '2026-04-22',
@@ -35,6 +36,7 @@ export const resourceContentEntries = [
     author: 'The Gray Divorce Podcast',
     category: 'Podcast',
     externalUrl: 'https://thegraydivorcepodcast.buzzsprout.com/2067333/episodes/18416657-solagree-an-alternative-to-litigation-with-amanda-mason',
+    featuredImage: '/images/news-gray-divorce-solagree-alternative-to-litigation.webp',
     kind: 'news',
     linkMode: 'external',
     publishedAt: '2025-12-27',
@@ -56,6 +58,7 @@ export const resourceContentEntries = [
     author: 'The CDFA Hotline Podcast',
     category: 'Podcast',
     externalUrl: 'https://www.youtube.com/watch?v=aJo9Zw4ZF1w',
+    featuredImage: '/images/news-cdfa-hotline-the-divorce-you-deserve.webp',
     kind: 'news',
     linkMode: 'external',
     // LinkedIn activity ID 7397642704173658112 encodes 2025-11-21T14:31:02.230Z.
@@ -78,6 +81,7 @@ export const resourceContentEntries = [
     author: 'Divorcing Strong Podcast',
     category: 'Podcast',
     externalUrl: 'https://music.amazon.com/es-us/podcasts/39d342b8-e78f-4731-a60c-2d2cf5a9d942/divorcing-strong',
+    featuredImage: '/images/news-divorcing-strong-family-court-is-broken.webp',
     kind: 'news',
     linkMode: 'external',
     publishedAt: '2026-05-14',
@@ -211,6 +215,7 @@ Divorcing strong means maintaining who you are at the core of your soul all the 
 NOTE: The foregoing article is not intended to give legal advice. All processes referenced are adapted to state law.
 
 *This content originally appeared at [Fresh Starts Registry](https://www.freshstartsregistry.com/blog/the-hidden-risks-of-naked-mediation-and-how-to-guarantee-a-court-free-divorce).*`,
+    featuredImage: '/images/blog-hidden-risks-naked-mediation.webp',
     kind: 'article',
     linkMode: 'internal',
     publishedAt: '2026-06-11',
@@ -221,7 +226,7 @@ NOTE: The foregoing article is not intended to give legal advice. All processes 
     slug: 'hidden-risks-naked-mediation',
     social: {
       description: 'Amanda Mason explains the risk of non-binding mediation and outlines a structured mediation-arbitration approach intended to keep divorce resolution out of court.',
-      image: '/images/splash-bg.webp',
+      image: '/images/blog-hidden-risks-naked-mediation.webp',
       title: 'The Hidden Risks of “Naked” Mediation (And How to Guarantee a Court-Free Divorce)'
     },
     status: 'published',
@@ -260,6 +265,7 @@ By prioritizing dignity, neutrality, and rational compromise over adversarial ba
 
 *This content originally appeared at [NCLawyersWeekly.com](https://nclawyersweekly.com/2026/05/26/ai-divorce-is-real-but-family-law-can-still-save-itself/).*`,
     category: 'Insights & Industry Trends',
+    featuredImage: '/images/blog-ai-divorce-family-law.webp',
     kind: 'article',
     linkMode: 'internal',
     publishedAt: '2026-05-26',
@@ -270,7 +276,7 @@ By prioritizing dignity, neutrality, and rational compromise over adversarial ba
     slug: 'ai-divorce-family-law',
     social: {
       description: 'Amanda Mason examines AI’s role in divorce administration and argues that human-centered alternative-resolution frameworks remain essential.',
-      image: '/images/splash-bg.webp',
+      image: '/images/blog-ai-divorce-family-law.webp',
       title: 'AI Divorce is Real, But Family Law Can Still Save Itself'
     },
     status: 'published',
@@ -322,6 +328,7 @@ The fact is that children of every age experiencing divorce need parents who are
 
 *This content originally appeared at [SecondSaturday.com](https://www.secondsaturday.com/relieving-that-uneasy-feeling-when-resolving-divorce/).*`,
     category: 'Mindset & Wellness',
+    featuredImage: '/images/blog-relieving-uneasy-feeling-resolving-divorce.webp',
     kind: 'article',
     linkMode: 'internal',
     publishedAt: '2026-06-04',
@@ -332,7 +339,7 @@ The fact is that children of every age experiencing divorce need parents who are
     slug: 'relieving-uneasy-feeling-resolving-divorce',
     social: {
       description: 'Amanda Mason describes how a structured, human-guided divorce process can reduce uncertainty through education, mediation, and arbitration.',
-      image: '/images/splash-bg.webp',
+      image: '/images/blog-relieving-uneasy-feeling-resolving-divorce.webp',
       title: 'Relieving That Uneasy Feeling When Resolving Divorce'
     },
     status: 'published',

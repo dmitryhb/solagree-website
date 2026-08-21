@@ -1,8 +1,11 @@
 <script setup lang="ts">
 const props = withDefaults(defineProps<{
   alt: string
+  /** Chooses whether an editorial photo crops or a publisher logo stays fully visible. */
+  fit?: 'contain' | 'cover'
   src?: string
 }>(), {
+  fit: 'cover',
   src: ''
 })
 
@@ -15,7 +18,10 @@ const showFallback = (): void => {
 </script>
 
 <template>
-  <div class="blog-media">
+  <div
+    class="blog-media"
+    :class="{ 'blog-media--contain': fit === 'contain' }"
+  >
     <img
       v-if="hasImage"
       :src="src"
