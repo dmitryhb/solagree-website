@@ -1,9 +1,12 @@
 import { computed, toValue } from 'vue'
-import type { SolagreeSeoInput } from '~/types/seo'
+import type { SolagreeSeoInput, StructuredDataObject } from '~/types/seo'
 
 const DEFAULT_SOCIAL_IMAGE = '/images/splash-bg.webp'
 const SITE_NAME = 'Solagree'
 const TWITTER_CARD_TYPE = 'summary_large_image'
+
+/** Serializes JSON-LD for a script body without allowing markup to terminate the script tag. */
+const serializeStructuredData = (item: StructuredDataObject): string => JSON.stringify(item).replace(/</g, '\\u003C')
 
 /**
  * Removes duplicate slashes and trailing slashes so canonical URLs stay stable
@@ -72,7 +75,7 @@ export const useSolagreeSeo = (input: SolagreeSeoInput) => {
     ],
     script: input.structuredData?.map((item) => ({
       type: 'application/ld+json',
-      children: JSON.stringify(item)
+      textContent: serializeStructuredData(item)
     })) ?? []
   }))
 
