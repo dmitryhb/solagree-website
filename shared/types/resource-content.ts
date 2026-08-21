@@ -1,0 +1,51 @@
+/** Publication state used to prevent unfinished resource entries from being exposed publicly. */
+export type ResourcePublicationStatus = 'draft' | 'published'
+
+/** Distinguishes Solagree-hosted articles from coverage that lives on another site. */
+export type ResourceContentKind = 'article' | 'news'
+
+/** Describes whether a resource opens a Solagree route or an external publication. */
+export type ResourceLinkMode = 'internal' | 'external'
+
+/** SEO fields required for every public resource entry. */
+export interface ResourceSeoMetadata {
+  description: string
+  title: string
+}
+
+/** Social-preview fields required for every public resource entry. */
+export interface ResourceSocialMetadata {
+  description: string
+  image: string
+  title: string
+}
+
+/** Fields shared by all repository-managed resource entries. */
+export interface ResourceContentBase {
+  author: string
+  featuredImage: string
+  publishedAt: string
+  seo: ResourceSeoMetadata
+  slug: string
+  social: ResourceSocialMetadata
+  status: ResourcePublicationStatus
+  summary: string
+  title: string
+}
+
+/** A Solagree-hosted article with body content and an internal route. */
+export interface ResourceArticle extends ResourceContentBase {
+  body: string
+  kind: 'article'
+  linkMode: 'internal'
+}
+
+/** An external news or press item that links to the original publication. */
+export interface ExternalNewsItem extends ResourceContentBase {
+  externalUrl: string
+  kind: 'news'
+  linkMode: 'external'
+}
+
+/** A resource entry that can be published through the website without a CMS. */
+export type ResourceContentEntry = ResourceArticle | ExternalNewsItem

@@ -2,7 +2,6 @@ const exactLegacyRedirects: Record<string, string> = {
   '/about': '/about-us',
   '/accessibility': '/legal/accessibility',
   '/be-a-part-of-the-future-with-us-for-lawyers-mediators-and-cdfa-professionals': '/attorneys',
-  '/blog': '/faq',
   '/category': '/faq',
   '/comments/feed': '/faq',
   '/contact': '/contact',
@@ -21,7 +20,6 @@ const exactLegacyRedirects: Record<string, string> = {
 }
 
 const prefixLegacyRedirects: Array<readonly [string, string]> = [
-  ['/blog/', '/faq'],
   ['/category/', '/faq'],
   ['/author/', '/faq'],
   ['/tag/', '/faq']
