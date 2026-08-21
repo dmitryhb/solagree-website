@@ -1,11 +1,19 @@
 <script setup lang="ts">
-import { headerLoginLink, headerPrimaryLinks, headerQuizLink } from '~/data/header-navigation'
+import {
+  headerLoginLink,
+  headerPrimaryLinks,
+  headerQuizLink,
+  headerResourcesMenu
+} from '~/data/header-navigation'
 
 const router = useRouter()
 const currentRoute = computed(() => router.currentRoute.value)
 const isMobileMenuOpen = ref(false)
+const isResourcesMenuOpen = ref(false)
 const isScrolled = ref(false)
 const isResettingHomeScroll = ref(false)
+const resourcesMenuButton = ref<HTMLButtonElement | null>(null)
+const resourcesMenu = ref<HTMLElement | null>(null)
 const isHomeRoute = computed(() => currentRoute.value.path === '/')
 const isSolidHeader = computed(() => !isHomeRoute.value)
 const menuToggleLabel = computed(() => (isMobileMenuOpen.value ? 'Close navigation menu' : 'Open navigation menu'))
@@ -79,6 +87,41 @@ const closeMobileMenu = () => {
   isMobileMenuOpen.value = false
 }
 
+const closeResourcesMenu = (returnFocus = false): void => {
+  isResourcesMenuOpen.value = false
+
+  if (returnFocus) {
+    nextTick(() => resourcesMenuButton.value?.focus())
+  }
+}
+
+const openResourcesMenu = async (focusPosition?: 'first' | 'last'): Promise<void> => {
+  isResourcesMenuOpen.value = true
+
+  if (!focusPosition) {
+    return
+  }
+
+  await nextTick()
+  const menuItems = resourcesMenu.value?.querySelectorAll<HTMLAnchorElement>('[role="menuitem"]')
+  const target = focusPosition === 'first' ? menuItems?.[0] : menuItems?.[menuItems.length - 1]
+
+  target?.focus()
+}
+
+const closeResourcesMenuWhenFocusLeaves = (event: FocusEvent): void => {
+  const container = event.currentTarget
+  const nextFocusedElement = event.relatedTarget
+
+  if (container instanceof HTMLElement && !container.contains(nextFocusedElement as Node | null)) {
+    closeResourcesMenu()
+  }
+}
+
+const isResourceRoute = computed(() => headerResourcesMenu.links.some(({ to }) => (
+  currentRoute.value.path === to || currentRoute.value.path.startsWith(`${to}/`)
+)))
+
 onMounted(() => {
   scheduleScrolledStateUpdate()
   window.addEventListener('scroll', updateScrolledState, { passive: true })
@@ -93,6 +136,7 @@ watch(
   () => currentRoute.value.fullPath,
   () => {
     closeMobileMenu()
+    closeResourcesMenu()
 
     scheduleScrolledStateUpdate()
   },
@@ -108,7 +152,7 @@ watch(
       'site-header--scrolled': isHomeRoute && isScrolled,
       'site-header--menu-open': isMobileMenuOpen
     }"
-    @keydown.esc="closeMobileMenu"
+    @keydown.esc="() => { closeMobileMenu(); closeResourcesMenu() }"
   >
     <div class="site-header__bar">
       <NuxtLink
@@ -139,6 +183,59 @@ watch(
         >
           {{ link.label }}
         </NuxtLink>
+
+        <div
+          class="site-header__resources"
+          :class="{ 'site-header__resources--open': isResourcesMenuOpen }"
+          @focusout="closeResourcesMenuWhenFocusLeaves"
+          @mouseenter="() => openResourcesMenu()"
+          @mouseleave="() => closeResourcesMenu()"
+        >
+          <button
+            ref="resourcesMenuButton"
+            class="site-header__nav-link site-header__resources-toggle"
+            type="button"
+            aria-controls="site-header-resources-menu"
+            aria-haspopup="menu"
+            :aria-expanded="isResourcesMenuOpen"
+            :class="{ 'site-header__nav-link--active': isResourceRoute }"
+            @click="isResourcesMenuOpen ? closeResourcesMenu() : openResourcesMenu()"
+            @keydown.down.prevent="openResourcesMenu('first')"
+            @keydown.up.prevent="openResourcesMenu('last')"
+            @keydown.esc.stop="closeResourcesMenu(true)"
+          >
+            {{ headerResourcesMenu.label }}
+            <span
+              class="site-header__resources-chevron"
+              aria-hidden="true"
+            />
+          </button>
+
+          <ul
+            v-if="isResourcesMenuOpen"
+            id="site-header-resources-menu"
+            ref="resourcesMenu"
+            class="site-header__resources-menu"
+            role="menu"
+            aria-label="Resources"
+          >
+            <li
+              v-for="link in headerResourcesMenu.links"
+              :key="link.label"
+              role="none"
+            >
+              <NuxtLink
+                class="site-header__resources-link"
+                :to="link.to"
+                role="menuitem"
+                :aria-current="currentRoute.path === link.to ? 'page' : undefined"
+                @click="() => closeResourcesMenu()"
+              >
+                {{ link.label }}
+              </NuxtLink>
+            </li>
+          </ul>
+        </div>
       </nav>
 
       <div class="site-header__actions">
@@ -192,6 +289,22 @@ watch(
           >
             {{ link.label }}
           </NuxtLink>
+
+          <div class="site-header__mobile-resource-group">
+            <p class="site-header__mobile-resource-label">
+              {{ headerResourcesMenu.label }}
+            </p>
+            <NuxtLink
+              v-for="link in headerResourcesMenu.links"
+              :key="link.label"
+              class="site-header__mobile-link site-header__mobile-resource-link"
+              :to="link.to"
+              :aria-current="currentRoute.path === link.to ? 'page' : undefined"
+              @click="closeMobileMenu"
+            >
+              {{ link.label }}
+            </NuxtLink>
+          </div>
         </nav>
 
         <div class="site-header__mobile-actions">

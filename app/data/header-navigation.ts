@@ -1,4 +1,5 @@
 import type { AppLink } from '~/types/links'
+import { resourceNavigationLinks } from '~/data/resource-navigation'
 
 export const headerPrimaryLinks = [
   {
@@ -14,6 +15,12 @@ export const headerPrimaryLinks = [
     to: '/cdfa'
   }
 ] as const satisfies readonly AppLink[]
+
+/** Resources submenu shared by the desktop disclosure and mobile navigation. */
+export const headerResourcesMenu = {
+  label: 'Resources',
+  links: resourceNavigationLinks
+} as const
 
 export const headerLoginLink = {
   label: 'Log in'
