@@ -1,3 +1,6 @@
+// Load Git-managed resource content during configuration so validation fails every Nuxt build.
+import './app/data/resource-content'
+
 const DEV_PORTAL_API_BASE_URL = 'http://solagree-portal.local:3004'
 const PRODUCTION_GA_MEASUREMENT_ID = 'G-TCGL2PDNNY'
 const isProduction = process.env.NODE_ENV === 'production'

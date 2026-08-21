@@ -11,6 +11,7 @@
     "lint": "eslint .",
     "typecheck": "nuxt typecheck",
     "preview": "nuxt preview --host solagree.local --port 3003",
+    "test:resource-content-validation": "node --experimental-strip-types --test tests/resource-content-validation.test.mts",
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
