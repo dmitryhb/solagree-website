@@ -68,7 +68,7 @@ describe('Approved initial Blog articles', () => {
     ])
   })
 
-  it('uses the optimized approved Figma hero and neutral fallback metadata for image-less articles', () => {
+  it('uses the optimized approved Figma hero and editorial thumbnails for every published article', () => {
     const heroPath = resolve(process.cwd(), 'public/images/blog-four-reasons-ai-divorce-hero.webp')
     const hero = readFileSync(heroPath)
 
@@ -78,8 +78,12 @@ describe('Approved initial Blog articles', () => {
     expect(createHash('sha256').update(hero).digest('hex'))
       .toBe('c67f91d662670883371d8c8f5b16269462da14433c0e242f8c2d2ea86ef12379')
 
-    expect(publishedArticles.filter(article => article.slug !== 'four-reasons-not-use-ai-get-divorced')
-      .every(article => !article.featuredImage && article.social.image === '/images/splash-bg.webp'))
-      .toBe(true)
+    expect(publishedArticles.map(article => article.featuredImage)).toEqual([
+      '/images/blog-hidden-risks-naked-mediation.webp',
+      '/images/blog-relieving-uneasy-feeling-resolving-divorce.webp',
+      '/images/blog-ai-divorce-family-law.webp',
+      '/images/blog-four-reasons-ai-divorce-hero.webp'
+    ])
+    expect(publishedArticles.every(article => article.social.image === article.featuredImage)).toBe(true)
   })
 })

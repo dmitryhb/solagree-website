@@ -45,10 +45,14 @@ describe('News & Press index', () => {
     expect(destinationLinks.every(link => link.attributes('aria-label')?.includes('opens in a new tab'))).toBe(true)
   })
 
-  it('uses the missing-image fallback and approved press email without a Load More control', () => {
+  it('renders the approved decorative publisher art without a fallback or redundant announcement', () => {
     const wrapper = mountNewsIndex()
+    const images = wrapper.findAll<HTMLImageElement>('.news-card .blog-media img')
 
-    expect(wrapper.findAll('.blog-media__fallback')).toHaveLength(4)
+    expect(images).toHaveLength(4)
+    expect(images.every(image => image.attributes('alt') === '')).toBe(true)
+    expect(wrapper.findAll('.news-card .blog-media--contain')).toHaveLength(4)
+    expect(wrapper.findAll('.blog-media__fallback')).toHaveLength(0)
     expect(wrapper.get('.news-press-inquiries a').attributes('href')).toBe('mailto:pr@solagree.com')
     expect(wrapper.text()).not.toContain('Load More')
   })
