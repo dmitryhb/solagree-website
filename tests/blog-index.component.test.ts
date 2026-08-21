@@ -50,4 +50,18 @@ describe('Blog index media', () => {
     expect(longTitleLink?.attributes('href')).toBe('/blog/hidden-risks-naked-mediation')
     expect(longTitleLink?.attributes('tabindex')).toBeUndefined()
   })
+
+  it('matches the Figma card hierarchy with category overlays and no index dates', () => {
+    const wrapper = mountBlogIndex()
+    const cards = wrapper.findAll('.blog-card')
+
+    expect(cards).toHaveLength(publishedArticles.length - 1)
+    expect(wrapper.find('.blog-card__date').exists()).toBe(false)
+
+    for (const card of cards) {
+      expect(card.get('.blog-card__media-link .blog-media').exists()).toBe(true)
+      expect(card.get('.blog-card__category').text().trim().length).toBeGreaterThan(0)
+      expect(card.get('.blog-card__title a').attributes('href')).toMatch(/^\/blog\//)
+    }
+  })
 })

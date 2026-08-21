@@ -59,6 +59,46 @@ test('stacks Blog media at tablet and mobile widths without horizontal overflow'
   }
 })
 
+test('matches the Figma Latest Article cards and exposes resource links in the footer', async ({ page }) => {
+  for (const width of [1440, 768, 390]) {
+    await page.setViewportSize({ height: 1000, width })
+    await page.goto(blogPath, { waitUntil: 'domcontentloaded' })
+
+    const cards = page.locator('.blog-card')
+    await expect(cards).toHaveCount(3)
+    await expect(cards.locator('.blog-card__date')).toHaveCount(0)
+    await expect(cards.locator('.blog-card__category')).toHaveCount(3)
+
+    const cardStyles = await cards.evaluateAll(items => items.map(card => {
+      const media = card.querySelector<HTMLElement>('.blog-media')
+      const mediaBounds = media?.getBoundingClientRect()
+      const style = getComputedStyle(card)
+
+      return {
+        gap: style.gap,
+        mediaAspect: mediaBounds ? mediaBounds.width / mediaBounds.height : 0,
+        padding: style.padding,
+        scrollWidth: card.scrollWidth,
+        width: card.clientWidth
+      }
+    }))
+
+    for (const card of cardStyles) {
+      expect(card.padding).toBe('12px 12px 24px')
+      expect(card.gap).toBe('24px')
+      expect(card.mediaAspect).toBeCloseTo(608 / 358, 2)
+      expect(card.scrollWidth).toBeLessThanOrEqual(card.width)
+    }
+
+    const resourcesColumn = page.locator('.site-footer__column', { hasText: 'Resources' })
+    await expect(resourcesColumn.getByRole('link', { name: 'Blog', exact: true })).toHaveAttribute('href', '/blog')
+    await expect(resourcesColumn.getByRole('link', { name: 'News & Press', exact: true })).toHaveAttribute('href', '/news')
+    await expect(resourcesColumn.getByRole('link', { name: 'Webinars & Events', exact: true })).toHaveAttribute('href', '/webinar')
+
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true)
+  }
+})
+
 test('contains decorative News publisher logos and preserves keyboard focus for long titles', async ({ page }) => {
   await page.setViewportSize({ height: 1000, width: 1440 })
   await page.goto('/news', { waitUntil: 'domcontentloaded' })

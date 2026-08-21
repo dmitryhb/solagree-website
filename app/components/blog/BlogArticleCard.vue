@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import BlogMedia from '~/components/blog/BlogMedia.vue'
-import { formatArticleDate } from '~/utils/article-formatting'
 import { getArticlePath } from '~/utils/article-seo'
 import type { ResourceArticle } from '#shared/types/resource-content'
 
@@ -24,9 +23,6 @@ defineProps<{
         class="blog-card__category"
       >{{ article.category }}</span>
     </NuxtLink>
-    <p class="blog-card__date">
-      {{ formatArticleDate(article.publishedAt) }}
-    </p>
     <h3 class="blog-card__title">
       <NuxtLink :to="getArticlePath(article)">
         {{ article.title }}
