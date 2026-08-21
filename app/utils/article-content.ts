@@ -35,10 +35,14 @@ export const parseArticleInlineContent = (value: string): ArticleInlineToken[] =
 
     if (linkLabel && href && isSafeHref(href)) {
       tokens.push({ href, type: 'link', value: linkLabel })
-    } else if (strongText) {
-      tokens.push({ type: 'emphasis', value: strongText })
-    } else if (emphasisText) {
-      tokens.push({ type: 'emphasis', value: emphasisText })
+    } else if (strongText || emphasisText) {
+      const emphasisValue = strongText ?? emphasisText ?? ''
+
+      tokens.push({
+        tokens: parseArticleInlineContent(emphasisValue),
+        type: 'emphasis',
+        value: emphasisValue
+      })
     } else {
       tokens.push({ type: 'text', value: fullMatch })
     }

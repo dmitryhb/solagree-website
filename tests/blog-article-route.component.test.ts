@@ -9,7 +9,9 @@ const { draftArticle, publishedArticle, routeState } = vi.hoisted(() => {
     author: 'Amanda Mason',
     body: `## A clearer next step
 
-Divorce decisions can benefit from *structured guidance* and [independent resources](https://example.com/resources).`,
+Divorce decisions can benefit from *structured guidance* and [independent resources](https://example.com/resources).
+
+*This content originally appeared at [Source](https://example.com/source).*`,
     category: 'Mediation & Arbitration',
     featured: true,
     featuredImage: '/images/about-process-around-people.png',
@@ -99,9 +101,14 @@ describe('Blog article route runtime', () => {
 
   it('renders a published article body and its safe rich-text link without unresolved component warnings', () => {
     const wrapper = mountArticleRoute()
+    const sourceLink = wrapper.get<HTMLAnchorElement>('.article-rich-text strong a[href="https://example.com/source"]')
 
     expect(wrapper.get('.article-rich-text h2').text()).toBe('A clearer next step')
     expect(wrapper.get('.article-rich-text a').attributes('href')).toBe('https://example.com/resources')
+    expect(sourceLink.text()).toBe('Source')
+    expect(sourceLink.attributes('target')).toBe('_blank')
+    expect(sourceLink.attributes('rel')).toBe('noopener noreferrer')
+    expect(sourceLink.element.parentElement?.tagName).toBe('STRONG')
     expect(warnSpy.mock.calls.some(args => args.join(' ').includes('Failed to resolve component'))).toBe(false)
   })
 
