@@ -1,6 +1,7 @@
 import { mount } from '@vue/test-utils'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { computed } from 'vue'
+import { useSolagreeSeo } from '../app/composables/useSolagreeSeo'
 import BlogArticleRoute from '../app/pages/blog/[slug].vue'
 
 const { draftArticle, publishedArticle, routeState } = vi.hoisted(() => {
@@ -16,7 +17,7 @@ Divorce decisions can benefit from *structured guidance* and [independent resour
     linkMode: 'internal' as const,
     publishedAt: '2026-08-21',
     seo: {
-      description: 'A current article description.',
+      description: 'A current article description. </script><script>unsafe()</script>',
       title: 'A clearer next step'
     },
     slug: 'clearer-next-step',
@@ -48,12 +49,25 @@ vi.mock('~/data/resource-content', () => ({
   resourceContentEntries: [publishedArticle, draftArticle]
 }))
 
+const renderedHeadScripts: HTMLScriptElement[] = []
+
 Object.assign(globalThis, {
   computed,
   createError: ({ statusMessage }: { statusMessage: string }) => new Error(statusMessage),
+  useHead: (entry: () => { script?: Array<{ textContent?: string, type?: string }> }) => {
+    entry().script?.forEach((scriptConfig) => {
+      const script = document.createElement('script')
+
+      script.type = scriptConfig.type ?? ''
+      script.textContent = scriptConfig.textContent ?? ''
+      document.head.append(script)
+      renderedHeadScripts.push(script)
+    })
+  },
   useRoute: () => ({ params: { slug: routeState.slug } }),
   useRuntimeConfig: () => ({ public: { siteUrl: 'https://www.solagree.com' } }),
-  useSolagreeSeo: () => undefined
+  useSeoMeta: () => undefined,
+  useSolagreeSeo
 })
 
 const mountArticleRoute = () => mount(BlogArticleRoute, {
@@ -79,6 +93,7 @@ describe('Blog article route runtime', () => {
   })
 
   afterEach(() => {
+    renderedHeadScripts.splice(0).forEach(script => script.remove())
     warnSpy.mockRestore()
   })
 
@@ -88,6 +103,25 @@ describe('Blog article route runtime', () => {
     expect(wrapper.get('.article-rich-text h2').text()).toBe('A clearer next step')
     expect(wrapper.get('.article-rich-text a').attributes('href')).toBe('https://example.com/resources')
     expect(warnSpy.mock.calls.some(args => args.join(' ').includes('Failed to resolve component'))).toBe(false)
+  })
+
+  it('injects parseable Article JSON-LD with the canonical article URL', () => {
+    mountArticleRoute()
+
+    const script = document.head.querySelector<HTMLScriptElement>('script[type="application/ld+json"]')
+
+    expect(script?.textContent).not.toBe('')
+    expect(script?.textContent).toBeTruthy()
+    expect(script?.textContent).not.toContain('</script>')
+
+    const structuredData = JSON.parse(script?.textContent ?? '') as Record<string, string>
+
+    expect(structuredData).toMatchObject({
+      '@type': 'Article',
+      description: 'A current article description. </script><script>unsafe()</script>',
+      headline: 'A clearer next step',
+      mainEntityOfPage: 'https://www.solagree.com/blog/clearer-next-step'
+    })
   })
 
   it('returns a 404 error for a draft article direct route', () => {
