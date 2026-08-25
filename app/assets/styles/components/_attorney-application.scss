@@ -1,3 +1,5 @@
+@use "../abstracts/breakpoints" as bp;
+
 .attorney-application-page {
   min-height: 100vh;
   background: var(--color-page);
@@ -255,7 +257,7 @@
   outline-offset: 3px;
 }
 
-@media (max-width: 767px) {
+@include bp.below(bp.$bp-mobile) {
   .attorney-application-page__content {
     width: min(calc(100% - 2rem), 640px);
     padding-block: 3.25rem 4.5rem;

@@ -1,3 +1,5 @@
+@use "breakpoints" as bp;
+
 :root {
   color-scheme: light;
   --font-display: "Lora", "Iowan Old Style", "Times New Roman", serif;
@@ -5,6 +7,10 @@
   --font-body: "Open Sans", "Helvetica Neue", Arial, sans-serif;
   --font-ui: "DM Sans", "Segoe UI", sans-serif;
   --font-control: "Inter", "Segoe UI", sans-serif;
+  /* Single documented mono stack (HIR-368): no mono webfont is loaded, so this
+     is the one system-fallback stack used everywhere. The previous hardcoded
+     "IBM Plex Mono" stacks (pricing card eyebrow, footer legal lines) named a
+     font that was never loaded and were folded into this token. */
   --font-mono: "SF Mono", "Monaco", "Inconsolata", "Fira Mono", "Droid Sans Mono", monospace;
   --color-page: #fffdf9;
   --color-text: #3f3154;
@@ -49,7 +55,6 @@
   --shadow-soft: 0 18px 40px rgba(62, 64, 89, 0.08);
   --shadow-card: 0 20px 44px rgba(62, 64, 89, 0.12);
   --shadow-quiz-button: 0 1px 2px rgba(16, 24, 40, 0.05);
-  --radius-frame: 32px;
   --radius-card: 24px;
   --radius-pill: 50px;
   --site-max-width: 1180px;
@@ -57,7 +62,9 @@
   --site-anchor-offset: calc(var(--site-header-height) + 1.25rem);
 }
 
-@media (max-width: 900px) {
+// The real header height switches from 76px to 72px at the nav boundary
+// (header padding change), so the token must flip at the same width.
+@include bp.below(bp.$bp-nav) {
   :root {
     --site-header-height: 72px;
     --site-anchor-offset: calc(var(--site-header-height) + 1rem);

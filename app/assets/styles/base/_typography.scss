@@ -1,3 +1,25 @@
+@use "../abstracts/breakpoints" as bp;
+
+// Adaptive stepped size contract for semantic section titles (HIR-368):
+// 54px desktop / 48px at <= tablet / 40px at <= mobile. Section titles
+// reference var(--section-title-size) instead of local fixed sizes; bespoke
+// hero/display headings keep their own sizes and say so inline.
+:root {
+  --section-title-size: 54px;
+}
+
+@include bp.below(bp.$bp-tablet) {
+  :root {
+    --section-title-size: 48px;
+  }
+}
+
+@include bp.below(bp.$bp-mobile) {
+  :root {
+    --section-title-size: 40px;
+  }
+}
+
 .eyebrow {
   margin: 0;
   font-family: var(--font-nav);

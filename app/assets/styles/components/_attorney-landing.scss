@@ -1,3 +1,5 @@
+@use "../abstracts/breakpoints" as bp;
+
 .attorney-landing-page {
   min-height: 100vh;
   background: var(--color-page);
@@ -43,6 +45,7 @@
 }
 
 .attorney-hero-section__title {
+  /* Hero/display exception: bespoke size, not the shared section-title contract. */
   margin: 0;
   color: var(--color-white);
   font-family: var(--font-display);
@@ -126,14 +129,14 @@
 }
 
 .cdfa-landing-page .attorney-hero-section__primary.sol-button {
-  border-color: #3e4059;
-  background: #3e4059;
+  border-color: var(--color-ink);
+  background: var(--color-surface-dark);
   color: var(--color-white);
 }
 
 .cdfa-landing-page .attorney-hero-section__primary.sol-button:hover {
-  border-color: #323449;
-  background: #323449;
+  border-color: var(--color-ink-hover);
+  background: var(--color-ink-hover);
 }
 
 .cdfa-landing-page .attorney-hero-section__primary .button-arrow-icon {
@@ -163,14 +166,14 @@
   margin: 0;
   color: var(--color-ink);
   font-family: var(--font-display);
-  font-size: 54px;
+  font-size: var(--section-title-size);
   font-weight: 500;
   line-height: 1.011;
 }
 
 .attorney-partner-paths-section__intro {
   margin: 0;
-  color: #171616;
+  color: var(--color-text-dark);
   font-family: var(--font-body);
   font-size: 18.4px;
   line-height: 1.4;
@@ -232,7 +235,7 @@
 .attorney-partner-card__description {
   max-width: 310px;
   margin: 0;
-  color: #171616;
+  color: var(--color-text-dark);
   font-family: var(--font-body);
   font-size: 18px;
   line-height: 1.45;
@@ -252,7 +255,7 @@
 
 .attorney-partner-card__details li {
   padding-bottom: 12px;
-  border-bottom: 2px solid #171616;
+  border-bottom: 2px solid var(--color-black);
 }
 
 .attorney-how-it-works-section {
@@ -278,14 +281,14 @@
   margin: 0;
   color: var(--color-ink);
   font-family: var(--font-display);
-  font-size: 54px;
+  font-size: var(--section-title-size);
   font-weight: 500;
   line-height: 1.011;
 }
 
 .attorney-how-it-works-section__intro {
   margin: 0;
-  color: #171616;
+  color: var(--color-text-dark);
   font-family: var(--font-body);
   font-size: 18.4px;
   line-height: 1.4;
@@ -309,7 +312,7 @@
 .attorney-how-it-works-section__quote {
   max-width: 780px;
   margin: 76px auto 0;
-  color: #171616;
+  color: var(--color-text-dark);
   font-family: var(--font-body);
   font-size: 35px;
   font-style: italic;
@@ -338,14 +341,14 @@
   margin: 0;
   color: var(--color-ink);
   font-family: var(--font-display);
-  font-size: 54px;
+  font-size: var(--section-title-size);
   font-weight: 500;
   line-height: 1.011;
 }
 
 .attorney-value-section__intro {
   margin: 0;
-  color: #171616;
+  color: var(--color-text-dark);
   font-family: var(--font-ui);
   font-size: 18.4px;
   line-height: 1.4;
@@ -385,7 +388,7 @@
 
 .attorney-value-card__description {
   margin: 15px 0 0;
-  color: #171616;
+  color: var(--color-text-dark);
   font-family: var(--font-body);
   font-size: 15px;
   line-height: 1.42;
@@ -441,7 +444,7 @@
   margin: 0;
   color: var(--color-heading);
   font-family: var(--font-display);
-  font-size: 54px;
+  font-size: var(--section-title-size);
   font-weight: 500;
   line-height: 1.011;
 }
@@ -525,7 +528,7 @@
   margin: 0;
   color: var(--color-heading);
   font-family: var(--font-display);
-  font-size: 54px;
+  font-size: var(--section-title-size);
   font-weight: 500;
   line-height: 1.011;
 }
@@ -607,7 +610,7 @@
   margin: 0;
   color: var(--color-heading);
   font-family: var(--font-display);
-  font-size: 54px;
+  font-size: var(--section-title-size);
   font-weight: 500;
   line-height: 1.011;
 }
@@ -615,7 +618,7 @@
 .attorney-faq-section__intro {
   max-width: 540px;
   margin: 0;
-  color: #171616;
+  color: var(--color-text-dark);
   font-family: var(--font-body);
   font-size: 18px;
   line-height: 1.431;
@@ -665,7 +668,7 @@
   margin: 0 0 34px;
   color: var(--color-ink);
   font-family: var(--font-display);
-  font-size: 54px;
+  font-size: var(--section-title-size);
   font-weight: 500;
   line-height: 1.011;
   text-align: center;
@@ -697,7 +700,7 @@
 .attorney-fits-practice-section__copy {
   max-width: 580px;
   margin: 0;
-  color: #171616;
+  color: var(--color-text-dark);
   font-family: var(--font-nav);
   font-size: 18.4px;
   font-weight: 600;
@@ -724,7 +727,9 @@
   object-fit: cover;
 }
 
-@media (max-width: 1100px) {
+@include bp.below(bp.$bp-compact) {
+  /* Compact-nav boundary: attorney landing keeps its tighter tablet metrics from
+     1100px down; the approved per-section mobile sizes below stay local. */
   .attorney-hero-section {
     padding: 72px 1.5rem;
   }
@@ -921,7 +926,7 @@
   }
 }
 
-@media (max-width: 767px) {
+@include bp.below(bp.$bp-mobile) {
   .attorney-hero-section {
     padding: 56px 1.25rem;
   }

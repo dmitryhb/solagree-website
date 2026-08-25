@@ -1,3 +1,5 @@
+@use "../abstracts/breakpoints" as bp;
+
 .quiz-section {
   padding-block: clamp(4rem, 7vw, 7.5rem);
   background: var(--color-page);
@@ -626,7 +628,7 @@
   font-size: 18px;
   font-weight: 900;
   line-height: 25.2px;
-  color: #000000;
+  color: var(--color-accent-text);
 }
 
 .quiz-explainer__body {
@@ -639,7 +641,7 @@
   color: #171717;
 }
 
-@media (max-width: 1024px) {
+@include bp.below(bp.$bp-tablet) {
   .quiz-section {
     padding-inline: 1rem;
   }
@@ -679,7 +681,7 @@
   }
 }
 
-@media (max-width: 767px) {
+@include bp.below(bp.$bp-mobile) {
   /* Derived mobile collapse approved by the user because no mobile Figma frame exists. */
   .quiz-section {
     padding-block: 3.5rem 4.5rem;
