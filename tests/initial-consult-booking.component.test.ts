@@ -129,6 +129,37 @@ describe('InitialConsultBookingPage', () => {
 
     expect(wrapper.find('.consultant-selection-summary').exists()).toBe(false)
     expect(wrapper.get('[data-consultant-id="stacie"]').attributes('aria-checked')).toBe('true')
+    expect(document.activeElement).toBe(wrapper.get('[data-consultant-id="stacie"]').element)
+
+    wrapper.unmount()
+  })
+
+  it('keeps focus on the booking summary after an arrow-key selection', async () => {
+    const BookingHarness = defineComponent({
+      setup() {
+        const selectedEvent = ref(firstEvent)
+
+        return () => h(InitialConsultBookingPage, {
+          events,
+          selectedEvent: selectedEvent.value,
+          trackingContext: {},
+          onSelect: (event: InitialConsultBookingEvent) => { selectedEvent.value = event }
+        })
+      }
+    })
+    const wrapper = mount(BookingHarness, {
+      attachTo: document.body,
+      global: {
+        stubs: {
+          CalComBookingEmbed: true,
+          SiteFooter: true
+        }
+      }
+    })
+
+    await wrapper.get('[data-consultant-id="first-available"]').trigger('keydown', { key: 'ArrowRight' })
+
+    expect(document.activeElement).toBe(wrapper.get('.consultant-selection-summary').element)
 
     wrapper.unmount()
   })
