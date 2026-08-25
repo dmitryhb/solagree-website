@@ -109,6 +109,7 @@ describe('InitialConsultBookingPage', () => {
       }
     })
     const wrapper = mount(BookingHarness, {
+      attachTo: document.body,
       global: {
         stubs: {
           CalComBookingEmbed: true,
@@ -122,11 +123,14 @@ describe('InitialConsultBookingPage', () => {
     expect(wrapper.find('.consultant-selector').exists()).toBe(false)
     expect(wrapper.get('.consultant-selection-summary').text()).toContain('Stacie Sanders')
     expect(wrapper.get('.consultant-selection-summary').text()).toContain('30 minutes · $60')
+    expect(document.activeElement).toBe(wrapper.get('.consultant-selection-summary').element)
 
     await wrapper.get('.consultant-selection-summary button').trigger('click')
 
     expect(wrapper.find('.consultant-selection-summary').exists()).toBe(false)
     expect(wrapper.get('[data-consultant-id="stacie"]').attributes('aria-checked')).toBe('true')
+
+    wrapper.unmount()
   })
 
   it('remounts exactly one booking embed for each selector choice', async () => {

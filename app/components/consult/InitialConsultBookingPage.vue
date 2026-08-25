@@ -18,6 +18,7 @@ const emit = defineEmits<{
 
 const bookingPanel = ref<HTMLElement | null>(null)
 const selectorPanel = ref<HTMLElement | null>(null)
+const bookingSummary = ref<HTMLElement | null>(null)
 const isSelectorExpanded = ref(true)
 
 /** Resolves a selected id back to its configured event before notifying the route. */
@@ -30,6 +31,9 @@ const handleSelection = async (selectionId: InitialConsultBookingEvent['id']): P
 
   isSelectorExpanded.value = false
   emit('select', event)
+
+  await nextTick()
+  bookingSummary.value?.focus()
 
   if (
     typeof window === 'undefined'
@@ -83,9 +87,11 @@ const openSelector = async (): Promise<void> => {
           />
 
           <section
+            ref="bookingSummary"
             v-else
             class="consultant-selection-summary"
             aria-labelledby="consultant-selection-summary-title"
+            tabindex="-1"
           >
             <p class="consultant-selection-summary__eyebrow">
               Your booking
