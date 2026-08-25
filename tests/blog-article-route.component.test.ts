@@ -30,7 +30,8 @@ Divorce decisions can benefit from *structured guidance* and [independent resour
     },
     status: 'published' as const,
     summary: 'A current article summary.',
-    title: 'A clearer next step'
+    title: 'A clearer next step',
+    updatedAt: '2026-08-24'
   }
 
   return {
@@ -127,9 +128,15 @@ describe('Blog article route runtime', () => {
 
     expect(structuredData).toMatchObject({
       '@type': 'Article',
+      dateModified: '2026-08-24',
+      datePublished: '2026-08-21',
       description: 'A current article description. </script><script>unsafe()</script>',
       headline: 'A clearer next step',
-      mainEntityOfPage: 'https://www.solagree.com/blog/clearer-next-step'
+      mainEntityOfPage: 'https://www.solagree.com/blog/clearer-next-step',
+      publisher: {
+        '@type': 'Organization',
+        name: 'Solagree'
+      }
     })
   })
 
