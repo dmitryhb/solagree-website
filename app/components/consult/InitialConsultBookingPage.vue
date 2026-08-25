@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import type {
   InitialConsultBookingEvent,
   InitialConsultBookingTrackingContext
@@ -20,6 +21,12 @@ const bookingPanel = ref<HTMLElement | null>(null)
 const selectorPanel = ref<HTMLElement | null>(null)
 const bookingSummary = ref<HTMLElement | null>(null)
 const isSelectorExpanded = ref(true)
+
+/** Keeps the team option informative without presenting it as an individual consultant. */
+const selectedConsultantBio = computed(() => {
+  return props.selectedEvent.profile?.bio
+    ?? 'Meet with the first available Solagree consultant from our experienced team. We’ll make sure you have the support that best fits your needs.'
+})
 
 /** Resolves a selected id back to its configured event before notifying the route. */
 const handleSelection = async (selectionId: InitialConsultBookingEvent['id']): Promise<void> => {
@@ -94,9 +101,10 @@ const openSelector = async (): Promise<void> => {
             tabindex="-1"
           >
             <p class="consultant-selection-summary__eyebrow">
-              Your booking
+              Solagree Initial Consult
             </p>
-            <div class="consultant-selection-summary__consultant">
+
+            <div class="consultant-selection-summary__profile">
               <img
                 v-if="selectedEvent.profile?.headshotUrl"
                 class="consultant-selection-summary__headshot"
@@ -109,9 +117,24 @@ const openSelector = async (): Promise<void> => {
                 <h2 id="consultant-selection-summary-title">
                   {{ selectedEvent.label }}
                 </h2>
-                <p>30 minutes · $60</p>
               </div>
             </div>
+
+            <p class="consultant-selection-summary__bio">
+              {{ selectedConsultantBio }}
+            </p>
+
+            <dl class="consultant-selection-summary__details">
+              <div>
+                <dt>Length</dt>
+                <dd>30 min</dd>
+              </div>
+              <div>
+                <dt>How we’ll meet</dt>
+                <dd>Phone Call or Zoom</dd>
+              </div>
+            </dl>
+
             <button
               type="button"
               @click="openSelector"

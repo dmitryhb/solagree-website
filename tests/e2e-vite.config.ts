@@ -4,6 +4,7 @@ import { defineConfig } from 'vite'
 
 export default defineConfig({
   root: fileURLToPath(new URL('./fixtures/initial-consult-booking', import.meta.url)),
+  publicDir: fileURLToPath(new URL('../public', import.meta.url)),
   plugins: [vue()],
   resolve: {
     alias: {

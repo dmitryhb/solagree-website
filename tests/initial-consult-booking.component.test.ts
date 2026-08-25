@@ -95,7 +95,7 @@ describe('InitialConsultBookingPage', () => {
     expect(scrollIntoView).toHaveBeenCalledWith({ behavior: 'smooth', block: 'start' })
   })
 
-  it('replaces the choices with the selected booking summary and can reopen them', async () => {
+  it('replaces the choices with the selected booking sidebar and can reopen them', async () => {
     const BookingHarness = defineComponent({
       setup() {
         const selectedEvent = ref(firstEvent)
@@ -122,7 +122,10 @@ describe('InitialConsultBookingPage', () => {
 
     expect(wrapper.find('.consultant-selector').exists()).toBe(false)
     expect(wrapper.get('.consultant-selection-summary').text()).toContain('Stacie Sanders')
-    expect(wrapper.get('.consultant-selection-summary').text()).toContain('30 minutes · $60')
+    expect(wrapper.get('.consultant-selection-summary__bio').text())
+      .toContain('Former family law paralegal')
+    expect(wrapper.get('.consultant-selection-summary__details').text()).toContain('30 min')
+    expect(wrapper.get('.consultant-selection-summary__details').text()).toContain('Phone Call or Zoom')
     expect(document.activeElement).toBe(wrapper.get('.consultant-selection-summary').element)
 
     await wrapper.get('.consultant-selection-summary button').trigger('click')
@@ -132,6 +135,35 @@ describe('InitialConsultBookingPage', () => {
     expect(document.activeElement).toBe(wrapper.get('[data-consultant-id="stacie"]').element)
 
     wrapper.unmount()
+  })
+
+  it('uses neutral team copy in the First Available booking sidebar', async () => {
+    const BookingHarness = defineComponent({
+      setup() {
+        const selectedEvent = ref(firstEvent)
+
+        return () => h(InitialConsultBookingPage, {
+          events,
+          selectedEvent: selectedEvent.value,
+          trackingContext: {},
+          onSelect: (event: InitialConsultBookingEvent) => { selectedEvent.value = event }
+        })
+      }
+    })
+    const wrapper = mount(BookingHarness, {
+      global: {
+        stubs: {
+          CalComBookingEmbed: true,
+          SiteFooter: true
+        }
+      }
+    })
+
+    await wrapper.get('[data-consultant-id="first-available"]').trigger('click')
+
+    expect(wrapper.get('.consultant-selection-summary').text()).toContain('First Available')
+    expect(wrapper.get('.consultant-selection-summary__bio').text()).toContain('first available Solagree consultant')
+    expect(wrapper.find('.consultant-selection-summary__headshot').exists()).toBe(false)
   })
 
   it('keeps focus on the booking summary after an arrow-key selection', async () => {

@@ -46,19 +46,29 @@
 
 .initial-consult-booking-page__workflow {
   display: grid;
-  grid-template-columns: minmax(280px, 1fr) minmax(0, 2fr);
-  gap: clamp(1.75rem, 3.5vw, 3.5rem);
+  grid-template-columns: minmax(300px, 0.9fr) minmax(0, 1.65fr);
+  gap: 0;
   align-items: start;
   margin-top: 2rem;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-card);
+  background: var(--color-white);
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
 }
 
 .initial-consult-booking-page__calendar {
   min-width: 0;
   scroll-margin-top: 1rem;
+  padding: clamp(1.5rem, 3vw, 3rem);
 }
 
 .initial-consult-booking-page__selection {
   min-width: 0;
+  align-self: stretch;
+  border-right: 1px solid var(--color-border-strong);
+  background: var(--color-surface-light);
+  padding: clamp(1.5rem, 3vw, 2.5rem);
 }
 
 .consultant-selector__header {
@@ -144,11 +154,9 @@
 .consultant-selection-summary {
   display: grid;
   justify-items: start;
-  gap: 1.25rem;
-  border: 1px solid rgba(62, 64, 89, 0.22);
-  border-radius: 0.5rem;
-  background: var(--color-white);
-  padding: 1.5rem;
+  align-content: start;
+  gap: 1.5rem;
+  height: 100%;
 }
 
 .consultant-selection-summary__eyebrow {
@@ -161,41 +169,76 @@
   text-transform: uppercase;
 }
 
-.consultant-selection-summary__consultant {
+.consultant-selection-summary__profile {
   display: flex;
   align-items: center;
   gap: 1rem;
 }
 
-.consultant-selection-summary__consultant h2,
-.consultant-selection-summary__consultant p {
+.consultant-selection-summary__profile h2 {
   margin: 0;
 }
 
-.consultant-selection-summary__consultant h2 {
+.consultant-selection-summary__profile h2 {
   color: var(--color-ink);
-  font-size: 1.25rem;
+  font-family: var(--font-nav);
+  font-size: 1.375rem;
+  font-weight: 700;
   line-height: 1.2;
 }
 
-.consultant-selection-summary__consultant p {
-  margin-top: 0.35rem;
+.consultant-selection-summary__bio {
+  margin: 0;
   color: var(--color-text-muted);
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+
+.consultant-selection-summary__details {
+  display: grid;
+  gap: 1rem;
+  width: 100%;
+  margin: 0;
+  border-top: 1px solid var(--color-border-strong);
+  padding-top: 1.25rem;
+}
+
+.consultant-selection-summary__details div {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.consultant-selection-summary__details dt {
+  color: var(--color-text-muted);
+  font-family: var(--font-nav);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.consultant-selection-summary__details dd {
+  margin: 0;
+  color: var(--color-ink);
+  font-family: var(--font-nav);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.4;
 }
 
 .consultant-selection-summary__headshot {
-  flex: 0 0 64px;
-  width: 64px;
-  height: 64px;
+  flex: 0 0 72px;
+  width: 72px;
+  height: 72px;
   border-radius: 50%;
   object-fit: cover;
 }
 
 .consultant-selection-summary button {
+  margin-top: auto;
   min-height: 42px;
   border: 1px solid rgba(62, 64, 89, 0.35);
-  border-radius: 4px;
+  border-radius: var(--radius-pill);
   background: transparent;
   color: var(--color-ink);
   cursor: pointer;
@@ -257,7 +300,7 @@
 @include bp.below(bp.$bp-nav) {
   .initial-consult-booking-page__workflow {
     grid-template-columns: 1fr;
-    gap: 2.25rem;
+    overflow: visible;
   }
 
   .consultant-selector__options {
@@ -269,7 +312,16 @@
   }
 
   .calcom-booking-embed {
-    border-top: 1px solid rgba(62, 64, 89, 0.18);
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  .initial-consult-booking-page__selection {
+    border-right: 0;
+    border-bottom: 1px solid var(--color-border-strong);
+  }
+
+  .initial-consult-booking-page__calendar {
     padding-top: 2rem;
   }
 }
@@ -286,6 +338,7 @@
 
   .initial-consult-booking-page__workflow {
     margin-top: 1.75rem;
+    border-radius: 1rem;
   }
 
   .consultant-selector__options {
