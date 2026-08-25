@@ -1,3 +1,5 @@
+@use "../abstracts/breakpoints" as bp;
+
 .consult-request-page {
   min-height: 100vh;
   background: var(--color-page);
@@ -145,7 +147,7 @@
   box-shadow: 0 0 0 3px rgba(62, 64, 89, 0.1);
 }
 
-@media (max-width: 767px) {
+@include bp.below(bp.$bp-mobile) {
   .consult-request-page__content {
     width: min(calc(100% - 2rem), 640px);
     padding-block: 3.25rem 4.5rem;

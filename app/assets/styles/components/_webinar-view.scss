@@ -1,3 +1,5 @@
+@use "../abstracts/breakpoints" as bp;
+
 .webinar-view-page {
   min-height: 100vh;
   background: var(--color-page);
@@ -75,7 +77,7 @@
 }
 
 .webinar-join-prompt__cta:hover {
-  background: #323449;
+  background: var(--color-surface-dark);
 }
 
 .webinar-join-prompt__cta:focus-visible,
@@ -99,7 +101,7 @@
 
 .webinar-join-prompt__contact {
   margin: 0.75rem 0 0;
-  color: #171616;
+  color: var(--color-text-dark);
   font-family: var(--font-body);
   font-size: 0.8125rem;
   line-height: 1.45;
@@ -114,7 +116,7 @@
   text-decoration: underline;
 }
 
-@media (max-width: 767px) {
+@include bp.below(bp.$bp-mobile) {
   .webinar-view-page__content {
     width: min(calc(100% - 2rem), 1076px);
     padding-block: 3rem 3.75rem;

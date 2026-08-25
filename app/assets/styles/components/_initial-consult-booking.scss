@@ -1,3 +1,5 @@
+@use "../abstracts/breakpoints" as bp;
+
 .initial-consult-booking-page {
   display: grid;
   min-height: 100svh;
@@ -71,7 +73,7 @@
   min-height: 124px;
   border: 1px solid rgba(62, 64, 89, 0.22);
   border-radius: 0.5rem;
-  background: #fff;
+  background: var(--color-white);
   color: var(--color-ink);
   cursor: pointer;
   text-align: left;
@@ -151,9 +153,10 @@
   justify-items: start;
   gap: 0.75rem;
   margin-top: 1rem;
-  border: 1px solid rgba(168, 57, 57, 0.28);
+  /* Error tint derived from --color-error; alphas documented per use. */
+  border: 1px solid color-mix(in srgb, var(--color-error) 28%, transparent);
   border-radius: 0.5rem;
-  background: rgba(168, 57, 57, 0.08);
+  background: color-mix(in srgb, var(--color-error) 8%, transparent);
   padding: 1rem;
 }
 
@@ -166,20 +169,20 @@
   border: 0;
   border-radius: 4px;
   background: var(--color-ink);
-  color: #fff;
+  color: var(--color-white);
   cursor: pointer;
   font: inherit;
   font-weight: 700;
   padding: 0 1rem;
 }
 
-@media (max-width: 960px) {
+@include bp.below(bp.$bp-nav) {
   .consultant-selector__options {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
-@media (max-width: 680px) {
+@include bp.below(bp.$bp-small) {
   .initial-consult-booking-page__content {
     width: min(calc(100% - 2rem), 1120px);
     padding: 3.75rem 0 4rem;

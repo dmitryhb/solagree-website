@@ -1,0 +1,35 @@
+// Canonical responsive width boundaries (HIR-368).
+//
+// The site uses exactly six boundaries. Every width media query should go
+// through below()/above() with one of these tokens; any exception must carry
+// an inline comment tying it to a real layout boundary.
+//
+//   small   640px  narrow-phone content tier (single-column forms/heroes)
+//   mobile  767px  mobile tier (one-column layouts, mobile paddings)
+//   nav     980px  header collapse + narrow desktop layout tier
+//   tablet  1024px tablet tier (section paddings, two-column grids)
+//   compact 1100px compact desktop nav bar: above this the bar column-gap
+//                  clamp becomes viewport-relative and would overflow the
+//                  nav between 1025px and ~1180px, so tighter gaps are a real
+//                  layout boundary, not drift
+//   wide    1180px wide tier (pricing stack-up, footer/splash vertical rhythm)
+$bp-small: 640px;
+$bp-mobile: 767px;
+$bp-nav: 980px;
+$bp-tablet: 1024px;
+$bp-compact: 1100px;
+$bp-wide: 1180px;
+
+// Inclusive max-width query for a canonical boundary.
+@mixin below($boundary) {
+  @media (max-width: $boundary) {
+    @content;
+  }
+}
+
+// min-width query that is the exact complement of below($boundary).
+@mixin above($boundary) {
+  @media (min-width: $boundary + 1) {
+    @content;
+  }
+}

@@ -1,3 +1,5 @@
+@use "../abstracts/breakpoints" as bp;
+
 .splash-section {
   position: relative;
   display: flex;
@@ -122,7 +124,7 @@
   border-left: 1px solid rgba(255, 255, 255, 0.34);
 }
 
-@media (max-width: 1180px) {
+@include bp.below(bp.$bp-wide) {
   .splash-section {
     min-height: min(820px, calc(100svh - 32px));
   }
@@ -149,7 +151,7 @@
   }
 }
 
-@media (max-width: 767px) {
+@include bp.below(bp.$bp-mobile) {
   .splash-section {
     min-height: min(760px, calc(100svh - 28px));
     padding: 118px 1.25rem 46px;
@@ -203,7 +205,7 @@
   }
 }
 
-@media (max-width: 420px) {
+@include bp.below(bp.$bp-small) { // was max-width: 420px — aligned to the small boundary
   .splash-section {
     min-height: min(700px, calc(100svh - 24px));
   }
