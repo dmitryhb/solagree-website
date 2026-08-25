@@ -34,6 +34,12 @@ export interface ResourceContentBase {
   status: ResourcePublicationStatus
   summary: string
   title: string
+  /**
+   * Optional later revision date. Must be a real YYYY-MM-DD ISO date that is on or
+   * after publishedAt; feeds Article JSON-LD dateModified. Omit unless the entry was
+   * genuinely revised, because no fallback date is ever invented.
+   */
+  updatedAt?: string
 }
 
 /** A Solagree-hosted article with body content and an internal route. */
@@ -42,6 +48,12 @@ export interface ResourceArticle extends ResourceContentBase {
   body: string
   kind: 'article'
   linkMode: 'internal'
+  /**
+   * Optional slugs of other published internal articles to feature as related
+   * reading. Each slug must resolve to a published article, cannot reference the
+   * article itself, and cannot be listed twice.
+   */
+  relatedArticleSlugs?: readonly string[]
 }
 
 /** An external news or press item that links to the original publication. */
