@@ -37,4 +37,3 @@ The scheduling rules configured for the five events are a 15-minute post-event b
 - Finalize the booking form requirements for state, phone, and SMS opt-in. The current public form does not yet satisfy the full approved question set.
 - Complete Stripe activation and the safe payment test matrix under HIR-248.
 - Run the full Phone and Zoom booking/cancellation acceptance matrix under HIR-250, including direct-host and First Available paths, before production sign-off.
-
