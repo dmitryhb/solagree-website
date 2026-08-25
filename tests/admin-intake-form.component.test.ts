@@ -2,6 +2,8 @@ import { flushPromises, mount } from '@vue/test-utils'
 import { computed, nextTick, reactive, ref } from 'vue'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import AdminIntakeForm from '../app/components/admin-intake/AdminIntakeForm.vue'
+import FormResultMessage from '../app/components/FormResultMessage.vue'
+import { useApplicationSubmission } from '../app/composables/useApplicationSubmission'
 import { submitAdminIntake } from '../app/services/admin-intake-api'
 
 vi.mock('~/services/admin-intake-api', async () => {
@@ -22,6 +24,7 @@ Object.assign(globalThis, {
   nextTick,
   reactive,
   ref,
+  useApplicationSubmission,
   useRuntimeConfig: () => ({
     public: {
       portalApiBaseUrl: 'https://portal.solagree.test'
@@ -33,9 +36,12 @@ const mountForm = () => mount(AdminIntakeForm, {
   attachTo: document.body,
   props: { slug: 'alpha-link' },
   global: {
+    components: {
+      FormResultMessage
+    },
     stubs: {
       SiteFormSubmit: {
-        props: ['label', 'submitting'],
+        props: ['label', 'submittingLabel', 'submitting', 'icon'],
         template: '<button type="submit">{{ label }}</button>'
       }
     }

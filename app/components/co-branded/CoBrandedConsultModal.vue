@@ -5,7 +5,7 @@ import {
   getConsultRequestSubmissionErrorMessage,
   submitCoBrandedConsultRequest
 } from '~/services/consult-request-api'
-import { isPortalApiConfigurationError, websitePortalFetcher } from '~/services/portal-api'
+import { websitePortalFetcher } from '~/services/portal-api'
 import type { CoBrandedConsultRequestFormState } from '~/types/consult-request'
 
 const props = defineProps<{
@@ -26,11 +26,8 @@ const { trackEvent } = useGoogleAnalytics()
 const formEl = ref<HTMLFormElement | null>(null)
 const panelEl = ref<HTMLElement | null>(null)
 const firstNameInput = ref<HTMLInputElement | null>(null)
-const errorEl = ref<HTMLElement | null>(null)
 const successHeading = ref<HTMLElement | null>(null)
-const submitting = ref(false)
 const submitted = ref(false)
-const submissionError = ref('')
 
 const createInitialForm = (): CoBrandedConsultRequestFormState => ({
   firstName: '',
@@ -47,9 +44,47 @@ const form = reactive<CoBrandedConsultRequestFormState>(createInitialForm())
 const isAttorneyVariant = computed(() => props.pageType === 'standard')
 const hasPhone = computed(() => Boolean(form.phone.trim()))
 
+const {
+  submitting,
+  submissionResult,
+  resetSubmissionResult,
+  handleSubmit
+} = useApplicationSubmission<CoBrandedConsultRequestFormState, Awaited<ReturnType<typeof submitCoBrandedConsultRequest>>>({
+  validate: () => {
+    if (!formEl.value?.checkValidity()) {
+      formEl.value?.reportValidity()
+      return false
+    }
+
+    return true
+  },
+  getFormState: () => form,
+  submit: (formState) => submitCoBrandedConsultRequest(formState, {
+    portalApiBaseUrl: runtimeConfig.public.portalApiBaseUrl,
+    fetcher: websitePortalFetcher,
+    pageType: props.pageType,
+    referralCode: props.partnerSlug,
+    sourceUrl
+  }),
+  onSuccess: async () => {
+    trackEvent('consultation_booked', {
+      consult_type: 'initial',
+      co_branded_page_type: props.pageType,
+      referral_code: props.partnerSlug,
+      source: 'co_branded_consult_modal'
+    })
+
+    submitted.value = true
+    await nextTick()
+    successHeading.value?.focus()
+  },
+  errorTitle: '',
+  getErrorMessage: getConsultRequestSubmissionErrorMessage
+})
+
 const resetForm = (): void => {
   Object.assign(form, createInitialForm())
-  submissionError.value = ''
+  resetSubmissionResult()
   submitted.value = false
 }
 
@@ -66,52 +101,6 @@ const modalDialog = useModalDialog({
   getInitialFocusTarget: () => firstNameInput.value,
   onRequestClose: handleClose
 })
-
-const handleSubmit = async (): Promise<void> => {
-  if (submitting.value) {
-    return
-  }
-
-  submissionError.value = ''
-
-  if (!formEl.value?.checkValidity()) {
-    formEl.value?.reportValidity()
-    return
-  }
-
-  submitting.value = true
-
-  try {
-    await submitCoBrandedConsultRequest(form, {
-      portalApiBaseUrl: runtimeConfig.public.portalApiBaseUrl,
-      fetcher: websitePortalFetcher,
-      pageType: props.pageType,
-      referralCode: props.partnerSlug,
-      sourceUrl
-    })
-
-    trackEvent('consultation_booked', {
-      consult_type: 'initial',
-      co_branded_page_type: props.pageType,
-      referral_code: props.partnerSlug,
-      source: 'co_branded_consult_modal'
-    })
-
-    submitted.value = true
-    await nextTick()
-    successHeading.value?.focus()
-  } catch (error) {
-    if (isPortalApiConfigurationError(error)) {
-      console.error(error)
-    }
-
-    submissionError.value = getConsultRequestSubmissionErrorMessage(error)
-    await nextTick()
-    errorEl.value?.focus()
-  } finally {
-    submitting.value = false
-  }
-}
 
 watch(
   () => form.phone.trim(),
@@ -333,25 +322,20 @@ watch(
             </template>
           </div>
 
-          <p
-            v-if="submissionError"
-            ref="errorEl"
+          <FormResultMessage
+            v-if="submissionResult"
             class="co-branded-consult-modal__error"
-            role="alert"
-            tabindex="-1"
-          >
-            {{ submissionError }}
-          </p>
+            kind="error"
+            :message="submissionResult.message"
+          />
 
-          <button
+          <SiteFormSubmit
             class="co-branded-consult-modal__submit"
-            type="submit"
-            :disabled="submitting"
-          >
-            <span aria-live="polite">
-              {{ submitting ? 'Submitting...' : 'Submit request' }}
-            </span>
-          </button>
+            label="Submit request"
+            submitting-label="Submitting..."
+            :icon="false"
+            :submitting="submitting"
+          />
         </form>
       </section>
     </div>

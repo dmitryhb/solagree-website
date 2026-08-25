@@ -18,11 +18,6 @@ export interface ConsultRequestFormState {
 /** Mutable form state used by the Attorney and CDFA co-branded modal variants. */
 export type CoBrandedConsultRequestFormState = CoBrandedConsultRequestFormValues
 
-export interface ConsultRequestResult {
-  title: string
-  message: string
-}
-
 export interface ConsultRequestPageContent {
   consultType: ConsultType
   eyebrow: string

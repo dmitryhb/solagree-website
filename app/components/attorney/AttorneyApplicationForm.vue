@@ -18,20 +18,6 @@ const {
   updateLicenseNumber,
   handleSubmit
 } = useAttorneyApplicationForm()
-
-const submissionResultEl = ref<HTMLElement | null>(null)
-
-watch(
-  submissionResult,
-  async (result) => {
-    if (result?.kind !== 'error') {
-      return
-    }
-
-    await nextTick()
-    submissionResultEl.value?.focus()
-  }
-)
 </script>
 
 <template>
@@ -227,19 +213,12 @@ watch(
         :submitting="submitting"
       />
 
-      <div
+      <FormResultMessage
         v-if="submissionResult"
-        ref="submissionResultEl"
-        class="attorney-application-form__result"
-        :class="`attorney-application-form__result--${submissionResult.kind}`"
-        :role="submissionResult.kind === 'error' ? 'alert' : 'status'"
-        tabindex="-1"
-      >
-        <p class="attorney-application-form__result-title">
-          {{ submissionResult.title }}
-        </p>
-        <p>{{ submissionResult.message }}</p>
-      </div>
+        kind="error"
+        :title="submissionResult.title"
+        :message="submissionResult.message"
+      />
     </form>
   </section>
 </template>

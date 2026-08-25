@@ -108,7 +108,19 @@ export const useAttorneyApplicationForm = (): UseAttorneyApplicationFormReturn =
     }
   }
 
-  const submission = useApplicationSubmission<AttorneyApplicationFormState, unknown>({
+  const submission = useApplicationSubmission<AttorneyApplicationFormState, Awaited<ReturnType<typeof submitAttorneyApplication>>>({
+    validate: () => {
+      hasAttemptedSubmit.value = true
+
+      const hasCustomErrors = hasBarStateError.value || hasLicenseNumberError.value
+
+      if (!formEl.value?.checkValidity() || hasCustomErrors) {
+        formEl.value?.reportValidity()
+        return false
+      }
+
+      return true
+    },
     getFormState: createSubmissionState,
     submit: (formState) => submitAttorneyApplication(formState, {
       portalApiBaseUrl: runtimeConfig.public.portalApiBaseUrl,
@@ -126,20 +138,6 @@ export const useAttorneyApplicationForm = (): UseAttorneyApplicationFormReturn =
     getErrorMessage: getAttorneyApplicationSubmissionErrorMessage
   })
 
-  const handleSubmit = async () => {
-    hasAttemptedSubmit.value = true
-    submission.resetSubmissionResult()
-
-    const hasCustomErrors = hasBarStateError.value || hasLicenseNumberError.value
-
-    if (!formEl.value?.checkValidity() || hasCustomErrors) {
-      formEl.value?.reportValidity()
-      return
-    }
-
-    await submission.handleSubmit()
-  }
-
   return {
     currentYear,
     formEl,
@@ -152,6 +150,6 @@ export const useAttorneyApplicationForm = (): UseAttorneyApplicationFormReturn =
     addLicenseNumber,
     removeLicenseNumber,
     updateLicenseNumber,
-    handleSubmit
+    handleSubmit: submission.handleSubmit
   }
 }

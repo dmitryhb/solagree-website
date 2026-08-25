@@ -255,36 +255,6 @@
   outline-offset: 3px;
 }
 
-.attorney-application-form__result {
-  display: grid;
-  gap: 0.35rem;
-  padding: 1rem;
-  border-radius: 10px;
-  background: var(--color-surface-cool);
-  color: var(--color-ink);
-  font-family: var(--font-body);
-  font-size: 0.9375rem;
-  line-height: 1.45;
-}
-
-.attorney-application-form__result p {
-  margin: 0;
-}
-
-.attorney-application-form__result-title {
-  font-family: var(--font-nav);
-  font-weight: 700;
-}
-
-.attorney-application-form__result--success {
-  background: rgba(250, 255, 129, 0.35);
-}
-
-.attorney-application-form__result--error {
-  border: 1px solid rgba(168, 57, 57, 0.28);
-  background: rgba(168, 57, 57, 0.08);
-}
-
 @media (max-width: 767px) {
   .attorney-application-page__content {
     width: min(calc(100% - 2rem), 640px);

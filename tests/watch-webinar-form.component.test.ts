@@ -1,7 +1,11 @@
 import { flushPromises, mount } from '@vue/test-utils'
 import { nextTick, reactive, ref } from 'vue'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import FormResultMessage from '../app/components/FormResultMessage.vue'
+import SiteFormSubmit from '../app/components/SiteFormSubmit.vue'
 import WatchWebinarForm from '../app/components/webinar/WatchWebinarForm.vue'
+import { useApplicationSubmission } from '../app/composables/useApplicationSubmission'
+import { useSourceUrl } from '../app/composables/useSourceUrl'
 import { submitWebinarRegistration } from '../app/services/webinar-registration-api'
 
 vi.mock('~/services/webinar-registration-api', async () => {
@@ -21,16 +25,22 @@ Object.assign(globalThis, {
   nextTick,
   reactive,
   ref,
+  useApplicationSubmission,
   useRuntimeConfig: () => ({
     public: {
       portalApiBaseUrl: 'https://portal.solagree.test'
     }
-  })
+  }),
+  useSourceUrl
 })
 
 const mountForm = () => mount(WatchWebinarForm, {
   attachTo: document.body,
   global: {
+    components: {
+      FormResultMessage,
+      SiteFormSubmit
+    },
     stubs: {
       NuxtLink: {
         props: ['to'],

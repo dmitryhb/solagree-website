@@ -3,18 +3,14 @@ import {
   getContactSubmissionErrorMessage,
   submitContactSubmission
 } from '~/services/contact-submission-api'
-import { isPortalApiConfigurationError, websitePortalFetcher } from '~/services/portal-api'
+import { websitePortalFetcher } from '~/services/portal-api'
 import { useSourceUrl } from '~/composables/useSourceUrl'
 import type { ContactFormState } from '~/types/contact'
 
 const runtimeConfig = useRuntimeConfig()
 const { trackEvent } = useGoogleAnalytics()
 const formEl = ref<HTMLFormElement | null>(null)
-const statusMessageEl = ref<HTMLElement | null>(null)
-const thankYouEl = ref<HTMLElement | null>(null)
-const submitting = ref(false)
 const submitted = ref(false)
-const statusMessage = ref('')
 
 const form = reactive<ContactFormState>({
   name: '',
@@ -26,62 +22,48 @@ const form = reactive<ContactFormState>({
 
 const sourceUrl = useSourceUrl()
 
-const handleSubmit = async () => {
-  if (submitting.value) {
-    return
-  }
+const {
+  submitting,
+  submissionResult,
+  handleSubmit
+} = useApplicationSubmission<ContactFormState, Awaited<ReturnType<typeof submitContactSubmission>>>({
+  validate: () => {
+    if (!formEl.value?.checkValidity()) {
+      formEl.value?.reportValidity()
+      return false
+    }
 
-  statusMessage.value = ''
-
-  if (!formEl.value?.checkValidity()) {
-    formEl.value?.reportValidity()
-    return
-  }
-
-  submitting.value = true
-
-  try {
-    await submitContactSubmission(form, {
-      portalApiBaseUrl: runtimeConfig.public.portalApiBaseUrl,
-      fetcher: websitePortalFetcher,
-      sourceUrl: sourceUrl
-    })
-
+    return true
+  },
+  getFormState: () => form,
+  submit: (formState) => submitContactSubmission(formState, {
+    portalApiBaseUrl: runtimeConfig.public.portalApiBaseUrl,
+    fetcher: websitePortalFetcher,
+    sourceUrl: sourceUrl
+  }),
+  onSuccess: () => {
     trackEvent('contact_form_submitted', {
       source: 'contact_form'
     })
 
     submitted.value = true
-    await nextTick()
-    thankYouEl.value?.focus()
-  } catch (error) {
-    if (isPortalApiConfigurationError(error)) {
-      console.error(error)
-    }
-
-    statusMessage.value = getContactSubmissionErrorMessage(error)
-    await nextTick()
-    statusMessageEl.value?.focus()
-  } finally {
-    submitting.value = false
-  }
-}
+  },
+  errorTitle: '',
+  getErrorMessage: getContactSubmissionErrorMessage
+})
 </script>
 
 <template>
-  <div
+  <FormResultMessage
     v-if="submitted"
-    ref="thankYouEl"
+    kind="success"
     class="contact-form contact-form__thank-you"
-    role="status"
-    aria-live="polite"
-    tabindex="-1"
   >
     <div>
       <p><strong>Thank you for reaching out.</strong></p>
       <p>We’ve received your message, and a Solagree team member will review it and follow up soon. If your matter is urgent, please use the direct contact details on this page.</p>
     </div>
-  </div>
+  </FormResultMessage>
 
   <form
     v-else
@@ -162,14 +144,11 @@ const handleSubmit = async () => {
       :submitting="submitting"
     />
 
-    <p
-      v-if="statusMessage"
-      ref="statusMessageEl"
+    <FormResultMessage
+      v-if="submissionResult"
       class="contact-form__status"
-      role="alert"
-      tabindex="-1"
-    >
-      {{ statusMessage }}
-    </p>
+      kind="error"
+      :message="submissionResult.message"
+    />
   </form>
 </template>

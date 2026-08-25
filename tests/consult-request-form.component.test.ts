@@ -2,6 +2,8 @@ import { flushPromises, mount } from '@vue/test-utils'
 import { computed, nextTick, reactive, ref, watch } from 'vue'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import ConsultRequestForm from '../app/components/consult/ConsultRequestForm.vue'
+import FormResultMessage from '../app/components/FormResultMessage.vue'
+import { useApplicationSubmission } from '../app/composables/useApplicationSubmission'
 import { useGoogleAnalytics } from '../app/composables/useGoogleAnalytics'
 import { useSourceUrl } from '../app/composables/useSourceUrl'
 import { submitConsultRequest } from '../app/services/consult-request-api'
@@ -24,6 +26,7 @@ Object.assign(globalThis, {
   nextTick,
   reactive,
   ref,
+  useApplicationSubmission,
   useGoogleAnalytics,
   useRoute: () => ({ query: {} }),
   useSourceUrl,
@@ -47,10 +50,13 @@ const mountForm = () => mount(ConsultRequestForm, {
   attachTo: document.body,
   props: { content: pageContent },
   global: {
+    components: {
+      FormResultMessage
+    },
     stubs: {
       FormSmsOptInField: true,
       SiteFormSubmit: {
-        props: ['label', 'submitting'],
+        props: ['label', 'submittingLabel', 'submitting', 'icon'],
         template: '<button type="submit">{{ label }}</button>'
       }
     }
