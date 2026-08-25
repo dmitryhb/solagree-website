@@ -14,41 +14,51 @@ const mountNewsIndex = () => mount(NewsIndexPage, {
     stubs: {
       SiteFooter: {
         template: '<footer />'
+      },
+      UIcon: {
+        template: '<span class="icon" />'
       }
     }
   }
 })
 
 describe('News & Press index', () => {
-  it('renders the approved external media in Figma order with safe, accessible destinations', () => {
+  it('renders the featured release and remaining media from most to least recent', () => {
     const wrapper = mountNewsIndex()
     const cards = wrapper.findAll('.news-card')
     const destinationLinks = wrapper.findAll<HTMLAnchorElement>('.news-card__link')
 
+    expect(wrapper.get('.news-feature__title').text()).toBe('SOLAGREE® Announces Free Partner Network Platform for CDFAs and Family Law Attorneys Seeking Human-Centric Alternatives to Dispute Resolution')
+    expect(wrapper.get('.news-feature__link').text()).toContain('Read the Full Release')
     expect(cards).toHaveLength(4)
     expect(cards.map(card => card.get('.news-card__title').text())).toEqual([
-      'Rethinking Divorce: Inside the Solagree Process with Amanda Mason ↗',
-      'Solagree - An Alternative to Litigation with Amanda Mason ↗',
-      'The Divorce You Deserve: Peaceful, Private, and Professional ↗',
-      'Family Court Is Broken: Former Divorce Lawyer Amanda Mason on Attorney Red Flags, Divorce Advice & Healing After Divorce ↗'
+      'Family Court Is Broken: Former Divorce Lawyer Amanda Mason on Attorney Red Flags, Divorce Advice & Healing After Divorce',
+      'Rethinking Divorce: Inside the Solagree Process with Amanda Mason',
+      'Solagree - An Alternative to Litigation with Amanda Mason',
+      'The Divorce You Deserve: Peaceful, Private, and Professional'
     ])
     expect(cards.map(card => card.get('.news-card__source').text().split('•')[0]?.trim())).toEqual([
+      'Divorcing Strong Podcast',
       'Doing Divorce Right Podcast',
       'The Gray Divorce Podcast',
-      'The CDFA Hotline Podcast',
-      'Divorcing Strong Podcast'
+      'The CDFA Hotline Podcast'
     ])
     expect(destinationLinks).toHaveLength(4)
     expect(destinationLinks.every(link => link.attributes('href')?.startsWith('https://'))).toBe(true)
     expect(destinationLinks.every(link => link.attributes('target') === '_blank')).toBe(true)
     expect(destinationLinks.every(link => link.attributes('rel') === 'noopener noreferrer')).toBe(true)
     expect(destinationLinks.every(link => link.attributes('aria-label')?.includes('opens in a new tab'))).toBe(true)
+    expect(wrapper.text()).not.toContain('↗')
+    expect(destinationLinks.every(link => link.text().includes('→'))).toBe(true)
   })
 
   it('renders the approved decorative publisher art without a fallback or redundant announcement', () => {
     const wrapper = mountNewsIndex()
     const images = wrapper.findAll<HTMLImageElement>('.news-card .blog-media img')
+    const featureImage = wrapper.get<HTMLImageElement>('.news-feature .blog-media img')
 
+    expect(featureImage.attributes('src')).toBe('/images/news-feature-partner-network.webp')
+    expect(featureImage.attributes('alt')).toBe('')
     expect(images).toHaveLength(4)
     expect(images.every(image => image.attributes('alt') === '')).toBe(true)
     expect(wrapper.findAll('.news-card .blog-media--contain')).toHaveLength(4)

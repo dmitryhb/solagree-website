@@ -3,6 +3,9 @@ import type {
   InitialConsultBookingTrackingContext
 } from '#shared/initial-consult-booking'
 
+export const initialConsultCalOrigin = 'https://solagree.cal.com'
+export const initialConsultCalEmbedScriptUrl = `${initialConsultCalOrigin}/embed.js`
+
 /** Cal.com listener registration used by the inline booking embed. */
 export interface CalComEmbedListener {
   action: 'linkReady' | 'linkFailed'
@@ -16,9 +19,16 @@ export interface CalComEmbedInlineOptions {
   config: InitialConsultBookingTrackingContext
 }
 
+/** Cal.com UI options that keep the embedded booker focused on date and time selection. */
+export interface CalComEmbedUiOptions {
+  hideEventTypeDetails: true
+  layout: 'month_view'
+}
+
 /** Minimal Cal.com namespace API required to render and clean up an inline booking embed. */
 export interface CalComEmbedNamespace {
   (method: 'on' | 'off', options: CalComEmbedListener): void
+  (method: 'ui', options: CalComEmbedUiOptions): void
   (method: 'inline', options: CalComEmbedInlineOptions): void
 }
 
@@ -77,7 +87,7 @@ export const createCalComBookingEmbedController = (
     const client = createClient()
     const namespace = `solagree-initial-consult-${event.id}-${mountId}`
 
-    client('init', namespace, { origin: 'https://cal.com' })
+    client('init', namespace, { origin: initialConsultCalOrigin })
 
     const namespacedClient = client.ns[namespace]
 
@@ -102,6 +112,10 @@ export const createCalComBookingEmbedController = (
       namespacedClient('off', { action: 'linkReady', callback: notifyReady })
       namespacedClient('off', { action: 'linkFailed', callback: notifyFailed })
     }
+    namespacedClient('ui', {
+      hideEventTypeDetails: true,
+      layout: 'month_view'
+    })
     namespacedClient('inline', {
       calLink: event.eventPath,
       elementOrSelector: host,

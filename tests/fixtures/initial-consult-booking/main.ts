@@ -8,11 +8,11 @@ import {
 Object.assign(globalThis, { nextTick, onBeforeUnmount, onMounted, ref, watch })
 
 const events = resolveInitialConsultBookingEvents({
-  firstAvailableEventPath: 'solagree/initial-consults/initial-consult',
-  tajEventPath: 'solagree/initial-consults/initial-consult-taj',
-  stacieEventPath: 'solagree/initial-consults/initial-consult-stacie',
-  jessicaEventPath: 'solagree/initial-consults/initial-consult-jessica',
-  jamesEventPath: 'solagree/initial-consults/initial-consult-james'
+  firstAvailableEventPath: 'initial-consults/initial-consult',
+  tajEventPath: 'initial-consults/initial-consult-taj',
+  stacieEventPath: 'initial-consults/initial-consult-stacie',
+  jessicaEventPath: 'initial-consults/initial-consult-jessica',
+  jamesEventPath: 'initial-consults/initial-consult-james'
 })
 const firstEvent = events[0]
 

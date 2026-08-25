@@ -4,7 +4,10 @@ import type {
   InitialConsultBookingEvent,
   InitialConsultBookingTrackingContext
 } from '#shared/initial-consult-booking'
-import { createCalComBookingEmbedController } from '~/utils/calcom-booking-embed'
+import {
+  createCalComBookingEmbedController,
+  initialConsultCalEmbedScriptUrl
+} from '~/utils/calcom-booking-embed'
 
 type EmbedStatus = 'loading' | 'ready' | 'error'
 
@@ -20,7 +23,7 @@ let loadTimeout: number | undefined
 let activeMountId = 0
 
 const bookingController = createCalComBookingEmbedController(
-  () => EmbedSnippet(),
+  () => EmbedSnippet(initialConsultCalEmbedScriptUrl),
   {
     onReady: () => {
       embedStatus.value = 'ready'
@@ -94,10 +97,9 @@ onBeforeUnmount(() => {
           {{ event.label }}
         </p>
         <h2 id="calcom-booking-title">
-          Choose a time
+          Choose a date and time
         </h2>
       </div>
-      <p>Phone appointments are currently available. Cal.com collects availability, booking questions, and payment securely.</p>
     </div>
 
     <p

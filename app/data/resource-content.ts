@@ -11,6 +11,29 @@ import type { ResourceContentEntry } from '#shared/types/resource-content'
  */
 export const resourceContentEntries = [
   {
+    author: 'StreetInsider',
+    category: 'Press Release',
+    externalUrl: 'https://www.streetinsider.com/Press+Releases/SOLAGREE%C2%AE+Announces+Free+Partner+Network+Platform+for+CDFAs+and+Family+Law+Attorneys+Seeking+Human-Centric+Alternatives+to+Dispute+Resolution/26688542.html',
+    featured: true,
+    featuredImage: '/images/news-feature-partner-network.webp',
+    kind: 'news',
+    linkMode: 'external',
+    publishedAt: '2026-06-25',
+    seo: {
+      description: 'SOLAGREE launches its free Partner Network platform for family law attorneys and Certified Divorce Financial Analysts.',
+      title: 'SOLAGREE Announces Free Partner Network Platform for CDFAs and Family Law Attorneys'
+    },
+    slug: 'solagree-announces-free-partner-network-platform',
+    social: {
+      description: 'SOLAGREE launches its free Partner Network platform for family law attorneys and Certified Divorce Financial Analysts.',
+      image: '/images/news-feature-partner-network.webp',
+      title: 'SOLAGREE Announces Free Partner Network Platform for CDFAs and Family Law Attorneys'
+    },
+    status: 'published',
+    summary: 'At this week’s 2026 National Family Law Conference, SOLAGREE® is proud to announce the launch of its new, free Partner Network platform for family law attorneys and Certified Divorce Financial Analysts® (CDFAs).',
+    title: 'SOLAGREE® Announces Free Partner Network Platform for CDFAs and Family Law Attorneys Seeking Human-Centric Alternatives to Dispute Resolution'
+  },
+  {
     author: 'Doing Divorce Right Podcast',
     category: 'Podcast',
     externalUrl: 'https://divorcemediationattorneyscottlevin.buzzsprout.com/2243813/episodes/19055580-rethinking-divorce-inside-the-solagree-process-with-amanda-mason?t=0',
@@ -101,6 +124,8 @@ export const resourceContentEntries = [
   },
   {
     author: 'Amanda Mason',
+    authorImage: '/images/amanda.webp',
+    authorRole: 'CEO & Founder, SOLAGREE®',
     body: `After I graduated from law school, I spent years as a litigator fighting in the traditional family court system. I spent the early part of my career doing exactly what I was trained to do: fighting hard, pushing forward, and winning cases. But even when my clients “won,” I saw the immense collateral damage left behind.
 
 Once I personally experienced the trauma of taking the stand in my own custody trial, the reality became undeniable. The traditional, adversarial court system is a failing model that leaves families financially and emotionally drained. Fundamentally, it is an environment where someone is pitted versus someone, breeding an atmosphere of hostility and paranoia.
@@ -117,29 +142,41 @@ At our core, we are mammals. We crave and need a human touch, especially during 
 
 Algorithms, no matter how advanced they may be, cannot read a room or understand emotional complexity. An AI cannot see the anxiety in a spouse’s face during a mediation session, nor can it validate a parent’s unique values and goals. When you are existing in a heightened state of distrust where every word feels like a trap, you need an objective human professional to guide you back to a rational headspace. Human professionals can dial down the anxiety at the outset and get people thinking more positively, something a computer prompt simply cannot do.
 
+![Two people reviewing and annotating a legal document](/images/blog-four-reasons-ai-divorce-document-review.webp)
+
 ## 2. The Margin of Error is Terrifying
 
 While AI might get the broad strokes right, the 5-40 percent that it gets wrong should be absolutely terrifying to anyone relying on it for a legal resolution. Divorce isn’t just paperwork; it dictates the division of your hard-earned assets, your future financial stability, and most importantly, the custody and support of your children.
 
 A hallucination by an AI platform or a misunderstanding of nuanced state law could result in a disastrous final document. If your automated AI divorce makes a critical error, you will likely end up right back in the same expensive, backlogged court system you were trying to avoid, paying an attorney tens of thousands of dollars to try and untangle the mess. I went to law school to protect people’s rights, and prioritizing flesh-and-blood clients over data sets requires real human diligence.
 
+:::callout
 ## Is Solagree Right For You?
-
 Take our quick 2-minute quiz to see if Solagree’s divorce framework is the right fit for your situation.
-
 [Take The Quiz](/quiz)
+:::
 
 ## 3. Algorithms Cannot Craft Creative Compromises
 
-AI platforms assume that you and your spouse can already agree on everything. But what happens when you don’t? Even the most “amicable” couples usually have complex financial or parenting issues to resolve. Artificial intelligence cannot craft creative compromises that fit a family’s specific needs and goals. Only humans can do that. In a properly structured human process, you start by working with a Certified Divorce Financial Analyst (CDFA) who helps you deeply understand what’s actually in play financially, giving you the power to design your own outcomes. Likewise, a custody intake specialist can help validate each parent’s styles, often revealing that parents have more commonalities than differences. A skilled human mediator can then bridge the gap on difficult issues. An AI simply outputs standard templates based on algorithms; it cannot brainstorm an outside-the-box solution that saves your family’s specific business or protects a unique retirement plan.
+AI platforms assume that you and your spouse can already agree on everything. But what happens when you don’t? Even the most “amicable” couples usually have complex financial or parenting issues to resolve.
+
+Artificial intelligence cannot craft creative compromises that fit a family’s specific needs and goals. Only humans can do that. In a properly structured human process, you start by working with a Certified Divorce Financial Analyst (CDFA) who helps you deeply understand what’s actually in play financially, giving you the power to design your own outcomes. Likewise, a custody intake specialist can help validate each parent’s styles, often revealing that parents have more commonalities than differences. A skilled human mediator can then bridge the gap on difficult issues. An AI simply outputs standard templates based on algorithms; it cannot brainstorm an outside-the-box solution that saves your family’s specific business or protects a unique retirement plan.
+
+![A mother and daughter sharing a reassuring embrace](/images/blog-four-reasons-ai-divorce-family-embrace.webp)
 
 ## 4. AI Lacks the Binding “Safety Net” Needed for True Peace of Mind
 
-The biggest vulnerability of any purely automated or unguided negotiation is that there is no safety net. With traditional “naked” mediation, collaborative law, or DIY AI tools, either spouse can walk away at any time. As long as that threat exists, neither party can truly relax or operate outside of a defensive posture. A human-centric, phased approach—specifically mediated arbitration—solves this. In this method, couples commit to a binding process from the start. If you cannot resolve a specific issue through mediation, a vetted, private human arbitrator steps in to make a legally binding decision based on your state’s laws. This ensures that no single person can blow the whole thing up and drag it out for years. Knowing that this human safety net is in place organically lowers anxiety and pulls clients out of their defensive fight-or-flight mentality, allowing them to engage in dignified, rational compromise. An AI program cannot guarantee that your high-conflict spouse won’t suddenly abandon the software and hire a pitbull attorney.
+The biggest vulnerability of any purely automated or unguided negotiation is that there is no safety net. With traditional “naked” mediation, collaborative law, or DIY AI tools, either spouse can walk away at any time. As long as that threat exists, neither party can truly relax or operate outside of a defensive posture.
+
+A human-centric, phased approach—specifically mediated arbitration—solves this. In this method, couples commit to a binding process from the start. If you cannot resolve a specific issue through mediation, a vetted, private human arbitrator steps in to make a legally binding decision based on your state’s laws. This ensures that no single person can blow the whole thing up and drag it out for years. Knowing that this human safety net is in place organically lowers anxiety and pulls clients out of their defensive fight-or-flight mentality, allowing them to engage in dignified, rational compromise. An AI program cannot guarantee that your high-conflict spouse won’t suddenly abandon the software and hire a pitbull attorney.
 
 ## Future-Proofing Your Divorce
 
-I entirely understand the desire to escape the nightmare of traditional litigation. As a seasoned practitioner who has spent years watching the adversarial system rip everyone apart, I know exactly why couples are searching for a faster, flat-fee alternative. But the answer is not to hand your family’s future over to an algorithm. To truly future-proof the profession and protect families, we must pivot toward human-centric, highly efficient alternative resolution frameworks. By utilizing a structured model that integrates CDFAs, skilled mediators, and private arbitrators, you can achieve the virtual, streamlined, and cost-predictable divorce you want—without sacrificing the vital emotional support and legal integrity you need. At the end of the day, divorcing strong means maintaining who you are at the core of your soul all the way through to the end of the process. You deserve a divorce framework that prioritizes your dignity, neutrality, and humanity. Robots may be fast, but when it comes to your family, your finances, and your peace of mind, there is simply no substitute for the right humans.
+I entirely understand the desire to escape the nightmare of traditional litigation. As a seasoned practitioner who has spent years watching the adversarial system rip everyone apart, I know exactly why couples are searching for a faster, flat-fee alternative.
+
+But the answer is not to hand your family’s future over to an algorithm. To truly future-proof the profession and protect families, we must pivot toward human-centric, highly efficient alternative resolution frameworks. By utilizing a structured model that integrates CDFAs, skilled mediators, and private arbitrators, you can achieve the virtual, streamlined, and cost-predictable divorce you want—without sacrificing the vital emotional support and legal integrity you need.
+
+At the end of the day, divorcing strong means maintaining who you are at the core of your soul all the way through to the end of the process. You deserve a divorce framework that prioritizes your dignity, neutrality, and humanity. Robots may be fast, but when it comes to your family, your finances, and your peace of mind, there is simply no substitute for the right humans.
 
 *This content originally appeared at [The Divorce Magazine](https://www.thedivorcemagazine.co.uk/4-reasons-you-shouldnt-use-ai-to-get-divorced/).*`,
     category: 'Modern Divorce & AI',
@@ -148,6 +185,10 @@ I entirely understand the desire to escape the nightmare of traditional litigati
     kind: 'article',
     linkMode: 'internal',
     publishedAt: '2026-05-15',
+    relatedArticleSlugs: [
+      'ai-divorce-family-law',
+      'relieving-uneasy-feeling-resolving-divorce'
+    ],
     seo: {
       description: 'Four reasons a human-centered divorce process can better address emotional complexity, legal risk, creative problem-solving, and binding resolution.',
       title: '4 Reasons You Shouldn’t Use AI to Get Divorced'
@@ -160,10 +201,13 @@ I entirely understand the desire to escape the nightmare of traditional litigati
     },
     status: 'published',
     summary: 'Four reasons a human-centered divorce process can better address emotional complexity, legal risk, creative problem-solving, and binding resolution.',
-    title: '4 Reasons You Shouldn’t Use AI to Get Divorced'
+    title: '4 Reasons You Shouldn’t Use AI to Get Divorced',
+    updatedAt: '2026-03-17'
   },
   {
     author: 'Amanda Mason',
+    authorImage: '/images/amanda.webp',
+    authorRole: 'CEO & Founder, SOLAGREE®',
     category: 'Mediation & Arbitration',
     body: `For anyone navigating the overwhelming transition of separation, finding a pathway that preserves your peace, your finances, and your family’s dignity is paramount. You are looking for a new start, not a multi-year battle.
 
@@ -236,6 +280,8 @@ NOTE: The foregoing article is not intended to give legal advice. All processes 
   },
   {
     author: 'Amanda Mason',
+    authorImage: '/images/amanda.webp',
+    authorRole: 'CEO & Founder, SOLAGREE®',
     body: `Most of us went to law school to serve the public, protect people’s rights, and make a living while doing so. If we are going to continue to prioritize people and families as flesh and blood clients and not data sets, it is up to the law community to adapt our skillsets diligently to these unique and rapidly evolving times. For family law practices in particular, the conditions are right for automated “AI Divorce” to fill a vacuum that threatens to commoditize marriage dissolution.
 
 It is more widely accepted than ever that the traditional, adversarial court system is a failing model that leaves families financially and emotionally drained. All of the demographics we see in our divorce practices – the wealthy, the “gray” divorcées, (though can we please stop with that term?), millennials, minorities – all are increasingly rejecting that approach.
@@ -286,6 +332,8 @@ By prioritizing dignity, neutrality, and rational compromise over adversarial ba
   },
   {
     author: 'Amanda Mason',
+    authorImage: '/images/amanda.webp',
+    authorRole: 'CEO & Founder, SOLAGREE®',
     body: `Anxiety is an unavoidable fact of divorce. In addition to grieving the end of a married relationship, you are stuck wondering about legal bills, getting financial answers, whether your parenting values will be honored, and how soon you’ll just have all of this behind you. Worse yet, you know the kids can sense the tension and feel stress, also.
 
 A healthy legal process will get these questions answered as early as possible. The ordinary legal approaches to divorce and even most alternatives don’t do that. Thankfully, a carefully managed (by humans!) process can reduce these normal fears and empower you with knowledge from the beginning.
@@ -321,6 +369,12 @@ In this phase, you will try to work through any open disagreements with a neutra
 
 And if you still don’t agree on everything, not to worry. Your kind, friendly, and knowledgeable arbitrator can close the gap and resolve lingering issues, all while keeping the entire process out of the public court docket.
 
+:::callout
+## Is Solagree Right For You?
+Take our quick 2-minute quiz to see if Solagree’s divorce framework is the right fit for your situation.
+[Take The Quiz](/quiz)
+:::
+
 Divorce coaches, knowledgeable Certified Divorce Real Estate professionals, and other experts can enhance the entire experience described above. Attorney representation can also happen the whole way through, in addition to your work, with the neutral attorney mediators and arbitrators.
 
 All of these steps should be guided by the right people familiar with navigating in their lane and based on your state’s laws.
@@ -346,6 +400,46 @@ The fact is that children of every age experiencing divorce need parents who are
     status: 'published',
     summary: 'Amanda Mason describes how a structured, human-guided divorce process can reduce uncertainty through education, mediation, and arbitration.',
     title: 'Relieving That Uneasy Feeling When Resolving Divorce'
+  },
+  {
+    author: 'Amanda Mason',
+    authorImage: '/images/amanda.webp',
+    authorRole: 'CEO & Founder, SOLAGREE®',
+    body: `A healthy divorce does not mean that every issue feels easy or that you and your spouse agree on each point. It means that you work toward clear terms while limiting needless conflict and respecting your roles as parents. For many families, the way a divorce unfolds may affect how well parents communicate after the case ends. A hostile court fight could deepen resentment, while a more respectful process might support a healthier co-parenting relationship.
+
+## How court conflict may affect co-parenting
+
+Court action serves an important purpose when parents cannot settle key issues or when safety concerns exist. Still, contested cases often require each side to present claims, challenge facts and ask a judge to decide the result. That setting may increase tension between you and the other parent.
+
+The strain may continue even after the case ends. You will still need to address school plans, medical needs and changes in your child’s life. When each concern becomes a contest, routine discussions could become harder. Ongoing conflict between parents may increase the risk of emotional and social problems for children.
+
+## How the SOLAGREE process offers another path
+
+SOLAGREE uses a structured process that includes an initial review, mediation and arbitration when parents leave issues unresolved. Parenting professionals help you identify concerns and develop possible terms. A neutral mediator then guides the discussion. If you do not settle every issue, an arbitrator decides the remaining matters under the terms of the process.
+
+This approach may give you more room to share facts and seek common ground. It does not remove every disagreement, but it could help you handle conflict in a more useful way. The communication patterns you build during the divorce may also support calmer talks after the case ends.
+
+## Prepare for a healthier co-parenting future
+
+You cannot take away every hard feeling from divorce. You can, however, consider how the way you resolve disputes might affect later parenting talks. Understanding the lasting effects of conflict and preparing for a respectful process may help you build a steadier co-parenting relationship focused on your child.`,
+    category: 'Mindset & Wellness',
+    featuredImage: '/images/blog-healthy-divorce-future-co-parenting.webp',
+    kind: 'article',
+    linkMode: 'internal',
+    publishedAt: '2026-08-23',
+    seo: {
+      description: 'Learn how a respectful, structured divorce process can reduce conflict and support healthier communication between future co-parents.',
+      title: 'How does a healthy divorce support future co-parenting?'
+    },
+    slug: 'healthy-divorce-future-co-parenting',
+    social: {
+      description: 'Learn how a respectful, structured divorce process can reduce conflict and support healthier communication between future co-parents.',
+      image: '/images/blog-healthy-divorce-future-co-parenting.webp',
+      title: 'How does a healthy divorce support future co-parenting?'
+    },
+    status: 'published',
+    summary: 'A respectful, structured divorce process can reduce conflict and support healthier communication between future co-parents.',
+    title: 'How does a healthy divorce support future co-parenting?'
   }
 ] as const satisfies readonly ResourceContentEntry[]
 

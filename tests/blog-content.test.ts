@@ -56,6 +56,31 @@ describe('Blog content foundation', () => {
     })
   })
 
+  it('parses repository-managed inline images and CTA callouts', () => {
+    const blocks = parseArticleBody(`![A reassuring family moment](/images/family.webp)
+
+:::callout
+## Is Solagree Right For You?
+Take our quick quiz to see whether the process fits your situation.
+[Take The Quiz](/quiz)
+:::`)
+
+    expect(blocks).toEqual([
+      {
+        alt: 'A reassuring family moment',
+        src: '/images/family.webp',
+        type: 'image'
+      },
+      {
+        actionHref: '/quiz',
+        actionLabel: 'Take The Quiz',
+        body: [{ type: 'text', value: 'Take our quick quiz to see whether the process fits your situation.' }],
+        title: [{ type: 'text', value: 'Is Solagree Right For You?' }],
+        type: 'callout'
+      }
+    ])
+  })
+
   it('uses only published internal article paths in sitemap records and Article schema', () => {
     const publishedArticles = getPublishedArticles(blogArticleFixtures)
     const currentArticle = publishedArticles[0]

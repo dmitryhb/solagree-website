@@ -15,7 +15,14 @@ if (!article) {
 const runtimeConfig = useRuntimeConfig()
 const articlePath = getArticlePath(article)
 const articleUrl = `${runtimeConfig.public.siteUrl.replace(/\/+$/, '')}${articlePath}`
-const relatedArticles = publishedArticles.filter(candidate => candidate.slug !== article.slug).slice(0, 3)
+const curatedRelatedArticles = article.relatedArticleSlugs?.flatMap((relatedSlug) => {
+  const relatedArticle = publishedArticles.find(candidate => candidate.slug === relatedSlug)
+
+  return relatedArticle ? [relatedArticle] : []
+})
+const relatedArticles = curatedRelatedArticles?.length
+  ? curatedRelatedArticles.slice(0, 2)
+  : publishedArticles.filter(candidate => candidate.slug !== article.slug).slice(0, 2)
 
 useSolagreeSeo({
   title: article.seo.title,

@@ -4,16 +4,17 @@ import {
   createCalComBookingEmbedController,
   type CalComEmbedClient,
   type CalComEmbedListener,
-  type CalComEmbedNamespace
+  type CalComEmbedNamespace,
+  type CalComEmbedUiOptions
 } from '../app/utils/calcom-booking-embed.ts'
 import { resolveInitialConsultBookingEvents } from '../shared/initial-consult-booking.ts'
 
 const events = resolveInitialConsultBookingEvents({
-  firstAvailableEventPath: 'solagree/initial-consults/initial-consult',
-  tajEventPath: 'solagree/initial-consults/initial-consult-taj',
-  stacieEventPath: 'solagree/initial-consults/initial-consult-stacie',
-  jessicaEventPath: 'solagree/initial-consults/initial-consult-jessica',
-  jamesEventPath: 'solagree/initial-consults/initial-consult-james'
+  firstAvailableEventPath: 'initial-consults/initial-consult',
+  tajEventPath: 'initial-consults/initial-consult-taj',
+  stacieEventPath: 'initial-consults/initial-consult-stacie',
+  jessicaEventPath: 'initial-consults/initial-consult-jessica',
+  jamesEventPath: 'initial-consults/initial-consult-james'
 })
 
 if (events.length !== 5) {
@@ -21,7 +22,7 @@ if (events.length !== 5) {
 }
 
 interface CalComCall {
-  method: 'init' | 'on' | 'off' | 'inline'
+  method: 'init' | 'on' | 'off' | 'ui' | 'inline'
   namespace?: string
   options: unknown
 }
@@ -42,8 +43,8 @@ const createEmbedClientSpy = (): {
       listeners.set(namespace, namespaceListeners)
 
       namespaces[namespace] = ((
-        namespaceMethod: 'on' | 'off' | 'inline',
-        namespaceOptions: CalComEmbedListener | { calLink: string }
+        namespaceMethod: 'on' | 'off' | 'ui' | 'inline',
+        namespaceOptions: CalComEmbedListener | CalComEmbedUiOptions | { calLink: string }
       ): void => {
         calls.push({ method: namespaceMethod, namespace, options: namespaceOptions })
 
@@ -90,6 +91,14 @@ test('remounts each Cal.com event once and ignores callbacks from replaced embed
   }
 
   assert.equal(host.replaceChildrenCalls, events.length)
+  assert.deepEqual(
+    cal.calls.filter(call => call.method === 'init').map(call => call.options),
+    events.map(() => ({ origin: 'https://solagree.cal.com' }))
+  )
+  assert.deepEqual(
+    cal.calls.filter(call => call.method === 'ui').map(call => call.options),
+    events.map(() => ({ hideEventTypeDetails: true, layout: 'month_view' }))
+  )
   assert.deepEqual(
     cal.calls.filter(call => call.method === 'inline').map(call => [call.namespace, (call.options as { calLink: string }).calLink]),
     mounts.map(({ event, namespace }) => [namespace, event.eventPath])

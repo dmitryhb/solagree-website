@@ -18,9 +18,16 @@ defineProps<{
   <main class="blog-article-page">
     <article class="blog-article">
       <header class="blog-article__header section-shell section-shell--narrow">
-        <p class="blog-article__eyebrow">
-          Blog <span aria-hidden="true">•</span> {{ formatArticleDate(article.publishedAt) }}
-        </p>
+        <NuxtLink
+          class="blog-article__back-link blog-article__back-link--top"
+          to="/blog"
+        >
+          <UIcon
+            name="i-heroicons-arrow-left-20-solid"
+            aria-hidden="true"
+          />
+          Back to all articles
+        </NuxtLink>
         <h1 class="blog-article__title">
           {{ article.title }}
         </h1>
@@ -34,26 +41,48 @@ defineProps<{
       </div>
 
       <div class="blog-article__layout section-shell section-shell--narrow">
-        <aside class="blog-article__aside">
-          <p class="blog-article__author">
-            Written by {{ article.author }}
-          </p>
-          <BlogShareControls
-            :title="article.title"
-            :url="shareUrl"
-          />
-        </aside>
         <div class="blog-article__body">
-          <p class="blog-article__summary">
-            {{ article.summary }}
-          </p>
+          <div class="blog-article__meta">
+            <span class="blog-article__tag">
+              <span aria-hidden="true">•</span> {{ article.category || 'Blog' }}
+            </span>
+            <span class="blog-article__updated">
+              Last Updated:
+              <time :datetime="article.updatedAt || article.publishedAt">
+                {{ formatArticleDate(article.updatedAt || article.publishedAt) }}
+              </time>
+            </span>
+          </div>
           <ArticleRichText :body="article.body" />
-          <NuxtLink
-            class="blog-article__back-link"
-            to="/blog"
-          >
-            <span aria-hidden="true">←</span> Back to all articles
-          </NuxtLink>
+
+          <footer class="blog-article__footer">
+            <p class="blog-article__author-label">
+              Meet the author
+            </p>
+            <div class="blog-article__author-card">
+              <img
+                v-if="article.authorImage"
+                :src="article.authorImage"
+                :alt="article.author"
+                width="48"
+                height="48"
+                loading="lazy"
+                decoding="async"
+              >
+              <div>
+                <p class="blog-article__author-name">
+                  {{ article.author }}
+                </p>
+                <p v-if="article.authorRole" class="blog-article__author-role">
+                  {{ article.authorRole }}
+                </p>
+              </div>
+            </div>
+            <BlogShareControls
+              :title="article.title"
+              :url="shareUrl"
+            />
+          </footer>
         </div>
       </div>
     </article>

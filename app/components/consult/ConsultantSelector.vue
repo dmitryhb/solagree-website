@@ -53,9 +53,8 @@ const handleOptionKeydown = (event: KeyboardEvent, index: number): void => {
   >
     <div class="consultant-selector__header">
       <h2 id="consultant-selector-title">
-        Choose your consultation
+        Choose your consultant
       </h2>
-      <p>Choose First Available or a specific consultant.</p>
     </div>
 
     <div
@@ -82,6 +81,10 @@ const handleOptionKeydown = (event: KeyboardEvent, index: number): void => {
           class="consultant-selector__headshot"
           :src="event.profile.headshotUrl"
           :alt="event.label"
+          width="64"
+          height="64"
+          loading="lazy"
+          decoding="async"
         >
         <span class="consultant-selector__option-copy">
           <span class="consultant-selector__option-title">{{ event.label }}</span>

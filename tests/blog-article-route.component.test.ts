@@ -79,6 +79,10 @@ const mountArticleRoute = () => mount(BlogArticleRoute, {
         props: ['to'],
         template: '<a :href="to"><slot /></a>'
       },
+      UIcon: {
+        props: ['name'],
+        template: '<span :data-icon="name" />'
+      },
       SiteFooter: {
         template: '<footer />'
       }
@@ -111,6 +115,10 @@ describe('Blog article route runtime', () => {
     expect(sourceLink.element.parentElement?.tagName).toBe('STRONG')
     expect(wrapper.find('a[href^="javascript:"]').exists()).toBe(false)
     expect(wrapper.text()).toContain('Unsafe [source](javascript:alert(1)).')
+    expect(wrapper.get('.blog-article__back-link--top').text()).toContain('Back to all articles')
+    expect(wrapper.get('.blog-article__meta').text()).toContain('Last Updated: August 21, 2026')
+    expect(wrapper.get('.blog-article__author-card').text()).toContain('Amanda Mason')
+    expect(wrapper.find('.blog-article__aside').exists()).toBe(false)
     expect(warnSpy.mock.calls.some(args => args.join(' ').includes('Failed to resolve component'))).toBe(false)
   })
 

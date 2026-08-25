@@ -2,8 +2,11 @@ import type { ArticleInlineToken, ArticleRichTextBlock } from '~/types/article-r
 
 const INLINE_MARKUP_PATTERN = /(\[([^\]]+)\]\(([^\s)]+)\)|\*\*([^*]+)\*\*|\*([^*]+)\*)/g
 const HEADING_PATTERN = /^(#{1,4})\s+(.+)$/
+const IMAGE_PATTERN = /^!\[([^\]]*)\]\(([^\s)]+)\)$/
 const ORDERED_ITEM_PATTERN = /^\d+\.\s+(.+)$/
 const UNORDERED_ITEM_PATTERN = /^[-*]\s+(.+)$/
+const CALLOUT_START = ':::callout'
+const CALLOUT_END = ':::'
 
 const isSafeHref = (href: string): boolean => {
   if ((href.startsWith('/') && !href.startsWith('//')) || href.startsWith('#')) {
@@ -74,6 +77,47 @@ export const parseArticleBody = (body: string): ArticleRichTextBlock[] => {
       continue
     }
 
+    if (line === CALLOUT_START) {
+      const calloutLines: string[] = []
+      lineIndex += 1
+
+      while (lineIndex < lines.length) {
+        const candidate = (lines[lineIndex] ?? '').trim()
+        lineIndex += 1
+
+        if (candidate === CALLOUT_END) {
+          break
+        }
+
+        if (candidate) {
+          calloutLines.push(candidate)
+        }
+      }
+
+      const title = calloutLines[0]?.replace(HEADING_PATTERN, '$2') ?? ''
+      const body = calloutLines[1] ?? ''
+      const actionMatch = calloutLines[2]?.match(/^\[([^\]]+)\]\(([^\s)]+)\)$/)
+
+      if (title && body && actionMatch?.[1] && actionMatch[2] && isSafeHref(actionMatch[2])) {
+        blocks.push({
+          actionHref: actionMatch[2],
+          actionLabel: actionMatch[1],
+          body: parseArticleInlineContent(body),
+          title: parseArticleInlineContent(title),
+          type: 'callout'
+        })
+      }
+
+      continue
+    }
+
+    const image = line.match(IMAGE_PATTERN)
+    if (image?.[2] && isSafeHref(image[2])) {
+      blocks.push({ alt: image[1] ?? '', src: image[2], type: 'image' })
+      lineIndex += 1
+      continue
+    }
+
     const heading = line.match(HEADING_PATTERN)
     if (heading) {
       const level = Math.max(2, Math.min(4, heading[1]?.length ?? 2)) as 2 | 3 | 4
@@ -108,7 +152,7 @@ export const parseArticleBody = (body: string): ArticleRichTextBlock[] => {
 
     while (lineIndex < lines.length) {
       const candidate = (lines[lineIndex] ?? '').trim()
-      if (!candidate || HEADING_PATTERN.test(candidate) || ORDERED_ITEM_PATTERN.test(candidate) || UNORDERED_ITEM_PATTERN.test(candidate)) {
+      if (!candidate || candidate === CALLOUT_START || IMAGE_PATTERN.test(candidate) || HEADING_PATTERN.test(candidate) || ORDERED_ITEM_PATTERN.test(candidate) || UNORDERED_ITEM_PATTERN.test(candidate)) {
         break
       }
 

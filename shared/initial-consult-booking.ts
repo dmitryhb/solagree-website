@@ -39,17 +39,34 @@ type InitialConsultEventDefinition = {
 
 const initialConsultEventDefinitions = [
   { id: 'first-available', label: 'First Available', configKey: 'firstAvailableEventPath' },
-  { id: 'taj', label: 'Taj Chiu', configKey: 'tajEventPath' },
-  { id: 'stacie', label: 'Stacie Martin', configKey: 'stacieEventPath' },
+  { id: 'taj', label: 'Taj Johnson Chiu', configKey: 'tajEventPath' },
+  { id: 'stacie', label: 'Stacie Sanders', configKey: 'stacieEventPath' },
   { id: 'jessica', label: 'Jessica Urash', configKey: 'jessicaEventPath' },
   { id: 'james', label: 'James Traub', configKey: 'jamesEventPath' }
 ] as const satisfies readonly InitialConsultEventDefinition[]
 
 /**
- * Reserved for client-approved role, bio, and headshot content.
- * Keeping this empty makes all current cards intentionally neutral.
+ * Client-approved biographies and headshots shown in the Initial Consult selector.
+ * First Available intentionally remains neutral because it represents the whole team.
  */
-export const initialConsultantProfileContent: Partial<Record<InitialConsultSelectionId, ConsultantProfileContent>> = {}
+export const initialConsultantProfileContent: Partial<Record<InitialConsultSelectionId, ConsultantProfileContent>> = {
+  taj: {
+    bio: 'Mediator, divorce & financial coach specializing in neurodivergent and special-needs families. LGBTQ+ affirming, judgment-free, money-savvy support.',
+    headshotUrl: '/images/initial-consult-taj-johnson-chiu.webp'
+  },
+  stacie: {
+    bio: 'Former family law paralegal turned client advocate—15+ years guiding clients through the legal and emotional sides of divorce with care.',
+    headshotUrl: '/images/initial-consult-stacie-sanders.webp'
+  },
+  jessica: {
+    bio: 'Faith-rooted divorce coach offering trauma-informed, compassionate support for emotional healing and healthy co-parenting through separation.',
+    headshotUrl: '/images/initial-consult-jessica-urash.webp'
+  },
+  james: {
+    bio: "Certified Divorce Coach & Kids-First Mediator helping parents avoid court conflict with calm, structured guidance focused on kids' wellbeing.",
+    headshotUrl: '/images/initial-consult-james-traub.webp'
+  }
+}
 
 const safeTrackingKeys = new Set([
   'ref',

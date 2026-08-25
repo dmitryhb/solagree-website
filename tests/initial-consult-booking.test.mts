@@ -9,11 +9,11 @@ import {
 } from '../shared/initial-consult-booking.ts'
 
 const configuredEvents: InitialConsultBookingRuntimeConfig = {
-  firstAvailableEventPath: 'solagree/initial-consults/initial-consult',
-  tajEventPath: 'solagree/initial-consults/initial-consult-taj',
-  stacieEventPath: 'solagree/initial-consults/initial-consult-stacie',
-  jessicaEventPath: 'solagree/initial-consults/initial-consult-jessica',
-  jamesEventPath: 'solagree/initial-consults/initial-consult-james'
+  firstAvailableEventPath: 'initial-consults/initial-consult',
+  tajEventPath: 'initial-consults/initial-consult-taj',
+  stacieEventPath: 'initial-consults/initial-consult-stacie',
+  jessicaEventPath: 'initial-consults/initial-consult-jessica',
+  jamesEventPath: 'initial-consults/initial-consult-james'
 }
 
 test('maps every Initial Consult selector option to its configured Cal.com event', () => {
@@ -22,17 +22,45 @@ test('maps every Initial Consult selector option to its configured Cal.com event
   assert.deepEqual(
     events.map(event => [event.id, event.label, event.eventPath]),
     [
-      ['first-available', 'First Available', 'solagree/initial-consults/initial-consult'],
-      ['taj', 'Taj Chiu', 'solagree/initial-consults/initial-consult-taj'],
-      ['stacie', 'Stacie Martin', 'solagree/initial-consults/initial-consult-stacie'],
-      ['jessica', 'Jessica Urash', 'solagree/initial-consults/initial-consult-jessica'],
-      ['james', 'James Traub', 'solagree/initial-consults/initial-consult-james']
+      ['first-available', 'First Available', 'initial-consults/initial-consult'],
+      ['taj', 'Taj Johnson Chiu', 'initial-consults/initial-consult-taj'],
+      ['stacie', 'Stacie Sanders', 'initial-consults/initial-consult-stacie'],
+      ['jessica', 'Jessica Urash', 'initial-consults/initial-consult-jessica'],
+      ['james', 'James Traub', 'initial-consults/initial-consult-james']
     ]
   )
 
+  assert.equal(events[0]?.profile, undefined)
+  assert.deepEqual(events.slice(1).map(event => ({
+    id: event.id,
+    headshotUrl: event.profile?.headshotUrl,
+    bio: event.profile?.bio
+  })), [
+    {
+      id: 'taj',
+      headshotUrl: '/images/initial-consult-taj-johnson-chiu.webp',
+      bio: 'Mediator, divorce & financial coach specializing in neurodivergent and special-needs families. LGBTQ+ affirming, judgment-free, money-savvy support.'
+    },
+    {
+      id: 'stacie',
+      headshotUrl: '/images/initial-consult-stacie-sanders.webp',
+      bio: 'Former family law paralegal turned client advocate—15+ years guiding clients through the legal and emotional sides of divorce with care.'
+    },
+    {
+      id: 'jessica',
+      headshotUrl: '/images/initial-consult-jessica-urash.webp',
+      bio: 'Faith-rooted divorce coach offering trauma-informed, compassionate support for emotional healing and healthy co-parenting through separation.'
+    },
+    {
+      id: 'james',
+      headshotUrl: '/images/initial-consult-james-traub.webp',
+      bio: "Certified Divorce Coach & Kids-First Mediator helping parents avoid court conflict with calm, structured guidance focused on kids' wellbeing."
+    }
+  ])
+
   assert.equal(
     resolveInitialConsultBookingEvent(events, 'jessica')?.eventPath,
-    'solagree/initial-consults/initial-consult-jessica'
+    'initial-consults/initial-consult-jessica'
   )
 })
 
@@ -45,7 +73,7 @@ test('requires the complete validated event mapping before enabling the booking 
     ...configuredEvents,
     jamesEventPath: ''
   }).length, 0)
-  assert.equal(normalizeInitialConsultEventPath('solagree/initial-consults/initial-consult?name=Jane'), null)
+  assert.equal(normalizeInitialConsultEventPath('initial-consults/initial-consult?name=Jane'), null)
 })
 
 test('forwards only a compact non-identifying Cal.com tracking allowlist', () => {

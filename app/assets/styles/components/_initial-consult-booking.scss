@@ -19,7 +19,7 @@
 }
 
 .initial-consult-booking-page__intro {
-  max-width: 680px;
+  max-width: none;
 }
 
 .initial-consult-booking-page__intro h1,
@@ -30,20 +30,30 @@
 }
 
 .initial-consult-booking-page__intro h1 {
-  font-size: clamp(2.25rem, 4vw, 4rem);
+  font-size: clamp(2.25rem, 3.5vw, 3.25rem);
+  line-height: 1.08;
+  white-space: nowrap;
 }
 
 .initial-consult-booking-page__intro > p:last-child {
   max-width: 620px;
-  margin: 1rem 0 0;
+  margin: 0.65rem 0 0;
   color: var(--color-text-muted);
-  font-size: 1.0625rem;
-  line-height: 1.6;
+  font-size: 1rem;
+  line-height: 1.45;
 }
 
-.consultant-selector,
-.calcom-booking-embed {
-  margin-top: 3rem;
+.initial-consult-booking-page__workflow {
+  display: grid;
+  grid-template-columns: minmax(280px, 1fr) minmax(0, 2fr);
+  gap: clamp(1.75rem, 3.5vw, 3.5rem);
+  align-items: start;
+  margin-top: 2rem;
+}
+
+.initial-consult-booking-page__calendar {
+  min-width: 0;
+  scroll-margin-top: 1rem;
 }
 
 .consultant-selector__header {
@@ -51,16 +61,13 @@
   gap: 0.5rem;
 }
 
-.consultant-selector__header p,
-.calcom-booking-embed__header p {
-  margin: 0;
-  color: var(--color-text-muted);
-  line-height: 1.55;
+.consultant-selector__header h2 {
+  font-weight: 700;
 }
 
 .consultant-selector__options {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: 1fr;
   gap: 0.75rem;
   margin-top: 1.25rem;
 }
@@ -76,6 +83,10 @@
   cursor: pointer;
   text-align: left;
   transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+.consultant-selector__option:first-child {
+  min-height: 76px;
 }
 
 .consultant-selector__option:hover {
@@ -117,6 +128,7 @@
 }
 
 .consultant-selector__headshot {
+  flex: 0 0 64px;
   width: 64px;
   height: 64px;
   margin: 1rem 0 1rem 1rem;
@@ -125,15 +137,12 @@
 }
 
 .calcom-booking-embed {
-  border-top: 1px solid rgba(62, 64, 89, 0.18);
-  padding-top: 2rem;
+  min-width: 0;
 }
 
 .calcom-booking-embed__header {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr);
-  gap: 1.5rem;
-  align-items: end;
+  gap: 0.35rem;
 }
 
 .calcom-booking-embed__status {
@@ -142,8 +151,8 @@
 }
 
 .calcom-booking-embed__frame {
-  min-height: 580px;
-  margin-top: 1.25rem;
+  min-height: 640px;
+  margin-top: 1rem;
 }
 
 .calcom-booking-embed__error {
@@ -174,29 +183,49 @@
 }
 
 @media (max-width: 960px) {
+  .initial-consult-booking-page__workflow {
+    grid-template-columns: 1fr;
+    gap: 2.25rem;
+  }
+
   .consultant-selector__options {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .consultant-selector__option:first-child {
+    grid-column: 1 / -1;
+  }
+
+  .calcom-booking-embed {
+    border-top: 1px solid rgba(62, 64, 89, 0.18);
+    padding-top: 2rem;
   }
 }
 
 @media (max-width: 680px) {
+  .initial-consult-booking-page__intro h1 {
+    white-space: normal;
+  }
+
   .initial-consult-booking-page__content {
     width: min(calc(100% - 2rem), 1120px);
-    padding: 3.75rem 0 4rem;
+    padding: 3rem 0 4rem;
   }
 
-  .consultant-selector,
-  .calcom-booking-embed {
-    margin-top: 2.25rem;
+  .initial-consult-booking-page__workflow {
+    margin-top: 1.75rem;
   }
 
-  .consultant-selector__options,
-  .calcom-booking-embed__header {
+  .consultant-selector__options {
     grid-template-columns: 1fr;
   }
 
   .consultant-selector__option {
     min-height: 76px;
+  }
+
+  .consultant-selector__option:first-child {
+    grid-column: auto;
   }
 
   .calcom-booking-embed__frame {

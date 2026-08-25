@@ -16,13 +16,33 @@ const emit = defineEmits<{
   select: [event: InitialConsultBookingEvent]
 }>()
 
+const bookingPanel = ref<HTMLElement | null>(null)
+
 /** Resolves a selected id back to its configured event before notifying the route. */
-const handleSelection = (selectionId: InitialConsultBookingEvent['id']): void => {
+const handleSelection = async (selectionId: InitialConsultBookingEvent['id']): Promise<void> => {
   const event = props.events.find(item => item.id === selectionId)
 
-  if (event) {
-    emit('select', event)
+  if (!event) {
+    return
   }
+
+  emit('select', event)
+
+  if (
+    typeof window === 'undefined'
+    || typeof window.matchMedia !== 'function'
+    || !window.matchMedia('(max-width: 960px)').matches
+  ) {
+    return
+  }
+
+  await nextTick()
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+  bookingPanel.value?.scrollIntoView({
+    behavior: prefersReducedMotion ? 'auto' : 'smooth',
+    block: 'start'
+  })
 }
 </script>
 
@@ -34,20 +54,27 @@ const handleSelection = (selectionId: InitialConsultBookingEvent['id']): void =>
           30 minutes · $60
         </p>
         <h1>Book a Solagree Initial Consult</h1>
-        <p>Choose the option that works best for you, then book and pay securely with Cal.com.</p>
+        <p>Choose a consultant, then pick the date and time that work best for you.</p>
       </header>
 
-      <ConsultantSelector
-        :events="events"
-        :selected-id="selectedEvent.id"
-        @select="handleSelection"
-      />
+      <div class="initial-consult-booking-page__workflow">
+        <ConsultantSelector
+          :events="events"
+          :selected-id="selectedEvent.id"
+          @select="handleSelection"
+        />
 
-      <CalComBookingEmbed
-        :key="selectedEvent.id"
-        :event="selectedEvent"
-        :tracking-context="trackingContext"
-      />
+        <div
+          ref="bookingPanel"
+          class="initial-consult-booking-page__calendar"
+        >
+          <CalComBookingEmbed
+            :key="selectedEvent.id"
+            :event="selectedEvent"
+            :tracking-context="trackingContext"
+          />
+        </div>
+      </div>
     </section>
 
     <SiteFooter />

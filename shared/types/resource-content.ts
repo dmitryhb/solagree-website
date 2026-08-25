@@ -38,10 +38,18 @@ export interface ResourceContentBase {
 
 /** A Solagree-hosted article with body content and an internal route. */
 export interface ResourceArticle extends ResourceContentBase {
+  /** Optional byline portrait used by the article footer card. */
+  authorImage?: string
+  /** Optional byline role shown beneath the author name. */
+  authorRole?: string
   /** Markdown-like source rendered through the safe article renderer. */
   body: string
   kind: 'article'
   linkMode: 'internal'
+  /** Optional curated article slugs used by the related-articles section. */
+  relatedArticleSlugs?: string[]
+  /** Optional editorial revision date shown in article metadata. */
+  updatedAt?: string
 }
 
 /** An external news or press item that links to the original publication. */

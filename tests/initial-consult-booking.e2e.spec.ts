@@ -1,11 +1,11 @@
 import { expect, test } from '@playwright/test'
 
 const expectedEvents = [
-  ['first-available', 'solagree/initial-consults/initial-consult'],
-  ['taj', 'solagree/initial-consults/initial-consult-taj'],
-  ['stacie', 'solagree/initial-consults/initial-consult-stacie'],
-  ['jessica', 'solagree/initial-consults/initial-consult-jessica'],
-  ['james', 'solagree/initial-consults/initial-consult-james']
+  ['first-available', 'initial-consults/initial-consult'],
+  ['taj', 'initial-consults/initial-consult-taj'],
+  ['stacie', 'initial-consults/initial-consult-stacie'],
+  ['jessica', 'initial-consults/initial-consult-jessica'],
+  ['james', 'initial-consults/initial-consult-james']
 ] as const
 
 test('switches the live booking iframe to each selected Cal.com event', async ({ page }) => {

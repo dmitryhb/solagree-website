@@ -5,9 +5,14 @@ import { describe, expect, it } from 'vitest'
 import { publishedArticles, publishedNewsItems } from '../app/data/resource-content'
 
 const assetDetails = [
-  ['blog-hidden-risks-naked-mediation.webp', 1208, 716, 96172, 'f22ae36edefbc11784436f9ea514d5b98cacee2013f9196c749a34a1c1995c6d'],
+  ['blog-healthy-divorce-future-co-parenting.webp', 1440, 2160, 143584, 'ae9b2e8813f1ecfdd20c1f5528847edded506e4f631820220843613cad18b470'],
+  ['blog-hidden-risks-naked-mediation.webp', 1600, 844, 53880, '315c7270aed474b0bc3f500f5053743221cd202c5c2727a8fbbdc9cf66fc6166'],
+  ['blog-four-reasons-ai-divorce-hero.webp', 2288, 1526, 106730, '42c5c0b62325441e192214061dd2a1cf7887940706009644b37f3851cde5ac17'],
+  ['blog-four-reasons-ai-divorce-document-review.webp', 1668, 943, 97532, 'e868a9a740d21f1a715996487a4b15d988551f701e23cd3b1be897ab62c1b981'],
+  ['blog-four-reasons-ai-divorce-family-embrace.webp', 1668, 943, 141230, '7921e56a556514b4ffa88faf2f377cc80f448aec444881b16de952d92a0dcc83'],
   ['blog-relieving-uneasy-feeling-resolving-divorce.webp', 1280, 854, 119930, 'c8101ebbefe644a2a5c87a04a74bd0bb0ead763ee5fed177d090b975db8b80a1'],
   ['blog-ai-divorce-family-law.webp', 1248, 832, 58926, 'd3fe5b07a011ce8a1ac2b676852f7c95db7b1bed959c81ab2259f108561a0b27'],
+  ['news-feature-partner-network.webp', 1672, 941, 49892, 'd6d29edf1c20f833d2da359acf6616897d0eeac0682e0c33da67cf1818342d00'],
   ['news-doing-divorce-right-rethinking-divorce.webp', 768, 768, 98540, '78345d39fef946164f87cf3ed7f1b392d1cfed6e414e6b6d64b9da9e8ea98ae3'],
   ['news-gray-divorce-solagree-alternative-to-litigation.webp', 600, 600, 37696, '1daa408208c0dc2efcd7daeccde54b302a75d9fcbf6bd39b9b85268c89d0d655'],
   ['news-cdfa-hotline-the-divorce-you-deserve.webp', 1024, 198, 21946, '2e8fdd022522088cea1788cfab0d04189ad47a99f36975505f2a51621ab7aaaa'],
@@ -54,7 +59,7 @@ describe('Approved Blog and News media assets', () => {
   it('assigns an approved local image to every published Blog and News card', () => {
     const entries = [...publishedArticles, ...publishedNewsItems]
 
-    expect(entries).toHaveLength(8)
+    expect(entries).toHaveLength(10)
     expect(entries.every(entry => entry.featuredImage?.startsWith('/images/'))).toBe(true)
   })
 })

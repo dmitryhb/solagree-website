@@ -112,5 +112,6 @@ export const getPublishedArticleBySlug = (
 /** Narrows public entries to external coverage for News & Press lists. */
 export const getPublishedNewsItems = (
   entries: readonly ResourceContentEntry[]
-): readonly ExternalNewsItem[] => getPublishedResourceEntries(entries)
+): readonly ExternalNewsItem[] => [...getPublishedResourceEntries(entries)
   .filter((entry): entry is ExternalNewsItem => entry.kind === 'news')
+].sort((first, second) => second.publishedAt.localeCompare(first.publishedAt))

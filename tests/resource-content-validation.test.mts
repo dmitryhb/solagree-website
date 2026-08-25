@@ -58,6 +58,23 @@ test('published resource lists exclude draft articles and news', () => {
   assert.deepEqual(getPublishedNewsItems(entries), [])
 })
 
+test('published news items are ordered from most to least recent', () => {
+  const olderNews = {
+    ...draftNews,
+    publishedAt: '2026-01-10',
+    slug: 'older-news',
+    status: 'published'
+  } as ResourceContentEntry
+  const newerNews = {
+    ...draftNews,
+    publishedAt: '2026-06-25',
+    slug: 'newer-news',
+    status: 'published'
+  } as ResourceContentEntry
+
+  assert.deepEqual(getPublishedNewsItems([olderNews, newerNews]), [newerNews, olderNews])
+})
+
 test('content validation rejects duplicate slugs, invalid dates, and required metadata gaps', () => {
   const invalidArticle = {
     ...article,
