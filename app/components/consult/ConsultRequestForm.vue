@@ -16,6 +16,7 @@ import type {
   ConsultRequestResult
 } from '~/types/consult-request'
 import { getStoredConsultQuizAnswers } from '~/utils/consult-quiz-answers'
+import { focusPageDestination } from '~/utils/focus-destination'
 
 const props = defineProps<{
   content: ConsultRequestPageContent
@@ -26,6 +27,7 @@ const route = useRoute()
 const { trackEvent } = useGoogleAnalytics()
 
 const formEl = ref<HTMLFormElement | null>(null)
+const submissionResultEl = ref<HTMLElement | null>(null)
 const submitting = ref(false)
 const submissionResult = ref<ConsultRequestResult | null>(null)
 
@@ -95,6 +97,7 @@ const handleSubmit = async () => {
     })
 
     await navigateTo(thankYouPath.value)
+    await focusPageDestination()
   } catch (error) {
     if (isPortalApiConfigurationError(error)) {
       console.error(error)
@@ -104,6 +107,9 @@ const handleSubmit = async () => {
       title: 'Request not sent',
       message: getConsultRequestSubmissionErrorMessage(error)
     }
+
+    await nextTick()
+    submissionResultEl.value?.focus()
   } finally {
     submitting.value = false
   }
@@ -275,9 +281,10 @@ const handleSubmit = async () => {
 
       <div
         v-if="submissionResult"
+        ref="submissionResultEl"
         class="consult-request-form__result consult-request-form__result--error"
-        role="status"
-        aria-live="polite"
+        role="alert"
+        tabindex="-1"
       >
         <p class="consult-request-form__result-title">
           {{ submissionResult.title }}

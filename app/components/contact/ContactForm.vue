@@ -10,6 +10,8 @@ import type { ContactFormState } from '~/types/contact'
 const runtimeConfig = useRuntimeConfig()
 const { trackEvent } = useGoogleAnalytics()
 const formEl = ref<HTMLFormElement | null>(null)
+const statusMessageEl = ref<HTMLElement | null>(null)
+const thankYouEl = ref<HTMLElement | null>(null)
 const submitting = ref(false)
 const submitted = ref(false)
 const statusMessage = ref('')
@@ -50,12 +52,16 @@ const handleSubmit = async () => {
     })
 
     submitted.value = true
+    await nextTick()
+    thankYouEl.value?.focus()
   } catch (error) {
     if (isPortalApiConfigurationError(error)) {
       console.error(error)
     }
 
     statusMessage.value = getContactSubmissionErrorMessage(error)
+    await nextTick()
+    statusMessageEl.value?.focus()
   } finally {
     submitting.value = false
   }
@@ -65,9 +71,11 @@ const handleSubmit = async () => {
 <template>
   <div
     v-if="submitted"
+    ref="thankYouEl"
     class="contact-form contact-form__thank-you"
     role="status"
     aria-live="polite"
+    tabindex="-1"
   >
     <div>
       <p><strong>Thank you for reaching out.</strong></p>
@@ -156,9 +164,10 @@ const handleSubmit = async () => {
 
     <p
       v-if="statusMessage"
+      ref="statusMessageEl"
       class="contact-form__status"
-      role="status"
-      aria-live="polite"
+      role="alert"
+      tabindex="-1"
     >
       {{ statusMessage }}
     </p>

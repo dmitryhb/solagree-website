@@ -6,6 +6,7 @@ import {
   submitAttorneyApplication
 } from '~/services/attorney-application-api'
 import { websitePortalFetcher } from '~/services/portal-api'
+import { focusPageDestination } from '~/utils/focus-destination'
 import type {
   AttorneyApplicationFormState,
   AttorneyLicenseNumberRow
@@ -120,6 +121,7 @@ export const useAttorneyApplicationForm = (): UseAttorneyApplicationFormReturn =
       })
 
       await navigateTo('/attorney-application/sent')
+      await focusPageDestination()
     },
     getErrorMessage: getAttorneyApplicationSubmissionErrorMessage
   })

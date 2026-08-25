@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { CoBrandedPageType } from '#shared/co-branded-page-variant'
+import { useModalDialog } from '~/composables/useModalDialog'
 import {
   getConsultRequestSubmissionErrorMessage,
   submitCoBrandedConsultRequest
@@ -30,9 +31,6 @@ const successHeading = ref<HTMLElement | null>(null)
 const submitting = ref(false)
 const submitted = ref(false)
 const submissionError = ref('')
-let previouslyFocusedElement: HTMLElement | null = null
-let previousBodyOverflow = ''
-let isPageScrollLocked = false
 
 const createInitialForm = (): CoBrandedConsultRequestFormState => ({
   firstName: '',
@@ -55,15 +53,6 @@ const resetForm = (): void => {
   submitted.value = false
 }
 
-const restorePageScroll = (): void => {
-  if (!isPageScrollLocked) {
-    return
-  }
-
-  document.body.style.overflow = previousBodyOverflow
-  isPageScrollLocked = false
-}
-
 const handleClose = (): void => {
   if (submitting.value) {
     return
@@ -72,39 +61,11 @@ const handleClose = (): void => {
   emit('close')
 }
 
-const getFocusableElements = (): HTMLElement[] => {
-  return Array.from(panelEl.value?.querySelectorAll<HTMLElement>(
-    'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
-  ) ?? [])
-}
-
-const handleDialogKeydown = (event: KeyboardEvent): void => {
-  if (event.key === 'Escape') {
-    handleClose()
-    return
-  }
-
-  if (event.key !== 'Tab') {
-    return
-  }
-
-  const focusableElements = getFocusableElements()
-  const firstFocusableElement = focusableElements[0]
-  const lastFocusableElement = focusableElements.at(-1)
-
-  if (!firstFocusableElement || !lastFocusableElement) {
-    event.preventDefault()
-    return
-  }
-
-  if (event.shiftKey && document.activeElement === firstFocusableElement) {
-    event.preventDefault()
-    lastFocusableElement.focus()
-  } else if (!event.shiftKey && document.activeElement === lastFocusableElement) {
-    event.preventDefault()
-    firstFocusableElement.focus()
-  }
-}
+const modalDialog = useModalDialog({
+  getContainer: () => panelEl.value,
+  getInitialFocusTarget: () => firstNameInput.value,
+  onRequestClose: handleClose
+})
 
 const handleSubmit = async (): Promise<void> => {
   if (submitting.value) {
@@ -164,32 +125,16 @@ watch(
 
 watch(
   () => props.open,
-  async (isOpen) => {
+  (isOpen) => {
     if (!isOpen) {
-      restorePageScroll()
+      void modalDialog.deactivate()
       resetForm()
-      await nextTick()
-      previouslyFocusedElement?.focus()
-      previouslyFocusedElement = null
       return
     }
 
-    previouslyFocusedElement = document.activeElement instanceof HTMLElement
-      ? document.activeElement
-      : null
-    previousBodyOverflow = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
-    isPageScrollLocked = true
-
-    await nextTick()
-    firstNameInput.value?.focus()
+    void modalDialog.activate()
   }
 )
-
-onBeforeUnmount(() => {
-  restorePageScroll()
-  previouslyFocusedElement?.focus()
-})
 </script>
 
 <template>
@@ -201,7 +146,7 @@ onBeforeUnmount(() => {
       aria-modal="true"
       aria-labelledby="co-branded-consult-modal-title"
       :aria-describedby="isAttorneyVariant ? 'co-branded-conflict-explanation' : undefined"
-      @keydown="handleDialogKeydown"
+      @keydown="modalDialog.handleKeydown"
     >
       <div
         class="co-branded-consult-modal__backdrop"

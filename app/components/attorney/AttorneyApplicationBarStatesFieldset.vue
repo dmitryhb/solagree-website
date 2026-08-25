@@ -23,11 +23,7 @@ defineProps<{
       Select all that apply.
     </p>
 
-    <div
-      class="attorney-application-form__state-list"
-      :aria-describedby="hasError ? 'attorney-bar-states-hint attorney-bar-states-error' : 'attorney-bar-states-hint'"
-      :aria-invalid="hasError ? 'true' : undefined"
-    >
+    <div class="attorney-application-form__state-list">
       <label
         v-for="state in stateOptions"
         :key="state.value"
@@ -38,6 +34,8 @@ defineProps<{
           type="checkbox"
           name="barStates"
           :value="state.value"
+          :aria-invalid="hasError ? 'true' : undefined"
+          :aria-describedby="hasError ? 'attorney-bar-states-hint attorney-bar-states-error' : 'attorney-bar-states-hint'"
         >
         <span>{{ state.label }}</span>
       </label>

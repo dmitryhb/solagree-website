@@ -6,6 +6,7 @@ withDefaults(defineProps<{
   label: string
   name: string
   autocomplete?: string
+  describedBy?: string
   inputmode?: 'none' | 'text' | 'tel' | 'url' | 'email' | 'numeric' | 'decimal' | 'search'
   max?: number | string
   min?: number | string
@@ -18,6 +19,7 @@ withDefaults(defineProps<{
   type?: string
 }>(), {
   autocomplete: undefined,
+  describedBy: undefined,
   inputmode: undefined,
   max: undefined,
   min: undefined,
@@ -46,6 +48,7 @@ withDefaults(defineProps<{
       :name="name"
       :rows="rows"
       :autocomplete="autocomplete"
+      :aria-describedby="describedBy"
       :placeholder="placeholder"
       :required="required"
     />
@@ -63,6 +66,7 @@ withDefaults(defineProps<{
       :placeholder="placeholder"
       :required="required"
       :title="title"
+      :aria-describedby="describedBy"
     >
   </div>
 </template>

@@ -6,6 +6,7 @@ import {
   submitWebinarRegistration
 } from '~/services/webinar-registration-api'
 import { isPortalApiConfigurationError, websitePortalFetcher } from '~/services/portal-api'
+import { focusPageDestination } from '~/utils/focus-destination'
 import type { WebinarFormState, WebinarRegistrationContent } from '~/types/webinar'
 
 interface WatchWebinarFormProps {
@@ -32,6 +33,7 @@ const form = reactive<WebinarFormState>({
 
 const submitting = ref(false)
 const statusMessage = ref('')
+const statusMessageEl = ref<HTMLElement | null>(null)
 
 const getSourceUrl = (): string | null => {
   if (!import.meta.client) {
@@ -64,12 +66,15 @@ const handleSubmit = async () => {
     })
 
     await navigateTo(props.redirectPath)
+    await focusPageDestination()
   } catch (error) {
     if (isPortalApiConfigurationError(error)) {
       console.error(error)
     }
 
     statusMessage.value = getWebinarRegistrationErrorMessage(error)
+    await nextTick()
+    statusMessageEl.value?.focus()
   } finally {
     submitting.value = false
   }
@@ -226,9 +231,10 @@ const handleSubmit = async () => {
 
       <p
         v-if="statusMessage"
+        ref="statusMessageEl"
         class="watch-webinar-form__status"
-        role="status"
-        aria-live="polite"
+        role="alert"
+        tabindex="-1"
       >
         {{ statusMessage }}
       </p>

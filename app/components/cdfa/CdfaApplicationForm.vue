@@ -14,6 +14,20 @@ const {
   submissionResult,
   handleSubmit
 } = useCdfaApplicationForm()
+
+const submissionResultEl = ref<HTMLElement | null>(null)
+
+watch(
+  submissionResult,
+  async (result) => {
+    if (result?.kind !== 'error') {
+      return
+    }
+
+    await nextTick()
+    submissionResultEl.value?.focus()
+  }
+)
 </script>
 
 <template>
@@ -118,6 +132,7 @@ const {
         label="What geographic area do you primarily serve?"
         name="serviceArea"
         placeholder="e.g., &quot;San Francisco Bay Area&quot; or &quot;Remote/National&quot;"
+        described-by="cdfa-service-area-hint"
         required
       />
       <p
@@ -190,10 +205,11 @@ const {
 
       <div
         v-if="submissionResult"
+        ref="submissionResultEl"
         class="attorney-application-form__result"
         :class="`attorney-application-form__result--${submissionResult.kind}`"
-        role="status"
-        aria-live="polite"
+        :role="submissionResult.kind === 'error' ? 'alert' : 'status'"
+        tabindex="-1"
       >
         <p class="attorney-application-form__result-title">
           {{ submissionResult.title }}

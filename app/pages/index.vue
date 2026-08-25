@@ -31,7 +31,8 @@ useSolagreeSeo({
 <template>
   <main class="min-h-screen bg-[var(--color-surface-footer)]">
     <SplashSection />
-    <div id="main-content">
+    <!-- The single #main-content anchor is owned by app.vue. -->
+    <div>
       <WhatYouGetSection />
       <HowItWorksSection />
       <GetStartedSection />
