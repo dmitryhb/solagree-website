@@ -62,6 +62,14 @@ gtag('config', '${gaMeasurementId}', { send_page_view: false });
     serverAppConfig: false
   },
   ssr: true,
+  // The static build deploys behind nginx, so /sitemap.xml must be emitted as a
+  // prerendered file. Nitro's crawler never discovers server routes, so the
+  // route has to be listed explicitly instead of relying on link discovery.
+  nitro: {
+    prerender: {
+      routes: ['/sitemap.xml']
+    }
+  },
   modules: ['@nuxt/ui', '@nuxt/eslint'],
   css: ['~/assets/styles/vendor.css', '~/assets/styles/main.scss'],
   vite: {
