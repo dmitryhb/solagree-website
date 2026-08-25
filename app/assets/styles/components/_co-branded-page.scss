@@ -1,3 +1,5 @@
+@use "../abstracts/breakpoints" as bp;
+
 .co-branded-page-route {
   min-height: 100svh;
   background:
@@ -26,36 +28,6 @@
   border-top-color: var(--color-heading);
   border-radius: 999px;
   animation: co-branded-page-spin 0.8s linear infinite;
-}
-
-.co-branded-page-route__state-box {
-  width: min(100%, 32rem);
-  padding: 2rem;
-  border: 1px solid var(--color-border);
-  border-radius: 18px;
-  background: var(--color-white);
-  box-shadow: var(--shadow-soft);
-}
-
-.co-branded-page-route__state-box h1,
-.co-branded-page-route__state-box p {
-  margin: 0;
-}
-
-.co-branded-page-route__state-box h1 {
-  color: var(--color-heading);
-  font-family: var(--font-display);
-  font-size: clamp(2rem, 5vw, 3rem);
-  line-height: 1.08;
-}
-
-.co-branded-page-route__state-box p {
-  margin-top: 0.8rem;
-  line-height: 1.65;
-}
-
-.co-branded-page-route__home-link {
-  margin-top: 1.4rem;
 }
 
 .co-branded-page {
@@ -103,7 +75,7 @@
   padding: clamp(0.45rem, 1vw, 0.75rem) 0;
 }
 
-@media (min-width: 781px) {
+@include bp.above(bp.$bp-mobile) { // was min-width: 781px — complement of the mobile boundary
   .co-branded-page--standard .co-branded-page__brand-row {
     width: min(
       calc(100vw - var(--co-branded-page-hero-edge) - var(--co-branded-page-hero-edge)),
@@ -565,7 +537,7 @@
   inset-block: 0;
   left: 50%;
   width: 100vw;
-  background: #f7f3ec;
+  background: var(--color-surface-footer);
   content: "";
   transform: translateX(-50%);
 }
@@ -619,11 +591,11 @@
 }
 
 .co-branded-page__attorney-guide-list li::marker {
-  color: #9b604b;
+  color: var(--color-badge-warm);
 }
 
 .co-branded-page__attorney-guide-list strong {
-  color: #9b604b;
+  color: var(--color-badge-warm);
   font-weight: 900;
 }
 
@@ -699,7 +671,7 @@
   padding: clamp(2rem, 2.25vw, 2.875rem) clamp(2rem, 2.25vw, 2.875rem) clamp(2.75rem, 2.65vw, 3.375rem);
   border-radius: 22px;
   background: var(--color-surface-cool);
-  color: #27241f;
+  color: var(--color-text-muted);
 }
 
 .co-branded-page__track-card h3,
@@ -712,7 +684,7 @@
 
 .co-branded-page__track-card h3 {
   margin: 0;
-  color: #27241f;
+  color: var(--color-text-muted);
   font-size: clamp(1.625rem, 1.46vw, 1.875rem);
   font-weight: 600;
   text-align: center;
@@ -741,7 +713,7 @@
 
 .co-branded-page__track-includes-title {
   margin: 0;
-  color: #27241f;
+  color: var(--color-text-muted);
   font-size: clamp(0.75rem, 0.7vw, 0.875rem);
   font-weight: 400;
 }
@@ -758,7 +730,7 @@
   display: flex;
   align-items: center;
   gap: 22px;
-  color: #27241f;
+  color: var(--color-text-muted);
   font-family: var(--font-body);
   font-size: clamp(1.0625rem, 0.98vw, 1.25rem);
   line-height: 1.5;
@@ -798,7 +770,7 @@
   margin: 0;
   color: var(--color-heading);
   font-family: var(--font-display);
-  font-size: 54px;
+  font-size: var(--section-title-size);
   font-weight: 500;
   line-height: 1.011;
   letter-spacing: 0;
@@ -1111,7 +1083,7 @@
   width: min(100%, 620px);
   max-height: calc(100svh - 48px);
   border-radius: 8px;
-  background: #fff;
+  background: var(--color-white);
   box-shadow: 0 24px 80px rgba(31, 34, 54, 0.24);
   color: #33354d;
 }
@@ -1137,7 +1109,7 @@
   width: 16px;
   height: 2px;
   border-radius: 999px;
-  background: #3e4059;
+  background: var(--color-ink);
   content: "";
 }
 
@@ -1186,7 +1158,7 @@
   margin: 0;
   max-width: 360px;
   color: #33354d;
-  font-family: var(--font-heading);
+  font-family: var(--font-display);
   font-size: 32px;
   font-weight: 500;
   line-height: 1.15;
@@ -1208,7 +1180,7 @@
 .co-branded-consult-modal__fields label {
   display: grid;
   gap: 8px;
-  color: #3e4059;
+  color: var(--color-ink);
   font-size: 14px;
   font-weight: 700;
 }
@@ -1225,7 +1197,7 @@
   min-height: 48px;
   border: 1px solid #d8d9e4;
   border-radius: 6px;
-  background: #fff;
+  background: var(--color-white);
   color: #33354d;
   font: inherit;
   font-weight: 500;
@@ -1260,8 +1232,11 @@
   opacity: 0.58;
 }
 
+/* Soft inline variant of the shared FormResultMessage panel. */
 .co-branded-consult-modal__error {
+  display: block;
   margin: 0;
+  border: 0;
   border-radius: 6px;
   background: #fff1f1;
   color: #9a3030;
@@ -1275,8 +1250,8 @@
   min-height: 48px;
   border: 0;
   border-radius: 999px;
-  background: #3e4059;
-  color: #fff;
+  background: var(--color-ink);
+  color: var(--color-white);
   cursor: pointer;
   font: inherit;
   font-size: 16px;
@@ -1290,14 +1265,14 @@
   opacity: 0.7;
 }
 
-@media (max-width: 1024px) {
+@include bp.below(bp.$bp-tablet) {
   .co-branded-page__how-steps {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 3rem 2rem;
   }
 }
 
-@media (max-width: 780px) {
+@include bp.below(bp.$bp-mobile) { // was max-width: 780px — aligned to the mobile boundary
   .co-branded-page {
     gap: 2.25rem;
   }
@@ -1420,10 +1395,6 @@
     aspect-ratio: 1056 / 1086;
   }
 
-  .co-branded-page__questions h2 {
-    font-size: 48px;
-  }
-
   .co-branded-page__questions-copy .co-branded-page__primary-cta {
     margin-top: 36px;
   }
@@ -1438,7 +1409,7 @@
   }
 }
 
-@media (max-width: 480px) {
+@include bp.below(bp.$bp-small) { // was max-width: 480px — aligned to the small boundary
   .co-branded-consult-modal {
     padding: 14px;
   }
@@ -1473,9 +1444,8 @@
   }
 }
 
-@media (max-width: 767px) {
+@include bp.below(bp.$bp-mobile) {
   .co-branded-page__questions h2 {
-    font-size: 40px;
     line-height: 1.15;
   }
 

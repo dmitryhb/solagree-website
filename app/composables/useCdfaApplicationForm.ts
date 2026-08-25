@@ -3,7 +3,8 @@ import {
   getCdfaApplicationSubmissionErrorMessage,
   submitCdfaApplication
 } from '~/services/cdfa-application-api'
-import type { CdfaApplicationFetcher } from '~/services/cdfa-application-api'
+import { websitePortalFetcher } from '~/services/portal-api'
+import { focusPageDestination } from '~/utils/focus-destination'
 import type { CdfaApplicationFormState } from '~/types/cdfa-application'
 import type { ApplicationResult } from '~/types/form-options'
 
@@ -41,11 +42,28 @@ export const useCdfaApplicationForm = (): UseCdfaApplicationFormReturn => {
     firstSpecializationInput?.focus()
   }
 
-  const submission = useApplicationSubmission<CdfaApplicationFormState, unknown>({
+  const submission = useApplicationSubmission<CdfaApplicationFormState, Awaited<ReturnType<typeof submitCdfaApplication>>>({
+    validate: async () => {
+      hasAttemptedSubmit.value = true
+
+      const hasCustomErrors = hasSpecializationError.value
+
+      if (!formEl.value?.checkValidity() || hasCustomErrors) {
+        formEl.value?.reportValidity()
+
+        if (hasCustomErrors) {
+          await focusFirstSpecialization()
+        }
+
+        return false
+      }
+
+      return true
+    },
     getFormState: () => form,
     submit: (formState) => submitCdfaApplication(formState, {
       portalApiBaseUrl: runtimeConfig.public.portalApiBaseUrl,
-      fetcher: $fetch as unknown as CdfaApplicationFetcher
+      fetcher: websitePortalFetcher
     }),
     onSuccess: async () => {
       trackEvent('partner_application_submitted', {
@@ -54,28 +72,10 @@ export const useCdfaApplicationForm = (): UseCdfaApplicationFormReturn => {
       })
 
       await navigateTo('/cdfa-application/sent')
+      await focusPageDestination()
     },
     getErrorMessage: getCdfaApplicationSubmissionErrorMessage
   })
-
-  const handleSubmit = async () => {
-    hasAttemptedSubmit.value = true
-    submission.resetSubmissionResult()
-
-    const hasCustomErrors = hasSpecializationError.value
-
-    if (!formEl.value?.checkValidity() || hasCustomErrors) {
-      formEl.value?.reportValidity()
-
-      if (hasCustomErrors) {
-        await focusFirstSpecialization()
-      }
-
-      return
-    }
-
-    await submission.handleSubmit()
-  }
 
   return {
     formEl,
@@ -84,6 +84,6 @@ export const useCdfaApplicationForm = (): UseCdfaApplicationFormReturn => {
     hasSpecializationError,
     submitting: submission.submitting,
     submissionResult: submission.submissionResult,
-    handleSubmit
+    handleSubmit: submission.handleSubmit
   }
 }

@@ -51,6 +51,11 @@ const draftNews: ResourceContentEntry = {
   title: 'News title'
 }
 
+/** Asserts the fail-closed validator accepts the provided publication. */
+const assertNoValidationError = (runValidation: () => void): void => {
+  assert.doesNotThrow(runValidation)
+}
+
 test('published resource lists exclude draft articles and news', () => {
   const entries = [article, draftNews]
 
@@ -102,4 +107,161 @@ test('content validation rejects non-HTTPS news destinations', () => {
     () => validateResourceContentEntries([insecureNews]),
     /invalid externalUrl/
   )
+})
+
+const relatedArticle: ResourceContentEntry = {
+  ...article,
+  featured: false,
+  publishedAt: '2026-08-19',
+  slug: 'related-article'
+}
+
+test('content validation accepts updatedAt on or after publishedAt', () => {
+  const revisedSameDay = { ...article, updatedAt: '2026-08-21' } as ResourceContentEntry
+  const revisedLater = { ...article, updatedAt: '2026-08-25' } as ResourceContentEntry
+
+  assertNoValidationError(() => validateResourceContentEntries([revisedSameDay]))
+  assertNoValidationError(() => validateResourceContentEntries([revisedLater]))
+})
+
+test('content validation rejects updatedAt earlier than publishedAt with a slug-specific message', () => {
+  const staleArticle = {
+    ...article,
+    publishedAt: '2026-05-15',
+    updatedAt: '2026-03-17'
+  } as ResourceContentEntry
+
+  assert.throws(
+    () => validateResourceContentEntries([staleArticle]),
+    /"article-slug" has updatedAt date "2026-03-17" before publishedAt date "2026-05-15"/
+  )
+})
+
+test('content validation rejects malformed updatedAt values', () => {
+  const impossibleCalendarDate = { ...article, updatedAt: '2026-02-30' } as ResourceContentEntry
+  const nonIsoDate = { ...article, updatedAt: '2026-8-1' } as ResourceContentEntry
+  const dateTimeInsteadOfDate = { ...article, updatedAt: '2026-08-21T10:00:00.000Z' } as ResourceContentEntry
+
+  for (const entry of [impossibleCalendarDate, nonIsoDate, dateTimeInsteadOfDate]) {
+    assert.throws(
+      () => validateResourceContentEntries([entry]),
+      /has invalid updatedAt date/
+    )
+  }
+})
+
+test('content validation accepts resolved, deduplicated, non-self related articles', () => {
+  const entry = {
+    ...article,
+    relatedArticleSlugs: ['related-article']
+  } as ResourceContentEntry
+
+  assertNoValidationError(() => validateResourceContentEntries([entry, relatedArticle]))
+})
+
+test('content validation rejects relatedArticleSlugs that do not resolve to published internal articles', () => {
+  const missingTarget = { ...article, relatedArticleSlugs: ['missing-article'] } as ResourceContentEntry
+  const draftTarget = { ...article, relatedArticleSlugs: ['draft-article'] } as ResourceContentEntry
+  const newsTarget = { ...article, relatedArticleSlugs: ['news-slug'] } as ResourceContentEntry
+  const emptySlug = { ...article, relatedArticleSlugs: ['   '] } as ResourceContentEntry
+
+  const cases = [
+    [missingTarget, [article]],
+    [draftTarget, [article, { ...relatedArticle, slug: 'draft-article', status: 'draft' } as ResourceContentEntry]],
+    [newsTarget, [article, draftNews]],
+    [emptySlug, [article]]
+  ] as const
+
+  for (const [entry, entries] of cases) {
+    assert.throws(
+      () => validateResourceContentEntries([entry, ...entries.filter(candidate => candidate.slug !== entry.slug)]),
+      /not a published internal article|empty relatedArticleSlugs/
+    )
+  }
+})
+
+test('content validation rejects self-relations and duplicate relatedArticleSlugs entries', () => {
+  const selfRelation = { ...article, relatedArticleSlugs: ['article-slug'] } as ResourceContentEntry
+
+  assert.throws(
+    () => validateResourceContentEntries([selfRelation, relatedArticle]),
+    /"article-slug" cannot relate to itself/
+  )
+
+  const duplicatedRelation = {
+    ...article,
+    relatedArticleSlugs: ['related-article', 'related-article']
+  } as ResourceContentEntry
+
+  assert.throws(
+    () => validateResourceContentEntries([duplicatedRelation, relatedArticle]),
+    /lists related slug "related-article" more than once/
+  )
+})
+
+test('content validation rejects multiple published featured entries in the same list', () => {
+  const secondFeatured = {
+    ...relatedArticle,
+    featured: true
+  } as ResourceContentEntry
+  const featuredArticle = { ...article, featured: true } as ResourceContentEntry
+
+  assert.throws(
+    () => validateResourceContentEntries([featuredArticle, secondFeatured]),
+    /Multiple published article entries are marked featured \("article-slug", "related-article"\)/
+  )
+})
+
+test('content validation allows one featured article and one featured news item', () => {
+  const featuredArticle = { ...article, featured: true } as ResourceContentEntry
+  const featuredNews = {
+    ...draftNews,
+    featured: true,
+    status: 'published'
+  } as ResourceContentEntry
+
+  assertNoValidationError(() => validateResourceContentEntries([featuredArticle, featuredNews]))
+})
+
+test('content validation allows one published featured entry alongside draft featured entries', () => {
+  const draftFeatured = {
+    ...relatedArticle,
+    featured: true,
+    status: 'draft'
+  } as ResourceContentEntry
+  const featuredArticle = { ...article, featured: true } as ResourceContentEntry
+
+  assertNoValidationError(() => validateResourceContentEntries([featuredArticle, draftFeatured]))
+})
+
+test('content validation rejects image paths outside the public /images/ convention', () => {
+  const invalidPaths = [
+    'images/article.webp',
+    '../secret/article.webp',
+    '/images/../secret/article.webp',
+    '/images/article name.webp',
+    '//cdn.example.com/article.webp',
+    'https://cdn.example.com/article.webp',
+    '/img/article.webp'
+  ]
+
+  for (const invalidPath of invalidPaths) {
+    assert.throws(
+      () => validateResourceContentEntries([{ ...article, featuredImage: invalidPath } as ResourceContentEntry]),
+      /featuredImage ".+" outside the supported public \/images\/ path convention/,
+      `expected ${invalidPath} to be rejected`
+    )
+  }
+
+  assert.throws(
+    () => validateResourceContentEntries([{
+      ...article,
+      social: { ...article.social, image: 'https://cdn.example.com/social.webp' }
+    } as ResourceContentEntry]),
+    /social\.image "https:\/\/cdn\.example\.com\/social\.webp" outside the supported public \/images\/ path convention/
+  )
+
+  assertNoValidationError(() => validateResourceContentEntries([
+    { ...article, featuredImage: '/images/blog-hero.webp' } as ResourceContentEntry
+  ]))
 })

@@ -5,12 +5,14 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 OUTPUT_DIR="$ROOT_DIR/.output/public/"
 LEGACY_REDIRECTS_SNIPPET="$ROOT_DIR/config/nginx/legacy-redirects.conf"
+CO_BRANDED_NOINDEX_SNIPPET="$ROOT_DIR/config/nginx/co-branded-noindex.conf"
 
 SSH_USER="${SSH_USER:-ubuntu}"
 SSH_HOST="${SSH_HOST:-15.204.253.205}"
 REMOTE_PATH="${REMOTE_PATH:-/home/solagree/public_html/}"
 REMOTE_OWNER="${REMOTE_OWNER:-solagree:solagree}"
 REMOTE_LEGACY_REDIRECTS_SNIPPET="${REMOTE_LEGACY_REDIRECTS_SNIPPET:-/etc/nginx/snippets/solagree-legacy-redirects.conf}"
+REMOTE_CO_BRANDED_NOINDEX_SNIPPET="${REMOTE_CO_BRANDED_NOINDEX_SNIPPET:-/etc/nginx/snippets/solagree-co-branded-noindex.conf}"
 REMOTE_NGINX_SITE_CONFIG="${REMOTE_NGINX_SITE_CONFIG:-/etc/nginx/sites-available/solagree-website}"
 
 PRODUCTION_SITE_URL="${NUXT_PUBLIC_SITE_URL:-https://www.solagree.com}"
@@ -72,6 +74,9 @@ if [ ! -d "$OUTPUT_DIR" ]; then
   exit 1
 fi
 
+# Fail the deployment before rsync when the static sitemap is missing or invalid.
+node "$ROOT_DIR/scripts/verify-sitemap.mjs"
+
 RSYNC_ARGS=(
   -avz
   --delete
@@ -89,25 +94,37 @@ rsync "${RSYNC_ARGS[@]}" "$OUTPUT_DIR" "${SSH_TARGET}:${REMOTE_PATH}"
 
 if [ "$DRY_RUN" = false ]; then
   LEGACY_REDIRECTS_SNIPPET_B64="$(base64 < "$LEGACY_REDIRECTS_SNIPPET" | tr -d '\n')"
+  CO_BRANDED_NOINDEX_SNIPPET_B64="$(base64 < "$CO_BRANDED_NOINDEX_SNIPPET" | tr -d '\n')"
 
-  echo "Installing nginx legacy redirect snippet at ${REMOTE_LEGACY_REDIRECTS_SNIPPET}"
-  ssh "$SSH_TARGET" "REMOTE_OWNER='${REMOTE_OWNER}' REMOTE_PATH='${REMOTE_PATH}' REMOTE_NGINX_SITE_CONFIG='${REMOTE_NGINX_SITE_CONFIG}' REMOTE_LEGACY_REDIRECTS_SNIPPET='${REMOTE_LEGACY_REDIRECTS_SNIPPET}' LEGACY_REDIRECTS_SNIPPET_B64='${LEGACY_REDIRECTS_SNIPPET_B64}' bash -s" <<'REMOTE_SCRIPT'
+  echo "Installing nginx snippets at ${REMOTE_LEGACY_REDIRECTS_SNIPPET} and ${REMOTE_CO_BRANDED_NOINDEX_SNIPPET}"
+  ssh "$SSH_TARGET" "REMOTE_OWNER='${REMOTE_OWNER}' REMOTE_PATH='${REMOTE_PATH}' REMOTE_NGINX_SITE_CONFIG='${REMOTE_NGINX_SITE_CONFIG}' REMOTE_LEGACY_REDIRECTS_SNIPPET='${REMOTE_LEGACY_REDIRECTS_SNIPPET}' REMOTE_CO_BRANDED_NOINDEX_SNIPPET='${REMOTE_CO_BRANDED_NOINDEX_SNIPPET}' LEGACY_REDIRECTS_SNIPPET_B64='${LEGACY_REDIRECTS_SNIPPET_B64}' CO_BRANDED_NOINDEX_SNIPPET_B64='${CO_BRANDED_NOINDEX_SNIPPET_B64}' bash -s" <<'REMOTE_SCRIPT'
 set -euo pipefail
 
 # Re-apply ownership to the app user in case rsync ran as root via sudo.
 sudo -n chown -R "$REMOTE_OWNER" "$REMOTE_PATH"
 
-sudo -n install -d -m 755 "$(dirname "$REMOTE_LEGACY_REDIRECTS_SNIPPET")"
-printf '%s' "$LEGACY_REDIRECTS_SNIPPET_B64" \
-  | base64 --decode \
-  | sudo -n tee "$REMOTE_LEGACY_REDIRECTS_SNIPPET" >/dev/null
+install_snippet() {
+  local snippet_path="$1"
+  local snippet_b64="$2"
 
-LEGACY_REDIRECT_INCLUDE="include ${REMOTE_LEGACY_REDIRECTS_SNIPPET};"
+  sudo -n install -d -m 755 "$(dirname "$snippet_path")"
+  printf '%s' "$snippet_b64" \
+    | base64 --decode \
+    | sudo -n tee "$snippet_path" >/dev/null
+}
 
-if ! sudo -n grep -Fq "$LEGACY_REDIRECT_INCLUDE" "$REMOTE_NGINX_SITE_CONFIG"; then
-  echo "Adding legacy redirect include to ${REMOTE_NGINX_SITE_CONFIG}"
+# Inserts `include <snippet>;` before the root directive of the
+# www.solagree.com server block, backing up the site config first.
+ensure_include_in_www_server_block() {
+  local include_line="include $1;"
+
+  if sudo -n grep -Fq "$include_line" "$REMOTE_NGINX_SITE_CONFIG"; then
+    return 0
+  fi
+
+  echo "Adding ${include_line} to ${REMOTE_NGINX_SITE_CONFIG}"
   sudo -n cp "$REMOTE_NGINX_SITE_CONFIG" "${REMOTE_NGINX_SITE_CONFIG}.bak"
-  sudo -n awk -v snippet="    ${LEGACY_REDIRECT_INCLUDE}" '
+  sudo -n awk -v snippet="    ${include_line}" '
     /^[[:space:]]*server_name[[:space:]]+www[.]solagree[.]com;/ {
       in_www_server = 1
     }
@@ -128,7 +145,12 @@ if ! sudo -n grep -Fq "$LEGACY_REDIRECT_INCLUDE" "$REMOTE_NGINX_SITE_CONFIG"; th
     }
   ' "$REMOTE_NGINX_SITE_CONFIG" | sudo -n tee "${REMOTE_NGINX_SITE_CONFIG}.tmp" >/dev/null
   sudo -n mv "${REMOTE_NGINX_SITE_CONFIG}.tmp" "$REMOTE_NGINX_SITE_CONFIG"
-fi
+}
+
+install_snippet "$REMOTE_LEGACY_REDIRECTS_SNIPPET" "$LEGACY_REDIRECTS_SNIPPET_B64"
+install_snippet "$REMOTE_CO_BRANDED_NOINDEX_SNIPPET" "$CO_BRANDED_NOINDEX_SNIPPET_B64"
+ensure_include_in_www_server_block "$REMOTE_LEGACY_REDIRECTS_SNIPPET"
+ensure_include_in_www_server_block "$REMOTE_CO_BRANDED_NOINDEX_SNIPPET"
 
 sudo -n nginx -t
 sudo -n systemctl reload nginx
@@ -143,11 +165,14 @@ if [ "$DRY_RUN" = false ] && [ "$SKIP_ROUTE_CHECK" = false ]; then
 
   for route_check_path in "${ROUTE_CHECK_PATHS[@]}"; do
     ROUTE_CHECK_URL="https://${ROUTE_CHECK_HOST}${route_check_path}"
+    ROUTE_CHECK_HEADER_FILE="$(mktemp)"
     ROUTE_CHECK_STATUS="$(curl -sS -o /dev/null -k \
       --resolve "${ROUTE_CHECK_HOST}:443:${ROUTE_CHECK_RESOLVE_IP}" \
+      -D "$ROUTE_CHECK_HEADER_FILE" \
       -w "%{http_code}" "$ROUTE_CHECK_URL" || true)"
 
     if [ "$ROUTE_CHECK_STATUS" = "404" ]; then
+      rm -f "$ROUTE_CHECK_HEADER_FILE"
       cat >&2 <<MESSAGE
 Production route check failed: $ROUTE_CHECK_URL returned HTTP 404.
 
@@ -161,7 +186,24 @@ MESSAGE
       exit 1
     fi
 
-    echo "Route check passed: $ROUTE_CHECK_URL returned HTTP $ROUTE_CHECK_STATUS"
+    if ! grep -iq '^x-robots-tag:.*noindex, nofollow' "$ROUTE_CHECK_HEADER_FILE"; then
+      rm -f "$ROUTE_CHECK_HEADER_FILE"
+      cat >&2 <<MESSAGE
+Production noindex check failed: $ROUTE_CHECK_URL responded without an
+X-Robots-Tag: noindex, nofollow header.
+
+Co-branded routes are client-only behind the static /200.html fallback, so the
+initial HTTP response must carry the noindex signal as a response header. The
+nginx server block for $ROUTE_CHECK_HOST must include the co-branded noindex
+snippet (deployed from config/nginx/co-branded-noindex.conf) before the SPA fallback:
+
+  include ${REMOTE_CO_BRANDED_NOINDEX_SNIPPET};
+MESSAGE
+      exit 1
+    fi
+
+    rm -f "$ROUTE_CHECK_HEADER_FILE"
+    echo "Route check passed: $ROUTE_CHECK_URL returned HTTP $ROUTE_CHECK_STATUS with X-Robots-Tag noindex"
   done
 
   LEGACY_REDIRECT_CHECK_URL="https://${ROUTE_CHECK_HOST}/about/"

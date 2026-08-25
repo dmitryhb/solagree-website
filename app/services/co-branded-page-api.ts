@@ -101,12 +101,34 @@ export const normalizeCoBrandedCtaUrl = (
 }
 
 /**
- * Resolves partner image URLs while rejecting unsafe schemes such as javascript:
- * and data:. Invalid or blocked image URLs safely omit the partner logo.
+ * Protocol of the page rendering the partner logo. Co-branded configuration
+ * only loads on the client, so production normalization reads the browser
+ * location; non-browser callers safely assume HTTPS.
+ */
+const getCoBrandedPageProtocol = (pageProtocol?: string): string => {
+  if (pageProtocol) {
+    return pageProtocol
+  }
+
+  if (typeof window !== 'undefined' && window.location?.protocol) {
+    return window.location.protocol
+  }
+
+  return 'https:'
+}
+
+/**
+ * Resolves partner image URLs against the approved Portal/CDN origin while
+ * rejecting unsafe schemes such as javascript: and data:, plain http: sources
+ * on HTTPS pages (mixed content and tracking pixels), and any other external
+ * origin. Website repository assets referenced by the templates themselves
+ * (for example `/solagree-logo.svg`) never pass through this normalizer.
+ * Invalid or blocked image URLs safely omit the partner logo.
  */
 export const normalizeCoBrandedImageUrl = (
   value: unknown,
-  portalApiBaseUrl: string
+  portalApiBaseUrl: string,
+  pageProtocol?: string
 ): string | null => {
   const imageUrl = normalizeOptionalString(value)
 
@@ -115,9 +137,20 @@ export const normalizeCoBrandedImageUrl = (
   }
 
   try {
+    const approvedOrigin = new URL(portalApiBaseUrl).origin
     const normalizedImageUrl = new URL(imageUrl, portalApiBaseUrl)
+    const renderingPageProtocol = getCoBrandedPageProtocol(pageProtocol)
+    const isHttpsPage = renderingPageProtocol === 'https:'
 
-    return APPROVED_CO_BRANDED_URL_PROTOCOLS.includes(normalizedImageUrl.protocol)
+    if (!APPROVED_CO_BRANDED_URL_PROTOCOLS.includes(normalizedImageUrl.protocol)) {
+      return null
+    }
+
+    if (isHttpsPage && normalizedImageUrl.protocol !== 'https:') {
+      return null
+    }
+
+    return normalizedImageUrl.origin === approvedOrigin
       ? normalizedImageUrl.toString()
       : null
   } catch {
@@ -127,9 +160,10 @@ export const normalizeCoBrandedImageUrl = (
 
 const normalizeLogoUrl = (
   payload: RawCoBrandedPagePublicConfig,
-  portalApiBaseUrl: string
+  portalApiBaseUrl: string,
+  pageProtocol?: string
 ): string | null => {
-  const directLogoUrl = normalizeCoBrandedImageUrl(payload.logoUrl, portalApiBaseUrl)
+  const directLogoUrl = normalizeCoBrandedImageUrl(payload.logoUrl, portalApiBaseUrl, pageProtocol)
 
   if (directLogoUrl) {
     return directLogoUrl
@@ -140,7 +174,7 @@ const normalizeLogoUrl = (
     && payload.logo !== null
     && 'url' in payload.logo
   ) {
-    return normalizeCoBrandedImageUrl(payload.logo.url, portalApiBaseUrl)
+    return normalizeCoBrandedImageUrl(payload.logo.url, portalApiBaseUrl, pageProtocol)
   }
 
   return null
@@ -153,7 +187,8 @@ export const normalizeCoBrandedPageConfig = (
   payload: unknown,
   fallbackSlug: string,
   portalApiBaseUrl: string,
-  pageType: CoBrandedPageType = 'standard'
+  pageType: CoBrandedPageType = 'standard',
+  pageProtocol?: string
 ): CoBrandedPagePublicConfig => {
   if (!isRecord(payload)) {
     throw new Error('Co-branded page configuration is invalid.')
@@ -175,7 +210,7 @@ export const normalizeCoBrandedPageConfig = (
     firmName: normalizeOptionalString(payload.firmName),
     phoneNumber: normalizeOptionalString(payload.phoneNumber) ?? normalizeOptionalString(payload.phone),
     emailAddress: normalizeOptionalString(payload.emailAddress) ?? normalizeOptionalString(payload.email),
-    logoUrl: normalizeLogoUrl(payload, portalApiBaseUrl),
+    logoUrl: normalizeLogoUrl(payload, portalApiBaseUrl, pageProtocol),
     ctaUrl: normalizeCoBrandedCtaUrl(payload.ctaUrl, slug, pageType)
   }
 }

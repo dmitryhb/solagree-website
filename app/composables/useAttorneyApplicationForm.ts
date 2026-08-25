@@ -5,7 +5,8 @@ import {
   getAttorneyApplicationSubmissionErrorMessage,
   submitAttorneyApplication
 } from '~/services/attorney-application-api'
-import type { AttorneyApplicationFetcher } from '~/services/attorney-application-api'
+import { websitePortalFetcher } from '~/services/portal-api'
+import { focusPageDestination } from '~/utils/focus-destination'
 import type {
   AttorneyApplicationFormState,
   AttorneyLicenseNumberRow
@@ -107,11 +108,23 @@ export const useAttorneyApplicationForm = (): UseAttorneyApplicationFormReturn =
     }
   }
 
-  const submission = useApplicationSubmission<AttorneyApplicationFormState, unknown>({
+  const submission = useApplicationSubmission<AttorneyApplicationFormState, Awaited<ReturnType<typeof submitAttorneyApplication>>>({
+    validate: () => {
+      hasAttemptedSubmit.value = true
+
+      const hasCustomErrors = hasBarStateError.value || hasLicenseNumberError.value
+
+      if (!formEl.value?.checkValidity() || hasCustomErrors) {
+        formEl.value?.reportValidity()
+        return false
+      }
+
+      return true
+    },
     getFormState: createSubmissionState,
     submit: (formState) => submitAttorneyApplication(formState, {
       portalApiBaseUrl: runtimeConfig.public.portalApiBaseUrl,
-      fetcher: $fetch as unknown as AttorneyApplicationFetcher
+      fetcher: websitePortalFetcher
     }),
     onSuccess: async () => {
       trackEvent('partner_application_submitted', {
@@ -120,23 +133,10 @@ export const useAttorneyApplicationForm = (): UseAttorneyApplicationFormReturn =
       })
 
       await navigateTo('/attorney-application/sent')
+      await focusPageDestination()
     },
     getErrorMessage: getAttorneyApplicationSubmissionErrorMessage
   })
-
-  const handleSubmit = async () => {
-    hasAttemptedSubmit.value = true
-    submission.resetSubmissionResult()
-
-    const hasCustomErrors = hasBarStateError.value || hasLicenseNumberError.value
-
-    if (!formEl.value?.checkValidity() || hasCustomErrors) {
-      formEl.value?.reportValidity()
-      return
-    }
-
-    await submission.handleSubmit()
-  }
 
   return {
     currentYear,
@@ -150,6 +150,6 @@ export const useAttorneyApplicationForm = (): UseAttorneyApplicationFormReturn =
     addLicenseNumber,
     removeLicenseNumber,
     updateLicenseNumber,
-    handleSubmit
+    handleSubmit: submission.handleSubmit
   }
 }

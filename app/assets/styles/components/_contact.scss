@@ -1,3 +1,5 @@
+@use "../abstracts/breakpoints" as bp;
+
 .contact-page {
   min-height: 100vh;
   background: var(--color-page);
@@ -34,7 +36,7 @@
 .contact-page__copy {
   max-width: 520px;
   margin: 2rem 0 0;
-  color: #171616;
+  color: var(--color-text-dark);
   font-family: var(--font-nav);
   font-size: 0.875rem;
   line-height: 1.45;
@@ -145,8 +147,13 @@
   box-shadow: 0 0 0 3px rgba(62, 64, 89, 0.1);
 }
 
+/* Plain inline variant of the shared FormResultMessage panel. */
 .contact-form__status {
-  margin: 0;
+  display: block;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
   color: var(--color-ink);
   font-family: var(--font-body);
   font-size: 0.9375rem;
@@ -154,8 +161,13 @@
 }
 
 .contact-form__thank-you {
+  display: block;
   gap: 0;
   margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
   color: var(--color-ink);
   font-family: var(--font-body);
   font-size: 1rem;
@@ -280,7 +292,7 @@
   outline-offset: 3px;
 }
 
-@media (max-width: 900px) {
+@include bp.below(bp.$bp-nav) { // was max-width: 900px — aligned to the nav boundary
   .contact-page__top,
   .contact-page__direct-grid {
     grid-template-columns: 1fr;
@@ -303,7 +315,7 @@
   }
 }
 
-@media (max-width: 640px) {
+@include bp.below(bp.$bp-small) {
   .contact-page__content {
     width: min(calc(100% - 2rem), 640px);
     padding-block: 3.25rem 3.75rem;

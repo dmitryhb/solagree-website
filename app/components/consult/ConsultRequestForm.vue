@@ -9,14 +9,13 @@ import {
   getConsultRequestSubmissionErrorMessage,
   submitConsultRequest
 } from '~/services/consult-request-api'
-import { isPortalApiConfigurationError } from '~/services/portal-api'
-import type { ConsultRequestFetcher } from '~/services/consult-request-api'
+import { websitePortalFetcher } from '~/services/portal-api'
 import type {
   ConsultRequestPageContent,
-  ConsultRequestFormState,
-  ConsultRequestResult
+  ConsultRequestFormState
 } from '~/types/consult-request'
 import { getStoredConsultQuizAnswers } from '~/utils/consult-quiz-answers'
+import { focusPageDestination } from '~/utils/focus-destination'
 
 const props = defineProps<{
   content: ConsultRequestPageContent
@@ -27,8 +26,6 @@ const route = useRoute()
 const { trackEvent } = useGoogleAnalytics()
 
 const formEl = ref<HTMLFormElement | null>(null)
-const submitting = ref(false)
-const submissionResult = ref<ConsultRequestResult | null>(null)
 
 const form = reactive<ConsultRequestFormState>({
   ...consultRequestInitialState
@@ -65,30 +62,29 @@ watch(
   }
 )
 
-const handleSubmit = async () => {
-  if (submitting.value) {
-    return
-  }
+const {
+  submitting,
+  submissionResult,
+  handleSubmit
+} = useApplicationSubmission<ConsultRequestFormState, Awaited<ReturnType<typeof submitConsultRequest>>>({
+  validate: () => {
+    if (!formEl.value?.checkValidity()) {
+      formEl.value?.reportValidity()
+      return false
+    }
 
-  submissionResult.value = null
-
-  if (!formEl.value?.checkValidity()) {
-    formEl.value?.reportValidity()
-    return
-  }
-
-  submitting.value = true
-
-  try {
-    await submitConsultRequest(form, {
-      portalApiBaseUrl: runtimeConfig.public.portalApiBaseUrl,
-      fetcher: $fetch as unknown as ConsultRequestFetcher,
-      consultType: props.content.consultType,
-      referralCode: referralCode.value,
-      sourceUrl: sourceUrl,
-      quizAnswers: getStoredConsultQuizAnswers()
-    })
-
+    return true
+  },
+  getFormState: () => form,
+  submit: (formState) => submitConsultRequest(formState, {
+    portalApiBaseUrl: runtimeConfig.public.portalApiBaseUrl,
+    fetcher: websitePortalFetcher,
+    consultType: props.content.consultType,
+    referralCode: referralCode.value,
+    sourceUrl: sourceUrl,
+    quizAnswers: getStoredConsultQuizAnswers()
+  }),
+  onSuccess: async () => {
     trackEvent('consultation_booked', {
       consult_type: props.content.consultType,
       referral_code: referralCode.value ?? undefined,
@@ -96,19 +92,11 @@ const handleSubmit = async () => {
     })
 
     await navigateTo(thankYouPath.value)
-  } catch (error) {
-    if (isPortalApiConfigurationError(error)) {
-      console.error(error)
-    }
-
-    submissionResult.value = {
-      title: 'Request not sent',
-      message: getConsultRequestSubmissionErrorMessage(error)
-    }
-  } finally {
-    submitting.value = false
-  }
-}
+    await focusPageDestination()
+  },
+  errorTitle: 'Request not sent',
+  getErrorMessage: getConsultRequestSubmissionErrorMessage
+})
 </script>
 
 <template>
@@ -274,17 +262,12 @@ const handleSubmit = async () => {
         :submitting="submitting"
       />
 
-      <div
+      <FormResultMessage
         v-if="submissionResult"
-        class="consult-request-form__result consult-request-form__result--error"
-        role="status"
-        aria-live="polite"
-      >
-        <p class="consult-request-form__result-title">
-          {{ submissionResult.title }}
-        </p>
-        <p>{{ submissionResult.message }}</p>
-      </div>
+        kind="error"
+        :title="submissionResult.title"
+        :message="submissionResult.message"
+      />
     </form>
   </section>
 </template>

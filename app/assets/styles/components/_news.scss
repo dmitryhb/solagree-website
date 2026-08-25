@@ -1,3 +1,5 @@
+@use "../abstracts/breakpoints" as bp;
+
 .news-index {
   background: var(--color-page);
 }
@@ -190,7 +192,7 @@
   color: var(--color-text-dark);
 }
 
-@media (max-width: 760px) {
+@include bp.below(bp.$bp-mobile) { // was max-width: 760px — aligned to the mobile boundary
   .news-feature {
     grid-template-columns: 1fr;
     gap: 1.5rem;

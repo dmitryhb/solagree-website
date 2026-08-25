@@ -1,3 +1,5 @@
+@use "../abstracts/breakpoints" as bp;
+
 .blog-index,
 .blog-article-page {
   background: var(--color-page);
@@ -404,6 +406,37 @@
   outline-offset: 3px;
 }
 
+.article-rich-text__note {
+  margin: 0 0 1.4rem;
+  padding: 1rem 1.2rem;
+  border-left: 3px solid var(--color-ink);
+  background: var(--color-surface-cool);
+}
+
+.article-rich-text__note-title {
+  margin: 0 0 0.4rem;
+  color: var(--color-heading);
+  font-family: var(--font-nav);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.article-rich-text__note[data-variant='warning'],
+.article-rich-text__note[data-variant='caution'] {
+  border-left-color: var(--color-heading);
+  background: var(--color-surface-stone);
+}
+
+.article-rich-text__note-content p {
+  margin: 0 0 0.6rem;
+}
+
+.article-rich-text__note-content p:last-child {
+  margin-bottom: 0;
+}
+
 .blog-article__back-link {
   display: inline-flex;
   align-items: center;
@@ -516,8 +549,9 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
-@media (max-width: 900px) {
-  .blog-featured {
+@include bp.below(bp.$bp-nav) { // was max-width: 900px — aligned to the nav boundary
+  .blog-featured,
+  .blog-article__layout {
     grid-template-columns: 1fr;
   }
 
@@ -535,7 +569,7 @@
   }
 }
 
-@media (max-width: 760px) {
+@include bp.below(bp.$bp-mobile) { // was max-width: 760px — aligned to the mobile boundary
 
   .blog-article__header {
     padding-left: 0;

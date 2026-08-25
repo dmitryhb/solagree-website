@@ -1,3 +1,5 @@
+@use "../abstracts/breakpoints" as bp;
+
 .legal-page {
   min-height: 100vh;
   background: var(--color-page);
@@ -121,7 +123,7 @@
 }
 
 .legal-document__body {
-  color: #27241f;
+  color: var(--color-text-muted);
   font-family: var(--font-body);
   font-size: 1rem;
   line-height: 1.4;
@@ -150,7 +152,7 @@
 
 .legal-document__section-title {
   margin: 1.9rem 0 1.35rem;
-  color: #27241f;
+  color: var(--color-text-muted);
   font-family: var(--font-body);
   font-size: 1rem;
   font-weight: 700;
@@ -160,7 +162,7 @@
 
 .legal-document__subheading {
   margin: 0 0 1.15rem;
-  color: #27241f;
+  color: var(--color-text-muted);
   font-weight: 700;
 }
 
@@ -206,13 +208,13 @@
 
 .faq-page__accordion .base-accordion__text {
   max-width: 690px;
-  color: #27241f;
+  color: var(--color-text-muted);
   font-family: var(--font-body);
   font-size: clamp(1rem, 1.35vw, 1.125rem);
   line-height: 1.48;
 }
 
-@media (max-width: 767px) {
+@include bp.below(bp.$bp-mobile) {
   .legal-page__content {
     width: min(calc(100% - 2rem), 1184px);
     padding-block: 3.25rem 4.25rem;

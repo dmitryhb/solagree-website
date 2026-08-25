@@ -30,7 +30,8 @@ Divorce decisions can benefit from *structured guidance* and [independent resour
     },
     status: 'published' as const,
     summary: 'A current article summary.',
-    title: 'A clearer next step'
+    title: 'A clearer next step',
+    updatedAt: '2026-08-24'
   }
 
   return {
@@ -116,7 +117,7 @@ describe('Blog article route runtime', () => {
     expect(wrapper.find('a[href^="javascript:"]').exists()).toBe(false)
     expect(wrapper.text()).toContain('Unsafe [source](javascript:alert(1)).')
     expect(wrapper.get('.blog-article__back-link--top').text()).toContain('Back to all articles')
-    expect(wrapper.get('.blog-article__meta').text()).toContain('Last Updated: August 21, 2026')
+    expect(wrapper.get('.blog-article__meta').text()).toContain('Last Updated: August 24, 2026')
     expect(wrapper.get('.blog-article__author-card').text()).toContain('Amanda Mason')
     expect(wrapper.find('.blog-article__aside').exists()).toBe(false)
     expect(warnSpy.mock.calls.some(args => args.join(' ').includes('Failed to resolve component'))).toBe(false)
@@ -135,9 +136,15 @@ describe('Blog article route runtime', () => {
 
     expect(structuredData).toMatchObject({
       '@type': 'Article',
+      dateModified: '2026-08-24',
+      datePublished: '2026-08-21',
       description: 'A current article description. </script><script>unsafe()</script>',
       headline: 'A clearer next step',
-      mainEntityOfPage: 'https://www.solagree.com/blog/clearer-next-step'
+      mainEntityOfPage: 'https://www.solagree.com/blog/clearer-next-step',
+      publisher: {
+        '@type': 'Organization',
+        name: 'Solagree'
+      }
     })
   })
 

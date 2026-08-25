@@ -1,4 +1,6 @@
-@media (max-width: 767px) {
+@use "../abstracts/breakpoints" as bp;
+
+@include bp.below(bp.$bp-mobile) {
   .section-shell,
   .section-shell--narrow {
     width: min(calc(100% - 1.5rem), var(--site-max-width));

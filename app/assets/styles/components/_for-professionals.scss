@@ -1,3 +1,5 @@
+@use "../abstracts/breakpoints" as bp;
+
 .for-professionals-section {
   background: var(--color-surface-footer);
   padding: 3rem 2rem 4rem;
@@ -21,7 +23,7 @@
   margin: 0;
   color: var(--color-ink);
   font-family: var(--font-display);
-  font-size: 54px;
+  font-size: var(--section-title-size);
   font-weight: 500;
   line-height: 1.54;
 }
@@ -129,13 +131,12 @@
   transform: scale(1.025);
 }
 
-@media (max-width: 1024px) {
+@include bp.below(bp.$bp-tablet) {
   .for-professionals-section {
     padding: 4rem 1.5rem;
   }
 
   .for-professionals-section__title {
-    font-size: 46px;
     line-height: 1.18;
   }
 
@@ -157,7 +158,7 @@
   }
 }
 
-@media (max-width: 767px) {
+@include bp.below(bp.$bp-mobile) {
   .for-professionals-section {
     padding: 3.5rem 1.25rem;
   }
@@ -169,7 +170,6 @@
   }
 
   .for-professionals-section__title {
-    font-size: 40px;
     line-height: 1.15;
   }
 

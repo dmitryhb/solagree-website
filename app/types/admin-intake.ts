@@ -52,14 +52,3 @@ export interface AdminIntakeSubmissionPayload {
   /** Source URL captured from `window.location.href` (hash stripped). */
   sourceUrl?: string | null
 }
-
-/**
- * Inline result displayed below the form when a submission error occurs.
- * Mirrors `ConsultRequestResult`.
- */
-export interface AdminIntakeResult {
-  /** Short, user-facing error heading. */
-  title: string
-  /** Detailed error message. */
-  message: string
-}

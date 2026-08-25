@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import type { CoBrandedPageType } from '#shared/co-branded-page-variant'
+import { useModalDialog } from '~/composables/useModalDialog'
 import {
   getConsultRequestSubmissionErrorMessage,
   submitCoBrandedConsultRequest
 } from '~/services/consult-request-api'
-import { isPortalApiConfigurationError } from '~/services/portal-api'
-import type { ConsultRequestFetcher } from '~/services/consult-request-api'
+import { websitePortalFetcher } from '~/services/portal-api'
 import type { CoBrandedConsultRequestFormState } from '~/types/consult-request'
 
 const props = defineProps<{
@@ -26,14 +26,8 @@ const { trackEvent } = useGoogleAnalytics()
 const formEl = ref<HTMLFormElement | null>(null)
 const panelEl = ref<HTMLElement | null>(null)
 const firstNameInput = ref<HTMLInputElement | null>(null)
-const errorEl = ref<HTMLElement | null>(null)
 const successHeading = ref<HTMLElement | null>(null)
-const submitting = ref(false)
 const submitted = ref(false)
-const submissionError = ref('')
-let previouslyFocusedElement: HTMLElement | null = null
-let previousBodyOverflow = ''
-let isPageScrollLocked = false
 
 const createInitialForm = (): CoBrandedConsultRequestFormState => ({
   firstName: '',
@@ -50,86 +44,29 @@ const form = reactive<CoBrandedConsultRequestFormState>(createInitialForm())
 const isAttorneyVariant = computed(() => props.pageType === 'standard')
 const hasPhone = computed(() => Boolean(form.phone.trim()))
 
-const resetForm = (): void => {
-  Object.assign(form, createInitialForm())
-  submissionError.value = ''
-  submitted.value = false
-}
+const {
+  submitting,
+  submissionResult,
+  resetSubmissionResult,
+  handleSubmit
+} = useApplicationSubmission<CoBrandedConsultRequestFormState, Awaited<ReturnType<typeof submitCoBrandedConsultRequest>>>({
+  validate: () => {
+    if (!formEl.value?.checkValidity()) {
+      formEl.value?.reportValidity()
+      return false
+    }
 
-const restorePageScroll = (): void => {
-  if (!isPageScrollLocked) {
-    return
-  }
-
-  document.body.style.overflow = previousBodyOverflow
-  isPageScrollLocked = false
-}
-
-const handleClose = (): void => {
-  if (submitting.value) {
-    return
-  }
-
-  emit('close')
-}
-
-const getFocusableElements = (): HTMLElement[] => {
-  return Array.from(panelEl.value?.querySelectorAll<HTMLElement>(
-    'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
-  ) ?? [])
-}
-
-const handleDialogKeydown = (event: KeyboardEvent): void => {
-  if (event.key === 'Escape') {
-    handleClose()
-    return
-  }
-
-  if (event.key !== 'Tab') {
-    return
-  }
-
-  const focusableElements = getFocusableElements()
-  const firstFocusableElement = focusableElements[0]
-  const lastFocusableElement = focusableElements.at(-1)
-
-  if (!firstFocusableElement || !lastFocusableElement) {
-    event.preventDefault()
-    return
-  }
-
-  if (event.shiftKey && document.activeElement === firstFocusableElement) {
-    event.preventDefault()
-    lastFocusableElement.focus()
-  } else if (!event.shiftKey && document.activeElement === lastFocusableElement) {
-    event.preventDefault()
-    firstFocusableElement.focus()
-  }
-}
-
-const handleSubmit = async (): Promise<void> => {
-  if (submitting.value) {
-    return
-  }
-
-  submissionError.value = ''
-
-  if (!formEl.value?.checkValidity()) {
-    formEl.value?.reportValidity()
-    return
-  }
-
-  submitting.value = true
-
-  try {
-    await submitCoBrandedConsultRequest(form, {
-      portalApiBaseUrl: runtimeConfig.public.portalApiBaseUrl,
-      fetcher: $fetch as unknown as ConsultRequestFetcher,
-      pageType: props.pageType,
-      referralCode: props.partnerSlug,
-      sourceUrl
-    })
-
+    return true
+  },
+  getFormState: () => form,
+  submit: (formState) => submitCoBrandedConsultRequest(formState, {
+    portalApiBaseUrl: runtimeConfig.public.portalApiBaseUrl,
+    fetcher: websitePortalFetcher,
+    pageType: props.pageType,
+    referralCode: props.partnerSlug,
+    sourceUrl
+  }),
+  onSuccess: async () => {
     trackEvent('consultation_booked', {
       consult_type: 'initial',
       co_branded_page_type: props.pageType,
@@ -140,18 +77,30 @@ const handleSubmit = async (): Promise<void> => {
     submitted.value = true
     await nextTick()
     successHeading.value?.focus()
-  } catch (error) {
-    if (isPortalApiConfigurationError(error)) {
-      console.error(error)
-    }
+  },
+  errorTitle: '',
+  getErrorMessage: getConsultRequestSubmissionErrorMessage
+})
 
-    submissionError.value = getConsultRequestSubmissionErrorMessage(error)
-    await nextTick()
-    errorEl.value?.focus()
-  } finally {
-    submitting.value = false
-  }
+const resetForm = (): void => {
+  Object.assign(form, createInitialForm())
+  resetSubmissionResult()
+  submitted.value = false
 }
+
+const handleClose = (): void => {
+  if (submitting.value) {
+    return
+  }
+
+  emit('close')
+}
+
+const modalDialog = useModalDialog({
+  getContainer: () => panelEl.value,
+  getInitialFocusTarget: () => firstNameInput.value,
+  onRequestClose: handleClose
+})
 
 watch(
   () => form.phone.trim(),
@@ -165,32 +114,16 @@ watch(
 
 watch(
   () => props.open,
-  async (isOpen) => {
+  (isOpen) => {
     if (!isOpen) {
-      restorePageScroll()
+      void modalDialog.deactivate()
       resetForm()
-      await nextTick()
-      previouslyFocusedElement?.focus()
-      previouslyFocusedElement = null
       return
     }
 
-    previouslyFocusedElement = document.activeElement instanceof HTMLElement
-      ? document.activeElement
-      : null
-    previousBodyOverflow = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
-    isPageScrollLocked = true
-
-    await nextTick()
-    firstNameInput.value?.focus()
+    void modalDialog.activate()
   }
 )
-
-onBeforeUnmount(() => {
-  restorePageScroll()
-  previouslyFocusedElement?.focus()
-})
 </script>
 
 <template>
@@ -202,7 +135,7 @@ onBeforeUnmount(() => {
       aria-modal="true"
       aria-labelledby="co-branded-consult-modal-title"
       :aria-describedby="isAttorneyVariant ? 'co-branded-conflict-explanation' : undefined"
-      @keydown="handleDialogKeydown"
+      @keydown="modalDialog.handleKeydown"
     >
       <div
         class="co-branded-consult-modal__backdrop"
@@ -389,25 +322,20 @@ onBeforeUnmount(() => {
             </template>
           </div>
 
-          <p
-            v-if="submissionError"
-            ref="errorEl"
+          <FormResultMessage
+            v-if="submissionResult"
             class="co-branded-consult-modal__error"
-            role="alert"
-            tabindex="-1"
-          >
-            {{ submissionError }}
-          </p>
+            kind="error"
+            :message="submissionResult.message"
+          />
 
-          <button
+          <SiteFormSubmit
             class="co-branded-consult-modal__submit"
-            type="submit"
-            :disabled="submitting"
-          >
-            <span aria-live="polite">
-              {{ submitting ? 'Submitting...' : 'Submit request' }}
-            </span>
-          </button>
+            label="Submit request"
+            submitting-label="Submitting..."
+            :icon="false"
+            :submitting="submitting"
+          />
         </form>
       </section>
     </div>

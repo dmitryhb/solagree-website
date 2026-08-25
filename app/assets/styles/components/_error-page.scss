@@ -1,3 +1,5 @@
+@use "../abstracts/breakpoints" as bp;
+
 .error-page {
   min-height: calc(100vh - 76px);
   background: var(--color-page);
@@ -116,7 +118,7 @@
   line-height: 1;
 }
 
-@media (max-width: 900px) {
+@include bp.below(bp.$bp-nav) { // was max-width: 900px — aligned to the nav boundary
   .error-page {
     min-height: calc(100vh - 72px);
   }
@@ -133,7 +135,7 @@
   }
 }
 
-@media (max-width: 560px) {
+@include bp.below(bp.$bp-small) { // was max-width: 560px — aligned to the small boundary
   .error-page__hero {
     width: min(calc(100% - 2rem), 1184px);
     padding-block: 3rem 3.75rem;

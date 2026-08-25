@@ -1,3 +1,6 @@
+/** Supported callout variants for emphasized advisory blocks in repository article bodies. */
+export type ArticleCalloutVariant = 'note' | 'tip' | 'important' | 'warning' | 'caution'
+
 /** A safe inline node produced from repository-managed article body text. */
 export type ArticleInlineToken =
   | { type: 'text', value: string }
@@ -12,7 +15,16 @@ export type ArticleInlineToken =
 /** A safe block node produced from repository-managed article body text. */
 export type ArticleRichTextBlock =
   | { alt: string, src: string, type: 'image' }
-  | { actionHref: string, actionLabel: string, body: ArticleInlineToken[], title: ArticleInlineToken[], type: 'callout' }
+  | {
+    /** Optional CTA destination; present only for `:::callout` blocks with a safe action link. */
+    actionHref?: string
+    /** Optional CTA label; present only for `:::callout` blocks with a safe action link. */
+    actionLabel?: string
+    body: ArticleInlineToken[]
+    title: ArticleInlineToken[]
+    type: 'callout'
+    variant: ArticleCalloutVariant
+  }
   | { content: ArticleInlineToken[], level: 2 | 3 | 4, type: 'heading' }
   | { content: ArticleInlineToken[], type: 'paragraph' }
   | { items: ArticleInlineToken[][], ordered: boolean, type: 'list' }

@@ -1,6 +1,8 @@
 import {
   getPortalSubmissionErrorMessage,
-  normalizePortalApiBaseUrl
+  isNonEmptyString,
+  normalizePortalApiBaseUrl,
+  submitToPortal
 } from '~/services/portal-api'
 import type { PortalFetcher, PortalSubmitOptions } from '~/services/portal-api'
 import type {
@@ -10,8 +12,6 @@ import type {
 
 const ADMIN_INTAKES_ENDPOINT_PREFIX = '/api/public/admin-intakes'
 const DEFAULT_SUBMISSION_ERROR_MESSAGE = 'We could not submit your intake form. Please try again.'
-
-type AdminIntakeApiResult = { ok: true, submissionId: string } | { error: true, message: string }
 
 /** Fetch implementation used by the admin intake service. */
 export type AdminIntakeFetcher = PortalFetcher<AdminIntakeSubmissionPayload>
@@ -59,35 +59,73 @@ export const createAdminIntakeSubmissionPayload = (
 }
 
 /**
+ * Outcome of verifying an admin intake slug against the portal.
+ *
+ * - `verified`: the portal confirmed the slug with `{ ok: true }`.
+ * - `missing`: the portal explicitly responded with a 404.
+ * - `invalid-response`: the portal returned a successful response whose
+ *   payload does not satisfy the documented verification shape.
+ */
+export type AdminIntakeSlugVerification =
+  | { status: 'verified' }
+  | { status: 'missing' }
+  | { status: 'invalid-response' }
+
+/**
+ * Guards portal fetch errors that confirm a slug does not exist.
+ */
+const isPortalSlugNotFound = (error: unknown): boolean => {
+  return (
+    typeof error === 'object'
+    && error !== null
+    && 'statusCode' in error
+    && error.statusCode === 404
+  )
+}
+
+/**
  * Verifies that an admin intake slug exists on the portal.
  *
- * Returns `true` when the portal responds with `{ ok: true }`, `false` on 404.
- *
- * @throws Error for any unexpected network or server error.
+ * Returns a typed outcome: `verified` for `{ ok: true }` responses, `missing`
+ * when the portal confirms the slug does not exist with a 404, and
+ * `invalid-response` when a successful response is malformed. Unexpected
+ * network, server, timeout, or configuration errors are rethrown so callers
+ * can distinguish upstream failures from a missing slug.
  */
 export const verifyAdminIntakeSlug = async (
   slug: string,
   options: VerifyAdminIntakeSlugOptions
-): Promise<boolean> => {
+): Promise<AdminIntakeSlugVerification> => {
   const portalApiBaseUrl = normalizePortalApiBaseUrl(options.portalApiBaseUrl)
   const endpoint = `${portalApiBaseUrl}${ADMIN_INTAKES_ENDPOINT_PREFIX}/${encodeURIComponent(slug)}`
 
   try {
     const response = await options.fetcher<{ ok?: unknown }>(endpoint)
 
-    return typeof response === 'object' && response !== null && 'ok' in response && response.ok === true
+    if (typeof response === 'object' && response !== null && 'ok' in response && response.ok === true) {
+      return { status: 'verified' }
+    }
+
+    return { status: 'invalid-response' }
   } catch (error) {
-    if (
-      typeof error === 'object'
-      && error !== null
-      && 'statusCode' in error
-      && error.statusCode === 404
-    ) {
-      return false
+    if (isPortalSlugNotFound(error)) {
+      return { status: 'missing' }
     }
 
     throw error
   }
+}
+
+/**
+ * Runtime parser for the admin intake success response.
+ *
+ * Requires a non-empty string `submissionId` and preserves the public
+ * `{ submissionId }` return shape exactly.
+ */
+const parseAdminIntakeSuccess = (response: object): { submissionId: string } | null => {
+  return 'submissionId' in response && isNonEmptyString(response.submissionId)
+    ? { submissionId: response.submissionId }
+    : null
 }
 
 /**
@@ -100,20 +138,12 @@ export const submitAdminIntake = async (
   slug: string,
   options: SubmitAdminIntakeOptions
 ): Promise<{ submissionId: string }> => {
-  const portalApiBaseUrl = normalizePortalApiBaseUrl(options.portalApiBaseUrl)
-  const endpoint = `${portalApiBaseUrl}${ADMIN_INTAKES_ENDPOINT_PREFIX}/${encodeURIComponent(slug)}`
-
-  const response = await options.fetcher<AdminIntakeApiResult>(
-    endpoint,
-    {
-      method: 'POST',
-      body: createAdminIntakeSubmissionPayload(form, options)
-    }
-  )
-
-  if ('error' in response) {
-    throw new Error(response.message)
-  }
-
-  return { submissionId: response.submissionId }
+  return await submitToPortal({
+    portalApiBaseUrl: options.portalApiBaseUrl,
+    fetcher: options.fetcher,
+    endpoint: `${ADMIN_INTAKES_ENDPOINT_PREFIX}/${encodeURIComponent(slug)}`,
+    payload: createAdminIntakeSubmissionPayload(form, options),
+    parseSuccess: parseAdminIntakeSuccess,
+    fallbackMessage: DEFAULT_SUBMISSION_ERROR_MESSAGE
+  })
 }

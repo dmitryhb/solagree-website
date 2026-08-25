@@ -28,7 +28,7 @@ const blocks = computed(() => parseArticleBody(props.body))
         >
       </figure>
       <aside
-        v-else-if="block.type === 'callout'"
+        v-else-if="block.type === 'callout' && block.actionLabel"
         class="article-rich-text__callout"
       >
         <h2 class="article-rich-text__callout-title">
@@ -43,6 +43,21 @@ const blocks = computed(() => parseArticleBody(props.body))
         >
           {{ block.actionLabel }}
         </SiteButton>
+      </aside>
+      <aside
+        v-else-if="block.type === 'callout'"
+        class="article-rich-text__note"
+        :data-variant="block.variant"
+      >
+        <p
+          v-if="block.title.length > 0"
+          class="article-rich-text__note-title"
+        >
+          <ArticleInlineContent :tokens="block.title" />
+        </p>
+        <div class="article-rich-text__note-content">
+          <ArticleInlineContent :tokens="block.body" />
+        </div>
       </aside>
       <h2 v-else-if="block.type === 'heading' && block.level === 2">
         <ArticleInlineContent :tokens="block.content" />

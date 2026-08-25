@@ -1,6 +1,7 @@
 import {
   getPortalSubmissionErrorMessage,
-  normalizePortalApiBaseUrl
+  parsePortalRequestIdSuccess,
+  submitToPortal
 } from '~/services/portal-api'
 import type { PortalFetcher, PortalSubmitOptions } from '~/services/portal-api'
 import {
@@ -10,7 +11,6 @@ import {
 import type {
   ConsultBestTimeOfDay,
   ConsultPreferredContactMethod,
-  ConsultRequestApiErrorResponse,
   ConsultRequestApiResponse,
   ConsultRequestQuizAnswer,
   ConsultRequestSubmissionPayload,
@@ -23,8 +23,6 @@ import { isMember } from '~/utils/is-member'
 
 const CONSULT_REQUESTS_ENDPOINT = '/api/consult-requests'
 const DEFAULT_SUBMISSION_ERROR_MESSAGE = 'We could not submit your consult request. Please try again.'
-
-type ConsultRequestApiResult = ConsultRequestApiResponse | ConsultRequestApiErrorResponse
 
 export type ConsultRequestFetcher = PortalFetcher<ConsultRequestSubmissionPayload>
 
@@ -115,20 +113,14 @@ export const submitConsultRequest = async (
   form: ConsultRequestFormState,
   options: SubmitConsultRequestOptions
 ): Promise<ConsultRequestApiResponse> => {
-  const portalApiBaseUrl = normalizePortalApiBaseUrl(options.portalApiBaseUrl)
-  const response = await options.fetcher<ConsultRequestApiResult>(
-    `${portalApiBaseUrl}${CONSULT_REQUESTS_ENDPOINT}`,
-    {
-      method: 'POST',
-      body: createConsultRequestSubmissionPayload(form, options)
-    }
-  )
-
-  if ('error' in response) {
-    throw new Error(response.message)
-  }
-
-  return response
+  return await submitToPortal({
+    portalApiBaseUrl: options.portalApiBaseUrl,
+    fetcher: options.fetcher,
+    endpoint: CONSULT_REQUESTS_ENDPOINT,
+    payload: createConsultRequestSubmissionPayload(form, options),
+    parseSuccess: parsePortalRequestIdSuccess<ConsultRequestApiResponse>,
+    fallbackMessage: DEFAULT_SUBMISSION_ERROR_MESSAGE
+  })
 }
 
 /**
@@ -138,18 +130,12 @@ export const submitCoBrandedConsultRequest = async (
   form: CoBrandedConsultRequestFormState,
   options: SubmitCoBrandedConsultRequestOptions
 ): Promise<ConsultRequestApiResponse> => {
-  const portalApiBaseUrl = normalizePortalApiBaseUrl(options.portalApiBaseUrl)
-  const response = await options.fetcher<ConsultRequestApiResult>(
-    `${portalApiBaseUrl}${CONSULT_REQUESTS_ENDPOINT}`,
-    {
-      method: 'POST',
-      body: createCoBrandedConsultRequestPayload(form, options)
-    }
-  )
-
-  if ('error' in response) {
-    throw new Error(response.message)
-  }
-
-  return response
+  return await submitToPortal({
+    portalApiBaseUrl: options.portalApiBaseUrl,
+    fetcher: options.fetcher,
+    endpoint: CONSULT_REQUESTS_ENDPOINT,
+    payload: createCoBrandedConsultRequestPayload(form, options),
+    parseSuccess: parsePortalRequestIdSuccess<ConsultRequestApiResponse>,
+    fallbackMessage: DEFAULT_SUBMISSION_ERROR_MESSAGE
+  })
 }

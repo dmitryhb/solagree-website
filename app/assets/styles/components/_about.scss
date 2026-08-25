@@ -1,3 +1,5 @@
+@use "../abstracts/breakpoints" as bp;
+
 .about-page {
   min-height: 100vh;
   background: var(--color-page);
@@ -107,7 +109,7 @@
 .about-founder-video-section__intro {
   max-width: 820px;
   margin: clamp(1rem, 1.8vw, 1.25rem) 0 0;
-  color: #171616;
+  color: var(--color-text-dark);
   font-family: var(--font-body);
   font-size: clamp(1.125rem, 1.55vw, 1.375rem);
   line-height: 1.36;
@@ -125,7 +127,7 @@
   justify-items: center;
   width: min(100%, 760px);
   margin: clamp(2.25rem, 4vw, 3.25rem) auto 0;
-  color: #171616;
+  color: var(--color-text-dark);
   font-family: var(--font-body);
   text-align: center;
 }
@@ -316,7 +318,7 @@
 .about-audience-card__title {
   max-width: 100%;
   margin: 0;
-  color: #171616;
+  color: var(--color-text-dark);
   font-family: var(--font-display);
   font-size: clamp(2rem, 3.2vw, 2.25rem);
   font-weight: 500;
@@ -337,7 +339,7 @@
   justify-items: center;
   max-width: 438px;
   margin-top: clamp(1.35rem, 2.2vw, 1.65rem);
-  color: #171616;
+  color: var(--color-text-dark);
   font-family: var(--font-nav);
   font-size: clamp(1.0625rem, 1.55vw, 1.25rem);
   line-height: 1.68;
@@ -401,7 +403,7 @@
   background: rgba(255, 253, 249, 0.34);
 }
 
-@media (max-width: 900px) {
+@include bp.below(bp.$bp-nav) { // was max-width: 900px — aligned to the nav boundary
   .about-hero-section {
     padding: 4rem 1.25rem 5rem;
   }
@@ -456,7 +458,7 @@
   }
 }
 
-@media (max-width: 640px) {
+@include bp.below(bp.$bp-small) {
   .about-hero-section {
     padding: 3rem 1rem 4rem;
   }

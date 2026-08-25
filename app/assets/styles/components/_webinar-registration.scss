@@ -1,3 +1,5 @@
+@use "../abstracts/breakpoints" as bp;
+
 .webinar-registration-page {
   min-height: 100vh;
   background: var(--color-page);
@@ -34,7 +36,7 @@
 .webinar-registration-intro__summary {
   max-width: 533px;
   margin: 1.625rem 0 1.35rem;
-  color: #171616;
+  color: var(--color-text-dark);
   font-family: var(--font-body);
   font-size: clamp(1.0625rem, 1.65vw, 1.5rem);
   line-height: 1.58;
@@ -52,7 +54,7 @@
 
 .webinar-registration-intro__includes-title {
   margin: 0;
-  color: #27241f;
+  color: var(--color-text-muted);
   font-family: var(--font-nav);
   font-size: 0.875rem;
   font-weight: 600;
@@ -73,7 +75,7 @@
   display: flex;
   gap: 1rem;
   align-items: center;
-  color: #171616;
+  color: var(--color-text-dark);
   font-family: var(--font-body);
   font-size: 1rem;
   line-height: 1.5;
@@ -266,7 +268,7 @@
 }
 
 .watch-webinar-form__submit:hover {
-  background: #323449;
+  background: var(--color-surface-dark);
 }
 
 .watch-webinar-form__submit:focus-visible {
@@ -287,7 +289,6 @@
   line-height: 1;
 }
 
-.watch-webinar-form__status,
 .watch-webinar-form__contact {
   margin: 0;
   color: #0a0e12;
@@ -296,8 +297,18 @@
   line-height: 1.45;
 }
 
+/* Plain inline variant of the shared FormResultMessage panel. */
 .watch-webinar-form__status {
+  display: block;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  margin: 0;
   color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.45;
 }
 
 .watch-webinar-form__contact {
@@ -313,7 +324,7 @@
   text-decoration: underline;
 }
 
-@media (max-width: 1060px) {
+@include bp.below(bp.$bp-tablet) { // was max-width: 1060px — aligned to the tablet boundary
   .webinar-registration-page__content {
     grid-template-columns: 1fr;
     width: min(calc(100% - 2rem), 760px);
@@ -325,7 +336,7 @@
   }
 }
 
-@media (max-width: 640px) {
+@include bp.below(bp.$bp-small) {
   .webinar-registration-page__content {
     padding-block: 3rem 3.75rem;
   }

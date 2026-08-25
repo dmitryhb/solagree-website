@@ -74,6 +74,9 @@ const {
         name="phone"
         type="tel"
         autocomplete="tel"
+        inputmode="tel"
+        pattern="(?:\+?1[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}"
+        title="Use a 10-digit US phone number, e.g. 1-415-555-1234 or 415-555-1234."
         placeholder="1-415-555-1234..."
         required
       />
@@ -210,18 +213,12 @@ const {
         :submitting="submitting"
       />
 
-      <div
+      <FormResultMessage
         v-if="submissionResult"
-        class="attorney-application-form__result"
-        :class="`attorney-application-form__result--${submissionResult.kind}`"
-        role="status"
-        aria-live="polite"
-      >
-        <p class="attorney-application-form__result-title">
-          {{ submissionResult.title }}
-        </p>
-        <p>{{ submissionResult.message }}</p>
-      </div>
+        kind="error"
+        :title="submissionResult.title"
+        :message="submissionResult.message"
+      />
     </form>
   </section>
 </template>

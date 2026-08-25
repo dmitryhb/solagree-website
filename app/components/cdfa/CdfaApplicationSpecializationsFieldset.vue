@@ -12,8 +12,6 @@ defineProps<{
   <fieldset
     class="attorney-application-form__fieldset"
     :class="{ 'attorney-application-form__fieldset--invalid': hasError }"
-    :aria-invalid="hasError"
-    :aria-describedby="hasError ? 'cdfa-specializations-error' : undefined"
   >
     <legend>
       Which areas of divorce financial analysis do you specialize in?<span aria-hidden="true">*</span>
@@ -30,6 +28,8 @@ defineProps<{
           name="specializations"
           type="checkbox"
           :value="option.value"
+          :aria-invalid="hasError ? 'true' : undefined"
+          :aria-describedby="hasError ? 'cdfa-specializations-error' : undefined"
         >
         <span>{{ option.label }}</span>
       </label>
@@ -39,6 +39,7 @@ defineProps<{
       v-if="hasError"
       id="cdfa-specializations-error"
       class="attorney-application-form__error"
+      role="alert"
     >
       Select at least one specialization.
     </p>

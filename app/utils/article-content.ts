@@ -1,12 +1,30 @@
-import type { ArticleInlineToken, ArticleRichTextBlock } from '~/types/article-rich-text'
+import type {
+  ArticleCalloutVariant,
+  ArticleInlineToken,
+  ArticleRichTextBlock
+} from '~/types/article-rich-text'
 
-const INLINE_MARKUP_PATTERN = /(\[([^\]]+)\]\(([^\s)]+)\)|\*\*([^*]+)\*\*|\*([^*]+)\*)/g
+/**
+ * Safe renderer for the documented repository rich-text grammar.
+ * The supported syntax and its degradation rules are documented in
+ * docs/article-rich-text.md; malformed constructs degrade to visible
+ * text instead of being discarded.
+ */
+
 const HEADING_PATTERN = /^(#{1,4})\s+(.+)$/
-const IMAGE_PATTERN = /^!\[([^\]]*)\]\(([^\s)]+)\)$/
 const ORDERED_ITEM_PATTERN = /^\d+\.\s+(.+)$/
 const UNORDERED_ITEM_PATTERN = /^[-*]\s+(.+)$/
-const CALLOUT_START = ':::callout'
-const CALLOUT_END = ':::'
+const CALLOUT_MARKER_PATTERN = /^>\s*\[!([A-Za-z]+)\]\s*(.*)$/
+const IMAGE_LINE_PATTERN = /^!\[([^\]]*)\]\((.+)\)$/
+const CTA_CALLOUT_START = ':::callout'
+const CTA_CALLOUT_END = ':::'
+
+const CALLOUT_VARIANTS: readonly ArticleCalloutVariant[] = ['note', 'tip', 'important', 'warning', 'caution']
+
+const isCalloutVariant = (value: string): value is ArticleCalloutVariant =>
+  CALLOUT_VARIANTS.includes(value as ArticleCalloutVariant)
+
+const stripCalloutQuote = (line: string): string => line.replace(/^>\s?/, '')
 
 const isSafeHref = (href: string): boolean => {
   if ((href.startsWith('/') && !href.startsWith('//')) || href.startsWith('#')) {
@@ -22,47 +40,181 @@ const isSafeHref = (href: string): boolean => {
   }
 }
 
+/** Repository images render from site-relative paths or absolute http(s) URLs; every other scheme stays text. */
+const isSafeImageSrc = (src: string): boolean => {
+  if (src.startsWith('/') && !src.startsWith('//')) {
+    return true
+  }
+
+  try {
+    const url = new URL(src)
+
+    return url.protocol === 'http:' || url.protocol === 'https:'
+  } catch {
+    return false
+  }
+}
+
+/**
+ * Reads a link destination beginning after "(", ending at its balanced closing
+ * parenthesis, so URLs containing balanced parentheses (including nested pairs
+ * such as https://en.wikipedia.org/wiki/Divorce_(law)) keep their full destination.
+ */
+const readBalancedHref = (value: string, start: number): { end: number, href: string } | undefined => {
+  let depth = 1
+
+  for (let index = start; index < value.length; index += 1) {
+    const character = value[index] ?? ''
+
+    if (character === '(') {
+      depth += 1
+      continue
+    }
+
+    if (character === ')') {
+      depth -= 1
+
+      if (depth === 0) {
+        const href = value.slice(start, index)
+
+        return href.length > 0 && !/\s/.test(href) ? { end: index + 1, href } : undefined
+      }
+
+      continue
+    }
+
+    if (/\s/.test(character)) {
+      return undefined
+    }
+  }
+
+  return undefined
+}
+
+const readInlineLink = (value: string, start: number): { end: number, href: string, label: string } | undefined => {
+  const labelEnd = value.indexOf(']', start + 1)
+
+  if (labelEnd === -1 || value[labelEnd + 1] !== '(') {
+    return undefined
+  }
+
+  const destination = readBalancedHref(value, labelEnd + 2)
+  if (!destination) {
+    return undefined
+  }
+
+  const label = value.slice(start + 1, labelEnd)
+
+  return label.length > 0 ? { end: destination.end, href: destination.href, label } : undefined
+}
+
+const readEmphasis = (value: string, start: number): { end: number, text: string } | undefined => {
+  const marker = value.startsWith('**', start) ? '**' : '*'
+  const contentStart = start + marker.length
+  const contentEnd = value.indexOf(marker, contentStart)
+
+  if (contentEnd <= contentStart) {
+    return undefined
+  }
+
+  const text = value.slice(contentStart, contentEnd)
+
+  return text.includes('*') ? undefined : { end: contentEnd + marker.length, text }
+}
+
+/** Appends visible text, merging with a preceding text token so degraded constructs stay contiguous. */
+const appendTextToken = (tokens: ArticleInlineToken[], value: string): void => {
+  const lastToken = tokens[tokens.length - 1]
+
+  if (lastToken?.type === 'text') {
+    lastToken.value += value
+    return
+  }
+
+  tokens.push({ type: 'text', value })
+}
+
 /** Converts the small, documented Markdown subset into safe inline render tokens. */
 export const parseArticleInlineContent = (value: string): ArticleInlineToken[] => {
   const tokens: ArticleInlineToken[] = []
   let cursor = 0
+  let index = 0
 
-  for (const match of value.matchAll(INLINE_MARKUP_PATTERN)) {
-    const index = match.index ?? 0
+  while (index < value.length) {
+    const character = value[index] ?? ''
+    let consumed = 0
 
-    if (index > cursor) {
-      tokens.push({ type: 'text', value: value.slice(cursor, index) })
+    if (character === '[') {
+      const link = readInlineLink(value, index)
+
+      if (link) {
+        if (index > cursor) {
+          appendTextToken(tokens, value.slice(cursor, index))
+        }
+
+        if (isSafeHref(link.href)) {
+          tokens.push({ href: link.href, type: 'link', value: link.label })
+        } else {
+          appendTextToken(tokens, value.slice(index, link.end))
+        }
+
+        cursor = link.end
+        consumed = link.end - index
+      }
     }
 
-    const [fullMatch, , linkLabel, href, strongText, emphasisText] = match
+    if (consumed === 0 && character === '*') {
+      const emphasis = readEmphasis(value, index)
 
-    if (linkLabel && href && isSafeHref(href)) {
-      tokens.push({ href, type: 'link', value: linkLabel })
-    } else if (strongText || emphasisText) {
-      const emphasisValue = strongText ?? emphasisText ?? ''
+      if (emphasis) {
+        if (index > cursor) {
+          appendTextToken(tokens, value.slice(cursor, index))
+        }
 
-      tokens.push({
-        tokens: parseArticleInlineContent(emphasisValue),
-        type: 'emphasis',
-        value: emphasisValue
-      })
-    } else {
-      tokens.push({ type: 'text', value: fullMatch })
+        tokens.push({
+          tokens: parseArticleInlineContent(emphasis.text),
+          type: 'emphasis',
+          value: emphasis.text
+        })
+
+        cursor = emphasis.end
+        consumed = emphasis.end - index
+      }
     }
 
-    cursor = index + fullMatch.length
+    index += consumed > 0 ? consumed : 1
   }
 
   if (cursor < value.length) {
-    tokens.push({ type: 'text', value: value.slice(cursor) })
+    appendTextToken(tokens, value.slice(cursor))
   }
 
   return tokens.length > 0 ? tokens : [{ type: 'text', value }]
 }
 
 /**
- * Parses headings, paragraphs, ordered/unordered lists, emphasis, and safe links
- * without injecting raw HTML from repository-managed content.
+ * Parses a `:::callout` action line (`[Label](href)` spanning the whole line).
+ * Unsafe destinations are not recognized as actions so their text stays visible.
+ */
+const readCtaCalloutAction = (value: string): { href: string, label: string } | undefined => {
+  if (!value.startsWith('[')) {
+    return undefined
+  }
+
+  const link = readInlineLink(value, 0)
+
+  if (!link || link.end !== value.length || !isSafeHref(link.href)) {
+    return undefined
+  }
+
+  return { href: link.href, label: link.label }
+}
+
+/**
+ * Parses headings, paragraphs, ordered/unordered lists, both callout grammars
+ * (`> [!TYPE]` advisory notes and `:::callout` CTA blocks), images, emphasis,
+ * and safe links without injecting raw HTML from repository-managed content.
+ * Malformed callout or image syntax degrades to visible paragraph text.
  */
 export const parseArticleBody = (body: string): ArticleRichTextBlock[] => {
   const lines = body.replace(/\r\n/g, '\n').split('\n')
@@ -77,15 +229,24 @@ export const parseArticleBody = (body: string): ArticleRichTextBlock[] => {
       continue
     }
 
-    if (line === CALLOUT_START) {
+    const heading = line.match(HEADING_PATTERN)
+    if (heading) {
+      const level = Math.max(2, Math.min(4, heading[1]?.length ?? 2)) as 2 | 3 | 4
+      blocks.push({ content: parseArticleInlineContent(heading[2] ?? ''), level, type: 'heading' })
+      lineIndex += 1
+      continue
+    }
+
+    if (line === CTA_CALLOUT_START) {
       const calloutLines: string[] = []
+
       lineIndex += 1
 
       while (lineIndex < lines.length) {
         const candidate = (lines[lineIndex] ?? '').trim()
         lineIndex += 1
 
-        if (candidate === CALLOUT_END) {
+        if (candidate === CTA_CALLOUT_END) {
           break
         }
 
@@ -95,33 +256,69 @@ export const parseArticleBody = (body: string): ArticleRichTextBlock[] => {
       }
 
       const title = calloutLines[0]?.replace(HEADING_PATTERN, '$2') ?? ''
-      const body = calloutLines[1] ?? ''
-      const actionMatch = calloutLines[2]?.match(/^\[([^\]]+)\]\(([^\s)]+)\)$/)
+      const actionSource = calloutLines.length > 2 ? calloutLines[calloutLines.length - 1] : undefined
+      const action = actionSource ? readCtaCalloutAction(actionSource) : undefined
+      const bodyText = (action ? calloutLines.slice(1, -1) : calloutLines.slice(1)).join(' ')
 
-      if (title && body && actionMatch?.[1] && actionMatch[2] && isSafeHref(actionMatch[2])) {
+      if (title && bodyText) {
         blocks.push({
-          actionHref: actionMatch[2],
-          actionLabel: actionMatch[1],
-          body: parseArticleInlineContent(body),
+          ...(action ? { actionHref: action.href, actionLabel: action.label } : {}),
+          body: parseArticleInlineContent(bodyText),
           title: parseArticleInlineContent(title),
-          type: 'callout'
+          type: 'callout',
+          variant: 'note'
         })
+      } else {
+        blocks.push({ content: parseArticleInlineContent(calloutLines.join(' ')), type: 'paragraph' })
       }
 
       continue
     }
 
-    const image = line.match(IMAGE_PATTERN)
-    if (image?.[2] && isSafeHref(image[2])) {
-      blocks.push({ alt: image[1] ?? '', src: image[2], type: 'image' })
+    const calloutMarker = line.match(CALLOUT_MARKER_PATTERN)
+    if (calloutMarker) {
+      const variant = (calloutMarker[1] ?? '').toLowerCase()
+      const title = (calloutMarker[2] ?? '').trim()
+      const rawLines = [line]
+
       lineIndex += 1
+
+      while (lineIndex < lines.length) {
+        const candidate = (lines[lineIndex] ?? '').trim()
+
+        if (!candidate.startsWith('>')) {
+          break
+        }
+
+        rawLines.push(candidate)
+        lineIndex += 1
+      }
+
+      if (isCalloutVariant(variant)) {
+        blocks.push({
+          body: parseArticleInlineContent(rawLines.slice(1).map(stripCalloutQuote).join(' ')),
+          title: title ? parseArticleInlineContent(title) : [],
+          type: 'callout',
+          variant
+        })
+      } else {
+        blocks.push({ content: parseArticleInlineContent(rawLines.join(' ')), type: 'paragraph' })
+      }
+
       continue
     }
 
-    const heading = line.match(HEADING_PATTERN)
-    if (heading) {
-      const level = Math.max(2, Math.min(4, heading[1]?.length ?? 2)) as 2 | 3 | 4
-      blocks.push({ content: parseArticleInlineContent(heading[2] ?? ''), level, type: 'heading' })
+    const image = line.match(IMAGE_LINE_PATTERN)
+    if (image) {
+      const alt = image[1] ?? ''
+      const src = (image[2] ?? '').trim()
+
+      if (src.length > 0 && !/\s/.test(src) && isSafeImageSrc(src)) {
+        blocks.push({ alt, src, type: 'image' })
+      } else {
+        blocks.push({ content: parseArticleInlineContent(line), type: 'paragraph' })
+      }
+
       lineIndex += 1
       continue
     }
@@ -152,7 +349,16 @@ export const parseArticleBody = (body: string): ArticleRichTextBlock[] => {
 
     while (lineIndex < lines.length) {
       const candidate = (lines[lineIndex] ?? '').trim()
-      if (!candidate || candidate === CALLOUT_START || IMAGE_PATTERN.test(candidate) || HEADING_PATTERN.test(candidate) || ORDERED_ITEM_PATTERN.test(candidate) || UNORDERED_ITEM_PATTERN.test(candidate)) {
+
+      if (
+        !candidate
+        || candidate === CTA_CALLOUT_START
+        || HEADING_PATTERN.test(candidate)
+        || ORDERED_ITEM_PATTERN.test(candidate)
+        || UNORDERED_ITEM_PATTERN.test(candidate)
+        || CALLOUT_MARKER_PATTERN.test(candidate)
+        || IMAGE_LINE_PATTERN.test(candidate)
+      ) {
         break
       }
 

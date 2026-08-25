@@ -62,6 +62,9 @@ if [ ! -d "$OUTPUT_DIR" ]; then
   exit 1
 fi
 
+# Fail the deployment before rsync when the static sitemap is missing or invalid.
+node "$ROOT_DIR/scripts/verify-sitemap.mjs"
+
 RSYNC_ARGS=(
   -avz
   --delete
@@ -82,9 +85,13 @@ if [ "$DRY_RUN" = false ] && [ "$SKIP_ROUTE_CHECK" = false ]; then
 
   for route_check_path in "${ROUTE_CHECK_PATHS[@]}"; do
     ROUTE_CHECK_URL="${STAGING_SITE_URL%/}${route_check_path}"
-    ROUTE_CHECK_STATUS="$(curl -sS -o /dev/null -w "%{http_code}" "$ROUTE_CHECK_URL" || true)"
+    ROUTE_CHECK_HEADER_FILE="$(mktemp)"
+    ROUTE_CHECK_STATUS="$(curl -sS -o /dev/null \
+      -D "$ROUTE_CHECK_HEADER_FILE" \
+      -w "%{http_code}" "$ROUTE_CHECK_URL" || true)"
 
     if [ "$ROUTE_CHECK_STATUS" = "404" ]; then
+      rm -f "$ROUTE_CHECK_HEADER_FILE"
       cat >&2 <<MESSAGE
 Staging route check failed: $ROUTE_CHECK_URL returned HTTP 404.
 
@@ -100,6 +107,33 @@ MESSAGE
       exit 1
     fi
 
-    echo "Route check passed: $ROUTE_CHECK_URL returned HTTP $ROUTE_CHECK_STATUS"
+    if ! grep -iq '^x-robots-tag:.*noindex, nofollow' "$ROUTE_CHECK_HEADER_FILE"; then
+      rm -f "$ROUTE_CHECK_HEADER_FILE"
+      cat >&2 <<MESSAGE
+Staging noindex check failed: $ROUTE_CHECK_URL responded without an
+X-Robots-Tag: noindex, nofollow header.
+
+Co-branded routes are client-only behind the static /200.html fallback, so the
+initial HTTP response must carry the noindex signal as a response header. Add
+the co-branded noindex locations from config/nginx/co-branded-noindex.conf to
+the nginx server block for $STAGING_SITE_URL, before the SPA fallback:
+
+  location ^~ /go/ {
+      add_header X-Robots-Tag "noindex, nofollow" always;
+      try_files $uri $uri/ /200.html;
+  }
+
+  location ^~ /cdfa/go/ {
+      add_header X-Robots-Tag "noindex, nofollow" always;
+      try_files $uri $uri/ /200.html;
+  }
+
+Then reload nginx and rerun this deployment.
+MESSAGE
+      exit 1
+    fi
+
+    rm -f "$ROUTE_CHECK_HEADER_FILE"
+    echo "Route check passed: $ROUTE_CHECK_URL returned HTTP $ROUTE_CHECK_STATUS with X-Robots-Tag noindex"
   done
 fi

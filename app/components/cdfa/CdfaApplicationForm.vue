@@ -118,6 +118,7 @@ const {
         label="What geographic area do you primarily serve?"
         name="serviceArea"
         placeholder="e.g., &quot;San Francisco Bay Area&quot; or &quot;Remote/National&quot;"
+        described-by="cdfa-service-area-hint"
         required
       />
       <p
@@ -188,18 +189,12 @@ const {
         :submitting="submitting"
       />
 
-      <div
+      <FormResultMessage
         v-if="submissionResult"
-        class="attorney-application-form__result"
-        :class="`attorney-application-form__result--${submissionResult.kind}`"
-        role="status"
-        aria-live="polite"
-      >
-        <p class="attorney-application-form__result-title">
-          {{ submissionResult.title }}
-        </p>
-        <p>{{ submissionResult.message }}</p>
-      </div>
+        kind="error"
+        :title="submissionResult.title"
+        :message="submissionResult.message"
+      />
     </form>
   </section>
 </template>

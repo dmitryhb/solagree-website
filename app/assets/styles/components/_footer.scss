@@ -1,3 +1,5 @@
+@use "../abstracts/breakpoints" as bp;
+
 .site-footer {
   background: var(--color-surface-dark);
   color: var(--color-surface-footer);
@@ -233,7 +235,7 @@
 .site-footer__legal-links a,
 .site-footer__copyright {
   color: var(--color-surface-footer);
-  font-family: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
+  font-family: var(--font-mono); /* single documented mono stack (HIR-368) */
   font-size: 0.625rem;
   font-weight: 400;
   line-height: 0.75rem;
@@ -423,7 +425,7 @@
   opacity: 0;
 }
 
-@media (max-width: 1180px) {
+@include bp.below(bp.$bp-wide) {
   .site-footer {
     padding: 4rem 1.5rem 3rem;
   }
@@ -445,7 +447,7 @@
   }
 }
 
-@media (max-width: 767px) {
+@include bp.below(bp.$bp-mobile) {
   .site-footer {
     padding: 3rem 1.25rem 2.5rem;
   }

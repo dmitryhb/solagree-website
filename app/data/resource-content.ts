@@ -201,8 +201,7 @@ At the end of the day, divorcing strong means maintaining who you are at the cor
     },
     status: 'published',
     summary: 'Four reasons a human-centered divorce process can better address emotional complexity, legal risk, creative problem-solving, and binding resolution.',
-    title: '4 Reasons You Shouldn’t Use AI to Get Divorced',
-    updatedAt: '2026-03-17'
+    title: '4 Reasons You Shouldn’t Use AI to Get Divorced'
   },
   {
     author: 'Amanda Mason',
