@@ -89,19 +89,8 @@ onBeforeUnmount(() => {
 <template>
   <section
     class="calcom-booking-embed"
-    aria-labelledby="calcom-booking-title"
+    aria-label="Secure booking calendar"
   >
-    <div class="calcom-booking-embed__header">
-      <div>
-        <p class="eyebrow">
-          {{ event.label }}
-        </p>
-        <h2 id="calcom-booking-title">
-          Choose a date and time
-        </h2>
-      </div>
-    </div>
-
     <p
       v-if="embedStatus === 'loading'"
       class="calcom-booking-embed__status"
