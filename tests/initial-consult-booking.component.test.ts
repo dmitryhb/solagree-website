@@ -126,6 +126,7 @@ describe('InitialConsultBookingPage', () => {
       .toContain('Former family law paralegal')
     expect(wrapper.get('.consultant-selection-summary__details').text()).toContain('30 min')
     expect(wrapper.get('.consultant-selection-summary__details').text()).toContain('Phone Call or Zoom')
+    expect(wrapper.get('.consultant-selection-summary__details').text()).toContain('$60')
     expect(document.activeElement).toBe(wrapper.get('.consultant-selection-summary').element)
 
     await wrapper.get('.consultant-selection-summary button').trigger('click')

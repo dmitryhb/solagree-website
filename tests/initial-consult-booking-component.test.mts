@@ -97,7 +97,11 @@ test('remounts each Cal.com event once and ignores callbacks from replaced embed
   )
   assert.deepEqual(
     cal.calls.filter(call => call.method === 'ui').map(call => call.options),
-    events.map(() => ({ hideEventTypeDetails: false, layout: 'month_view' }))
+    events.map(() => ({
+      hideEventTypeDetails: true,
+      showTimezoneWhenEventDetailsHidden: true,
+      layout: 'month_view'
+    }))
   )
   assert.deepEqual(
     cal.calls.filter(call => call.method === 'inline').map(call => [call.namespace, (call.options as { calLink: string }).calLink]),

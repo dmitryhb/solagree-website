@@ -26,6 +26,7 @@ test('switches the live booking iframe to each selected Cal.com event', async ({
     await expect(page.locator('.consultant-selector')).toHaveCount(0)
     await expect(page.locator('.consultant-selection-summary__details')).toContainText('30 min')
     await expect(page.locator('.consultant-selection-summary__details')).toContainText('Phone Call or Zoom')
+    await expect(page.locator('.consultant-selection-summary__details')).toContainText('$60')
     await expect(embed).toHaveCount(1)
     await expect(embed).toHaveAttribute('data-calcom-event-path', eventPath)
   }
