@@ -59,31 +59,57 @@ export const createAdminIntakeSubmissionPayload = (
 }
 
 /**
+ * Outcome of verifying an admin intake slug against the portal.
+ *
+ * - `verified`: the portal confirmed the slug with `{ ok: true }`.
+ * - `missing`: the portal explicitly responded with a 404.
+ * - `invalid-response`: the portal returned a successful response whose
+ *   payload does not satisfy the documented verification shape.
+ */
+export type AdminIntakeSlugVerification =
+  | { status: 'verified' }
+  | { status: 'missing' }
+  | { status: 'invalid-response' }
+
+/**
+ * Guards portal fetch errors that confirm a slug does not exist.
+ */
+const isPortalSlugNotFound = (error: unknown): boolean => {
+  return (
+    typeof error === 'object'
+    && error !== null
+    && 'statusCode' in error
+    && error.statusCode === 404
+  )
+}
+
+/**
  * Verifies that an admin intake slug exists on the portal.
  *
- * Returns `true` when the portal responds with `{ ok: true }`, `false` on 404.
- *
- * @throws Error for any unexpected network or server error.
+ * Returns a typed outcome: `verified` for `{ ok: true }` responses, `missing`
+ * when the portal confirms the slug does not exist with a 404, and
+ * `invalid-response` when a successful response is malformed. Unexpected
+ * network, server, timeout, or configuration errors are rethrown so callers
+ * can distinguish upstream failures from a missing slug.
  */
 export const verifyAdminIntakeSlug = async (
   slug: string,
   options: VerifyAdminIntakeSlugOptions
-): Promise<boolean> => {
+): Promise<AdminIntakeSlugVerification> => {
   const portalApiBaseUrl = normalizePortalApiBaseUrl(options.portalApiBaseUrl)
   const endpoint = `${portalApiBaseUrl}${ADMIN_INTAKES_ENDPOINT_PREFIX}/${encodeURIComponent(slug)}`
 
   try {
     const response = await options.fetcher<{ ok?: unknown }>(endpoint)
 
-    return typeof response === 'object' && response !== null && 'ok' in response && response.ok === true
+    if (typeof response === 'object' && response !== null && 'ok' in response && response.ok === true) {
+      return { status: 'verified' }
+    }
+
+    return { status: 'invalid-response' }
   } catch (error) {
-    if (
-      typeof error === 'object'
-      && error !== null
-      && 'statusCode' in error
-      && error.statusCode === 404
-    ) {
-      return false
+    if (isPortalSlugNotFound(error)) {
+      return { status: 'missing' }
     }
 
     throw error

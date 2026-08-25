@@ -2,7 +2,8 @@ import { describe, expect, it } from 'vitest'
 
 import {
   getAdminIntakeSubmissionErrorMessage,
-  submitAdminIntake
+  submitAdminIntake,
+  verifyAdminIntakeSlug
 } from '../app/services/admin-intake-api'
 import {
   getAttorneyApplicationSubmissionErrorMessage,
@@ -520,5 +521,88 @@ describe('submitAdminIntake slug handling', () => {
     })
 
     expect(calls[0]?.request).toBe(`${PORTAL_BASE_URL}/api/public/admin-intakes/rivera%20%26%20partners`)
+  })
+})
+
+const createVerificationFetcher = (respond: () => unknown): {
+  fetcher: <TResponse>(request: string) => Promise<TResponse>
+  requests: string[]
+} => {
+  const requests: string[] = []
+  const fetcher = async <TResponse>(request: string): Promise<TResponse> => {
+    requests.push(request)
+    return respond() as TResponse
+  }
+
+  return { fetcher, requests }
+}
+
+const verifyOptions = (fetcher: <TResponse>(request: string) => Promise<TResponse>) => ({
+  portalApiBaseUrl: PORTAL_BASE_URL,
+  fetcher
+})
+
+describe('verifyAdminIntakeSlug', () => {
+  it('returns verified for the documented ok response and encodes the slug in the endpoint path', async () => {
+    const { fetcher, requests } = createVerificationFetcher(() => ({ ok: true }))
+
+    const verification = await verifyAdminIntakeSlug('rivera & partners', verifyOptions(fetcher))
+
+    expect(verification).toStrictEqual({ status: 'verified' })
+    expect(requests).toEqual([`${PORTAL_BASE_URL}/api/public/admin-intakes/rivera%20%26%20partners`])
+  })
+
+  it('returns missing when the portal confirms the slug does not exist', async () => {
+    const notFoundError = Object.assign(
+      new Error('[GET] "https://portal.solagree.test/api/public/admin-intakes/retired-link": 404 Not Found'),
+      { statusCode: 404, statusMessage: 'Not Found' }
+    )
+    const { fetcher } = createVerificationFetcher(() => {
+      throw notFoundError
+    })
+
+    await expect(verifyAdminIntakeSlug('retired-link', verifyOptions(fetcher)))
+      .resolves.toStrictEqual({ status: 'missing' })
+  })
+
+  it.each([
+    ['an ok false payload', { ok: false }],
+    ['an empty object payload', {}],
+    ['a null payload', null],
+    ['a string payload', 'ok']
+  ])('returns invalid-response for a malformed success payload (%s)', async (_label, response) => {
+    const { fetcher } = createVerificationFetcher(() => response)
+
+    const verification = await verifyAdminIntakeSlug('rivera-mediation', verifyOptions(fetcher))
+
+    expect(verification).toStrictEqual({ status: 'invalid-response' })
+  })
+
+  it('rethrows portal server errors so callers preserve the upstream status', async () => {
+    const { fetcher } = createVerificationFetcher(() => {
+      throw nuxtFetchError
+    })
+
+    await expect(verifyAdminIntakeSlug('rivera-mediation', verifyOptions(fetcher))).rejects.toBe(nuxtFetchError)
+  })
+
+  it('rethrows network failures without a status code', async () => {
+    const networkError = new TypeError('fetch failed')
+    const { fetcher } = createVerificationFetcher(() => {
+      throw networkError
+    })
+
+    await expect(verifyAdminIntakeSlug('rivera-mediation', verifyOptions(fetcher))).rejects.toBe(networkError)
+  })
+
+  it('throws a configuration error for an empty portal base URL', async () => {
+    const { fetcher } = createVerificationFetcher(() => ({ ok: true }))
+
+    const error = await catchSubmissionError(() => verifyAdminIntakeSlug('rivera-mediation', {
+      portalApiBaseUrl: '',
+      fetcher
+    }))
+
+    expect(isPortalApiConfigurationError(error)).toBe(true)
   })
 })
