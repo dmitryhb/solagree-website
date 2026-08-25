@@ -51,6 +51,9 @@ if [ ! -d "$OUTPUT_DIR" ]; then
   exit 1
 fi
 
+# Fail the deployment before rsync when the static sitemap is missing or invalid.
+node "$ROOT_DIR/scripts/verify-sitemap.mjs"
+
 RSYNC_ARGS=(
   -avz
   --delete
