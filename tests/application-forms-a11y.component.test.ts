@@ -8,6 +8,7 @@ import AttorneyApplicationForm from '../app/components/attorney/AttorneyApplicat
 import AttorneyApplicationLicenseFieldset from '../app/components/attorney/AttorneyApplicationLicenseFieldset.vue'
 import CdfaApplicationForm from '../app/components/cdfa/CdfaApplicationForm.vue'
 import CdfaApplicationSpecializationsFieldset from '../app/components/cdfa/CdfaApplicationSpecializationsFieldset.vue'
+import FormResultMessage from '../app/components/FormResultMessage.vue'
 import { useAttorneyApplicationForm } from '../app/composables/useAttorneyApplicationForm'
 import { useCdfaApplicationForm } from '../app/composables/useCdfaApplicationForm'
 
@@ -126,7 +127,8 @@ const applicationFormGlobals = {
     ApplicationTextField,
     AttorneyApplicationBarStatesFieldset,
     AttorneyApplicationLicenseFieldset,
-    CdfaApplicationSpecializationsFieldset
+    CdfaApplicationSpecializationsFieldset,
+    FormResultMessage
   },
   stubs: {
     FormSmsOptInField: true,

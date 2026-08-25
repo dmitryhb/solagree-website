@@ -8,13 +8,10 @@ import {
   getAdminIntakeSubmissionErrorMessage,
   submitAdminIntake
 } from '~/services/admin-intake-api'
-import { isPortalApiConfigurationError, websitePortalFetcher } from '~/services/portal-api'
+import { websitePortalFetcher } from '~/services/portal-api'
 import { useSourceUrl } from '~/composables/useSourceUrl'
 import { focusPageDestination } from '~/utils/focus-destination'
-import type {
-  AdminIntakeFormState,
-  AdminIntakeResult
-} from '~/types/admin-intake'
+import type { AdminIntakeFormState } from '~/types/admin-intake'
 
 const props = defineProps<{
   slug: string
@@ -23,9 +20,6 @@ const props = defineProps<{
 const runtimeConfig = useRuntimeConfig()
 
 const formEl = ref<HTMLFormElement | null>(null)
-const submissionResultEl = ref<HTMLElement | null>(null)
-const submitting = ref(false)
-const submissionResult = ref<AdminIntakeResult | null>(null)
 
 const form = reactive<AdminIntakeFormState>({
   ...adminIntakeInitialState
@@ -35,45 +29,32 @@ const thankYouPath = computed(() => `/meet/${encodeURIComponent(props.slug)}/${a
 
 const sourceUrl = useSourceUrl()
 
-const handleSubmit = async () => {
-  if (submitting.value) {
-    return
-  }
+const {
+  submitting,
+  submissionResult,
+  handleSubmit
+} = useApplicationSubmission<AdminIntakeFormState, Awaited<ReturnType<typeof submitAdminIntake>>>({
+  validate: () => {
+    if (!formEl.value?.checkValidity()) {
+      formEl.value?.reportValidity()
+      return false
+    }
 
-  submissionResult.value = null
-
-  if (!formEl.value?.checkValidity()) {
-    formEl.value?.reportValidity()
-    return
-  }
-
-  submitting.value = true
-
-  try {
-    await submitAdminIntake(form, props.slug, {
-      portalApiBaseUrl: runtimeConfig.public.portalApiBaseUrl,
-      fetcher: websitePortalFetcher,
-      sourceUrl: sourceUrl
-    })
-
+    return true
+  },
+  getFormState: () => form,
+  submit: (formState) => submitAdminIntake(formState, props.slug, {
+    portalApiBaseUrl: runtimeConfig.public.portalApiBaseUrl,
+    fetcher: websitePortalFetcher,
+    sourceUrl: sourceUrl
+  }),
+  onSuccess: async () => {
     await navigateTo(thankYouPath.value)
     await focusPageDestination()
-  } catch (error) {
-    if (isPortalApiConfigurationError(error)) {
-      console.error(error)
-    }
-
-    submissionResult.value = {
-      title: 'Request not sent',
-      message: getAdminIntakeSubmissionErrorMessage(error)
-    }
-
-    await nextTick()
-    submissionResultEl.value?.focus()
-  } finally {
-    submitting.value = false
-  }
-}
+  },
+  errorTitle: 'Request not sent',
+  getErrorMessage: getAdminIntakeSubmissionErrorMessage
+})
 </script>
 
 <template>
@@ -245,18 +226,12 @@ const handleSubmit = async () => {
         :submitting="submitting"
       />
 
-      <div
+      <FormResultMessage
         v-if="submissionResult"
-        ref="submissionResultEl"
-        class="consult-request-form__result consult-request-form__result--error"
-        role="alert"
-        tabindex="-1"
-      >
-        <p class="consult-request-form__result-title">
-          {{ submissionResult.title }}
-        </p>
-        <p>{{ submissionResult.message }}</p>
-      </div>
+        kind="error"
+        :title="submissionResult.title"
+        :message="submissionResult.message"
+      />
     </form>
   </section>
 </template>

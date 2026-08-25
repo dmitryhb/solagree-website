@@ -111,8 +111,8 @@
   flex: 0 0 auto;
 }
 
-/* --- Submission result --- */
-%form-result {
+/* --- Submission result (FormResultMessage) --- */
+.form-result-message {
   display: grid;
   gap: 0.35rem;
   padding: 1rem;
@@ -124,16 +124,16 @@
   line-height: 1.45;
 }
 
-%form-result-paragraph {
+.form-result-message p {
   margin: 0;
 }
 
-%form-result-title {
+.form-result-message__title {
   font-family: var(--font-nav);
   font-weight: 700;
 }
 
-%form-result-error {
+.form-result-message--error {
   border: 1px solid rgba(168, 57, 57, 0.28);
   background: rgba(168, 57, 57, 0.08);
 }

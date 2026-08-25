@@ -287,7 +287,6 @@
   line-height: 1;
 }
 
-.watch-webinar-form__status,
 .watch-webinar-form__contact {
   margin: 0;
   color: #0a0e12;
@@ -296,8 +295,18 @@
   line-height: 1.45;
 }
 
+/* Plain inline variant of the shared FormResultMessage panel. */
 .watch-webinar-form__status {
+  display: block;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  margin: 0;
   color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.45;
 }
 
 .watch-webinar-form__contact {

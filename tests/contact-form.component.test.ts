@@ -2,6 +2,8 @@ import { flushPromises, mount } from '@vue/test-utils'
 import { nextTick, reactive, ref } from 'vue'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import ContactForm from '../app/components/contact/ContactForm.vue'
+import FormResultMessage from '../app/components/FormResultMessage.vue'
+import { useApplicationSubmission } from '../app/composables/useApplicationSubmission'
 import { useGoogleAnalytics } from '../app/composables/useGoogleAnalytics'
 import { submitContactSubmission } from '../app/services/contact-submission-api'
 
@@ -20,6 +22,7 @@ Object.assign(globalThis, {
   nextTick,
   reactive,
   ref,
+  useApplicationSubmission,
   useGoogleAnalytics,
   useRuntimeConfig: () => ({
     public: {
@@ -31,10 +34,13 @@ Object.assign(globalThis, {
 const mountForm = () => mount(ContactForm, {
   attachTo: document.body,
   global: {
+    components: {
+      FormResultMessage
+    },
     stubs: {
       FormSmsOptInField: true,
       SiteFormSubmit: {
-        props: ['label', 'submitting'],
+        props: ['label', 'submittingLabel', 'submitting', 'icon'],
         template: '<button type="submit">{{ label }}</button>'
       }
     }

@@ -42,7 +42,24 @@ export const useCdfaApplicationForm = (): UseCdfaApplicationFormReturn => {
     firstSpecializationInput?.focus()
   }
 
-  const submission = useApplicationSubmission<CdfaApplicationFormState, unknown>({
+  const submission = useApplicationSubmission<CdfaApplicationFormState, Awaited<ReturnType<typeof submitCdfaApplication>>>({
+    validate: async () => {
+      hasAttemptedSubmit.value = true
+
+      const hasCustomErrors = hasSpecializationError.value
+
+      if (!formEl.value?.checkValidity() || hasCustomErrors) {
+        formEl.value?.reportValidity()
+
+        if (hasCustomErrors) {
+          await focusFirstSpecialization()
+        }
+
+        return false
+      }
+
+      return true
+    },
     getFormState: () => form,
     submit: (formState) => submitCdfaApplication(formState, {
       portalApiBaseUrl: runtimeConfig.public.portalApiBaseUrl,
@@ -60,25 +77,6 @@ export const useCdfaApplicationForm = (): UseCdfaApplicationFormReturn => {
     getErrorMessage: getCdfaApplicationSubmissionErrorMessage
   })
 
-  const handleSubmit = async () => {
-    hasAttemptedSubmit.value = true
-    submission.resetSubmissionResult()
-
-    const hasCustomErrors = hasSpecializationError.value
-
-    if (!formEl.value?.checkValidity() || hasCustomErrors) {
-      formEl.value?.reportValidity()
-
-      if (hasCustomErrors) {
-        await focusFirstSpecialization()
-      }
-
-      return
-    }
-
-    await submission.handleSubmit()
-  }
-
   return {
     formEl,
     form,
@@ -86,6 +84,6 @@ export const useCdfaApplicationForm = (): UseCdfaApplicationFormReturn => {
     hasSpecializationError,
     submitting: submission.submitting,
     submissionResult: submission.submissionResult,
-    handleSubmit
+    handleSubmit: submission.handleSubmit
   }
 }

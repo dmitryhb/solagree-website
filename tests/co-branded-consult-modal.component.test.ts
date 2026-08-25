@@ -2,6 +2,9 @@ import { DOMWrapper, flushPromises, mount } from '@vue/test-utils'
 import { computed, nextTick, reactive, ref, watch } from 'vue'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import CoBrandedConsultModal from '../app/components/co-branded/CoBrandedConsultModal.vue'
+import FormResultMessage from '../app/components/FormResultMessage.vue'
+import SiteFormSubmit from '../app/components/SiteFormSubmit.vue'
+import { useApplicationSubmission } from '../app/composables/useApplicationSubmission'
 import { useGoogleAnalytics } from '../app/composables/useGoogleAnalytics'
 import { useSourceUrl } from '../app/composables/useSourceUrl'
 import { submitCoBrandedConsultRequest } from '../app/services/consult-request-api'
@@ -22,6 +25,7 @@ Object.assign(globalThis, {
   nextTick,
   reactive,
   ref,
+  useApplicationSubmission,
   useGoogleAnalytics,
   useRuntimeConfig: () => ({
     public: {
@@ -69,6 +73,10 @@ const mountModal = () => mount(CoBrandedConsultModal, {
     pageType: 'standard' as const
   },
   global: {
+    components: {
+      FormResultMessage,
+      SiteFormSubmit
+    },
     stubs: {
       FormSmsOptInField: true
     }

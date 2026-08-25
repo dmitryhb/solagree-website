@@ -5,7 +5,7 @@ import {
   getWebinarRegistrationErrorMessage,
   submitWebinarRegistration
 } from '~/services/webinar-registration-api'
-import { isPortalApiConfigurationError, websitePortalFetcher } from '~/services/portal-api'
+import { websitePortalFetcher } from '~/services/portal-api'
 import { focusPageDestination } from '~/utils/focus-destination'
 import type { WebinarFormState, WebinarRegistrationContent } from '~/types/webinar'
 
@@ -31,54 +31,35 @@ const form = reactive<WebinarFormState>({
   state: ''
 })
 
-const submitting = ref(false)
-const statusMessage = ref('')
-const statusMessageEl = ref<HTMLElement | null>(null)
+const sourceUrl = useSourceUrl()
 
-const getSourceUrl = (): string | null => {
-  if (!import.meta.client) {
-    return null
-  }
-
-  return window.location.href
-}
-
-const handleSubmit = async () => {
-  if (submitting.value) {
-    return
-  }
-
-  statusMessage.value = ''
-
-  if (!formEl.value?.checkValidity()) {
-    formEl.value?.reportValidity()
-    return
-  }
-
-  submitting.value = true
-
-  try {
-    await submitWebinarRegistration(form, {
-      portalApiBaseUrl: runtimeConfig.public.portalApiBaseUrl,
-      fetcher: websitePortalFetcher,
-      submissionType: props.submissionType,
-      sourceUrl: getSourceUrl()
-    })
-
-    await navigateTo(props.redirectPath)
-    await focusPageDestination()
-  } catch (error) {
-    if (isPortalApiConfigurationError(error)) {
-      console.error(error)
+const {
+  submitting,
+  submissionResult,
+  handleSubmit
+} = useApplicationSubmission<WebinarFormState, Awaited<ReturnType<typeof submitWebinarRegistration>>>({
+  validate: () => {
+    if (!formEl.value?.checkValidity()) {
+      formEl.value?.reportValidity()
+      return false
     }
 
-    statusMessage.value = getWebinarRegistrationErrorMessage(error)
-    await nextTick()
-    statusMessageEl.value?.focus()
-  } finally {
-    submitting.value = false
-  }
-}
+    return true
+  },
+  getFormState: () => form,
+  submit: (formState) => submitWebinarRegistration(formState, {
+    portalApiBaseUrl: runtimeConfig.public.portalApiBaseUrl,
+    fetcher: websitePortalFetcher,
+    submissionType: props.submissionType,
+    sourceUrl
+  }),
+  onSuccess: async () => {
+    await navigateTo(props.redirectPath)
+    await focusPageDestination()
+  },
+  errorTitle: '',
+  getErrorMessage: getWebinarRegistrationErrorMessage
+})
 </script>
 
 <template>
@@ -215,29 +196,28 @@ const handleSubmit = async () => {
         </div>
       </div>
 
-      <button
+      <SiteFormSubmit
         class="watch-webinar-form__submit"
-        type="submit"
-        :disabled="submitting"
+        label="Watch Now"
+        submitting-label="Submitting..."
+        :submitting="submitting"
       >
-        <span>{{ submitting ? 'Submitting...' : 'Watch Now' }}</span>
-        <span
-          class="watch-webinar-form__submit-icon"
-          aria-hidden="true"
-        >
-          &rarr;
-        </span>
-      </button>
+        <template #icon>
+          <span
+            class="watch-webinar-form__submit-icon"
+            aria-hidden="true"
+          >
+            &rarr;
+          </span>
+        </template>
+      </SiteFormSubmit>
 
-      <p
-        v-if="statusMessage"
-        ref="statusMessageEl"
+      <FormResultMessage
+        v-if="submissionResult"
         class="watch-webinar-form__status"
-        role="alert"
-        tabindex="-1"
-      >
-        {{ statusMessage }}
-      </p>
+        kind="error"
+        :message="submissionResult.message"
+      />
     </form>
 
     <p class="watch-webinar-form__contact">
