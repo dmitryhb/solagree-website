@@ -11,6 +11,7 @@
     "lint": "eslint .",
     "typecheck": "nuxt typecheck",
     "preview": "nuxt preview --host solagree.local --port 3003",
+    "pregenerate": "npm run validate:resource-content",
     "validate:resource-content": "node scripts/validate-resource-content.mjs",
     "verify:sitemap": "node scripts/verify-sitemap.mjs",
     "test:co-branded-page-variants": "node --experimental-strip-types --test tests/co-branded-page-variant.test.mts",

@@ -40,6 +40,38 @@ const blocks = computed(() => parseArticleBody(props.body))
           <ArticleInlineContent :tokens="item" />
         </li>
       </ul>
+      <figure
+        v-else-if="block.type === 'image'"
+        class="article-rich-text__figure"
+      >
+        <img
+          :src="block.src"
+          :alt="block.alt"
+          loading="lazy"
+          decoding="async"
+        >
+        <figcaption
+          v-if="block.alt"
+          class="article-rich-text__figure-caption"
+        >
+          {{ block.alt }}
+        </figcaption>
+      </figure>
+      <aside
+        v-else-if="block.type === 'callout'"
+        class="article-rich-text__callout"
+        :data-variant="block.variant"
+      >
+        <p
+          v-if="block.title"
+          class="article-rich-text__callout-title"
+        >
+          {{ block.title }}
+        </p>
+        <div class="article-rich-text__callout-content">
+          <ArticleInlineContent :tokens="block.content" />
+        </div>
+      </aside>
       <p v-else>
         <ArticleInlineContent :tokens="block.content" />
       </p>
