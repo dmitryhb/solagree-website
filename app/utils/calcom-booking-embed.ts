@@ -19,9 +19,10 @@ export interface CalComEmbedInlineOptions {
   config: InitialConsultBookingTrackingContext
 }
 
-/** Cal.com UI options that retain its native booking details and selected-slot summary. */
+/** Cal.com UI options that defer static event details to the Solagree sidebar. */
 export interface CalComEmbedUiOptions {
-  hideEventTypeDetails: false
+  hideEventTypeDetails: true
+  showTimezoneWhenEventDetailsHidden: true
   layout: 'month_view'
 }
 
@@ -113,7 +114,8 @@ export const createCalComBookingEmbedController = (
       namespacedClient('off', { action: 'linkFailed', callback: notifyFailed })
     }
     namespacedClient('ui', {
-      hideEventTypeDetails: false,
+      hideEventTypeDetails: true,
+      showTimezoneWhenEventDetailsHidden: true,
       layout: 'month_view'
     })
     namespacedClient('inline', {

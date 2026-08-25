@@ -133,6 +133,10 @@ const openSelector = async (): Promise<void> => {
                 <dt>How we’ll meet</dt>
                 <dd>Phone Call or Zoom</dd>
               </div>
+              <div>
+                <dt>Price</dt>
+                <dd>$60</dd>
+              </div>
             </dl>
 
             <button
