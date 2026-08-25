@@ -57,6 +57,10 @@
   scroll-margin-top: 1rem;
 }
 
+.initial-consult-booking-page__selection {
+  min-width: 0;
+}
+
 .consultant-selector__header {
   display: grid;
   gap: 0.5rem;
@@ -135,6 +139,78 @@
   margin: 1rem 0 1rem 1rem;
   border-radius: 50%;
   object-fit: cover;
+}
+
+.consultant-selection-summary {
+  display: grid;
+  justify-items: start;
+  gap: 1.25rem;
+  border: 1px solid rgba(62, 64, 89, 0.22);
+  border-radius: 0.5rem;
+  background: var(--color-white);
+  padding: 1.5rem;
+}
+
+.consultant-selection-summary__eyebrow {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-family: var(--font-nav);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.consultant-selection-summary__consultant {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.consultant-selection-summary__consultant h2,
+.consultant-selection-summary__consultant p {
+  margin: 0;
+}
+
+.consultant-selection-summary__consultant h2 {
+  color: var(--color-ink);
+  font-size: 1.25rem;
+  line-height: 1.2;
+}
+
+.consultant-selection-summary__consultant p {
+  margin-top: 0.35rem;
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+}
+
+.consultant-selection-summary__headshot {
+  flex: 0 0 64px;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.consultant-selection-summary button {
+  min-height: 42px;
+  border: 1px solid rgba(62, 64, 89, 0.35);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--color-ink);
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+  padding: 0 1rem;
+}
+
+.consultant-selection-summary button:hover {
+  border-color: var(--color-ink);
+}
+
+.consultant-selection-summary button:focus-visible {
+  outline: 3px solid rgba(62, 64, 89, 0.35);
+  outline-offset: 3px;
 }
 
 .calcom-booking-embed {
