@@ -3,7 +3,7 @@ import {
   getCdfaApplicationSubmissionErrorMessage,
   submitCdfaApplication
 } from '~/services/cdfa-application-api'
-import type { CdfaApplicationFetcher } from '~/services/cdfa-application-api'
+import { websitePortalFetcher } from '~/services/portal-api'
 import type { CdfaApplicationFormState } from '~/types/cdfa-application'
 import type { ApplicationResult } from '~/types/form-options'
 
@@ -45,7 +45,7 @@ export const useCdfaApplicationForm = (): UseCdfaApplicationFormReturn => {
     getFormState: () => form,
     submit: (formState) => submitCdfaApplication(formState, {
       portalApiBaseUrl: runtimeConfig.public.portalApiBaseUrl,
-      fetcher: $fetch as unknown as CdfaApplicationFetcher
+      fetcher: websitePortalFetcher
     }),
     onSuccess: async () => {
       trackEvent('partner_application_submitted', {

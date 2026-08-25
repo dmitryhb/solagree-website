@@ -9,8 +9,7 @@ import {
   getConsultRequestSubmissionErrorMessage,
   submitConsultRequest
 } from '~/services/consult-request-api'
-import { isPortalApiConfigurationError } from '~/services/portal-api'
-import type { ConsultRequestFetcher } from '~/services/consult-request-api'
+import { isPortalApiConfigurationError, websitePortalFetcher } from '~/services/portal-api'
 import type {
   ConsultRequestPageContent,
   ConsultRequestFormState,
@@ -82,7 +81,7 @@ const handleSubmit = async () => {
   try {
     await submitConsultRequest(form, {
       portalApiBaseUrl: runtimeConfig.public.portalApiBaseUrl,
-      fetcher: $fetch as unknown as ConsultRequestFetcher,
+      fetcher: websitePortalFetcher,
       consultType: props.content.consultType,
       referralCode: referralCode.value,
       sourceUrl: sourceUrl,

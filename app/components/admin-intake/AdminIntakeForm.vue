@@ -8,9 +8,8 @@ import {
   getAdminIntakeSubmissionErrorMessage,
   submitAdminIntake
 } from '~/services/admin-intake-api'
-import { isPortalApiConfigurationError } from '~/services/portal-api'
+import { isPortalApiConfigurationError, websitePortalFetcher } from '~/services/portal-api'
 import { useSourceUrl } from '~/composables/useSourceUrl'
-import type { AdminIntakeFetcher } from '~/services/admin-intake-api'
 import type {
   AdminIntakeFormState,
   AdminIntakeResult
@@ -51,7 +50,7 @@ const handleSubmit = async () => {
   try {
     await submitAdminIntake(form, props.slug, {
       portalApiBaseUrl: runtimeConfig.public.portalApiBaseUrl,
-      fetcher: $fetch as unknown as AdminIntakeFetcher,
+      fetcher: websitePortalFetcher,
       sourceUrl: sourceUrl
     })
 

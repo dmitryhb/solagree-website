@@ -15,6 +15,7 @@
     "validate:resource-content": "node scripts/validate-resource-content.mjs",
     "verify:sitemap": "node scripts/verify-sitemap.mjs",
     "test:co-branded-page-variants": "node --experimental-strip-types --test tests/co-branded-page-variant.test.mts",
+    "test:portal-submission-services": "vitest run tests/portal-submission-services.test.ts",
     "test:blog-content": "vitest run tests/blog-content.test.ts",
     "test:sitemap": "vitest run tests/sitemap.test.ts",
     "test:co-branded-consult-requests": "node --experimental-strip-types --test tests/co-branded-consult-request.test.mts",

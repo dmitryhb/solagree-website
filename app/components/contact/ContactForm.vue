@@ -3,9 +3,8 @@ import {
   getContactSubmissionErrorMessage,
   submitContactSubmission
 } from '~/services/contact-submission-api'
-import { isPortalApiConfigurationError } from '~/services/portal-api'
+import { isPortalApiConfigurationError, websitePortalFetcher } from '~/services/portal-api'
 import { useSourceUrl } from '~/composables/useSourceUrl'
-import type { ContactSubmissionFetcher } from '~/services/contact-submission-api'
 import type { ContactFormState } from '~/types/contact'
 
 const runtimeConfig = useRuntimeConfig()
@@ -42,7 +41,7 @@ const handleSubmit = async () => {
   try {
     await submitContactSubmission(form, {
       portalApiBaseUrl: runtimeConfig.public.portalApiBaseUrl,
-      fetcher: $fetch as unknown as ContactSubmissionFetcher,
+      fetcher: websitePortalFetcher,
       sourceUrl: sourceUrl
     })
 

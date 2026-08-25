@@ -1,6 +1,8 @@
 import {
   getPortalSubmissionErrorMessage,
-  normalizePortalApiBaseUrl
+  isNonEmptyString,
+  normalizePortalApiBaseUrl,
+  submitToPortal
 } from '~/services/portal-api'
 import type { PortalFetcher, PortalSubmitOptions } from '~/services/portal-api'
 import type {
@@ -10,8 +12,6 @@ import type {
 
 const ADMIN_INTAKES_ENDPOINT_PREFIX = '/api/public/admin-intakes'
 const DEFAULT_SUBMISSION_ERROR_MESSAGE = 'We could not submit your intake form. Please try again.'
-
-type AdminIntakeApiResult = { ok: true, submissionId: string } | { error: true, message: string }
 
 /** Fetch implementation used by the admin intake service. */
 export type AdminIntakeFetcher = PortalFetcher<AdminIntakeSubmissionPayload>
@@ -91,6 +91,18 @@ export const verifyAdminIntakeSlug = async (
 }
 
 /**
+ * Runtime parser for the admin intake success response.
+ *
+ * Requires a non-empty string `submissionId` and preserves the public
+ * `{ submissionId }` return shape exactly.
+ */
+const parseAdminIntakeSuccess = (response: object): { submissionId: string } | null => {
+  return 'submissionId' in response && isNonEmptyString(response.submissionId)
+    ? { submissionId: response.submissionId }
+    : null
+}
+
+/**
  * Submits an admin intake form to the portal API and returns the submission ID.
  *
  * @throws Error when the portal returns a request-level error response.
@@ -100,20 +112,12 @@ export const submitAdminIntake = async (
   slug: string,
   options: SubmitAdminIntakeOptions
 ): Promise<{ submissionId: string }> => {
-  const portalApiBaseUrl = normalizePortalApiBaseUrl(options.portalApiBaseUrl)
-  const endpoint = `${portalApiBaseUrl}${ADMIN_INTAKES_ENDPOINT_PREFIX}/${encodeURIComponent(slug)}`
-
-  const response = await options.fetcher<AdminIntakeApiResult>(
-    endpoint,
-    {
-      method: 'POST',
-      body: createAdminIntakeSubmissionPayload(form, options)
-    }
-  )
-
-  if ('error' in response) {
-    throw new Error(response.message)
-  }
-
-  return { submissionId: response.submissionId }
+  return await submitToPortal({
+    portalApiBaseUrl: options.portalApiBaseUrl,
+    fetcher: options.fetcher,
+    endpoint: `${ADMIN_INTAKES_ENDPOINT_PREFIX}/${encodeURIComponent(slug)}`,
+    payload: createAdminIntakeSubmissionPayload(form, options),
+    parseSuccess: parseAdminIntakeSuccess,
+    fallbackMessage: DEFAULT_SUBMISSION_ERROR_MESSAGE
+  })
 }
