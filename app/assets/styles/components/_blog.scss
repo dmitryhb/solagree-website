@@ -549,9 +549,11 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
-@include bp.below(bp.$bp-nav) { // was max-width: 900px — aligned to the nav boundary
-  .blog-featured,
-  .blog-article__layout {
+// HIR-368 exception: the featured card's real two-column boundary is 900px —
+// at 901–980px the approved layout (and the resources-layout E2E) keep the
+// media beside the copy, so this must not ride the 980px nav token.
+@include bp.below(900px) {
+  .blog-featured {
     grid-template-columns: 1fr;
   }
 

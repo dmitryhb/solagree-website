@@ -65,9 +65,9 @@ test('matches the Figma Latest Article cards and exposes resource links in the f
     await page.goto(blogPath, { waitUntil: 'domcontentloaded' })
 
     const cards = page.locator('.blog-card')
-    await expect(cards).toHaveCount(3)
+    await expect(cards).toHaveCount(4)
     await expect(cards.locator('.blog-card__date')).toHaveCount(0)
-    await expect(cards.locator('.blog-card__category')).toHaveCount(3)
+    await expect(cards.locator('.blog-card__category')).toHaveCount(4)
 
     const cardStyles = await cards.evaluateAll(items => items.map(card => {
       const media = card.querySelector<HTMLElement>('.blog-media')
