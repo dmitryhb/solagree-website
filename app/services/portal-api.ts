@@ -29,6 +29,26 @@ export interface PortalSubmitOptions<TBody> {
   fetcher: PortalFetcher<TBody>
 }
 
+/**
+ * Default website fetcher for portal submissions.
+ *
+ * Wraps Nuxt's global `$fetch` in the injectable `PortalFetcher` shape so
+ * components pass one typed fetcher instead of repeating the double cast at
+ * every call site. Dependency injection is unchanged: services still accept
+ * any `PortalFetcher`-compatible implementation.
+ */
+export const websitePortalFetcher = async <TResponse>(
+  request: string,
+  options: PortalFetchOptions<unknown>
+): Promise<TResponse> => {
+  const response: unknown = await $fetch(
+    request,
+    options as PortalFetchOptions<Record<string, unknown>>
+  )
+
+  return response as TResponse
+}
+
 export const isPortalApiConfigurationError = (error: unknown): error is PortalApiConfigurationError => {
   return error instanceof PortalApiConfigurationError
 }
@@ -104,26 +124,101 @@ export const getPortalSubmissionErrorMessage = (
 }
 
 /**
- * Shared POST submission helper used by all portal submission services.
- * Each service benefits from calling this instead of duplicating URL
- * construction, fetch, and error checking.
+ * Guard for required string fields on portal responses.
  */
-export const submitToPortal = async <TPayload, TResponse extends { error?: boolean; message?: string }>(
+export const isNonEmptyString = (value: unknown): value is string => {
+  return typeof value === 'string' && value.length > 0
+}
+
+/**
+ * Parses a non-error 2xx portal response into the endpoint's success value.
+ *
+ * Return the parsed success value, or `null` when the response does not
+ * satisfy the endpoint's documented success shape.
+ */
+export type PortalSuccessParser<TSuccess> = (response: object) => TSuccess | null
+
+/**
+ * Success parser for endpoints whose response carries a `submissionId`.
+ *
+ * Requires a non-empty string `submissionId`, mirroring the shared
+ * `ContactSubmissionApiResponse` contract.
+ */
+export const parsePortalSubmissionIdSuccess = <TSuccess extends { submissionId: string }>(
+  response: object
+): TSuccess | null => {
+  return 'submissionId' in response && isNonEmptyString(response.submissionId)
+    ? response as TSuccess
+    : null
+}
+
+/**
+ * Success parser for endpoints whose response carries a `requestId`.
+ *
+ * Requires a non-empty string `requestId`, mirroring the shared
+ * `ConsultRequestApiResponse` contract.
+ */
+export const parsePortalRequestIdSuccess = <TSuccess extends { requestId: string }>(
+  response: object
+): TSuccess | null => {
+  return 'requestId' in response && isNonEmptyString(response.requestId)
+    ? response as TSuccess
+    : null
+}
+
+/**
+ * Shared POST submission helper used by all portal submission services.
+ *
+ * Runtime contract:
+ * - the raw response is guarded as a non-null object before any property access;
+ * - an explicit portal error response throws its safe message or the fallback;
+ * - malformed 2xx responses throw the user-safe fallback instead of leaking
+ *   native errors such as `Cannot use 'in' operator` through the UI.
+ *
+ * Fetch, network, and configuration errors propagate to the caller unchanged.
+ */
+export const submitToPortal = async <TPayload, TSuccess>(
   options: PortalSubmitOptions<TPayload> & {
+    /** Endpoint path appended to the normalized portal base URL. */
     endpoint: string
+    /** Request body submitted with the POST. */
     payload: TPayload
+    /**
+     * Validates the 2xx response shape and returns the endpoint's success
+     * value, or `null` when the response is malformed.
+     */
+    parseSuccess: PortalSuccessParser<TSuccess>
+    /**
+     * User-safe message thrown when the portal reports an error without a
+     * message, or when the success response is malformed. Defaults to the
+     * shared portal submission failure message.
+     */
+    fallbackMessage?: string
   }
-): Promise<TResponse> => {
+): Promise<TSuccess> => {
+  const fallbackMessage = options.fallbackMessage ?? DEFAULT_PORTAL_SUBMISSION_ERROR_MESSAGE
   const portalApiBaseUrl = normalizePortalApiBaseUrl(options.portalApiBaseUrl)
 
-  const response = await options.fetcher<TResponse>(
+  const response: unknown = await options.fetcher<unknown>(
     `${portalApiBaseUrl}${options.endpoint}`,
     { method: 'POST', body: options.payload }
   )
 
-  if ('error' in response && response.error) {
-    throw new Error(response.message || DEFAULT_PORTAL_SUBMISSION_ERROR_MESSAGE)
+  if (typeof response !== 'object' || response === null) {
+    throw new Error(fallbackMessage)
   }
 
-  return response
+  const responseObject = response as Record<string, unknown>
+
+  if (responseObject.error) {
+    throw new Error(isNonEmptyString(responseObject.message) ? responseObject.message : fallbackMessage)
+  }
+
+  const success = options.parseSuccess(responseObject)
+
+  if (success === null || success === undefined) {
+    throw new Error(fallbackMessage)
+  }
+
+  return success
 }

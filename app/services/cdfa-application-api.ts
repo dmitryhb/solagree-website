@@ -5,7 +5,6 @@ import {
   CDFA_CONSULTATION_INTEREST_VALUES
 } from '#shared/types/cdfa-application'
 import type {
-  CdfaApplicationApiErrorResponse,
   CdfaApplicationApiResponse,
   CdfaApplicationSubmissionPayload,
   CdfaCertificationStatusValue,
@@ -16,15 +15,14 @@ import type {
 import type { CdfaApplicationFormState } from '~/types/cdfa-application'
 import {
   getPortalSubmissionErrorMessage,
-  normalizePortalApiBaseUrl
+  isNonEmptyString,
+  submitToPortal
 } from '~/services/portal-api'
 import type { PortalFetcher, PortalSubmitOptions } from '~/services/portal-api'
 import { isMember } from '~/utils/is-member'
 
 const CDFA_APPLICATIONS_ENDPOINT = '/api/cdfa-applications'
 const DEFAULT_SUBMISSION_ERROR_MESSAGE = 'We could not submit your application. Please try again.'
-
-type CdfaApplicationApiResult = CdfaApplicationApiResponse | CdfaApplicationApiErrorResponse
 
 export type CdfaApplicationFetcher = PortalFetcher<CdfaApplicationSubmissionPayload>
 
@@ -82,22 +80,28 @@ export const getCdfaApplicationSubmissionErrorMessage = (error: unknown): string
   return getPortalSubmissionErrorMessage(error, DEFAULT_SUBMISSION_ERROR_MESSAGE)
 }
 
+/**
+ * Runtime parser for the CDFA application success response.
+ *
+ * Requires a non-empty string `applicationId` per the documented
+ * `CdfaApplicationApiResponse` contract.
+ */
+const parseCdfaApplicationSuccess = (response: object): CdfaApplicationApiResponse | null => {
+  return 'applicationId' in response && isNonEmptyString(response.applicationId)
+    ? response as CdfaApplicationApiResponse
+    : null
+}
+
 export const submitCdfaApplication = async (
   form: CdfaApplicationFormState,
   options: SubmitCdfaApplicationOptions
 ): Promise<CdfaApplicationApiResponse> => {
-  const portalApiBaseUrl = normalizePortalApiBaseUrl(options.portalApiBaseUrl)
-  const response = await options.fetcher<CdfaApplicationApiResult>(
-    `${portalApiBaseUrl}${CDFA_APPLICATIONS_ENDPOINT}`,
-    {
-      method: 'POST',
-      body: createCdfaApplicationSubmissionPayload(form)
-    }
-  )
-
-  if ('error' in response) {
-    throw new Error(response.message)
-  }
-
-  return response
+  return await submitToPortal({
+    portalApiBaseUrl: options.portalApiBaseUrl,
+    fetcher: options.fetcher,
+    endpoint: CDFA_APPLICATIONS_ENDPOINT,
+    payload: createCdfaApplicationSubmissionPayload(form),
+    parseSuccess: parseCdfaApplicationSuccess,
+    fallbackMessage: DEFAULT_SUBMISSION_ERROR_MESSAGE
+  })
 }

@@ -4,8 +4,7 @@ import {
   getConsultRequestSubmissionErrorMessage,
   submitCoBrandedConsultRequest
 } from '~/services/consult-request-api'
-import { isPortalApiConfigurationError } from '~/services/portal-api'
-import type { ConsultRequestFetcher } from '~/services/consult-request-api'
+import { isPortalApiConfigurationError, websitePortalFetcher } from '~/services/portal-api'
 import type { CoBrandedConsultRequestFormState } from '~/types/consult-request'
 
 const props = defineProps<{
@@ -124,7 +123,7 @@ const handleSubmit = async (): Promise<void> => {
   try {
     await submitCoBrandedConsultRequest(form, {
       portalApiBaseUrl: runtimeConfig.public.portalApiBaseUrl,
-      fetcher: $fetch as unknown as ConsultRequestFetcher,
+      fetcher: websitePortalFetcher,
       pageType: props.pageType,
       referralCode: props.partnerSlug,
       sourceUrl

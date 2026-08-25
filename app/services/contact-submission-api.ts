@@ -1,10 +1,10 @@
 import {
   getPortalSubmissionErrorMessage,
-  normalizePortalApiBaseUrl
+  parsePortalSubmissionIdSuccess,
+  submitToPortal
 } from '~/services/portal-api'
 import type { PortalFetcher, PortalSubmitOptions } from '~/services/portal-api'
 import type {
-  ContactSubmissionApiErrorResponse,
   ContactSubmissionApiResponse,
   ContactSubmissionPayload
 } from '#shared/types/contact-submission'
@@ -12,8 +12,6 @@ import type { ContactFormState } from '~/types/contact'
 
 const CONTACT_SUBMISSIONS_ENDPOINT = '/api/contact-submissions'
 const DEFAULT_SUBMISSION_ERROR_MESSAGE = 'We could not submit your message. Please try again.'
-
-type ContactSubmissionApiResult = ContactSubmissionApiResponse | ContactSubmissionApiErrorResponse
 
 export type ContactSubmissionFetcher = PortalFetcher<ContactSubmissionPayload>
 
@@ -60,18 +58,12 @@ export const submitContactSubmission = async (
   form: ContactFormState,
   options: SubmitContactSubmissionOptions
 ): Promise<ContactSubmissionApiResponse> => {
-  const portalApiBaseUrl = normalizePortalApiBaseUrl(options.portalApiBaseUrl)
-  const response = await options.fetcher<ContactSubmissionApiResult>(
-    `${portalApiBaseUrl}${CONTACT_SUBMISSIONS_ENDPOINT}`,
-    {
-      method: 'POST',
-      body: createContactSubmissionPayload(form, options)
-    }
-  )
-
-  if ('error' in response) {
-    throw new Error(response.message)
-  }
-
-  return response
+  return await submitToPortal({
+    portalApiBaseUrl: options.portalApiBaseUrl,
+    fetcher: options.fetcher,
+    endpoint: CONTACT_SUBMISSIONS_ENDPOINT,
+    payload: createContactSubmissionPayload(form, options),
+    parseSuccess: parsePortalSubmissionIdSuccess<ContactSubmissionApiResponse>,
+    fallbackMessage: DEFAULT_SUBMISSION_ERROR_MESSAGE
+  })
 }

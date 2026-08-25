@@ -5,8 +5,7 @@ import {
   getWebinarRegistrationErrorMessage,
   submitWebinarRegistration
 } from '~/services/webinar-registration-api'
-import { isPortalApiConfigurationError } from '~/services/portal-api'
-import type { WebinarRegistrationFetcher } from '~/services/webinar-registration-api'
+import { isPortalApiConfigurationError, websitePortalFetcher } from '~/services/portal-api'
 import type { WebinarFormState, WebinarRegistrationContent } from '~/types/webinar'
 
 interface WatchWebinarFormProps {
@@ -59,7 +58,7 @@ const handleSubmit = async () => {
   try {
     await submitWebinarRegistration(form, {
       portalApiBaseUrl: runtimeConfig.public.portalApiBaseUrl,
-      fetcher: $fetch as unknown as WebinarRegistrationFetcher,
+      fetcher: websitePortalFetcher,
       submissionType: props.submissionType,
       sourceUrl: getSourceUrl()
     })

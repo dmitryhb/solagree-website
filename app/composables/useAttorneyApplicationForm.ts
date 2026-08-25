@@ -5,7 +5,7 @@ import {
   getAttorneyApplicationSubmissionErrorMessage,
   submitAttorneyApplication
 } from '~/services/attorney-application-api'
-import type { AttorneyApplicationFetcher } from '~/services/attorney-application-api'
+import { websitePortalFetcher } from '~/services/portal-api'
 import type {
   AttorneyApplicationFormState,
   AttorneyLicenseNumberRow
@@ -111,7 +111,7 @@ export const useAttorneyApplicationForm = (): UseAttorneyApplicationFormReturn =
     getFormState: createSubmissionState,
     submit: (formState) => submitAttorneyApplication(formState, {
       portalApiBaseUrl: runtimeConfig.public.portalApiBaseUrl,
-      fetcher: $fetch as unknown as AttorneyApplicationFetcher
+      fetcher: websitePortalFetcher
     }),
     onSuccess: async () => {
       trackEvent('partner_application_submitted', {

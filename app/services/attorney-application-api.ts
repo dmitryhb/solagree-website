@@ -3,7 +3,6 @@ import {
   ATTORNEY_YES_NO_ANSWERS
 } from '#shared/types/attorney-application'
 import type {
-  AttorneyApplicationApiErrorResponse,
   AttorneyApplicationApiResponse,
   AttorneyApplicationSubmissionPayload,
   AttorneyMediationExperienceValue,
@@ -14,15 +13,14 @@ import type {
 } from '~/types/attorney-application'
 import {
   getPortalSubmissionErrorMessage,
-  normalizePortalApiBaseUrl
+  isNonEmptyString,
+  submitToPortal
 } from '~/services/portal-api'
 import type { PortalFetcher, PortalSubmitOptions } from '~/services/portal-api'
 import { isMember } from '~/utils/is-member'
 
 const ATTORNEY_APPLICATIONS_ENDPOINT = '/api/attorney-applications'
 const DEFAULT_SUBMISSION_ERROR_MESSAGE = 'We could not submit your application. Please try again.'
-
-type AttorneyApplicationApiResult = AttorneyApplicationApiResponse | AttorneyApplicationApiErrorResponse
 
 export type AttorneyApplicationFetcher = PortalFetcher<AttorneyApplicationSubmissionPayload>
 
@@ -86,6 +84,18 @@ export const getAttorneyApplicationSubmissionErrorMessage = (error: unknown): st
 }
 
 /**
+ * Runtime parser for the attorney application success response.
+ *
+ * Requires a non-empty string `applicationId` per the documented
+ * `AttorneyApplicationApiResponse` contract.
+ */
+const parseAttorneyApplicationSuccess = (response: object): AttorneyApplicationApiResponse | null => {
+  return 'applicationId' in response && isNonEmptyString(response.applicationId)
+    ? response as AttorneyApplicationApiResponse
+    : null
+}
+
+/**
  * Submits an attorney application to the portal API and returns the successful API response.
  *
  * @throws Error when the portal returns an application-level error response.
@@ -94,18 +104,12 @@ export const submitAttorneyApplication = async (
   form: AttorneyApplicationFormState,
   options: SubmitAttorneyApplicationOptions
 ): Promise<AttorneyApplicationApiResponse> => {
-  const portalApiBaseUrl = normalizePortalApiBaseUrl(options.portalApiBaseUrl)
-  const response = await options.fetcher<AttorneyApplicationApiResult>(
-    `${portalApiBaseUrl}${ATTORNEY_APPLICATIONS_ENDPOINT}`,
-    {
-      method: 'POST',
-      body: createAttorneyApplicationSubmissionPayload(form)
-    }
-  )
-
-  if ('error' in response) {
-    throw new Error(response.message)
-  }
-
-  return response
+  return await submitToPortal({
+    portalApiBaseUrl: options.portalApiBaseUrl,
+    fetcher: options.fetcher,
+    endpoint: ATTORNEY_APPLICATIONS_ENDPOINT,
+    payload: createAttorneyApplicationSubmissionPayload(form),
+    parseSuccess: parseAttorneyApplicationSuccess,
+    fallbackMessage: DEFAULT_SUBMISSION_ERROR_MESSAGE
+  })
 }
