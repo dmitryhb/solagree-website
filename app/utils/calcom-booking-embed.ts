@@ -19,9 +19,9 @@ export interface CalComEmbedInlineOptions {
   config: InitialConsultBookingTrackingContext
 }
 
-/** Cal.com UI options that keep the embedded booker focused on date and time selection. */
+/** Cal.com UI options that retain its native booking details and selected-slot summary. */
 export interface CalComEmbedUiOptions {
-  hideEventTypeDetails: true
+  hideEventTypeDetails: false
   layout: 'month_view'
 }
 
@@ -113,7 +113,7 @@ export const createCalComBookingEmbedController = (
       namespacedClient('off', { action: 'linkFailed', callback: notifyFailed })
     }
     namespacedClient('ui', {
-      hideEventTypeDetails: true,
+      hideEventTypeDetails: false,
       layout: 'month_view'
     })
     namespacedClient('inline', {

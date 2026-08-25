@@ -18,7 +18,13 @@ test('switches the live booking iframe to each selected Cal.com event', async ({
   await expect(page.locator('.calcom-booking-embed')).toHaveAttribute('aria-label', 'Secure booking calendar')
 
   for (const [id, eventPath] of expectedEvents) {
+    if (await page.locator('.consultant-selection-summary').count()) {
+      await page.getByRole('button', { name: 'Change consultant' }).click()
+    }
+
     await page.locator(`[data-consultant-id="${id}"]`).click()
+    await expect(page.locator('.consultant-selector')).toHaveCount(0)
+    await expect(page.locator('.consultant-selection-summary')).toContainText('30 minutes · $60')
     await expect(embed).toHaveCount(1)
     await expect(embed).toHaveAttribute('data-calcom-event-path', eventPath)
   }

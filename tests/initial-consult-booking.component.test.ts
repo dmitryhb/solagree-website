@@ -95,6 +95,75 @@ describe('InitialConsultBookingPage', () => {
     expect(scrollIntoView).toHaveBeenCalledWith({ behavior: 'smooth', block: 'start' })
   })
 
+  it('replaces the choices with the selected booking summary and can reopen them', async () => {
+    const BookingHarness = defineComponent({
+      setup() {
+        const selectedEvent = ref(firstEvent)
+
+        return () => h(InitialConsultBookingPage, {
+          events,
+          selectedEvent: selectedEvent.value,
+          trackingContext: {},
+          onSelect: (event: InitialConsultBookingEvent) => { selectedEvent.value = event }
+        })
+      }
+    })
+    const wrapper = mount(BookingHarness, {
+      attachTo: document.body,
+      global: {
+        stubs: {
+          CalComBookingEmbed: true,
+          SiteFooter: true
+        }
+      }
+    })
+
+    await wrapper.get('[data-consultant-id="stacie"]').trigger('click')
+
+    expect(wrapper.find('.consultant-selector').exists()).toBe(false)
+    expect(wrapper.get('.consultant-selection-summary').text()).toContain('Stacie Sanders')
+    expect(wrapper.get('.consultant-selection-summary').text()).toContain('30 minutes · $60')
+    expect(document.activeElement).toBe(wrapper.get('.consultant-selection-summary').element)
+
+    await wrapper.get('.consultant-selection-summary button').trigger('click')
+
+    expect(wrapper.find('.consultant-selection-summary').exists()).toBe(false)
+    expect(wrapper.get('[data-consultant-id="stacie"]').attributes('aria-checked')).toBe('true')
+    expect(document.activeElement).toBe(wrapper.get('[data-consultant-id="stacie"]').element)
+
+    wrapper.unmount()
+  })
+
+  it('keeps focus on the booking summary after an arrow-key selection', async () => {
+    const BookingHarness = defineComponent({
+      setup() {
+        const selectedEvent = ref(firstEvent)
+
+        return () => h(InitialConsultBookingPage, {
+          events,
+          selectedEvent: selectedEvent.value,
+          trackingContext: {},
+          onSelect: (event: InitialConsultBookingEvent) => { selectedEvent.value = event }
+        })
+      }
+    })
+    const wrapper = mount(BookingHarness, {
+      attachTo: document.body,
+      global: {
+        stubs: {
+          CalComBookingEmbed: true,
+          SiteFooter: true
+        }
+      }
+    })
+
+    await wrapper.get('[data-consultant-id="first-available"]').trigger('keydown', { key: 'ArrowRight' })
+
+    expect(document.activeElement).toBe(wrapper.get('.consultant-selection-summary').element)
+
+    wrapper.unmount()
+  })
+
   it('remounts exactly one booking embed for each selector choice', async () => {
     const mountedEvents: string[] = []
     const unmountedEvents: string[] = []
@@ -141,6 +210,10 @@ describe('InitialConsultBookingPage', () => {
     })
 
     for (const event of events.slice(1)) {
+      if (wrapper.find('.consultant-selection-summary').exists()) {
+        await wrapper.get('.consultant-selection-summary button').trigger('click')
+      }
+
       await wrapper.get(`[data-consultant-id="${event.id}"]`).trigger('click')
     }
 
