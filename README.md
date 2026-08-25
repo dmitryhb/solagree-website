@@ -115,6 +115,8 @@ NUXT_PUBLIC_CALCOM_INITIAL_CONSULT_JAMES_EVENT_PATH=initial-consults/initial-con
 
 These paths are relative to Solagree's Cal.com organization origin, `https://solagree.cal.com`.
 
+See `docs/initial-consult-booking.md` for event IDs, the verified non-secret Cal.com configuration, and the remaining production acceptance work.
+
 The embed forwards only a compact allowlist of marketing identifiers: `ref`, `source`, and `utm_source`, `utm_medium`, `utm_campaign`, `utm_term`, and `utm_content`. Do not use the URL to pass contact details or other booking answers; Cal.com collects those in its own flow.
 
 For local development:
