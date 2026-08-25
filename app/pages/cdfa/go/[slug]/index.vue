@@ -8,5 +8,6 @@ const slug = computed(() => String(route.params.slug || '').trim())
     mode="page"
     page-type="cdfa"
     :seo-path="`/cdfa/go/${slug}`"
+    no-index
   />
 </template>

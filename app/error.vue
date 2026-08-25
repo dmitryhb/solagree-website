@@ -9,11 +9,18 @@ const isNotFound = computed(() => props.error.statusCode === 404)
 
 const title = computed(() => (isNotFound.value ? 'Page not found' : 'Something went wrong'))
 const eyebrow = computed(() => (isNotFound.value ? '404' : String(props.error.statusCode || 'Error')))
+const statusCode = computed(() => String(props.error.statusCode || 'Error'))
 const description = computed(() =>
   isNotFound.value
     ? 'The page you are looking for may have moved, or the link may no longer be available.'
     : 'We could not load this page. Please try again, or return home to continue.'
 )
+
+// Error output is served by the static /200.html fallback (HTTP 200) under
+// static hosting, so it must carry its own crawler-visible noindex policy.
+useSeoMeta({
+  robots: 'noindex, nofollow'
+})
 
 const handleHome = () => {
   clearError({ redirect: '/' })
@@ -39,6 +46,7 @@ const handleQuiz = () => {
           :eyebrow="eyebrow"
           :title="title"
           :description="description"
+          :code="statusCode"
         >
           <template #actions>
             <button

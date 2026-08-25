@@ -7,5 +7,6 @@ const slug = computed(() => String(route.params.slug || '').trim())
   <CoBrandedPageRouteShell
     mode="page"
     :seo-path="`/go/${slug}`"
+    no-index
   />
 </template>
