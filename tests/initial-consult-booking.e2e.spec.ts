@@ -4,8 +4,8 @@ const expectedEvents = [
   ['first-available', 'initial-consults/initial-consult'],
   ['taj', 'initial-consults/initial-consult-taj'],
   ['stacie', 'initial-consults/initial-consult-stacie'],
-  ['jessica', 'initial-consults/initial-consult-jessica'],
-  ['james', 'initial-consults/initial-consult-james']
+  ['james', 'initial-consults/initial-consult-james'],
+  ['jessica', 'initial-consults/initial-consult-jessica']
 ] as const
 
 test('switches the live booking iframe to each selected Cal.com event', async ({ page }) => {
@@ -14,6 +14,8 @@ test('switches the live booking iframe to each selected Cal.com event', async ({
 
   const embed = page.locator('.calcom-booking-embed__frame')
   await expect(embed).toHaveCount(1)
+  await expect(page.locator('.calcom-booking-embed__header')).toHaveCount(0)
+  await expect(page.locator('.calcom-booking-embed')).toHaveAttribute('aria-label', 'Secure booking calendar')
 
   for (const [id, eventPath] of expectedEvents) {
     await page.locator(`[data-consultant-id="${id}"]`).click()

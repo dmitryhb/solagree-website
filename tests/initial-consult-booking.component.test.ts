@@ -55,10 +55,12 @@ describe('InitialConsultBookingPage', () => {
     expect(headshots.map(image => [image.attributes('alt'), image.attributes('src')])).toEqual([
       ['Taj Johnson Chiu', '/images/initial-consult-taj-johnson-chiu.webp'],
       ['Stacie Sanders', '/images/initial-consult-stacie-sanders.webp'],
-      ['Jessica Urash', '/images/initial-consult-jessica-urash.webp'],
-      ['James Traub', '/images/initial-consult-james-traub.webp']
+      ['James Traub', '/images/initial-consult-james-traub.webp'],
+      ['Jessica Urash', '/images/initial-consult-jessica-urash.webp']
     ])
     expect(wrapper.findAll('.consultant-selector__option-bio')).toHaveLength(4)
+    expect(wrapper.get('[data-consultant-id="stacie"] .consultant-selector__option-bio').text())
+      .toContain('client advocate – 15+ years')
     expect(wrapper.find('[data-consultant-id="first-available"] img').exists()).toBe(false)
   })
 

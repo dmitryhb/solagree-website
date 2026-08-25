@@ -25,8 +25,8 @@ test('maps every Initial Consult selector option to its configured Cal.com event
       ['first-available', 'First Available', 'initial-consults/initial-consult'],
       ['taj', 'Taj Johnson Chiu', 'initial-consults/initial-consult-taj'],
       ['stacie', 'Stacie Sanders', 'initial-consults/initial-consult-stacie'],
-      ['jessica', 'Jessica Urash', 'initial-consults/initial-consult-jessica'],
-      ['james', 'James Traub', 'initial-consults/initial-consult-james']
+      ['james', 'James Traub', 'initial-consults/initial-consult-james'],
+      ['jessica', 'Jessica Urash', 'initial-consults/initial-consult-jessica']
     ]
   )
 
@@ -44,17 +44,17 @@ test('maps every Initial Consult selector option to its configured Cal.com event
     {
       id: 'stacie',
       headshotUrl: '/images/initial-consult-stacie-sanders.webp',
-      bio: 'Former family law paralegal turned client advocate—15+ years guiding clients through the legal and emotional sides of divorce with care.'
-    },
-    {
-      id: 'jessica',
-      headshotUrl: '/images/initial-consult-jessica-urash.webp',
-      bio: 'Faith-rooted divorce coach offering trauma-informed, compassionate support for emotional healing and healthy co-parenting through separation.'
+      bio: 'Former family law paralegal turned client advocate – 15+ years guiding clients through the legal and emotional sides of divorce with care.'
     },
     {
       id: 'james',
       headshotUrl: '/images/initial-consult-james-traub.webp',
       bio: "Certified Divorce Coach & Kids-First Mediator helping parents avoid court conflict with calm, structured guidance focused on kids' wellbeing."
+    },
+    {
+      id: 'jessica',
+      headshotUrl: '/images/initial-consult-jessica-urash.webp',
+      bio: 'Faith-rooted divorce coach offering trauma-informed, compassionate support for emotional healing and healthy co-parenting through separation.'
     }
   ])
 

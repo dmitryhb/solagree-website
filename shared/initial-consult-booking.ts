@@ -41,8 +41,8 @@ const initialConsultEventDefinitions = [
   { id: 'first-available', label: 'First Available', configKey: 'firstAvailableEventPath' },
   { id: 'taj', label: 'Taj Johnson Chiu', configKey: 'tajEventPath' },
   { id: 'stacie', label: 'Stacie Sanders', configKey: 'stacieEventPath' },
-  { id: 'jessica', label: 'Jessica Urash', configKey: 'jessicaEventPath' },
-  { id: 'james', label: 'James Traub', configKey: 'jamesEventPath' }
+  { id: 'james', label: 'James Traub', configKey: 'jamesEventPath' },
+  { id: 'jessica', label: 'Jessica Urash', configKey: 'jessicaEventPath' }
 ] as const satisfies readonly InitialConsultEventDefinition[]
 
 /**
@@ -55,7 +55,7 @@ export const initialConsultantProfileContent: Partial<Record<InitialConsultSelec
     headshotUrl: '/images/initial-consult-taj-johnson-chiu.webp'
   },
   stacie: {
-    bio: 'Former family law paralegal turned client advocate—15+ years guiding clients through the legal and emotional sides of divorce with care.',
+    bio: 'Former family law paralegal turned client advocate – 15+ years guiding clients through the legal and emotional sides of divorce with care.',
     headshotUrl: '/images/initial-consult-stacie-sanders.webp'
   },
   jessica: {
