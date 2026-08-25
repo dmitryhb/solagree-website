@@ -1,4 +1,5 @@
 import { createApp, h, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import '../../../app/assets/styles/main.scss'
 import InitialConsultBookingPage from '../../../app/components/consult/InitialConsultBookingPage.vue'
 import {
   resolveInitialConsultBookingEvents,
