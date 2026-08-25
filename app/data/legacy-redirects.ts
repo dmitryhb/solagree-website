@@ -1,3 +1,7 @@
+// Client-side (router middleware) redirects for legacy paths that resolve to
+// app pages. /site-map is intentionally absent: it targets the /sitemap.xml
+// server route, which the Vue router cannot navigate to, so nginx performs that
+// redirect server-side (see config/nginx/legacy-redirects.conf).
 const exactLegacyRedirects: Record<string, string> = {
   '/about': '/about-us',
   '/accessibility': '/legal/accessibility',
@@ -9,7 +13,6 @@ const exactLegacyRedirects: Record<string, string> = {
   '/feed': '/faq',
   '/frequently-asked-questions': '/faq',
   '/privacy-policy': '/legal/privacy-policy',
-  '/site-map': '/sitemap.xml',
   '/tag': '/faq',
   '/terms-of-service': '/legal/terms-of-service',
   '/the-solagree-method-vs-traditional-divorce': '/#how-it-works',
