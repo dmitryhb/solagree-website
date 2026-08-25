@@ -10,6 +10,7 @@ import {
 } from '~/services/admin-intake-api'
 import { isPortalApiConfigurationError, websitePortalFetcher } from '~/services/portal-api'
 import { useSourceUrl } from '~/composables/useSourceUrl'
+import { focusPageDestination } from '~/utils/focus-destination'
 import type {
   AdminIntakeFormState,
   AdminIntakeResult
@@ -22,6 +23,7 @@ const props = defineProps<{
 const runtimeConfig = useRuntimeConfig()
 
 const formEl = ref<HTMLFormElement | null>(null)
+const submissionResultEl = ref<HTMLElement | null>(null)
 const submitting = ref(false)
 const submissionResult = ref<AdminIntakeResult | null>(null)
 
@@ -55,6 +57,7 @@ const handleSubmit = async () => {
     })
 
     await navigateTo(thankYouPath.value)
+    await focusPageDestination()
   } catch (error) {
     if (isPortalApiConfigurationError(error)) {
       console.error(error)
@@ -64,6 +67,9 @@ const handleSubmit = async () => {
       title: 'Request not sent',
       message: getAdminIntakeSubmissionErrorMessage(error)
     }
+
+    await nextTick()
+    submissionResultEl.value?.focus()
   } finally {
     submitting.value = false
   }
@@ -201,7 +207,10 @@ const handleSubmit = async () => {
       </fieldset>
 
       <div class="admin-intake-form__privacy">
-        <p class="admin-intake-form__privacy-label">
+        <p
+          id="privacy-preference-label"
+          class="admin-intake-form__privacy-label"
+        >
           Privacy preference<span aria-hidden="true">*</span>
         </p>
         <div
@@ -238,9 +247,10 @@ const handleSubmit = async () => {
 
       <div
         v-if="submissionResult"
+        ref="submissionResultEl"
         class="consult-request-form__result consult-request-form__result--error"
-        role="status"
-        aria-live="polite"
+        role="alert"
+        tabindex="-1"
       >
         <p class="consult-request-form__result-title">
           {{ submissionResult.title }}

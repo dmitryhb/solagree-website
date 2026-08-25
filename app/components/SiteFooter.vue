@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useModalDialog } from '~/composables/useModalDialog'
 import { resourceNavigationLinks } from '~/data/resource-navigation'
 import { solagreeSocialLinks } from '~/data/social-links'
 
@@ -8,26 +9,34 @@ const isNetworkChooserOpen = ref(false)
 const networkChooserDialog = ref<HTMLElement | null>(null)
 const networkChooserTrigger = ref<HTMLButtonElement | null>(null)
 
-const openNetworkChooser = async () => {
-  isNetworkChooserOpen.value = true
+const closeNetworkChooser = () => {
+  if (!isNetworkChooserOpen.value) {
+    return
+  }
 
-  await nextTick()
-  networkChooserDialog.value?.focus()
+  isNetworkChooserOpen.value = false
+  void networkChooserDialogBehavior.deactivate()
 }
 
-const closeNetworkChooser = async () => {
-  isNetworkChooserOpen.value = false
+const networkChooserDialogBehavior = useModalDialog({
+  getContainer: () => networkChooserDialog.value,
+  getInitialFocusTarget: () => networkChooserDialog.value,
+  getRestoreFocusTarget: () => networkChooserTrigger.value,
+  onRequestClose: closeNetworkChooser
+})
 
-  await nextTick()
-  networkChooserTrigger.value?.focus()
+const openNetworkChooser = () => {
+  if (isNetworkChooserOpen.value) {
+    return
+  }
+
+  isNetworkChooserOpen.value = true
+  void networkChooserDialogBehavior.activate()
 }
 </script>
 
 <template>
-  <footer
-    class="site-footer"
-    @keydown.esc="closeNetworkChooser"
-  >
+  <footer class="site-footer">
     <div class="site-footer__inner">
       <div class="site-footer__top">
         <div class="site-footer__brand">
@@ -230,7 +239,7 @@ const closeNetworkChooser = async () => {
           v-if="isNetworkChooserOpen"
           class="network-chooser"
           role="presentation"
-          @keydown.esc="closeNetworkChooser"
+          @keydown="networkChooserDialogBehavior.handleKeydown"
         >
           <button
             class="network-chooser__backdrop"

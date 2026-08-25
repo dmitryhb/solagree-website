@@ -4,6 +4,7 @@ import {
   submitCdfaApplication
 } from '~/services/cdfa-application-api'
 import { websitePortalFetcher } from '~/services/portal-api'
+import { focusPageDestination } from '~/utils/focus-destination'
 import type { CdfaApplicationFormState } from '~/types/cdfa-application'
 import type { ApplicationResult } from '~/types/form-options'
 
@@ -54,6 +55,7 @@ export const useCdfaApplicationForm = (): UseCdfaApplicationFormReturn => {
       })
 
       await navigateTo('/cdfa-application/sent')
+      await focusPageDestination()
     },
     getErrorMessage: getCdfaApplicationSubmissionErrorMessage
   })

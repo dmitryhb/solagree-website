@@ -18,6 +18,20 @@ const {
   updateLicenseNumber,
   handleSubmit
 } = useAttorneyApplicationForm()
+
+const submissionResultEl = ref<HTMLElement | null>(null)
+
+watch(
+  submissionResult,
+  async (result) => {
+    if (result?.kind !== 'error') {
+      return
+    }
+
+    await nextTick()
+    submissionResultEl.value?.focus()
+  }
+)
 </script>
 
 <template>
@@ -74,6 +88,9 @@ const {
         name="phone"
         type="tel"
         autocomplete="tel"
+        inputmode="tel"
+        pattern="(?:\+?1[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}"
+        title="Use a 10-digit US phone number, e.g. 1-415-555-1234 or 415-555-1234."
         placeholder="1-415-555-1234..."
         required
       />
@@ -212,10 +229,11 @@ const {
 
       <div
         v-if="submissionResult"
+        ref="submissionResultEl"
         class="attorney-application-form__result"
         :class="`attorney-application-form__result--${submissionResult.kind}`"
-        role="status"
-        aria-live="polite"
+        :role="submissionResult.kind === 'error' ? 'alert' : 'status'"
+        tabindex="-1"
       >
         <p class="attorney-application-form__result-title">
           {{ submissionResult.title }}
