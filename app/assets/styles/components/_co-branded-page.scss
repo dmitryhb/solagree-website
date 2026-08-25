@@ -28,36 +28,6 @@
   animation: co-branded-page-spin 0.8s linear infinite;
 }
 
-.co-branded-page-route__state-box {
-  width: min(100%, 32rem);
-  padding: 2rem;
-  border: 1px solid var(--color-border);
-  border-radius: 18px;
-  background: var(--color-white);
-  box-shadow: var(--shadow-soft);
-}
-
-.co-branded-page-route__state-box h1,
-.co-branded-page-route__state-box p {
-  margin: 0;
-}
-
-.co-branded-page-route__state-box h1 {
-  color: var(--color-heading);
-  font-family: var(--font-display);
-  font-size: clamp(2rem, 5vw, 3rem);
-  line-height: 1.08;
-}
-
-.co-branded-page-route__state-box p {
-  margin-top: 0.8rem;
-  line-height: 1.65;
-}
-
-.co-branded-page-route__home-link {
-  margin-top: 1.4rem;
-}
-
 .co-branded-page {
   --co-branded-page-hero-edge: max(clamp(1.5rem, 5vw, 4rem), calc((100vw - 1700px) / 2));
   --co-branded-page-hero-gap: clamp(2.5rem, 4.6vw, 5.25rem);

@@ -1,9 +1,13 @@
 <script setup lang="ts">
-defineProps<{
+withDefaults(defineProps<{
   eyebrow: string
   title: string
   description: string
-}>()
+  /** Status code displayed in the hero mark; defaults to the 404 visual. */
+  code?: string | number
+}>(), {
+  code: '404'
+})
 </script>
 
 <template>
@@ -41,7 +45,7 @@ defineProps<{
         class="error-page__mark"
         aria-hidden="true"
       >
-        <span>404</span>
+        <span>{{ code }}</span>
       </div>
     </section>
 

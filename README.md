@@ -170,12 +170,15 @@ Published co-branded partner pages are served by the website under:
 ```text
 /go/:slug
 /go/:slug/embed
+/cdfa/go/:slug
+/cdfa/go/:slug/embed
 ```
 
 The website fetches page data from the Portal public API:
 
 ```text
 ${NUXT_PUBLIC_PORTAL_API_BASE_URL}/api/public/co-branded-pages/:slug
+${NUXT_PUBLIC_PORTAL_API_BASE_URL}/api/public/cdfa-co-branded-pages/:slug
 ```
 
 Because the staging website deploys as static Nuxt output, nginx must route
@@ -191,6 +194,32 @@ location / {
 `npm run deploy:staging` checks this after upload by requesting a `/go/...`
 route and fails if nginx still returns `404`. Use `--skip-route-check` only when
 the server fallback is being changed separately.
+
+### Co-branded routes are non-indexable
+
+Co-branded page configuration only loads on the client behind the static
+`/200.html` fallback, and the initial HTML shell is shared by every unmatched
+URL, so a client-side `noindex` meta tag alone is not crawler-visible on the
+initial response. Until the site has a server/prerender source of valid slugs,
+every `/go/*` and `/cdfa/go/*` URL is treated as non-indexable:
+
+- nginx sends `X-Robots-Tag: noindex, nofollow` on the initial HTTP response for
+  `/go/*` and `/cdfa/go/*` (production installs `config/nginx/co-branded-noindex.conf`
+  automatically; the staging server block needs the same location blocks —
+  `npm run deploy:staging` fails the route check until they are added).
+- The rendered app applies `noindex, nofollow` meta after hydration as a
+  second layer, including the embed routes.
+- `robots.txt` deliberately has no `Disallow` rules for these paths: crawlers
+  must fetch these URLs to see the noindex signal, and robots.txt is not a
+  substitute for noindex.
+
+Under static hosting, a missing slug **cannot** return a true HTTP 404 — it
+returns HTTP 200 with the noindex header above and renders the site's 404 page
+after the Portal confirms the slug is missing (a noindexed soft-404). Portal or
+configuration failures render the site error page with their own status code
+instead of a 404. See
+[production deployment](docs/production-deployment.md#dynamic-urls-cannot-return-a-true-http-404)
+for the full limitation notes.
 
 The staging Portal `.env` must allow the website origin for public form submissions:
 
