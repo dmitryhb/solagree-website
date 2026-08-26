@@ -6,7 +6,8 @@ const homeQuizHostConfig: QuizHostConfigInput = {
   hostId: 'homepage-quiz',
   display: {
     showShellHeader: false,
-    showExplainer: true
+    showInstructions: true,
+    headingLevel: 3
   },
   bridge: {
     postMessage: false
@@ -29,10 +30,10 @@ const homeQuizHostConfig: QuizHostConfigInput = {
           id="home-quiz-title"
           class="home-quiz-section__title"
         >
-          See if Solagree is right for you.
+          Qualify a Solagree case in 15 seconds.
         </h2>
         <p class="home-quiz-section__intro">
-          Answer a few questions (takes less than a minute) and we’ll let you know if you’re a fit—and recommend your next step.
+          Use the approved practitioner checklist to assess fit during an initial consultation.
         </p>
       </header>
 

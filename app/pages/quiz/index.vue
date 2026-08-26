@@ -1,8 +1,8 @@
 <script setup lang="ts">
 useSolagreeSeo({
-  title: 'Divorce Plan Quiz',
+  title: 'Solagree Case Qualifier',
   description:
-    'Take the Solagree quiz to see whether expedited or traditional structured divorce support may fit your situation.',
+    'Use the 15-second Solagree Case Qualifier to assess whether a client is a strong candidate for the structured Solagree process.',
   path: '/quiz'
 })
 </script>

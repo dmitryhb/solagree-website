@@ -1,28 +1,27 @@
 import { resolveQuizHostConfig, resolveQuizResultViewForHost } from '~/data/quiz-host'
 import type {
+  QuizCompletedEvent,
+  QuizCriterionId,
+  QuizCriterionToggledEvent,
   QuizCtaClickedEvent,
   QuizHostConfigInput,
   QuizHostEvent,
-  QuizQuestionAnsweredEvent,
-  QuizQuestionId,
-  QuizQuestionViewedEvent,
+  QuizOutcomeChangedEvent,
   QuizResetEvent,
-  QuizResultCta
+  QuizResultCta,
+  QuizStartedEvent
 } from '~/data/quiz-types'
-import type { useQuizSession } from '~/composables/useQuizSession'
 
 interface UseQuizHostOptions {
   hostConfig?: MaybeRefOrGetter<QuizHostConfigInput | undefined>
   onEvent?: (event: QuizHostEvent) => void
 }
 
-const createQuizHostSessionId = () => {
+const createQuizHostSessionId = (): string => {
   return `quiz-${Math.random().toString(36).slice(2, 10)}`
 }
 
-/**
- * Connects quiz session state to host configuration, CTA overrides, and embed events.
- */
+/** Connects the PII-free qualifier session to host events, GA, CTA overrides, and iframe messaging. */
 export const useQuizHost = (
   quizSession: ReturnType<typeof useQuizSession>,
   options: UseQuizHostOptions = {}
@@ -31,6 +30,7 @@ export const useQuizHost = (
   const { trackEvent } = useGoogleAnalytics()
   const sessionId = ref(createQuizHostSessionId())
   const hasTrackedQuizStart = ref(false)
+  const hasTrackedCompletion = ref(false)
   const hostConfig = computed(() => {
     return resolveQuizHostConfig(
       runtimeConfig.public.solagreeQuiz as QuizHostConfigInput | undefined,
@@ -39,16 +39,16 @@ export const useQuizHost = (
   })
   const resolvedResultView = computed(() => {
     const result = quizSession.resultView.value
-    return result ? resolveQuizResultViewForHost(result, hostConfig.value) : undefined
+    return result ? resolveQuizResultViewForHost(result, hostConfig.value) : null
   })
 
-  const shouldEmitEvents = () => {
+  const shouldEmitEvents = (): boolean => {
     return hostConfig.value.analytics.enabled
       || hostConfig.value.bridge.postMessage
       || typeof options.onEvent === 'function'
   }
 
-  const dispatchEvent = (event: QuizHostEvent) => {
+  const dispatchEvent = (event: QuizHostEvent): void => {
     if (!import.meta.client) {
       return
     }
@@ -85,187 +85,179 @@ export const useQuizHost = (
     }
   }
 
-  const trackQuizStarted = (questionId: QuizQuestionId) => {
-    if (!hostConfig.value.analytics.enabled || hasTrackedQuizStart.value) {
+  const trackStarted = (): void => {
+    if (hasTrackedQuizStart.value) {
       return
     }
 
     hasTrackedQuizStart.value = true
-    trackEvent('quiz_started', {
-      question_id: questionId,
+
+    if (shouldEmitEvents()) {
+      const event: QuizStartedEvent = {
+        type: 'started',
+        ...buildEventContext()
+      }
+      dispatchEvent(event)
+    }
+
+    if (hostConfig.value.analytics.enabled) {
+      trackEvent('quiz_started', buildAnalyticsContext())
+    }
+  }
+
+  const trackCriterionToggled = (
+    criterionId: QuizCriterionId,
+    selected: boolean
+  ): void => {
+    const analyticsPayload = {
+      criterion_id: criterionId,
+      selected,
+      criteria_met: quizSession.score.value,
+      progress: quizSession.progressValue.value,
       ...buildAnalyticsContext()
-    })
-  }
-
-  const trackQuestionViewed = (questionId: QuizQuestionId, progress: number) => {
-    if (!shouldEmitEvents()) {
-      return
     }
 
-    const event: QuizQuestionViewedEvent = {
-      type: 'question_viewed',
-      questionId,
-      progress,
-      ...buildEventContext()
-    }
-
-    dispatchEvent(event)
-  }
-
-  const trackQuestionAnswered = (questionId: QuizQuestionId, value: QuizQuestionAnsweredEvent['value']) => {
-    if (!shouldEmitEvents()) {
-      return
-    }
-
-    const event: QuizQuestionAnsweredEvent = {
-      type: 'question_answered',
-      questionId,
-      value,
-      progress: quizSession.progressValue.value,
-      ...buildEventContext()
-    }
-
-    dispatchEvent(event)
-  }
-
-  const getTrackedAnswerValue = (questionId: QuizQuestionId): QuizQuestionAnsweredEvent['value'] | undefined => {
-    const value = quizSession.answers.value[questionId]
-
-    if (value === undefined) {
-      return undefined
-    }
-
-    return Array.isArray(value)
-      ? [...value] as QuizQuestionAnsweredEvent['value']
-      : value as QuizQuestionAnsweredEvent['value']
-  }
-
-  const handleSingleAnswer = (questionId: QuizQuestionId, value: string | undefined) => {
-    quizSession.setSingleAnswer(questionId, value)
-
-    const nextValue = getTrackedAnswerValue(questionId)
-    if (nextValue !== undefined) {
-      trackQuizStarted(questionId)
-      trackQuestionAnswered(questionId, nextValue)
-    }
-  }
-
-  const handleMultiAnswer = (questionId: QuizQuestionId, payload: { value: string, checked: boolean }) => {
-    quizSession.toggleMultiAnswer(questionId, payload.value, payload.checked)
-
-    const nextValue = getTrackedAnswerValue(questionId)
-    if (nextValue !== undefined) {
-      trackQuizStarted(questionId)
-      trackQuestionAnswered(questionId, nextValue)
-    }
-  }
-
-  const handleAdvance = () => {
-    const fromQuestionId = quizSession.currentQuestionId.value
-    const previousPhase = quizSession.phase.value
-
-    quizSession.goNext()
-
-    if (!shouldEmitEvents() || previousPhase !== 'question') {
-      return
-    }
-
-    dispatchEvent({
-      type: 'progressed',
-      fromQuestionId,
-      toQuestionId: quizSession.phase.value === 'result' ? 'result' : quizSession.currentQuestionId.value,
-      progress: quizSession.progressValue.value,
-      ...buildEventContext()
-    })
-  }
-
-  const handleBack = () => {
-    quizSession.goBack()
-  }
-
-  const handleReset = () => {
-    quizSession.reset()
-    hasTrackedQuizStart.value = false
-
-    if (!shouldEmitEvents()) {
-      return
-    }
-
-    const event: QuizResetEvent = {
-      type: 'reset',
-      ...buildEventContext()
-    }
-
-    dispatchEvent(event)
-  }
-
-  const handleResultCtaClick = (cta: QuizResultCta) => {
-    if (!shouldEmitEvents()) {
-      return
-    }
-
-    const evaluation = quizSession.evaluation.value
-    const event: QuizCtaClickedEvent = {
-      type: 'cta_clicked',
-      actionId: cta.actionId,
-      href: cta.href,
-      ctaTrackingId: cta.trackingId,
-      outcome: evaluation.kind === 'resolved' ? evaluation.outcome : 'open-policy',
-      policyId: evaluation.kind === 'open-policy' ? evaluation.policyId : undefined,
-      ...buildEventContext()
-    }
-
-    dispatchEvent(event)
-  }
-
-  watch(
-    [() => quizSession.currentQuestionId.value, () => quizSession.phase.value] as const,
-    ([questionId, phase]) => {
-      if (phase !== 'question') {
-        return
-      }
-
-      trackQuestionViewed(questionId, quizSession.progressValue.value)
-    },
-    { immediate: true }
-  )
-
-  watch(
-    () => quizSession.phase.value,
-    (phase, previousPhase) => {
-      if (!shouldEmitEvents() || phase !== 'result' || previousPhase === 'result') {
-        return
-      }
-
-      const evaluation = quizSession.evaluation.value
-      dispatchEvent({
-        type: 'completed',
-        outcome: evaluation.kind === 'resolved' ? evaluation.outcome : 'open-policy',
-        policyId: evaluation.kind === 'open-policy' ? evaluation.policyId : undefined,
-        tags: evaluation.metadata.tags,
+    if (shouldEmitEvents()) {
+      const event: QuizCriterionToggledEvent = {
+        type: 'criterion_toggled',
+        criterionId,
+        selected,
+        score: quizSession.score.value,
         progress: quizSession.progressValue.value,
         ...buildEventContext()
-      })
-
-      if (hostConfig.value.analytics.enabled) {
-        trackEvent('quiz_completed', {
-          outcome: evaluation.kind === 'resolved' ? evaluation.outcome : 'open-policy',
-          policy_id: evaluation.kind === 'open-policy' ? evaluation.policyId : undefined,
-          progress: quizSession.progressValue.value,
-          tag_ids: evaluation.metadata.tags.join(','),
-          ...buildAnalyticsContext()
-        })
       }
+      dispatchEvent(event)
     }
-  )
+
+    if (hostConfig.value.analytics.enabled) {
+      trackEvent('quiz_criterion_toggled', analyticsPayload)
+    }
+  }
+
+  const trackCompleted = (): void => {
+    const outcome = quizSession.outcome.value
+
+    if (!outcome || hasTrackedCompletion.value) {
+      return
+    }
+
+    hasTrackedCompletion.value = true
+
+    if (shouldEmitEvents()) {
+      const event: QuizCompletedEvent = {
+        type: 'completed',
+        outcome,
+        score: quizSession.score.value,
+        progress: quizSession.progressValue.value,
+        ...buildEventContext()
+      }
+      dispatchEvent(event)
+    }
+
+    if (hostConfig.value.analytics.enabled) {
+      trackEvent('quiz_completed', {
+        outcome,
+        criteria_met: quizSession.score.value,
+        progress: quizSession.progressValue.value,
+        ...buildAnalyticsContext()
+      })
+    }
+  }
+
+  const trackOutcomeChanged = (): void => {
+    const outcome = quizSession.outcome.value
+
+    if (!outcome) {
+      return
+    }
+
+    if (shouldEmitEvents()) {
+      const event: QuizOutcomeChangedEvent = {
+        type: 'outcome_changed',
+        outcome,
+        score: quizSession.score.value,
+        ...buildEventContext()
+      }
+      dispatchEvent(event)
+    }
+
+    if (hostConfig.value.analytics.enabled) {
+      trackEvent('quiz_outcome_changed', {
+        outcome,
+        criteria_met: quizSession.score.value,
+        ...buildAnalyticsContext()
+      })
+    }
+  }
+
+  const handleCriterionChange = (
+    criterionId: QuizCriterionId,
+    selected: boolean
+  ): void => {
+    const previousOutcome = quizSession.outcome.value
+
+    quizSession.setCriterionSelected(criterionId, selected)
+    trackStarted()
+    trackCriterionToggled(criterionId, selected)
+    trackCompleted()
+
+    if (quizSession.outcome.value !== previousOutcome) {
+      trackOutcomeChanged()
+    }
+  }
+
+  const handleReset = (): void => {
+    quizSession.reset()
+    hasTrackedQuizStart.value = false
+    hasTrackedCompletion.value = false
+
+    if (shouldEmitEvents()) {
+      const event: QuizResetEvent = {
+        type: 'reset',
+        ...buildEventContext()
+      }
+      dispatchEvent(event)
+    }
+
+    if (hostConfig.value.analytics.enabled) {
+      trackEvent('quiz_reset', buildAnalyticsContext())
+    }
+  }
+
+  const handleResultCtaClick = (cta: QuizResultCta): void => {
+    const outcome = quizSession.outcome.value
+
+    if (!outcome) {
+      return
+    }
+
+    if (shouldEmitEvents()) {
+      const event: QuizCtaClickedEvent = {
+        type: 'cta_clicked',
+        actionId: cta.actionId,
+        ctaTrackingId: cta.trackingId,
+        outcome,
+        score: quizSession.score.value,
+        ...buildEventContext()
+      }
+      dispatchEvent(event)
+    }
+
+    if (hostConfig.value.analytics.enabled) {
+      trackEvent('quiz_cta_clicked', {
+        action_id: cta.actionId,
+        cta_tracking_id: cta.trackingId,
+        outcome,
+        criteria_met: quizSession.score.value,
+        ...buildAnalyticsContext()
+      })
+    }
+  }
 
   return {
     hostConfig,
     resolvedResultView,
-    handleSingleAnswer,
-    handleMultiAnswer,
-    handleAdvance,
-    handleBack,
+    handleCriterionChange,
     handleReset,
     handleResultCtaClick
   }

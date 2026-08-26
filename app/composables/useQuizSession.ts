@@ -1,189 +1,41 @@
-import { solagreeQuizLabels, solagreeQuizStorageKey } from '~/data/quiz'
-import { solagreeQuizQuestionIds } from '~/data/quiz-schema'
-import type {
-  QuizAnswerMap,
-  QuizPersistedSession,
-  QuizQuestionId,
-  QuizQuestionValue,
-  QuizSessionPhase
-} from '~/data/quiz-types'
 import {
-  coerceQuizCurrentQuestionId,
-  getNextQuizQuestionId,
-  getPreviousQuizQuestionId,
+  solagreeQuizLegacyStorageKeys,
+  solagreeQuizSchemaVersion,
+  solagreeQuizStorageKey
+} from '~/data/quiz'
+import type { QuizCriterionId, QuizPersistedSession } from '~/data/quiz-types'
+import {
+  evaluateQuizAnswers,
   getQuizProgressValue,
-  getQuizQuestionById,
-  getVisibleQuizQuestionIds,
-  isQuizAnswerPresent,
-  pruneHiddenQuizAnswers
-} from '~/utils/quiz-navigation'
-import { evaluateQuizAnswers, getQuizResultViewModel } from '~/utils/quiz-results'
+  getQuizResultViewModel
+} from '~/utils/quiz-results'
+import { toggleQuizCriterionSelection } from '~/utils/quiz-selection'
+import { parseQuizSessionSnapshot } from '~/utils/quiz-session'
 
-const isQuizSessionSnapshot = (value: unknown): value is QuizPersistedSession => {
-  if (!value || typeof value !== 'object') {
-    return false
-  }
-
-  const snapshot = value as {
-    version?: unknown
-    phase?: unknown
-    currentQuestionId?: unknown
-    answers?: unknown
-  }
-
-  return (
-    (snapshot.version === 1 || snapshot.version === 2) &&
-    (snapshot.phase === 'question' || snapshot.phase === 'complete' || snapshot.phase === 'result') &&
-    typeof snapshot.currentQuestionId === 'string' &&
-    !!snapshot.answers &&
-    typeof snapshot.answers === 'object'
-  )
-}
-
-const normalizeQuizSessionPhase = (snapshot: { phase?: unknown }): QuizSessionPhase => {
-  if (snapshot.phase === 'complete') {
-    return 'result'
-  }
-
-  return snapshot.phase === 'result' ? 'result' : 'question'
-}
-
-const normalizeProgressValue = (value: unknown): number | undefined => {
-  if (typeof value !== 'number' || !Number.isFinite(value)) {
-    return undefined
-  }
-
-  return Math.min(Math.max(Math.round(value), 0), 100)
-}
-
-/**
- * Owns quiz answer state, branching navigation, result evaluation, and persistence.
- */
+/** Owns qualifier selection, deterministic assessment, reset, and v3 persistence. */
 export const useQuizSession = () => {
-  const initialQuestionId = solagreeQuizQuestionIds[0] ?? 'state'
-  const answers = ref<QuizAnswerMap>({})
-  const currentQuestionId = ref<QuizQuestionId>(initialQuestionId)
-  const phase = ref<QuizSessionPhase>('question')
-  const maxForwardProgressValue = ref(getQuizProgressValue(initialQuestionId, {}, 'question'))
+  const selectedCriterionIds = ref<QuizCriterionId[]>([])
   const hasRestoredPersistedState = ref(false)
+  const evaluation = computed(() => evaluateQuizAnswers(selectedCriterionIds.value))
+  const score = computed(() => evaluation.value.score)
+  const outcome = computed(() => evaluation.value.outcome)
+  const progressValue = computed(() => getQuizProgressValue(score.value))
+  const resultView = computed(() => getQuizResultViewModel(score.value))
 
-  const visibleQuestionIds = computed(() => getVisibleQuizQuestionIds(answers.value))
-  const currentQuestion = computed(() => getQuizQuestionById(currentQuestionId.value))
-  const currentValue = computed(() => answers.value[currentQuestionId.value])
-  const canGoBack = computed(() => {
-    if (phase.value === 'result') {
-      return visibleQuestionIds.value.length > 0
-    }
+  const isSelected = (criterionId: QuizCriterionId): boolean => {
+    return selectedCriterionIds.value.includes(criterionId)
+  }
 
-    return getPreviousQuizQuestionId(currentQuestionId.value, answers.value) !== null
-  })
-  const canAdvance = computed(() => {
-    return isQuizAnswerPresent(currentQuestionId.value, currentValue.value as QuizQuestionValue | undefined)
-  })
-  const evaluation = computed(() => evaluateQuizAnswers(answers.value))
-  const resultView = computed(() => getQuizResultViewModel())
-  const branchProgressValue = computed(() => {
-    return getQuizProgressValue(currentQuestionId.value, answers.value, phase.value)
-  })
-  const progressValue = computed(() => {
-    if (phase.value === 'result') {
-      return 100
-    }
-
-    return Math.max(branchProgressValue.value, maxForwardProgressValue.value)
-  })
-  const primaryActionLabel = computed(() => {
-    const nextQuestionId = getNextQuizQuestionId(currentQuestionId.value, answers.value)
-    return nextQuestionId ? solagreeQuizLabels.next : solagreeQuizLabels.finish
-  })
-
-  const raiseForwardProgressFloor = () => {
-    maxForwardProgressValue.value = Math.max(
-      maxForwardProgressValue.value,
-      branchProgressValue.value
+  const setCriterionSelected = (criterionId: QuizCriterionId, selected: boolean): void => {
+    selectedCriterionIds.value = toggleQuizCriterionSelection(
+      selectedCriterionIds.value,
+      criterionId,
+      selected
     )
   }
 
-  const resetProgressFloorToCurrentBranch = () => {
-    maxForwardProgressValue.value = branchProgressValue.value
-  }
-
-  const syncQuestionPosition = (nextAnswers: QuizAnswerMap, preferredQuestionId?: QuizQuestionId) => {
-    const prunedAnswers = pruneHiddenQuizAnswers(nextAnswers)
-    answers.value = prunedAnswers
-    currentQuestionId.value = coerceQuizCurrentQuestionId(prunedAnswers, preferredQuestionId ?? currentQuestionId.value)
-    phase.value = 'question'
-    raiseForwardProgressFloor()
-  }
-
-  const setAnswer = <TQuestionId extends QuizQuestionId>(
-    questionId: TQuestionId,
-    value: QuizQuestionValue<TQuestionId> | undefined
-  ) => {
-    const nextAnswers: QuizAnswerMap = {
-      ...answers.value
-    }
-
-    if (value === undefined || (Array.isArray(value) && value.length === 0)) {
-      delete nextAnswers[questionId]
-    } else {
-      nextAnswers[questionId] = value as never
-    }
-
-    syncQuestionPosition(nextAnswers, questionId)
-  }
-
-  const setSingleAnswer = (questionId: QuizQuestionId, value: string | undefined) => {
-    setAnswer(questionId, value as QuizQuestionValue | undefined)
-  }
-
-  const toggleMultiAnswer = (questionId: QuizQuestionId, optionId: string, checked: boolean) => {
-    const current = answers.value[questionId]
-    const currentValues = Array.isArray(current) ? current : []
-    const nextValues = checked
-      ? [...new Set([...currentValues, optionId])]
-      : currentValues.filter(value => value !== optionId)
-
-    setAnswer(questionId, nextValues as QuizQuestionValue)
-  }
-
-  const goNext = () => {
-    if (!canAdvance.value) {
-      return
-    }
-
-    const nextQuestionId = getNextQuizQuestionId(currentQuestionId.value, answers.value)
-
-    if (!nextQuestionId) {
-      phase.value = 'result'
-      raiseForwardProgressFloor()
-      return
-    }
-
-    currentQuestionId.value = nextQuestionId
-    raiseForwardProgressFloor()
-  }
-
-  const goBack = () => {
-    if (phase.value === 'result') {
-      phase.value = 'question'
-      currentQuestionId.value = visibleQuestionIds.value.at(-1) ?? initialQuestionId
-      resetProgressFloorToCurrentBranch()
-      return
-    }
-
-    const previousQuestionId = getPreviousQuizQuestionId(currentQuestionId.value, answers.value)
-    if (previousQuestionId) {
-      currentQuestionId.value = previousQuestionId
-      resetProgressFloorToCurrentBranch()
-    }
-  }
-
-  const reset = () => {
-    answers.value = {}
-    currentQuestionId.value = initialQuestionId
-    phase.value = 'question'
-    resetProgressFloorToCurrentBranch()
+  const reset = (): void => {
+    selectedCriterionIds.value = []
 
     if (import.meta.client) {
       window.localStorage.removeItem(solagreeQuizStorageKey)
@@ -192,6 +44,10 @@ export const useQuizSession = () => {
 
   if (import.meta.client) {
     onMounted(() => {
+      solagreeQuizLegacyStorageKeys.forEach((legacyKey) => {
+        window.localStorage.removeItem(legacyKey)
+      })
+
       const snapshotText = window.localStorage.getItem(solagreeQuizStorageKey)
 
       if (!snapshotText) {
@@ -200,19 +56,14 @@ export const useQuizSession = () => {
       }
 
       try {
-        const parsedSnapshot = JSON.parse(snapshotText) as unknown
-        if (!isQuizSessionSnapshot(parsedSnapshot)) {
-          hasRestoredPersistedState.value = true
+        const snapshot = parseQuizSessionSnapshot(JSON.parse(snapshotText) as unknown)
+
+        if (!snapshot) {
+          window.localStorage.removeItem(solagreeQuizStorageKey)
           return
         }
 
-        const prunedAnswers = pruneHiddenQuizAnswers(parsedSnapshot.answers)
-        answers.value = prunedAnswers
-        currentQuestionId.value = coerceQuizCurrentQuestionId(prunedAnswers, parsedSnapshot.currentQuestionId)
-        phase.value = normalizeQuizSessionPhase(parsedSnapshot)
-        maxForwardProgressValue.value = normalizeProgressValue(parsedSnapshot.maxProgressValue)
-          ?? branchProgressValue.value
-        raiseForwardProgressFloor()
+        selectedCriterionIds.value = snapshot.selectedCriterionIds
       } catch {
         window.localStorage.removeItem(solagreeQuizStorageKey)
       } finally {
@@ -220,45 +71,35 @@ export const useQuizSession = () => {
       }
     })
 
-    watch(
-      [answers, currentQuestionId, phase],
-      () => {
-        if (!hasRestoredPersistedState.value) {
-          return
-        }
+    watch(selectedCriterionIds, (selectedIds) => {
+      if (!hasRestoredPersistedState.value) {
+        return
+      }
 
-        const snapshot: QuizPersistedSession = {
-          version: 2,
-          phase: phase.value,
-          currentQuestionId: currentQuestionId.value,
-          answers: answers.value,
-          maxProgressValue: progressValue.value
-        }
+      if (selectedIds.length === 0) {
+        window.localStorage.removeItem(solagreeQuizStorageKey)
+        return
+      }
 
-        window.localStorage.setItem(solagreeQuizStorageKey, JSON.stringify(snapshot))
-      },
-      { deep: true }
-    )
+      const snapshot: QuizPersistedSession = {
+        version: solagreeQuizSchemaVersion,
+        selectedCriterionIds: [...selectedIds]
+      }
+
+      window.localStorage.setItem(solagreeQuizStorageKey, JSON.stringify(snapshot))
+    })
   }
 
   return {
-    answers: readonly(answers),
-    currentQuestion,
-    currentQuestionId: readonly(currentQuestionId),
-    currentValue,
-    phase: readonly(phase),
-    visibleQuestionIds,
-    progressValue,
+    selectedCriterionIds: readonly(selectedCriterionIds),
+    hasRestoredPersistedState: readonly(hasRestoredPersistedState),
     evaluation,
+    score,
+    outcome,
+    progressValue,
     resultView,
-    canGoBack,
-    canAdvance,
-    primaryActionLabel,
-    labels: solagreeQuizLabels,
-    setSingleAnswer,
-    toggleMultiAnswer,
-    goNext,
-    goBack,
+    isSelected,
+    setCriterionSelected,
     reset
   }
 }

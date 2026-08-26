@@ -11,12 +11,13 @@ const defaultQuizCtaTargets = {
   }
 } as const satisfies Record<QuizCtaActionId, { href: string }>
 
-export const defaultQuizHostRuntimeConfig = {
+const defaultQuizHostRuntimeConfig = {
   hostId: 'solagree-quiz',
   mode: 'standalone',
   display: {
     showShellHeader: true,
-    showExplainer: true
+    showInstructions: true,
+    headingLevel: 1
   },
   analytics: {
     enabled: true,
@@ -73,7 +74,8 @@ export const resolveQuizHostConfig = (
     mode: mergedInput.mode ?? defaultQuizHostRuntimeConfig.mode,
     display: {
       showShellHeader: mergedInput.display?.showShellHeader ?? defaultQuizHostRuntimeConfig.display.showShellHeader,
-      showExplainer: mergedInput.display?.showExplainer ?? defaultQuizHostRuntimeConfig.display.showExplainer
+      showInstructions: mergedInput.display?.showInstructions ?? defaultQuizHostRuntimeConfig.display.showInstructions,
+      headingLevel: mergedInput.display?.headingLevel ?? defaultQuizHostRuntimeConfig.display.headingLevel
     },
     analytics: {
       enabled: mergedInput.analytics?.enabled ?? defaultQuizHostRuntimeConfig.analytics.enabled,

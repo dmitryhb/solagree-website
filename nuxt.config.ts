@@ -128,7 +128,8 @@ gtag('config', '${gaMeasurementId}', { send_page_view: false });
         mode: 'standalone',
         display: {
           showShellHeader: true,
-          showExplainer: true
+          showInstructions: true,
+          headingLevel: 1
         },
         analytics: {
           enabled: true,

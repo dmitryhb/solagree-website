@@ -27,6 +27,8 @@
     "test:initial-consult-booking": "node --experimental-strip-types --test tests/initial-consult-booking.test.mts",
     "test:initial-consult-booking-component": "vitest run tests/initial-consult-booking.component.test.ts",
     "test:initial-consult-booking-e2e": "playwright test -c playwright.initial-consult-booking.config.ts",
+    "test:quiz": "vitest run tests/quiz-results.test.ts tests/quiz-session.test.ts",
+    "test:quiz-e2e": "playwright test -c playwright.quiz.config.ts",
     "test:initial-consult-booking-lifecycle": "node --experimental-strip-types --test tests/initial-consult-booking-component.test.mts",
     "test:resource-content-validation": "node --experimental-strip-types --test tests/resource-content-validation.test.mts",
     "test:resources-navigation": "vitest run tests/resources-navigation.component.test.ts",

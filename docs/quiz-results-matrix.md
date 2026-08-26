@@ -1,92 +1,46 @@
-# Solagree Quiz Answers and Results Matrix
+# Solagree Case Qualifier Results Matrix
 
-This document describes the current quiz behavior in the website code as of July 31, 2026.
+This document describes the approved Phase 2 Case Qualifier implemented by `HIR-253`.
 
 Source files:
 
-- `app/data/quiz-schema.ts` defines questions, answers, and conditional visibility.
-- `app/utils/quiz-results.ts` defines final result routing.
-- `app/data/quiz-policies.ts` defines non-blocking policy metadata.
-- `app/data/quiz-results.ts` defines the single displayed recommendation.
+- `app/data/quiz-schema.ts` defines the three groups and 12 approved criteria.
+- `app/utils/quiz-results.ts` defines deterministic score thresholds.
+- `app/data/quiz-results.ts` defines exact approved result copy and the Initial Consult CTA.
+- `app/composables/useQuizSession.ts` owns selection and v3 local restoration.
 
-## Displayed Recommendation
+## Score Thresholds
 
-Every completed path displays the same recommendation:
+| Criteria met | Gauge label | Result title | Action label |
+| --- | --- | --- | --- |
+| 0 | Awaiting Assessment | None | None |
+| 1–2 | Possible Fit | Possible Fit | Consider carefully |
+| 3–5 | Good Fit | Introduce the Solagree Track | Good Fit — Move Forward |
+| 6–12 | Ideal Fit | Launch the Solagree Process | Ideal Fit — Priority Case |
 
-| Displayed title | Primary CTA | Destination |
+Every non-zero tier offers `Book an Initial Consult`, routed through host action ID `solagree-consult` to `/book-a-solagree-consult` by default.
+
+## Criterion Matrix
+
+| Group | Criterion | Description |
 | --- | --- | --- |
-| You look like a fit for a Solagree consult. | Book a Solagree consult | `/book-a-solagree-consult` |
+| Financial & Asset Alignment | Simple Estate | Marital estate is approximately $500,000 or less |
+| Financial & Asset Alignment | Budget Constraints | Client is hesitant or unable to pay a $7,500+ litigation retainer |
+| Financial & Asset Alignment | Financial Transparency | Neither party is alleging hidden assets or significant financial misconduct |
+| Financial & Asset Alignment | High-Net-Worth Exception | High-net-worth client seeking a private, confidential alternative to courtroom litigation |
+| Client Mindset & Goals | Court Avoidance | Both parties want to avoid court if possible |
+| Client Mindset & Goals | Resolution Focus | Client wants a faster, more predictable process |
+| Client Mindset & Goals | Co-Parenting Priority | Preserving family relationships or effective co-parenting is a priority |
+| Client Mindset & Goals | Ready to Move Forward | The client has said, “I just want this over” |
+| Case Suitability | Willing Participants | Both parties will engage in good faith (even if they disagree on outcomes) |
+| Case Suitability | Specific Disagreements | Parties have identifiable issues they can’t resolve on their own |
+| Case Suitability | Litigation Stuck | Case is stuck in litigation and has had too many delays |
+| Case Suitability | Integrity Deficit | Client deserves a high-integrity process but can’t afford the cost that comes with it |
 
-The result screen does not display an Attorney Consult recommendation or a General Help/resource block.
+## Interaction Rules
 
-## Internal Evaluation Outcomes
-
-Evaluation IDs remain available for analytics, but they do not change the displayed recommendation.
-
-| Priority | Condition | Result |
-| --- | --- | --- |
-| 1 | `paymentReadiness = need-payment-plan` | `payment-options-consult` |
-| 2 | `paymentReadiness = not-ready` | `payment-options-consult` |
-| 3 | Any remaining completed path | `solagree-fit` |
-
-## Decision Flow
-
-```mermaid
-flowchart TD
-  A["Completed quiz answers"] --> B{"Payment plan or not ready?"}
-  B -- Yes --> PO["payment-options-consult"]
-  B -- No --> SF["solagree-fit"]
-  PO --> IC["Display Initial Consult recommendation"]
-  SF --> IC
-```
-
-## Question Matrix
-
-| Question | Answer | Visible when | Direct result impact | Metadata impact |
-| --- | --- | --- | --- | --- |
-| Where will your divorce be filed? | Any state | Always | None | Stores selected state. Adds deferred policy ID `state-specific-result-messaging`, but this does not block or change the result. |
-| Do you have children under 21? | Yes | Always | None | Enables parenting screener. |
-| Do you have children under 21? | No | Always | None | Hides parenting screener and parenting details. |
-| Do you need help working through parenting, custody, or child-support issues? | Yes | Only when children = yes | None | Adds tag `parenting`. If financial screener is also yes, adds tag `both`. |
-| Do you need help working through parenting, custody, or child-support issues? | No | Only when children = yes | None | No result or tag impact. |
-| Which parenting topics apply to your situation? | Any selected topic | Only when children = yes and parenting screener = yes | None | Stores selected parenting topic IDs. |
-| Do you have financial questions about your divorce? | Yes | Always | None | Adds tag `financial`. If parenting concerns also exist, adds tag `both`. Enables financial details. |
-| Do you have financial questions about your divorce? | No | Always | None | Hides financial details. |
-| Which financial topics apply to your situation? | Any selected topic | Only when financial screener = yes | None | Stores selected financial topic IDs and adds tag `financial-complexity`. |
-| Do you have contact information for your spouse (we will not ask you to provide it at this time)? | Yes / `direct-contact` | Always | Allows quiz to continue to spouse cooperation. No direct result. | Stores spouse contact. |
-| Do you have contact information for your spouse (we will not ask you to provide it at this time)? | No / `cannot-find` | Always | None | Adds tag `missing-spouse`. |
-| Do you have contact information for your spouse (we will not ask you to provide it at this time)? | Not Sure / `unknown-whereabouts` | Always | None | Adds tag `missing-spouse`. |
-| Do you expect your spouse to cooperate in the divorce process? | Yes | Only when spouse contact = direct-contact | None | Stores spouse cooperation. |
-| Do you expect your spouse to cooperate in the divorce process? | No | Only when spouse contact = direct-contact | None | Adds tag `spouse-resistance`. |
-| Do you expect your spouse to cooperate in the divorce process? | I am not sure yet | Only when spouse contact = direct-contact | None | Stores spouse cooperation. |
-| Do you think you need legal advice before moving forward? | Yes | Always | None | Adds tag `legal-advice-needed`. |
-| Do you think you need legal advice before moving forward? | No | Always | None | Stores legal advice answer. |
-| Do you think you need legal advice before moving forward? | I am not sure | Always | None | Adds tag `legal-advice-needed`. |
-| Do you have the ability to pay for a service to help you? | Yes, I am ready now | Always | `solagree-fit` | Stores payment readiness. |
-| Do you have the ability to pay for a service to help you? | I would need a payment plan | Always | `payment-options-consult` | Adds tag `payment-plan`. |
-| Do you have the ability to pay for a service to help you? | No, not right now | Always | `payment-options-consult` | Stores payment readiness. |
-
-## Metadata-only Answers
-
-Spouse contact, spouse cooperation, and legal-advice answers are retained as consult metadata and tags. They no longer select a different recommendation.
-
-## Payment Options Consult Conditions
-
-These answers produce `payment-options-consult` for analytics while still displaying the Initial Consult recommendation:
-
-| Trigger answer | Code value | Source |
-| --- | --- | --- |
-| Payment readiness = I would need a payment plan | `paymentReadiness = need-payment-plan` | `app/utils/quiz-results.ts` |
-| Payment readiness = No, not right now | `paymentReadiness = not-ready` | `app/utils/quiz-results.ts` |
-
-## Solagree Fit Conditions
-
-The quiz returns `solagree-fit` whenever payment readiness is not `need-payment-plan` or `not-ready`.
-
-## Notes For Tweaking
-
-- Parenting answers currently do not affect the final result. They only collect metadata and topics.
-- Financial answers currently do not affect the final result. They only collect metadata and topics.
-- Spouse and legal-advice answers currently do not affect the displayed recommendation. They only collect metadata and tags.
-- State currently does not affect the displayed recommendation. It adds a deferred policy marker for future state-specific messaging.
-- Every completed path displays the Initial Consult CTA and no post-CTA resource list.
+- All criteria remain visible. There are no conditional branches or hidden answers.
+- Each checked criterion contributes exactly one point.
+- Results update immediately as criteria are checked or unchecked.
+- `Start Over` clears the v3 snapshot, returns the assessment to zero, focuses the first criterion, and respects reduced-motion preferences.
+- Homepage, standalone, and iframe modes use the same schema, session, evaluator, and result content.
