@@ -63,7 +63,7 @@ describe('News & Press index', () => {
     expect(images.every(image => image.attributes('alt') === '')).toBe(true)
     expect(wrapper.findAll('.news-card .blog-media--contain')).toHaveLength(4)
     expect(wrapper.findAll('.blog-media__fallback')).toHaveLength(0)
-    expect(wrapper.get('.news-press-inquiries a').attributes('href')).toBe('mailto:pr@solagree.com')
+    expect(wrapper.get('.news-press-inquiries a').attributes('href')).toBe('mailto:support@solagree.com')
     expect(wrapper.text()).not.toContain('Load More')
   })
 })

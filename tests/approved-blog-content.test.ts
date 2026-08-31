@@ -28,6 +28,7 @@ describe('Approved Blog articles', () => {
     ])
     expect(publishedArticles.filter(article => article.featured).map(article => article.slug))
       .toEqual(['four-reasons-not-use-ai-get-divorced'])
+    expect(getArticle('ai-divorce-family-law').category).toBe('For Professionals')
     expect(publishedArticles.every(article => article.authorImage === '/images/amanda.webp')).toBe(true)
     expect(publishedArticles.every(article => article.authorRole === 'CEO & Founder, SOLAGREE®')).toBe(true)
   })

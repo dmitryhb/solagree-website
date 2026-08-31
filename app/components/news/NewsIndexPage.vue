@@ -136,7 +136,7 @@ const getExternalLabel = (item: ExternalNewsItem): string => item.category === '
             Press Inquiries
           </h2>
           <p>
-            For media inquiries, contact <a href="mailto:pr@solagree.com">pr@solagree.com</a>.
+            For media inquiries, contact <a href="mailto:support@solagree.com">support@solagree.com</a>.
           </p>
         </section>
       </div>
