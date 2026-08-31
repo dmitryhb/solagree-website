@@ -66,9 +66,7 @@
   padding: clamp(1.5rem, 3vw, 2.5rem);
 }
 
-.initial-consult-booking-policy h2,
-.initial-consult-booking-policy h3,
-.initial-consult-booking-policy p {
+.initial-consult-booking-policy :where(h2, h3, p) {
   margin: 0;
 }
 
