@@ -34,6 +34,33 @@ afterEach(() => {
 })
 
 describe('InitialConsultBookingPage', () => {
+  it('renders the client-approved booking policy', () => {
+    const wrapper = mount(InitialConsultBookingPage, {
+      props: {
+        events,
+        selectedEvent: firstEvent,
+        trackingContext: {}
+      },
+      global: {
+        stubs: {
+          CalComBookingEmbed: true,
+          SiteFooter: true
+        }
+      }
+    })
+    const policy = wrapper.get('.initial-consult-booking-policy')
+
+    expect(policy.get('h2').text()).toBe('Booking policy')
+    expect(policy.text()).toContain('You may reschedule your Initial Consult once, at no charge')
+    expect(policy.text()).toContain('at least 48 hours before your scheduled appointment')
+    expect(policy.text()).toContain('less than 48 hours before your appointment are non-refundable')
+    expect(policy.text()).toContain('within 5–10 business days')
+    expect(policy.text()).toContain('you will need to book and pay for another Initial Consultation')
+    expect(policy.get('em').text()).toBe('(Consultants reserve dedicated time for each appointment.)')
+    expect(policy.get('.initial-consult-booking-policy__agreement').text())
+      .toBe('By booking, you agree to this policy.')
+  })
+
   it('renders the approved consultant names, biographies, and headshots', () => {
     const wrapper = mount(InitialConsultBookingPage, {
       props: {
