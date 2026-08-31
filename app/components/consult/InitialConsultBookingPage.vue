@@ -171,29 +171,17 @@ const openSelector = async (): Promise<void> => {
         <div class="initial-consult-booking-policy__rules">
           <section>
             <h3>Rescheduling</h3>
-            <p>
-              You may reschedule your Initial Consult once, at no charge, provided you do so at least
-              48 hours before your scheduled appointment time.
-            </p>
+            <p>Reschedule once, free, up to 48 hours before your appointment.</p>
           </section>
 
           <section>
             <h3>Cancellations</h3>
-            <p>
-              Cancellations made at least 48 hours before your scheduled appointment are eligible for
-              a full refund. Cancellations made less than 48 hours before your appointment are
-              non-refundable. Eligible refunds will be issued to your original payment method within
-              5–10 business days.
-            </p>
+            <p>Cancel 48+ hours ahead for a full refund. Less than 48 hours: non-refundable.</p>
           </section>
 
           <section>
             <h3>No-Shows</h3>
-            <p>
-              If you do not attend your scheduled consultation, the appointment is forfeited and is
-              non-refundable. To move forward, you will need to book and pay for another Initial
-              Consultation. <em>(Consultants reserve dedicated time for each appointment.)</em>
-            </p>
+            <p>Missed appointments are non-refundable and must be rebooked.</p>
           </section>
         </div>
 

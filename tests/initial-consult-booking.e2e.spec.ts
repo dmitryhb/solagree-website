@@ -56,6 +56,7 @@ test('keeps the Solagree booking sidebar beside the Cal.com embed on desktop', a
   const headshot = page.locator('.consultant-selection-summary__headshot')
   const policyRules = page.locator('.initial-consult-booking-policy__rules')
   const policyAgreement = page.locator('.initial-consult-booking-policy__agreement')
+  const policyBody = policyRules.locator('p').first()
   const [sidebarBox, calendarBox, policyRulesBox, policyAgreementBox] = await Promise.all([
     sidebar.boundingBox(),
     calendar.boundingBox(),
@@ -66,6 +67,7 @@ test('keeps the Solagree booking sidebar beside the Cal.com embed on desktop', a
   expect(sidebarBox?.x).toBeLessThan(calendarBox?.x ?? 0)
   expect(Math.abs((sidebarBox?.y ?? 0) - (calendarBox?.y ?? 0))).toBeLessThan(1)
   expect(await headshot.evaluate((image: HTMLImageElement) => image.naturalWidth)).toBeGreaterThan(0)
+  expect(await policyBody.evaluate(element => getComputedStyle(element).fontSize)).toBe('13px')
   expect((policyAgreementBox?.y ?? 0) - ((policyRulesBox?.y ?? 0) + (policyRulesBox?.height ?? 0)))
     .toBeGreaterThanOrEqual(32)
 })
