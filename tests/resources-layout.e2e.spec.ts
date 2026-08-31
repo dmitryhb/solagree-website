@@ -93,7 +93,7 @@ test('matches the Figma Latest Article cards and exposes resource links in the f
     const resourcesColumn = page.locator('.site-footer__column', { hasText: 'Resources' })
     await expect(resourcesColumn.getByRole('link', { name: 'Blog', exact: true })).toHaveAttribute('href', '/blog')
     await expect(resourcesColumn.getByRole('link', { name: 'News & Press', exact: true })).toHaveAttribute('href', '/news')
-    await expect(resourcesColumn.getByRole('link', { name: 'Webinars & Events', exact: true })).toHaveAttribute('href', '/webinar')
+    await expect(resourcesColumn.getByRole('link', { name: 'Webinars & Events', exact: true })).toHaveCount(0)
 
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true)
   }

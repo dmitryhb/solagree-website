@@ -9,9 +9,5 @@ export const resourceNavigationLinks = [
   {
     label: 'News & Press',
     to: '/news'
-  },
-  {
-    label: 'Webinars & Events',
-    to: '/webinar'
   }
 ] as const satisfies readonly AppLink[]
