@@ -159,6 +159,48 @@ const openSelector = async (): Promise<void> => {
           />
         </div>
       </div>
+
+      <section
+        class="initial-consult-booking-policy"
+        aria-labelledby="initial-consult-booking-policy-title"
+      >
+        <h2 id="initial-consult-booking-policy-title">
+          Booking policy
+        </h2>
+
+        <div class="initial-consult-booking-policy__rules">
+          <section>
+            <h3>Rescheduling</h3>
+            <p>
+              You may reschedule your Initial Consult once, at no charge, provided you do so at least
+              48 hours before your scheduled appointment time.
+            </p>
+          </section>
+
+          <section>
+            <h3>Cancellations</h3>
+            <p>
+              Cancellations made at least 48 hours before your scheduled appointment are eligible for
+              a full refund. Cancellations made less than 48 hours before your appointment are
+              non-refundable. Eligible refunds will be issued to your original payment method within
+              5–10 business days.
+            </p>
+          </section>
+
+          <section>
+            <h3>No-Shows</h3>
+            <p>
+              If you do not attend your scheduled consultation, the appointment is forfeited and is
+              non-refundable. To move forward, you will need to book and pay for another Initial
+              Consultation. <em>(Consultants reserve dedicated time for each appointment.)</em>
+            </p>
+          </section>
+        </div>
+
+        <p class="initial-consult-booking-policy__agreement">
+          By booking, you agree to this policy.
+        </p>
+      </section>
     </section>
 
     <SiteFooter />
