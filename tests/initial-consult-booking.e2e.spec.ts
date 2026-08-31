@@ -54,9 +54,18 @@ test('keeps the Solagree booking sidebar beside the Cal.com embed on desktop', a
   const sidebar = page.locator('.initial-consult-booking-page__selection')
   const calendar = page.locator('.initial-consult-booking-page__calendar')
   const headshot = page.locator('.consultant-selection-summary__headshot')
-  const [sidebarBox, calendarBox] = await Promise.all([sidebar.boundingBox(), calendar.boundingBox()])
+  const policyRules = page.locator('.initial-consult-booking-policy__rules')
+  const policyAgreement = page.locator('.initial-consult-booking-policy__agreement')
+  const [sidebarBox, calendarBox, policyRulesBox, policyAgreementBox] = await Promise.all([
+    sidebar.boundingBox(),
+    calendar.boundingBox(),
+    policyRules.boundingBox(),
+    policyAgreement.boundingBox()
+  ])
 
   expect(sidebarBox?.x).toBeLessThan(calendarBox?.x ?? 0)
   expect(Math.abs((sidebarBox?.y ?? 0) - (calendarBox?.y ?? 0))).toBeLessThan(1)
   expect(await headshot.evaluate((image: HTMLImageElement) => image.naturalWidth)).toBeGreaterThan(0)
+  expect((policyAgreementBox?.y ?? 0) - ((policyRulesBox?.y ?? 0) + (policyRulesBox?.height ?? 0)))
+    .toBeGreaterThanOrEqual(32)
 })
