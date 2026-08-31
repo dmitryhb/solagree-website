@@ -310,7 +310,7 @@ The model can be achieved virtually, also. This means that we can reach clients 
 By prioritizing dignity, neutrality, and rational compromise over adversarial battles, practitioners can protect their practices while delivering empowering, predictable resolutions. And you just might get more of those elusive client “thank yous” at the end of the day.
 
 *This content originally appeared at [NCLawyersWeekly.com](https://nclawyersweekly.com/2026/05/26/ai-divorce-is-real-but-family-law-can-still-save-itself/).*`,
-    category: 'Insights & Industry Trends',
+    category: 'For Professionals',
     featuredImage: '/images/blog-ai-divorce-family-law.webp',
     kind: 'article',
     linkMode: 'internal',
