@@ -16,6 +16,8 @@ const ORDERED_ITEM_PATTERN = /^\d+\.\s+(.+)$/
 const UNORDERED_ITEM_PATTERN = /^[-*]\s+(.+)$/
 const CALLOUT_MARKER_PATTERN = /^>\s*\[!([A-Za-z]+)\]\s*(.*)$/
 const IMAGE_LINE_PATTERN = /^!\[([^\]]*)\]\((.+)\)$/
+const CTA_CALLOUT_START = ':::callout'
+const CTA_CALLOUT_END = ':::'
 
 const CALLOUT_VARIANTS: readonly ArticleCalloutVariant[] = ['note', 'tip', 'important', 'warning', 'caution']
 
@@ -191,7 +193,26 @@ export const parseArticleInlineContent = (value: string): ArticleInlineToken[] =
 }
 
 /**
- * Parses headings, paragraphs, ordered/unordered lists, callouts, images, emphasis,
+ * Parses a `:::callout` action line (`[Label](href)` spanning the whole line).
+ * Unsafe destinations are not recognized as actions so their text stays visible.
+ */
+const readCtaCalloutAction = (value: string): { href: string, label: string } | undefined => {
+  if (!value.startsWith('[')) {
+    return undefined
+  }
+
+  const link = readInlineLink(value, 0)
+
+  if (!link || link.end !== value.length || !isSafeHref(link.href)) {
+    return undefined
+  }
+
+  return { href: link.href, label: link.label }
+}
+
+/**
+ * Parses headings, paragraphs, ordered/unordered lists, both callout grammars
+ * (`> [!TYPE]` advisory notes and `:::callout` CTA blocks), images, emphasis,
  * and safe links without injecting raw HTML from repository-managed content.
  * Malformed callout or image syntax degrades to visible paragraph text.
  */
@@ -216,6 +237,44 @@ export const parseArticleBody = (body: string): ArticleRichTextBlock[] => {
       continue
     }
 
+    if (line === CTA_CALLOUT_START) {
+      const calloutLines: string[] = []
+
+      lineIndex += 1
+
+      while (lineIndex < lines.length) {
+        const candidate = (lines[lineIndex] ?? '').trim()
+        lineIndex += 1
+
+        if (candidate === CTA_CALLOUT_END) {
+          break
+        }
+
+        if (candidate) {
+          calloutLines.push(candidate)
+        }
+      }
+
+      const title = calloutLines[0]?.replace(HEADING_PATTERN, '$2') ?? ''
+      const actionSource = calloutLines.length > 2 ? calloutLines[calloutLines.length - 1] : undefined
+      const action = actionSource ? readCtaCalloutAction(actionSource) : undefined
+      const bodyText = (action ? calloutLines.slice(1, -1) : calloutLines.slice(1)).join(' ')
+
+      if (title && bodyText) {
+        blocks.push({
+          ...(action ? { actionHref: action.href, actionLabel: action.label } : {}),
+          body: parseArticleInlineContent(bodyText),
+          title: parseArticleInlineContent(title),
+          type: 'callout',
+          variant: 'note'
+        })
+      } else {
+        blocks.push({ content: parseArticleInlineContent(calloutLines.join(' ')), type: 'paragraph' })
+      }
+
+      continue
+    }
+
     const calloutMarker = line.match(CALLOUT_MARKER_PATTERN)
     if (calloutMarker) {
       const variant = (calloutMarker[1] ?? '').toLowerCase()
@@ -237,8 +296,8 @@ export const parseArticleBody = (body: string): ArticleRichTextBlock[] => {
 
       if (isCalloutVariant(variant)) {
         blocks.push({
-          content: parseArticleInlineContent(rawLines.slice(1).map(stripCalloutQuote).join(' ')),
-          ...(title ? { title } : {}),
+          body: parseArticleInlineContent(rawLines.slice(1).map(stripCalloutQuote).join(' ')),
+          title: title ? parseArticleInlineContent(title) : [],
           type: 'callout',
           variant
         })
@@ -293,6 +352,7 @@ export const parseArticleBody = (body: string): ArticleRichTextBlock[] => {
 
       if (
         !candidate
+        || candidate === CTA_CALLOUT_START
         || HEADING_PATTERN.test(candidate)
         || ORDERED_ITEM_PATTERN.test(candidate)
         || UNORDERED_ITEM_PATTERN.test(candidate)

@@ -3,12 +3,17 @@ import BlogMedia from '~/components/blog/BlogMedia.vue'
 import { formatArticleDate } from '~/utils/article-formatting'
 import type { ExternalNewsItem } from '#shared/types/resource-content'
 
-defineProps<{
+const props = defineProps<{
   items: readonly ExternalNewsItem[]
 }>()
 
+const featuredItem = computed(() => props.items.find(item => item.featured) ?? props.items[0])
+const mediaItems = computed(() => props.items.filter(item => item.slug !== featuredItem.value?.slug))
+
 /** Identifies the external destination in a concise label for assistive technology. */
-const getExternalLabel = (item: ExternalNewsItem): string => `Listen on ${item.author} (opens in a new tab)`
+const getExternalLabel = (item: ExternalNewsItem): string => item.category === 'Press Release'
+  ? `Read the full release on ${item.author} (opens in a new tab)`
+  : `Listen on ${item.author} (opens in a new tab)`
 </script>
 
 <template>
@@ -23,6 +28,37 @@ const getExternalLabel = (item: ExternalNewsItem): string => `Listen on ${item.a
             Official announcements, company updates, and national coverage on how Solagree is reshaping dispute resolution.
           </p>
         </header>
+
+        <article
+          v-if="featuredItem"
+          class="news-feature"
+        >
+          <BlogMedia
+            :src="featuredItem.featuredImage"
+            :alt="''"
+          />
+          <div class="news-feature__content">
+            <h2 class="news-feature__title">
+              {{ featuredItem.title }}
+            </h2>
+            <p class="news-feature__summary">
+              {{ featuredItem.summary }}
+            </p>
+            <a
+              class="news-feature__link sol-button sol-button--primary"
+              :href="featuredItem.externalUrl"
+              target="_blank"
+              rel="noopener noreferrer"
+              :aria-label="getExternalLabel(featuredItem)"
+            >
+              Read the Full Release
+              <UIcon
+                name="i-heroicons-arrow-right-20-solid"
+                aria-hidden="true"
+              />
+            </a>
+          </div>
+        </article>
 
         <section
           class="news-index__media"
@@ -41,11 +77,11 @@ const getExternalLabel = (item: ExternalNewsItem): string => `Listen on ${item.a
           </header>
 
           <div
-            v-if="items.length"
+            v-if="mediaItems.length"
             class="news-card-grid"
           >
             <article
-              v-for="item in items"
+              v-for="item in mediaItems"
               :key="item.slug"
               class="news-card"
             >
@@ -64,7 +100,7 @@ const getExternalLabel = (item: ExternalNewsItem): string => `Listen on ${item.a
                   rel="noopener noreferrer"
                   :aria-label="getExternalLabel(item)"
                 >
-                  {{ item.title }} <span aria-hidden="true">↗</span>
+                  {{ item.title }}
                 </a>
               </h3>
               <p class="news-card__summary">

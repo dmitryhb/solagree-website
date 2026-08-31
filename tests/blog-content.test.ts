@@ -61,6 +61,61 @@ describe('Blog content foundation', () => {
     })
   })
 
+  it('parses repository-managed inline images and CTA callouts', () => {
+    const blocks = parseArticleBody(`![A reassuring family moment](/images/family.webp)
+
+:::callout
+## Is Solagree Right For You?
+Take our quick quiz to see whether the process fits your situation.
+[Take The Quiz](/quiz)
+:::`)
+
+    expect(blocks).toEqual([
+      {
+        alt: 'A reassuring family moment',
+        src: '/images/family.webp',
+        type: 'image'
+      },
+      {
+        actionHref: '/quiz',
+        actionLabel: 'Take The Quiz',
+        body: [{ type: 'text', value: 'Take our quick quiz to see whether the process fits your situation.' }],
+        title: [{ type: 'text', value: 'Is Solagree Right For You?' }],
+        type: 'callout',
+        variant: 'note'
+      }
+    ])
+  })
+
+  it('keeps :::callout constructs visible when the CTA link is missing or unsafe', () => {
+    const blocks = parseArticleBody([
+      ':::callout',
+      '## Title without body',
+      ':::',
+      '',
+      ':::callout',
+      '## Unsafe action',
+      'Body stays visible.',
+      '[XSS](javascript:alert(1))',
+      ':::'
+    ].join('\n'))
+
+    expect(blocks[0]).toEqual({
+      content: [{ type: 'text', value: '## Title without body' }],
+      type: 'paragraph'
+    })
+
+    const unsafeCallout = blocks[1]
+
+    if (!unsafeCallout || unsafeCallout.type !== 'callout') {
+      throw new Error('Expected the unsafe CTA to degrade to a visible callout without an action.')
+    }
+
+    expect(unsafeCallout.actionHref).toBeUndefined()
+    expect(unsafeCallout.actionLabel).toBeUndefined()
+    expect(JSON.stringify(unsafeCallout)).toContain('[XSS](javascript:alert(1))')
+  })
+
   it('keeps safe link destinations with balanced parentheses complete', () => {
     const tokens = parseArticleInlineContent('Read [Divorce (law)](https://en.wikipedia.org/wiki/Divorce_(law)) and [nested parens](https://example.com/wiki/A_(b_(c))).')
 
@@ -95,9 +150,11 @@ describe('Blog content foundation', () => {
       throw new Error('Expected the third article body block to be a callout.')
     }
 
-    expect(callout.title).toBe('Flat-fee guarantee')
+    expect(callout.title).toEqual([{ type: 'text', value: 'Flat-fee guarantee' }])
     expect(callout.variant).toBe('note')
-    expect(callout.content).toEqual([
+    expect(callout.actionHref).toBeUndefined()
+    expect(callout.actionLabel).toBeUndefined()
+    expect(callout.body).toEqual([
       { type: 'text', value: 'Sessions follow a ' },
       { href: 'https://example.com/fees_(2026)', type: 'link', value: 'published fee schedule' },
       { type: 'text', value: '. Second body line.' }
@@ -221,14 +278,14 @@ describe('Blog content foundation', () => {
       }
     })
 
-    const image = wrapper.get('.article-rich-text__figure img')
+    const image = wrapper.get('.article-rich-text__image img')
 
     expect(image.attributes('src')).toBe('/images/blog-chart.webp')
     expect(image.attributes('alt')).toBe('Editorial chart')
 
-    const callout = wrapper.get('.article-rich-text__callout[data-variant="warning"]')
+    const callout = wrapper.get('.article-rich-text__note[data-variant="warning"]')
 
-    expect(callout.get('.article-rich-text__callout-title').text()).toBe('Court filings are public')
+    expect(callout.get('.article-rich-text__note-title').text()).toBe('Court filings are public')
     expect(callout.get('a').attributes('href')).toBe('https://example.com/fees_(2026)')
 
     const paragraphs = wrapper.findAll('.article-rich-text > p')
@@ -237,7 +294,7 @@ describe('Blog content foundation', () => {
       '![Unsafe image](javascript:alert(1))',
       '> [!UNKNOWN] unsupported variant stays visible'
     ])
-    expect(wrapper.get('.article-rich-text__callout-content').text()).toBe('Read the fee schedule first.')
+    expect(wrapper.get('.article-rich-text__note-content').text()).toBe('Read the fee schedule first.')
     expect(wrapper.find('img[src^="javascript:"]').exists()).toBe(false)
     expect(wrapper.findAll('img')).toHaveLength(1)
   })

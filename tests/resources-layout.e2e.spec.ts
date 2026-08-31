@@ -65,9 +65,9 @@ test('matches the Figma Latest Article cards and exposes resource links in the f
     await page.goto(blogPath, { waitUntil: 'domcontentloaded' })
 
     const cards = page.locator('.blog-card')
-    await expect(cards).toHaveCount(3)
+    await expect(cards).toHaveCount(4)
     await expect(cards.locator('.blog-card__date')).toHaveCount(0)
-    await expect(cards.locator('.blog-card__category')).toHaveCount(3)
+    await expect(cards.locator('.blog-card__category')).toHaveCount(4)
 
     const cardStyles = await cards.evaluateAll(items => items.map(card => {
       const media = card.querySelector<HTMLElement>('.blog-media')
@@ -93,7 +93,7 @@ test('matches the Figma Latest Article cards and exposes resource links in the f
     const resourcesColumn = page.locator('.site-footer__column', { hasText: 'Resources' })
     await expect(resourcesColumn.getByRole('link', { name: 'Blog', exact: true })).toHaveAttribute('href', '/blog')
     await expect(resourcesColumn.getByRole('link', { name: 'News & Press', exact: true })).toHaveAttribute('href', '/news')
-    await expect(resourcesColumn.getByRole('link', { name: 'Webinars & Events', exact: true })).toHaveAttribute('href', '/webinar')
+    await expect(resourcesColumn.getByRole('link', { name: 'Webinars & Events', exact: true })).toHaveCount(0)
 
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true)
   }

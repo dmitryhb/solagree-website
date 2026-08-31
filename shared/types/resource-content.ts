@@ -44,6 +44,10 @@ export interface ResourceContentBase {
 
 /** A Solagree-hosted article with body content and an internal route. */
 export interface ResourceArticle extends ResourceContentBase {
+  /** Optional byline portrait used by the article footer card. */
+  authorImage?: string
+  /** Optional byline role shown beneath the author name. */
+  authorRole?: string
   /** Markdown-like source rendered through the safe article renderer. */
   body: string
   kind: 'article'

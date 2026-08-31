@@ -93,7 +93,8 @@ describe('AppHeader Resources navigation', () => {
     await toggle.trigger('keydown', { key: 'ArrowDown' })
 
     const menuItems = wrapper.findAll<HTMLAnchorElement>('[role="menuitem"]')
-    expect(menuItems).toHaveLength(3)
+    expect(menuItems).toHaveLength(2)
+    expect(menuItems.map(item => item.text().trim())).toEqual(['Blog', 'News & Press'])
     expect(document.activeElement).toBe(menuItems[0]?.element)
 
     await menuItems[0]?.trigger('keydown', { key: 'ArrowDown' })

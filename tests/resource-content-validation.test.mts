@@ -63,6 +63,23 @@ test('published resource lists exclude draft articles and news', () => {
   assert.deepEqual(getPublishedNewsItems(entries), [])
 })
 
+test('published news items are ordered from most to least recent', () => {
+  const olderNews = {
+    ...draftNews,
+    publishedAt: '2026-01-10',
+    slug: 'older-news',
+    status: 'published'
+  } as ResourceContentEntry
+  const newerNews = {
+    ...draftNews,
+    publishedAt: '2026-06-25',
+    slug: 'newer-news',
+    status: 'published'
+  } as ResourceContentEntry
+
+  assert.deepEqual(getPublishedNewsItems([olderNews, newerNews]), [newerNews, olderNews])
+})
+
 test('content validation rejects duplicate slugs, invalid dates, and required metadata gaps', () => {
   const invalidArticle = {
     ...article,
@@ -182,7 +199,7 @@ test('content validation rejects self-relations and duplicate relatedArticleSlug
   )
 })
 
-test('content validation rejects multiple published featured entries', () => {
+test('content validation rejects multiple published featured entries in the same list', () => {
   const secondFeatured = {
     ...relatedArticle,
     featured: true
@@ -191,8 +208,19 @@ test('content validation rejects multiple published featured entries', () => {
 
   assert.throws(
     () => validateResourceContentEntries([featuredArticle, secondFeatured]),
-    /Multiple published resource entries are marked featured \("article-slug", "related-article"\)/
+    /Multiple published article entries are marked featured \("article-slug", "related-article"\)/
   )
+})
+
+test('content validation allows one featured article and one featured news item', () => {
+  const featuredArticle = { ...article, featured: true } as ResourceContentEntry
+  const featuredNews = {
+    ...draftNews,
+    featured: true,
+    status: 'published'
+  } as ResourceContentEntry
+
+  assertNoValidationError(() => validateResourceContentEntries([featuredArticle, featuredNews]))
 })
 
 test('content validation allows one published featured entry alongside draft featured entries', () => {

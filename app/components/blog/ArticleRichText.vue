@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import ArticleInlineContent from '~/components/blog/ArticleInlineContent.vue'
+import SiteButton from '~/components/SiteButton.vue'
 import { parseArticleBody } from '~/utils/article-content'
 
 const props = defineProps<{
@@ -15,7 +16,50 @@ const blocks = computed(() => parseArticleBody(props.body))
       v-for="(block, index) in blocks"
       :key="index"
     >
-      <h2 v-if="block.type === 'heading' && block.level === 2">
+      <figure
+        v-if="block.type === 'image'"
+        class="article-rich-text__image"
+      >
+        <img
+          :src="block.src"
+          :alt="block.alt"
+          loading="lazy"
+          decoding="async"
+        >
+      </figure>
+      <aside
+        v-else-if="block.type === 'callout' && block.actionLabel"
+        class="article-rich-text__callout"
+      >
+        <h2 class="article-rich-text__callout-title">
+          <ArticleInlineContent :tokens="block.title" />
+        </h2>
+        <p>
+          <ArticleInlineContent :tokens="block.body" />
+        </p>
+        <SiteButton
+          :to="block.actionHref"
+          size="sm"
+        >
+          {{ block.actionLabel }}
+        </SiteButton>
+      </aside>
+      <aside
+        v-else-if="block.type === 'callout'"
+        class="article-rich-text__note"
+        :data-variant="block.variant"
+      >
+        <p
+          v-if="block.title.length > 0"
+          class="article-rich-text__note-title"
+        >
+          <ArticleInlineContent :tokens="block.title" />
+        </p>
+        <div class="article-rich-text__note-content">
+          <ArticleInlineContent :tokens="block.body" />
+        </div>
+      </aside>
+      <h2 v-else-if="block.type === 'heading' && block.level === 2">
         <ArticleInlineContent :tokens="block.content" />
       </h2>
       <h3 v-else-if="block.type === 'heading' && block.level === 3">
@@ -40,39 +84,10 @@ const blocks = computed(() => parseArticleBody(props.body))
           <ArticleInlineContent :tokens="item" />
         </li>
       </ul>
-      <figure
-        v-else-if="block.type === 'image'"
-        class="article-rich-text__figure"
+      <p
+        v-else
+        :class="{ 'article-rich-text__lead': index === 0 }"
       >
-        <img
-          :src="block.src"
-          :alt="block.alt"
-          loading="lazy"
-          decoding="async"
-        >
-        <figcaption
-          v-if="block.alt"
-          class="article-rich-text__figure-caption"
-        >
-          {{ block.alt }}
-        </figcaption>
-      </figure>
-      <aside
-        v-else-if="block.type === 'callout'"
-        class="article-rich-text__callout"
-        :data-variant="block.variant"
-      >
-        <p
-          v-if="block.title"
-          class="article-rich-text__callout-title"
-        >
-          {{ block.title }}
-        </p>
-        <div class="article-rich-text__callout-content">
-          <ArticleInlineContent :tokens="block.content" />
-        </div>
-      </aside>
-      <p v-else>
         <ArticleInlineContent :tokens="block.content" />
       </p>
     </template>

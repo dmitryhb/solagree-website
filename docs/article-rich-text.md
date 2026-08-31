@@ -54,12 +54,13 @@ An image must be the only content on its line:
   convention, which repository validation enforces for entry metadata) or an
   absolute `http(s)` URL.
 - `src` cannot contain whitespace.
-- The alt text renders as the accessible alt attribute and as a visible caption.
+- The alt text renders as the accessible alt attribute. Images render with the
+  approved editorial frame (fixed aspect ratio, rounded corners).
 
-### Callouts
+### Advisory callouts
 
-A callout opens with a marker line and continues over consecutive `>`-prefixed
-lines:
+An advisory callout opens with a marker line and continues over consecutive
+`>`-prefixed lines:
 
 ```
 > [!NOTE] Optional title
@@ -71,6 +72,29 @@ lines:
   `CAUTION`.
 - The title is the optional text after the marker on the opening line.
 - Callout body supports inline markup.
+- Advisory callouts render as the compact note style
+  (`.article-rich-text__note` with a `data-variant` accent).
+
+### CTA callouts
+
+A CTA callout is a fenced block that renders a title, a body, and one action
+button:
+
+```
+:::callout
+## Is Solagree Right For You?
+Take our quick quiz to see whether the process fits your situation.
+[Take The Quiz](/quiz)
+:::
+```
+
+- Line 1 is the title (a leading heading marker `##` is stripped); it supports
+  inline markup.
+- Line 2 is the body; it supports inline markup.
+- Line 3 is the action link `[Label](href)`; `href` follows the same safety
+  policy as inline links.
+- CTA callouts render as the card style (`.article-rich-text__callout`) with a
+  `SiteButton` action.
 
 ## Inline markup
 
@@ -105,9 +129,13 @@ is not clickable. The same policy applies to image `src` values.
   paragraph containing the original line text.
 - An image line with broken syntax (for example a missing closing parenthesis)
   renders as an ordinary paragraph.
-- A callout with an unsupported variant (for example `> [!UNKNOWN]`) renders the
-  entire `>`-quoted run as a paragraph containing the original lines, marker
-  included.
+- An advisory callout with an unsupported variant (for example `> [!UNKNOWN]`)
+  renders the entire `>`-quoted run as a paragraph containing the original
+  lines, marker included.
+- A `:::callout` block missing its title or body renders as a paragraph
+  containing the original lines.
+- A `:::callout` action line that is missing or unsafe keeps the callout but
+  omits the button; the action line text stays visible inside the body.
 - Plain `>`-quoted lines without a callout marker render as ordinary paragraph
   text.
 - Unsafe or malformed link syntax renders as literal text.

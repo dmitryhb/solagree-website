@@ -110,16 +110,22 @@ const validateEntry = (entry: ResourceContentEntry, errors: string[]): void => {
   }
 }
 
-/** Published lists pick at most one featured entry, so two published featured entries would be silently ambiguous. */
+/**
+ * Published lists pick at most one featured entry, so two published featured
+ * entries in the same list would be silently ambiguous. The news list and the
+ * article list each select their own featured entry, so the check is per kind.
+ */
 const validatePublishedFeaturedEntries = (entries: readonly ResourceContentEntry[], errors: string[]): void => {
-  const featuredSlugs = entries
-    .filter(entry => entry.status === 'published' && entry.featured === true)
-    .map(entry => entry.slug)
+  for (const kind of ['article', 'news'] as const) {
+    const featuredSlugs = entries
+      .filter(entry => entry.status === 'published' && entry.featured === true && entry.kind === kind)
+      .map(entry => entry.slug)
 
-  if (featuredSlugs.length > 1) {
-    errors.push(
-      `Multiple published resource entries are marked featured (${featuredSlugs.map(slug => `"${slug}"`).join(', ')}); only one published featured entry is allowed.`
-    )
+    if (featuredSlugs.length > 1) {
+      errors.push(
+        `Multiple published ${kind} entries are marked featured (${featuredSlugs.map(slug => `"${slug}"`).join(', ')}); only one published featured ${kind} entry is allowed.`
+      )
+    }
   }
 }
 
@@ -220,5 +226,6 @@ export const getPublishedArticleBySlug = (
 /** Narrows public entries to external coverage for News & Press lists. */
 export const getPublishedNewsItems = (
   entries: readonly ResourceContentEntry[]
-): readonly ExternalNewsItem[] => getPublishedResourceEntries(entries)
+): readonly ExternalNewsItem[] => [...getPublishedResourceEntries(entries)
   .filter((entry): entry is ExternalNewsItem => entry.kind === 'news')
+].sort((first, second) => second.publishedAt.localeCompare(first.publishedAt))

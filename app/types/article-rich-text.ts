@@ -14,13 +14,17 @@ export type ArticleInlineToken =
 
 /** A safe block node produced from repository-managed article body text. */
 export type ArticleRichTextBlock =
-  | { content: ArticleInlineToken[], level: 2 | 3 | 4, type: 'heading' }
-  | { content: ArticleInlineToken[], type: 'paragraph' }
-  | { items: ArticleInlineToken[][], ordered: boolean, type: 'list' }
   | { alt: string, src: string, type: 'image' }
   | {
-    content: ArticleInlineToken[]
-    title?: string
+    /** Optional CTA destination; present only for `:::callout` blocks with a safe action link. */
+    actionHref?: string
+    /** Optional CTA label; present only for `:::callout` blocks with a safe action link. */
+    actionLabel?: string
+    body: ArticleInlineToken[]
+    title: ArticleInlineToken[]
     type: 'callout'
     variant: ArticleCalloutVariant
   }
+  | { content: ArticleInlineToken[], level: 2 | 3 | 4, type: 'heading' }
+  | { content: ArticleInlineToken[], type: 'paragraph' }
+  | { items: ArticleInlineToken[][], ordered: boolean, type: 'list' }
