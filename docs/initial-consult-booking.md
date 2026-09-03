@@ -32,13 +32,14 @@ The First Available event is configured with a 15-minute post-event buffer, no p
 
 ### Current assignment status
 
-The September 3 owner-side configuration repair restored Stacie to `Initial Consults` and saved the event assignments:
+The September 3 owner-side configuration repair added/invited Stacie to `Initial Consults` and saved the event assignments:
 
-- Taj, Stacie, Jessica, and James are all members of `Initial Consults` and are the four First Available round-robin hosts.
+- Taj, Jessica, and James are existing `Initial Consults` members; Cal.com confirmed that Stacie's team invitation was sent and exposed her for assignment.
+- First Available now includes Taj, Stacie, Jessica, and James as round-robin hosts.
 - First Available retains `Load balancing`; no fixed hosts or weights were enabled.
 - Stacie is the only round-robin host on `initial-consult-stacie`; reload verification displayed bookable slots.
 
-Host-owned Google Workspace conflict checking and working hours remain unverified by the owner. The previously recorded default working-hours pattern (Monday-Friday, 09:00-17:00 in each host's local timezone) must be confirmed by the hosts.
+Confirm that Stacie accepts the team invitation and becomes an active host before treating the four-host setup as production-ready. Host-owned Google Workspace conflict checking and working hours remain unverified by the owner. The previously recorded default working-hours pattern (Monday-Friday, 09:00-17:00 in each host's local timezone) must be confirmed by the hosts.
 
 ## Host identities
 
@@ -70,6 +71,7 @@ The September 3 inspection and repair confirmed the required Phone, State, volun
 
 ## Remaining acceptance work
 
+- Confirm Stacie accepts the `Initial Consults` invitation and is active before production use.
 - Verify each host's Google Workspace calendar connection and conflict-check calendar.
 - Re-verify Stacie's Google Calendar and Zoom authorizations against `stacie.sanders@solagree.com` after the membership change.
 - Obtain final confirmation of each host's working hours.
