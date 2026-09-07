@@ -67,7 +67,12 @@ gtag('config', '${gaMeasurementId}', { send_page_view: false });
   // route has to be listed explicitly instead of relying on link discovery.
   nitro: {
     prerender: {
-      routes: ['/sitemap.xml']
+      routes: [
+        '/sitemap.xml',
+        // This approved-partner tool is intentionally unlinked, so the crawler
+        // cannot discover it and must prerender it explicitly.
+        '/partner-tools/case-qualifier-7h3m9k'
+      ]
     }
   },
   modules: ['@nuxt/ui', '@nuxt/eslint'],
@@ -128,12 +133,34 @@ gtag('config', '${gaMeasurementId}', { send_page_view: false });
         mode: 'standalone',
         display: {
           showShellHeader: true,
+          showExplainer: true
+        },
+        analytics: {
+          enabled: true,
+          namespace: 'solagree.quiz',
+          trackingId: gaMeasurementId || undefined
+        },
+        bridge: {
+          postMessage: false,
+          targetOrigin: '*'
+        },
+        ctas: {
+          'solagree-consult': {
+            href: '/book-a-solagree-consult'
+          }
+        }
+      },
+      solagreeCaseQualifier: {
+        hostId: 'solagree-case-qualifier',
+        mode: 'standalone',
+        display: {
+          showShellHeader: true,
           showInstructions: true,
           headingLevel: 1
         },
         analytics: {
           enabled: true,
-          namespace: 'solagree.quiz',
+          namespace: 'solagree.case_qualifier',
           trackingId: gaMeasurementId || undefined
         },
         bridge: {

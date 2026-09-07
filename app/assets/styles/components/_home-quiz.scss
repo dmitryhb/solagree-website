@@ -43,19 +43,13 @@
 }
 
 .home-quiz-section__quiz {
-  width: min(100%, 1240px);
+  width: min(100%, 1076px);
   margin-inline: auto;
   transition: transform 220ms ease;
 }
 
 .home-quiz-section__quiz:hover {
   transform: translateY(-3px);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .home-quiz-section__quiz {
-    transition: none;
-  }
 }
 
 .home-quiz-section .quiz-section {

@@ -1,12 +1,6 @@
 <script setup lang="ts">
 import { solagreeSocialLinksByIcon } from '~/data/social-links'
-import { solagreeQuizCopy } from '~/data/quiz'
-import { solagreeQuizCriterionGroups } from '~/data/quiz-schema'
-import type {
-  QuizCriterionId,
-  QuizHostConfigInput,
-  QuizHostEvent
-} from '~/data/quiz-types'
+import type { QuizHostConfigInput, QuizHostEvent } from '~/data/quiz-types'
 
 const props = defineProps<{
   hostConfig?: QuizHostConfigInput
@@ -23,11 +17,28 @@ const quizHost = useQuizHost(quizSession, {
 })
 const quizBodyRef = ref<HTMLElement | null>(null)
 const linkedInSocialLink = solagreeSocialLinksByIcon.linkedin
-const titleTag = computed(() => `h${quizHost.hostConfig.value.display.headingLevel}`)
-const sectionClasses = computed(() => ({
-  'quiz-section--standalone': quizHost.hostConfig.value.mode === 'standalone',
-  'quiz-section--embedded': quizHost.hostConfig.value.mode === 'embedded'
-}))
+const currentStepNumber = computed(() => {
+  if (quizSession.phase.value !== 'question') {
+    return undefined
+  }
+
+  const currentQuestionId = quizSession.currentQuestionId.value
+  const questionIndex = quizSession.visibleQuestionIds.value.findIndex(questionId => questionId === currentQuestionId)
+
+  return questionIndex >= 0 ? questionIndex + 1 : undefined
+})
+const totalStepCount = computed(() => {
+  return quizSession.phase.value === 'question' ? quizSession.visibleQuestionIds.value.length : undefined
+})
+const showStepCounter = computed(() => {
+  return quizSession.phase.value === 'question' && (totalStepCount.value ?? 0) > 0
+})
+const sectionClasses = computed(() => {
+  return {
+    'quiz-section--standalone': quizHost.hostConfig.value.mode === 'standalone',
+    'quiz-section--embedded': quizHost.hostConfig.value.mode === 'embedded'
+  }
+})
 
 const getQuizScrollBehavior = (): ScrollBehavior => {
   if (!import.meta.client) {
@@ -37,26 +48,43 @@ const getQuizScrollBehavior = (): ScrollBehavior => {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
 }
 
-const handleCriterionChange = (payload: {
-  criterionId: QuizCriterionId
-  selected: boolean
-}): void => {
-  quizHost.handleCriterionChange(payload.criterionId, payload.selected)
-}
+const scrollQuizToTop = async () => {
+  if (!import.meta.client) {
+    return
+  }
 
-const handleReset = async (): Promise<void> => {
-  quizHost.handleReset()
   await nextTick()
 
-  const firstCriterion = quizBodyRef.value?.querySelector<HTMLInputElement>(
-    '[data-criterion-id="simple-estate"]'
-  )
+  const quizBody = quizBodyRef.value
+  if (!quizBody) {
+    return
+  }
 
-  firstCriterion?.focus({ preventScroll: true })
-  quizBodyRef.value?.scrollIntoView({
-    behavior: getQuizScrollBehavior(),
-    block: 'start'
+  const top = Math.max(window.scrollY + quizBody.getBoundingClientRect().top - 24, 0)
+  window.scrollTo({
+    top,
+    behavior: getQuizScrollBehavior()
   })
+}
+
+const hasRevealedQuizResult = (previousPhase: typeof quizSession.phase.value) => {
+  return previousPhase !== 'result' && quizSession.phase.value === 'result'
+}
+
+const handleAdvance = async () => {
+  const previousPhase = quizSession.phase.value
+
+  quizHost.handleAdvance()
+
+  if (!hasRevealedQuizResult(previousPhase)) {
+    return
+  }
+
+  await scrollQuizToTop()
+}
+
+const handleBack = () => {
+  quizHost.handleBack()
 }
 </script>
 
@@ -64,12 +92,11 @@ const handleReset = async (): Promise<void> => {
   <section
     class="quiz-section"
     :class="sectionClasses"
-    aria-labelledby="case-qualifier-title"
   >
     <div class="quiz-section__layout">
       <header
         v-if="quizHost.hostConfig.value.display.showShellHeader"
-        class="quiz-section__shell-header"
+        class="quiz-section__header"
       >
         <NuxtLink
           to="/"
@@ -93,52 +120,31 @@ const handleReset = async (): Promise<void> => {
         </a>
       </header>
 
-      <article
+      <div
         ref="quizBodyRef"
-        class="quiz-qualifier"
-        :data-quiz-ready="quizSession.hasRestoredPersistedState.value ? 'true' : 'false'"
+        class="quiz-section__body"
       >
-        <header class="quiz-qualifier__header">
-          <component
-            :is="titleTag"
-            id="case-qualifier-title"
-            class="quiz-qualifier__title"
-          >
-            {{ solagreeQuizCopy.title }}
-          </component>
-          <p class="quiz-qualifier__subtitle">
-            {{ solagreeQuizCopy.subtitle }}
-          </p>
-        </header>
-
-        <div class="quiz-qualifier__layout">
-          <div class="quiz-qualifier__questions">
-            <p
-              v-if="quizHost.hostConfig.value.display.showInstructions"
-              class="quiz-qualifier__instructions"
-            >
-              {{ solagreeQuizCopy.instructions }}
-            </p>
-
-            <QuizCriterionGroup
-              v-for="(group, index) in solagreeQuizCriterionGroups"
-              :key="group.id"
-              :group="group"
-              :group-number="index + 1"
-              :selected-criterion-ids="quizSession.selectedCriterionIds.value"
-              @change="handleCriterionChange"
-            />
-          </div>
-
-          <QuizAssessmentPanel
-            :score="quizSession.score.value"
-            :result="quizHost.resolvedResultView.value"
-            :heading-level="quizHost.hostConfig.value.display.headingLevel"
-            @cta="quizHost.handleResultCtaClick"
-            @reset="handleReset"
-          />
-        </div>
-      </article>
+        <QuizCardShell
+          :progress="quizSession.progressValue.value"
+          :back-label="quizSession.labels.backLabel"
+          :current-step-number="currentStepNumber"
+          :total-step-count="totalStepCount"
+          :show-step-counter="showStepCounter"
+          :question="quizSession.phase.value === 'result' ? undefined : quizSession.currentQuestion.value"
+          :result="quizSession.phase.value === 'result' ? quizHost.resolvedResultView.value : undefined"
+          :value="quizSession.currentValue.value"
+          :primary-action-label="quizSession.primaryActionLabel.value"
+          :can-go-back="quizSession.canGoBack.value"
+          :can-advance="quizSession.canAdvance.value"
+          :show-explainer="quizHost.hostConfig.value.display.showExplainer"
+          @back="handleBack"
+          @advance="handleAdvance"
+          @cta="quizHost.handleResultCtaClick"
+          @reset="quizHost.handleReset"
+          @single-change="quizHost.handleSingleAnswer($event.questionId, $event.value)"
+          @multi-change="quizHost.handleMultiAnswer($event.questionId, { value: $event.value, checked: $event.checked })"
+        />
+      </div>
     </div>
   </section>
 </template>

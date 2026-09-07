@@ -16,8 +16,7 @@ const embeddedHostConfig = computed<QuizHostConfigInput>(() => {
     mode: props.hostConfig?.mode ?? 'embedded',
     display: {
       showShellHeader: props.hostConfig?.display?.showShellHeader ?? false,
-      showInstructions: props.hostConfig?.display?.showInstructions,
-      headingLevel: props.hostConfig?.display?.headingLevel ?? 1
+      showExplainer: props.hostConfig?.display?.showExplainer
     }
   }
 })

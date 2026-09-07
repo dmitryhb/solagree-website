@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import { solagreeQuizCopy } from '~/data/quiz'
-import type { QuizHostDisplayOptions, QuizResultViewModel } from '~/data/quiz-types'
+import { solagreeCaseQualifierCopy } from '~/data/case-qualifier'
+import type { CaseQualifierHostDisplayOptions, CaseQualifierResultViewModel } from '~/data/case-qualifier-types'
 import { appendReferralToHref } from '~/utils/referral'
 
 const props = defineProps<{
   score: number
-  result: QuizResultViewModel | null
-  headingLevel: QuizHostDisplayOptions['headingLevel']
+  result: CaseQualifierResultViewModel | null
+  headingLevel: CaseQualifierHostDisplayOptions['headingLevel']
 }>()
 
 const emit = defineEmits<{
   reset: []
-  cta: [payload: QuizResultViewModel['primaryCta']]
+  cta: [payload: CaseQualifierResultViewModel['primaryCta']]
 }>()
 
 const route = useRoute()
@@ -34,8 +34,8 @@ const primaryCta = computed(() => {
     href: appendReferralToHref(props.result.primaryCta.href, referralCode.value)
   }
 })
-const gaugeLabel = computed(() => props.result?.gaugeLabel ?? solagreeQuizCopy.awaitingLabel)
-const toneClass = computed(() => props.result ? `quiz-assessment--${props.result.tone}` : undefined)
+const gaugeLabel = computed(() => props.result?.gaugeLabel ?? solagreeCaseQualifierCopy.awaitingLabel)
+const toneClass = computed(() => props.result ? `case-qualifier-assessment--${props.result.tone}` : undefined)
 const assessmentHeadingTag = computed(() => `h${props.headingLevel + 1}`)
 const resultHeadingTag = computed(() => `h${props.headingLevel + 2}`)
 const needleAngle = computed(() => {
@@ -58,7 +58,7 @@ const needleStyle = computed(() => ({
 }))
 const announcement = computed(() => {
   if (!props.result) {
-    return `0 criteria met. ${solagreeQuizCopy.awaitingLabel}.`
+    return `0 criteria met. ${solagreeCaseQualifierCopy.awaitingLabel}.`
   }
 
   return `${props.score} criteria met. ${props.result.gaugeLabel}. ${props.result.title}. ${props.result.actionLabel}.`
@@ -67,21 +67,21 @@ const announcement = computed(() => {
 
 <template>
   <aside
-    class="quiz-assessment"
+    class="case-qualifier-assessment"
     :class="toneClass"
-    aria-labelledby="quiz-assessment-title"
+    aria-labelledby="case-qualifier-assessment-title"
   >
-    <div class="quiz-assessment__inner">
+    <div class="case-qualifier-assessment__inner">
       <component
         :is="assessmentHeadingTag"
-        id="quiz-assessment-title"
-        class="quiz-assessment__heading"
+        id="case-qualifier-assessment-title"
+        class="case-qualifier-assessment__heading"
       >
-        {{ solagreeQuizCopy.assessmentTitle }}
+        {{ solagreeCaseQualifierCopy.assessmentTitle }}
       </component>
 
       <div
-        class="quiz-visually-hidden"
+        class="case-qualifier-visually-hidden"
         role="status"
         aria-live="polite"
         aria-atomic="true"
@@ -90,27 +90,27 @@ const announcement = computed(() => {
       </div>
 
       <div
-        class="quiz-assessment__gauge"
+        class="case-qualifier-assessment__gauge"
         aria-hidden="true"
       >
         <svg viewBox="0 0 300 190">
           <path
-            class="quiz-assessment__segment quiz-assessment__segment--possible"
+            class="case-qualifier-assessment__segment case-qualifier-assessment__segment--possible"
             :class="{ 'is-active': result?.tone === 'possible' }"
             d="M 40 150 A 110 110 0 0 1 95 54.74"
           />
           <path
-            class="quiz-assessment__segment quiz-assessment__segment--good"
+            class="case-qualifier-assessment__segment case-qualifier-assessment__segment--good"
             :class="{ 'is-active': result?.tone === 'good' }"
             d="M 95 54.74 A 110 110 0 0 1 205 54.74"
           />
           <path
-            class="quiz-assessment__segment quiz-assessment__segment--ideal"
+            class="case-qualifier-assessment__segment case-qualifier-assessment__segment--ideal"
             :class="{ 'is-active': result?.tone === 'ideal' }"
             d="M 205 54.74 A 110 110 0 0 1 260 150"
           />
           <line
-            class="quiz-assessment__needle"
+            class="case-qualifier-assessment__needle"
             :style="needleStyle"
             x1="150"
             y1="150"
@@ -118,7 +118,7 @@ const announcement = computed(() => {
             y2="150"
           />
           <circle
-            class="quiz-assessment__needle-dot"
+            class="case-qualifier-assessment__needle-dot"
             cx="150"
             cy="150"
             r="10"
@@ -126,40 +126,40 @@ const announcement = computed(() => {
         </svg>
       </div>
 
-      <p class="quiz-assessment__gauge-label">
+      <p class="case-qualifier-assessment__gauge-label">
         {{ gaugeLabel }}
       </p>
       <p
-        class="quiz-assessment__score"
-        data-testid="quiz-score"
+        class="case-qualifier-assessment__score"
+        data-testid="case-qualifier-score"
       >
         {{ score }}
       </p>
-      <p class="quiz-assessment__score-label">
-        {{ solagreeQuizCopy.scoreLabel }}
+      <p class="case-qualifier-assessment__score-label">
+        {{ solagreeCaseQualifierCopy.scoreLabel }}
       </p>
 
       <div
         v-if="result"
-        class="quiz-assessment__result"
+        class="case-qualifier-assessment__result"
       >
         <component
           :is="resultHeadingTag"
-          class="quiz-assessment__result-title"
+          class="case-qualifier-assessment__result-title"
         >
           {{ result.title }}
         </component>
-        <p class="quiz-assessment__result-description">
+        <p class="case-qualifier-assessment__result-description">
           {{ result.body }}
         </p>
-        <p class="quiz-assessment__action-label">
+        <p class="case-qualifier-assessment__action-label">
           {{ result.actionLabel }}
         </p>
 
-        <div class="quiz-assessment__actions">
+        <div class="case-qualifier-assessment__actions">
           <a
             v-if="primaryCta"
-            class="quiz-assessment__cta quiz-assessment__cta--primary"
+            class="case-qualifier-assessment__cta case-qualifier-assessment__cta--primary"
             :href="primaryCta.href"
             :target="primaryCta.target"
             :rel="primaryCta.rel"
@@ -168,7 +168,7 @@ const announcement = computed(() => {
             {{ primaryCta.label }}
           </a>
           <button
-            class="quiz-assessment__cta quiz-assessment__cta--reset"
+            class="case-qualifier-assessment__cta case-qualifier-assessment__cta--reset"
             type="button"
             @click="emit('reset')"
           >
