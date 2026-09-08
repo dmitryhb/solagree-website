@@ -1,61 +1,126 @@
-import { solagreeQuizCriterionIds } from '~/data/quiz-schema'
+import { solagreeQuizOpenPolicies } from '~/data/quiz-policies'
 import { solagreeQuizResultContent } from '~/data/quiz-results'
 import type {
-  QuizCriterionId,
+  QuizAnswerMap,
+  QuizConsultMetadata,
   QuizEvaluation,
-  QuizOutcomeId,
+  QuizInternalTag,
+  QuizOpenPolicy,
   QuizResultViewModel
 } from '~/data/quiz-types'
 
-/** Resolves the approved assessment tier for a criterion count. */
-export const getQuizOutcome = (score: number): QuizOutcomeId | null => {
-  if (!Number.isInteger(score) || score <= 0 || score > solagreeQuizCriterionIds.length) {
-    return null
+/**
+ * Builds structured metadata used by quiz analytics and result routing.
+ */
+export const buildQuizConsultMetadata = (answers: Readonly<QuizAnswerMap>): QuizConsultMetadata => {
+  const tags = new Set<QuizInternalTag>()
+  const parentingTopicIds = answers.parentingDetails ?? []
+  const financialTopicIds = answers.financialDetails ?? []
+
+  const hasParentingConcerns = answers.children === 'yes' && answers.parentingScreener === 'yes'
+  const hasFinancialConcerns = answers.financialScreener === 'yes'
+  const hasFinancialComplexity = financialTopicIds.length > 0
+  const hasMissingSpouse =
+    answers.spouseContact === 'cannot-find' || answers.spouseContact === 'unknown-whereabouts'
+  const hasNoSpouseCommunication = answers.spouseContact === 'know-where-not-communicating'
+  const needsLegalAdvice = answers.legalAdvice === 'yes' || answers.legalAdvice === 'not-sure'
+
+  if (hasParentingConcerns) {
+    tags.add('parenting')
   }
 
-  if (score <= 2) {
-    return 'possible-fit'
+  if (hasFinancialConcerns) {
+    tags.add('financial')
   }
 
-  if (score <= 5) {
-    return 'good-fit'
+  if (hasParentingConcerns && hasFinancialConcerns) {
+    tags.add('both')
   }
 
-  return 'ideal-fit'
-}
+  if (hasFinancialComplexity) {
+    tags.add('financial-complexity')
+  }
 
-/** Evaluates a normalized selection without using criterion labels or user-entered data. */
-export const evaluateQuizAnswers = (
-  selectedCriterionIds: readonly QuizCriterionId[]
-): QuizEvaluation => {
-  const score = selectedCriterionIds.length
+  if (hasMissingSpouse) {
+    tags.add('missing-spouse')
+  }
+
+  if (hasNoSpouseCommunication) {
+    tags.add('no-spouse-communication')
+  }
+
+  if (needsLegalAdvice) {
+    tags.add('legal-advice-needed')
+  }
+
+  if (answers.paymentReadiness === 'need-payment-plan') {
+    tags.add('payment-plan')
+  }
+
+  if (answers.spouseCooperation === 'no') {
+    tags.add('spouse-resistance')
+  }
 
   return {
-    score,
-    outcome: getQuizOutcome(score)
+    state: answers.state,
+    tags: [...tags],
+    parentingTopicIds,
+    financialTopicIds,
+    spouseContact: answers.spouseContact,
+    spouseCooperation: answers.spouseCooperation,
+    legalAdvice: answers.legalAdvice,
+    paymentReadiness: answers.paymentReadiness,
+    hasParentingConcerns,
+    hasFinancialConcerns,
+    hasFinancialComplexity,
+    hasMissingSpouse,
+    needsLegalAdvice,
+    deferredPolicyIds: getQuizDeferredPolicyIds(answers)
   }
 }
 
-/** Returns the exact approved result copy for a non-zero assessment. */
-export const getQuizResultViewModel = (score: number): QuizResultViewModel | null => {
-  const outcome = getQuizOutcome(score)
+/**
+ * Evaluates quiz answers into the configured result policy outcome.
+ */
+export const evaluateQuizAnswers = (answers: Readonly<QuizAnswerMap>): QuizEvaluation => {
+  const metadata = buildQuizConsultMetadata(answers)
 
-  if (!outcome) {
-    return null
-  }
-
-  const result = solagreeQuizResultContent[outcome]
-
-  return {
-    ...result,
-    primaryCta: {
-      ...result.primaryCta
+  if (answers.paymentReadiness === 'need-payment-plan' || answers.paymentReadiness === 'not-ready') {
+    return {
+      kind: 'resolved',
+      outcome: 'payment-options-consult',
+      metadata
     }
   }
+
+  return {
+    kind: 'resolved',
+    outcome: 'solagree-fit',
+    metadata
+  }
 }
 
-/** Converts selection count into bounded progress for host analytics. */
-export const getQuizProgressValue = (score: number): number => {
-  const boundedScore = Math.min(Math.max(score, 0), solagreeQuizCriterionIds.length)
-  return Math.round((boundedScore / solagreeQuizCriterionIds.length) * 100)
+/**
+ * Returns the Initial Consult recommendation displayed for every quiz outcome.
+ */
+export const getQuizResultViewModel = (): QuizResultViewModel => {
+  return {
+    ...solagreeQuizResultContent
+  }
+}
+
+/**
+ * Returns non-blocking open policy IDs that can be handled after result routing.
+ */
+export const getQuizDeferredPolicyIds = (_: Readonly<QuizAnswerMap>): readonly QuizOpenPolicy['id'][] => {
+  return solagreeQuizOpenPolicies
+    .filter(policy => !policy.blocksOutcome)
+    .map(policy => policy.id)
+}
+
+/**
+ * Checks whether an evaluation is blocked by an unresolved open policy.
+ */
+export const isQuizResultBlockedByOpenPolicy = (evaluation: QuizEvaluation): boolean => {
+  return evaluation.kind === 'open-policy'
 }

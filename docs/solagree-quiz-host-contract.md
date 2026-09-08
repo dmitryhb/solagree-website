@@ -1,58 +1,52 @@
-# Solagree Case Qualifier Host Contract
+# Solagree Quiz Host Contract
 
-`HIR-253` keeps the approved Case Qualifier reusable by separating its typed schema, v3 session, evaluator, presentation, and host integrations.
+`HIR-40` keeps the quiz core reusable by separating host integration from the schema, session, navigation, and evaluator layers.
 
 ## Entry Points
 
-- Homepage: `HomeQuizSection` configures `SolagreeQuizEmbed` for the existing marketing-page heading hierarchy.
-- Standalone route: `/quiz` renders `QuizSection` with runtime defaults.
-- Public iframe route: `/quiz/embed?ref=<slug>` renders `SolagreeQuizEmbed`, sets `noindex`, and preserves the optional referral slug in the same-site Initial Consult CTA.
-
-All three surfaces use `app/data/quiz-schema.ts`, `useQuizSession`, and `useQuizHost`. There is no route-specific scoring or copy.
+- Standalone route: use `QuizSection` with no props. It resolves Nuxt runtime defaults automatically.
+- Embedded module: use `SolagreeQuizEmbed`. It wraps `QuizSection` with embedded defaults and re-emits host events.
+- Public iframe route: use `/quiz/embed?ref=<slug>`. The route renders `SolagreeQuizEmbed`, sets `noindex`, skips marketing chrome, and preserves the optional `ref` query value into same-site consult CTAs.
 
 ## Host Config
 
-`QuizSection` and `SolagreeQuizEmbed` accept an optional `hostConfig` prop:
+`QuizSection` and `SolagreeQuizEmbed` accept an optional `hostConfig` prop with these bounded concerns:
 
-- `hostId`: stable host identifier attached to emitted events
+- `hostId`: host identifier attached to emitted events
 - `mode`: `standalone` or `embedded`
-- `display.showShellHeader`: show or hide the logo/contact shell
-- `display.showInstructions`: show or hide the approved instruction panel
-- `display.headingLevel`: qualifier title heading level (`1`, `2`, or `3`)
-- `analytics.enabled`: enable Google Analytics events
+- `display.showShellHeader`: show or hide the standalone heading/intro shell
+- `display.showExplainer`: show or hide the explainer block under the card
+- `analytics.enabled`: gate all emitted progression/completion/CTA events
 - `analytics.namespace`: source string used for postMessage payloads
-- `analytics.trackingId`: optional tracking ID attached to emitted events
+- `analytics.trackingId`: optional tracking id attached to all emitted events
 - `bridge.postMessage`: mirror host events to `window.parent.postMessage`
 - `bridge.targetOrigin`: target origin for postMessage
-- `ctas[actionId]`: override CTA href, target, rel, and CTA-specific tracking ID
+- `ctas[actionId]`: override CTA href, target, rel, and CTA-specific tracking id
 
 ## CTA Action IDs
 
-- `solagree-consult` defaults to `/book-a-solagree-consult`, the canonical Initial Consult page.
+CTA routing is keyed by stable action ids instead of hardcoded page checks:
 
-## Privacy-Safe Host Events
+- `solagree-consult`
 
-Vue hosts can listen through `@host-event`. Iframe hosts can opt into `postMessage`.
+Every result displays the Initial Consult action. The host layer decides its final destination URL.
 
-- `started`
-- `criterion_toggled`
+## Host Events
+
+When analytics is enabled, the quiz emits bounded integration events:
+
+- `question_viewed`
+- `question_answered`
+- `progressed`
 - `completed`
-- `outcome_changed`
 - `cta_clicked`
 - `reset`
 
-Events contain stable criterion/action/outcome IDs, selection booleans, counts, progress, and host context. They never contain criterion labels, arbitrary text, names, email addresses, or phone numbers. CTA events do not emit the destination URL.
-
-Google Analytics mirrors these lifecycle points as `quiz_started`, `quiz_criterion_toggled`, `quiz_completed`, `quiz_outcome_changed`, `quiz_cta_clicked`, and `quiz_reset` with the same bounded ID/count fields.
-
-## Local Restoration
-
-The qualifier stores only `{ version: 3, selectedCriterionIds }` under `solagree.quiz.session.v3`. Restore rejects stale versions, unknown IDs, duplicate IDs, and malformed data. Legacy v1/v2 keys are removed when the qualifier mounts.
+Vue hosts can listen via `@host-event`. Embedded iframe hosts can opt into `postMessage`.
 
 ## Intentional Boundaries
 
 - No backend or CMS coupling
-- No free-text quiz input
-- No host-specific scoring
-- No route-specific result copy
-- No answer labels in analytics or host events
+- No host-specific branching inside the evaluator
+- No provider-specific analytics SDK in the quiz core
+- No result-policy changes beyond resolving CTA destinations and event emission

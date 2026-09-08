@@ -120,12 +120,12 @@ the nginx server block for $STAGING_SITE_URL, before the SPA fallback:
 
   location ^~ /go/ {
       add_header X-Robots-Tag "noindex, nofollow" always;
-      try_files $uri $uri/ /200.html;
+      try_files \$uri \$uri/ /200.html;
   }
 
   location ^~ /cdfa/go/ {
       add_header X-Robots-Tag "noindex, nofollow" always;
-      try_files $uri $uri/ /200.html;
+      try_files \$uri \$uri/ /200.html;
   }
 
 Then reload nginx and rerun this deployment.

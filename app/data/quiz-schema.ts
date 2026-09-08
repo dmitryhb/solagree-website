@@ -1,108 +1,126 @@
 import type {
-  QuizCriterionDefinition,
-  QuizCriterionGroupDefinition,
-  QuizCriterionId
+  QuizQuestionDefinition,
+  QuizQuestionId
 } from '~/data/quiz-types'
+import { stateOptions } from '~/data/us-states'
 
-export const solagreeQuizCriterionGroups = [
+const solagreeStateOptions = stateOptions.map(({ value, label }) => ({ id: value, label }))
+
+const solagreeQuizExplainerTitle = 'Why are we asking this?'
+
+export const solagreeQuizQuestions = [
   {
-    id: 'financial-asset-alignment',
-    title: 'Financial & Asset Alignment',
-    listeningCue:
-      '"I don\'t have $10,000 for a retainer," or "We\'re spending more fighting than the house is worth."',
-    criteria: [
-      {
-        id: 'simple-estate',
-        title: 'Simple Estate',
-        description: 'Marital estate is approximately $500,000 or less'
-      },
-      {
-        id: 'budget-constraints',
-        title: 'Budget Constraints',
-        description: 'Client is hesitant or unable to pay a $7,500+ litigation retainer'
-      },
-      {
-        id: 'financial-transparency',
-        title: 'Financial Transparency',
-        description: 'Neither party is alleging hidden assets or significant financial misconduct'
-      },
-      {
-        id: 'high-net-worth-exception',
-        title: 'High-Net-Worth Exception',
-        description: 'High-net-worth client seeking a private, confidential alternative to courtroom litigation'
-      }
+    id: 'state',
+    kind: 'select',
+    title: 'Where will your divorce be filed?',
+    description: 'Select the U.S. state or district connected to your divorce filing.',
+    placeholder: 'Choose a state',
+    options: solagreeStateOptions
+  },
+  {
+    id: 'children',
+    kind: 'single-select',
+    title: 'Do you have children under 21?',
+    options: [
+      { id: 'yes', label: 'Yes' },
+      { id: 'no', label: 'No' }
     ]
   },
   {
-    id: 'client-mindset-goals',
-    title: 'Client Mindset & Goals',
-    listeningCue:
-      '"Can we stay out of court?", "Our kids don\'t deserve this," or "I just want this over."',
-    criteria: [
-      {
-        id: 'court-avoidance',
-        title: 'Court Avoidance',
-        description: 'Both parties want to avoid court if possible'
-      },
-      {
-        id: 'resolution-focus',
-        title: 'Resolution Focus',
-        description: 'Client wants a faster, more predictable process'
-      },
-      {
-        id: 'co-parenting-priority',
-        title: 'Co-Parenting Priority',
-        description: 'Preserving family relationships or effective co-parenting is a priority'
-      },
-      {
-        id: 'ready-to-move-forward',
-        title: 'Ready to Move Forward',
-        description: 'The client has said, "I just want this over"'
-      }
+    id: 'parentingScreener',
+    kind: 'single-select',
+    title: 'Do you need help working through parenting, custody, or child-support issues?',
+    options: [
+      { id: 'yes', label: 'Yes' },
+      { id: 'no', label: 'No' }
+    ],
+    explainerTitle: solagreeQuizExplainerTitle,
+    explainerBody: 'Examples: custody, parenting time, visitation, child support, or decision-making for the children.',
+    isVisible: answers => answers.children === 'yes'
+  },
+  {
+    id: 'parentingDetails',
+    kind: 'multi-select',
+    title: 'Which parenting topics apply to your situation?',
+    description: 'Select one or more answers:',
+    options: [
+      { id: 'custody-schedule', label: 'Custody or parenting-time schedule' },
+      { id: 'decision-making', label: 'Decision-making responsibilities' },
+      { id: 'child-support', label: 'Child support' },
+      { id: 'communication-conflict', label: 'Co-parenting communication or conflict' }
+    ],
+    isVisible: answers => answers.children === 'yes' && answers.parentingScreener === 'yes'
+  },
+  {
+    id: 'financialScreener',
+    kind: 'single-select',
+    title: 'Do you have financial questions about your divorce?',
+    options: [
+      { id: 'yes', label: 'Yes' },
+      { id: 'no', label: 'No' }
+    ],
+    explainerTitle: solagreeQuizExplainerTitle,
+    explainerBody: 'Examples: your home, bank accounts, retirement accounts, debts, spousal support, or who keeps what.'
+  },
+  {
+    id: 'financialDetails',
+    kind: 'multi-select',
+    title: 'Which financial topics apply to your situation?',
+    description: 'Select one or more answers:',
+    options: [
+      { id: 'real-estate', label: 'A home, real estate, or major property' },
+      { id: 'retirement-assets', label: 'Retirement accounts or investments' },
+      { id: 'business-self-employment', label: 'A business or self-employment income' },
+      { id: 'spousal-support', label: 'Spousal support or alimony' },
+      { id: 'debts-assets', label: 'Debt, asset division, or other complex finances' }
+    ],
+    isVisible: answers => answers.financialScreener === 'yes'
+  },
+  {
+    id: 'spouseContact',
+    kind: 'single-select',
+    title: 'Do you have contact information for your spouse (we will not ask you to provide it at this time)?',
+    options: [
+      { id: 'direct-contact', label: 'Yes' },
+      { id: 'cannot-find', label: 'No' },
+      { id: 'unknown-whereabouts', label: 'Not Sure' }
     ]
   },
   {
-    id: 'case-suitability',
-    title: 'Case Suitability',
-    listeningCue:
-      '"This case has been dragging on forever," or "We have some things we can\'t agree on."',
-    criteria: [
-      {
-        id: 'willing-participants',
-        title: 'Willing Participants',
-        description: 'Both parties will engage in good faith (even if they disagree on outcomes)'
-      },
-      {
-        id: 'specific-disagreements',
-        title: 'Specific Disagreements',
-        description: 'Parties have identifiable issues they can\'t resolve on their own'
-      },
-      {
-        id: 'litigation-stuck',
-        title: 'Litigation Stuck',
-        description: 'Case is stuck in litigation and has had too many delays'
-      },
-      {
-        id: 'integrity-deficit',
-        title: 'Integrity Deficit',
-        description: 'Client deserves a high-integrity process but can\'t afford the cost that comes with it'
-      }
+    id: 'spouseCooperation',
+    kind: 'single-select',
+    title: 'Do you expect your spouse to cooperate in the divorce process?',
+    options: [
+      { id: 'yes', label: 'Yes, I expect them to cooperate' },
+      { id: 'no', label: 'No, I expect resistance' },
+      { id: 'not-sure', label: 'I am not sure yet' }
+    ],
+    isVisible: answers => answers.spouseContact === 'direct-contact'
+  },
+  {
+    id: 'legalAdvice',
+    kind: 'single-select',
+    title: 'Do you think you need legal advice before moving forward?',
+    options: [
+      { id: 'yes', label: 'Yes' },
+      { id: 'no', label: 'No' },
+      { id: 'not-sure', label: 'I am not sure' }
+    ]
+  },
+  {
+    id: 'paymentReadiness',
+    kind: 'single-select',
+    title: 'Do you have the ability to pay for a service to help you?',
+    options: [
+      { id: 'ready-now', label: 'Yes, I am ready now' },
+      { id: 'need-payment-plan', label: 'I would need a payment plan' },
+      { id: 'not-ready', label: 'No, not right now' }
     ]
   }
-] as const satisfies readonly QuizCriterionGroupDefinition[]
+] as const satisfies readonly QuizQuestionDefinition[]
 
-const solagreeQuizCriteria = solagreeQuizCriterionGroups.reduce<QuizCriterionDefinition[]>(
-  (criteria, group) => {
-    criteria.push(...group.criteria)
-    return criteria
-  },
-  []
-)
+export const solagreeQuizQuestionIds = solagreeQuizQuestions.map(question => question.id) as readonly QuizQuestionId[]
 
-export const solagreeQuizCriterionIds = solagreeQuizCriteria.map(
-  criterion => criterion.id
-) as readonly QuizCriterionId[]
-
-export const solagreeQuizCriterionMap = Object.fromEntries(
-  solagreeQuizCriteria.map(criterion => [criterion.id, criterion])
-) as Record<QuizCriterionId, QuizCriterionDefinition>
+export const solagreeQuizQuestionMap = Object.fromEntries(
+  solagreeQuizQuestions.map(question => [question.id, question])
+) as Record<QuizQuestionId, (typeof solagreeQuizQuestions)[number]>
