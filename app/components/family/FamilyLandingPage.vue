@@ -1,7 +1,8 @@
 <script setup lang="ts">
+import FamilyPricingCard from './FamilyPricingCard.vue'
 import WebinarVideoFrame from '~/components/webinar/WebinarVideoFrame.vue'
 import { howItWorksPhases } from '~/data/how-it-works-phases'
-import { pricingPlans } from '~/data/pricing-plans'
+import { pricingPlans } from '~/data/family-pricing-plans'
 import type { FamilyLandingPage } from '~/data/family-landing-pages'
 
 const props = defineProps<{ page: FamilyLandingPage }>()
@@ -97,7 +98,7 @@ useSolagreeSeo({
           <h2 id="family-pricing-title">Transparent flat-fee pricing.</h2>
           <p v-for="paragraph in page.pricingIntro" :key="paragraph" class="pricing-section__intro">{{ paragraph }}</p>
         </header>
-        <div class="pricing-section__grid"><PricingCard v-for="plan in pricingPlans" :key="plan.name" :plan="plan" /></div>
+        <div class="pricing-section__grid"><FamilyPricingCard v-for="plan in pricingPlans" :key="plan.name" :plan="plan" /></div>
       </div>
     </section>
 
@@ -123,4 +124,8 @@ useSolagreeSeo({
 
 <style scoped lang="scss">
 @use '~/assets/styles/components/family-landing';
+</style>
+
+<style lang="scss">
+@use '~/assets/styles/components/family-pricing';
 </style>
