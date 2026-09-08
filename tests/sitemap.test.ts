@@ -12,6 +12,7 @@ const NON_INDEXABLE_PATH_PATTERNS: Array<readonly [string, RegExp]> = [
   ['embed hosts', /\/embed$/],
   ['internal review tooling', /^\/review(\/|$)/],
   ['admin intake', /^\/admin(\/|$)/],
+  ['unlisted partner tools', /^\/partner-tools(\/|$)/],
   ['consult booking flows', /^\/book-(a-solagree|an-attorney)-consult(\/|$)/],
   ['meeting short links', /^\/meet(\/|$)/],
   ['external news details', /^\/news\//]

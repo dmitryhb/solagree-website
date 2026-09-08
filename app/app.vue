@@ -4,7 +4,11 @@ const currentRoute = computed(() => router.currentRoute.value)
 const normalizedRoutePath = computed(() => (
   currentRoute.value.path === '/' ? currentRoute.value.path : currentRoute.value.path.replace(/\/+$/, '')
 ))
-const quizShellRoutes = new Set(['/quiz', '/quiz/embed'])
+const quizShellRoutes = new Set([
+  '/quiz',
+  '/quiz/embed',
+  '/partner-tools/case-qualifier-7h3m9k'
+])
 const CO_BRANDED_PATH_PREFIXES = ['/co-branded/', '/go/', '/cdfa/go/'] as const
 const isQuizRoute = computed(() => quizShellRoutes.has(normalizedRoutePath.value))
 const isCoBrandedRoute = computed(() => (

@@ -1,14 +1,14 @@
 import { describe, expect, it } from 'vitest'
-import { solagreeQuizCopy } from '../app/data/quiz'
+import { solagreeCaseQualifierCopy } from '../app/data/case-qualifier'
 import {
-  solagreeQuizCriterionGroups,
-  solagreeQuizCriterionIds
-} from '../app/data/quiz-schema'
+  solagreeCaseQualifierCriterionGroups,
+  solagreeCaseQualifierCriterionIds
+} from '../app/data/case-qualifier-schema'
 import {
-  evaluateQuizAnswers,
-  getQuizOutcome,
-  getQuizResultViewModel
-} from '../app/utils/quiz-results'
+  evaluateCaseQualifierAnswers,
+  getCaseQualifierOutcome,
+  getCaseQualifierResultViewModel
+} from '../app/utils/case-qualifier-results'
 
 describe('case qualifier results', () => {
   it.each([
@@ -20,21 +20,21 @@ describe('case qualifier results', () => {
     [6, 'ideal-fit'],
     [12, 'ideal-fit']
   ] as const)('maps score %i to %s', (score, outcome) => {
-    expect(getQuizOutcome(score)).toBe(outcome)
-    expect(evaluateQuizAnswers(solagreeQuizCriterionIds.slice(0, score))).toEqual({ score, outcome })
+    expect(getCaseQualifierOutcome(score)).toBe(outcome)
+    expect(evaluateCaseQualifierAnswers(solagreeCaseQualifierCriterionIds.slice(0, score))).toEqual({ score, outcome })
   })
 
   it('rejects scores outside the approved integer range', () => {
-    expect(getQuizOutcome(-1)).toBeNull()
-    expect(getQuizOutcome(1.5)).toBeNull()
-    expect(getQuizOutcome(13)).toBeNull()
+    expect(getCaseQualifierOutcome(-1)).toBeNull()
+    expect(getCaseQualifierOutcome(1.5)).toBeNull()
+    expect(getCaseQualifierOutcome(13)).toBeNull()
   })
 
   it('preserves the exact approved instructions, groups, listening cues, and criteria copy', () => {
-    expect(solagreeQuizCopy.instructions).toBe(
+    expect(solagreeCaseQualifierCopy.instructions).toBe(
       "Check each criterion your client meets during your initial consultation. If they match 3 or more, they're likely a strong candidate for Solagree. Your recommendation will update in real-time on the right."
     )
-    expect(solagreeQuizCriterionGroups).toEqual([
+    expect(solagreeCaseQualifierCriterionGroups).toEqual([
       {
         id: 'financial-asset-alignment',
         title: 'Financial & Asset Alignment',
@@ -72,7 +72,7 @@ describe('case qualifier results', () => {
   })
 
   it('uses the exact approved Possible Fit copy and action', () => {
-    expect(getQuizResultViewModel(2)).toMatchObject({
+    expect(getCaseQualifierResultViewModel(2)).toMatchObject({
       gaugeLabel: 'Possible Fit',
       title: 'Possible Fit',
       body:
@@ -83,7 +83,7 @@ describe('case qualifier results', () => {
   })
 
   it('uses the exact approved Good Fit copy and action', () => {
-    expect(getQuizResultViewModel(3)).toMatchObject({
+    expect(getCaseQualifierResultViewModel(3)).toMatchObject({
       gaugeLabel: 'Good Fit',
       title: 'Introduce the Solagree Track',
       body:
@@ -94,7 +94,7 @@ describe('case qualifier results', () => {
   })
 
   it('uses the exact approved Ideal Fit copy, action, and Initial Consult destination', () => {
-    expect(getQuizResultViewModel(6)).toMatchObject({
+    expect(getCaseQualifierResultViewModel(6)).toMatchObject({
       gaugeLabel: 'Ideal Fit',
       title: 'Launch the Solagree Process',
       body:

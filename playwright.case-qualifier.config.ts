@@ -2,8 +2,8 @@ import { defineConfig } from '@playwright/test'
 
 export default defineConfig({
   testDir: './tests',
-  testMatch: 'quiz.e2e.spec.ts',
-  outputDir: '/tmp/solagree-quiz-playwright-results',
+  testMatch: 'case-qualifier.e2e.spec.ts',
+  outputDir: '/tmp/solagree-case-qualifier-playwright-results',
   use: {
     baseURL: 'http://127.0.0.1:3106',
     browserName: 'chromium',
