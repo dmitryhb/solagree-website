@@ -26,7 +26,7 @@ export const militaryLandingPage: FamilyLandingPage = {
   "path": "/military-divorce",
   "eyebrow": "Solagree for Servicemembers",
   "headline": "Your Service Shouldn't Complicate Your Divorce.",
-  "description": "A virtual, flat-fee process built around the realities of military life – deployments, relocations, and everything that comes with them.",
+  "description": "A virtual, flat-fee process built for the realities of military life – deployments, relocations, and everything that comes with them.",
   "hero": {
     "src": "/images/family-pages/military-divorce-hero.webp",
     "alt": "Parent embracing child, representing a military family navigating divorce with Solagree"
