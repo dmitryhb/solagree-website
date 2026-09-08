@@ -190,3 +190,7 @@
 @include bp.below(bp.$bp-small) {
   .family-page__concern-grid { grid-template-columns: 1fr; }
 }
+
+.family-page--military .family-page__description {
+  text-wrap: pretty;
+}
