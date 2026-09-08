@@ -431,7 +431,7 @@
   }
 
   .site-footer__top {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 3rem;
     margin-bottom: 4.5rem;
   }
@@ -444,6 +444,16 @@
   .site-footer__bottom {
     grid-template-columns: 1fr;
     gap: 2rem;
+  }
+}
+
+@include bp.below(bp.$bp-tablet) {
+  .site-footer__nav {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .site-footer__column {
+    min-width: 0;
   }
 }
 

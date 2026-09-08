@@ -25,7 +25,7 @@ const mountHeader = () => mount(AppHeader, {
     stubs: {
       NuxtLink: {
         props: ['to'],
-        template: '<a :href="to"><slot /></a>'
+        template: '<a :href="to" @click.prevent><slot /></a>'
       },
       SiteButton: {
         template: '<a><slot /></a>'
@@ -55,8 +55,8 @@ describe('AppHeader Resources navigation', () => {
 
   it('keeps Resources open when a pointer clicks after hover, then toggles it on the next click', async () => {
     const wrapper = headerWrapper = mountHeader()
-    const resources = wrapper.get('.site-header__resources')
-    const toggle = wrapper.get('.site-header__resources-toggle')
+    const resources = wrapper.findAll('.site-header__resources')[1]!
+    const toggle = wrapper.get('[aria-controls="site-header-resources-menu"]')
 
     await resources.trigger('mouseenter')
     expect(toggle.attributes('aria-expanded')).toBe('true')
@@ -73,7 +73,7 @@ describe('AppHeader Resources navigation', () => {
 
   it('closes a click-pinned menu when a pointer starts outside the header controls', async () => {
     const wrapper = headerWrapper = mountHeader()
-    const toggle = wrapper.get('.site-header__resources-toggle')
+    const toggle = wrapper.get('[aria-controls="site-header-resources-menu"]')
 
     await toggle.trigger('click')
     expect(toggle.attributes('aria-expanded')).toBe('true')
@@ -86,7 +86,7 @@ describe('AppHeader Resources navigation', () => {
 
   it('supports menu keyboard navigation and returns focus to Resources on Escape', async () => {
     const wrapper = headerWrapper = mountHeader()
-    const toggle = wrapper.get('.site-header__resources-toggle')
+    const toggle = wrapper.get('[aria-controls="site-header-resources-menu"]')
     const toggleElement = toggle.element as HTMLButtonElement
 
     toggleElement.focus()
@@ -108,7 +108,7 @@ describe('AppHeader Resources navigation', () => {
 
   it('closes a click-pinned menu after route navigation', async () => {
     const wrapper = headerWrapper = mountHeader()
-    const toggle = wrapper.get('.site-header__resources-toggle')
+    const toggle = wrapper.get('[aria-controls="site-header-resources-menu"]')
 
     await toggle.trigger('click')
     expect(toggle.attributes('aria-expanded')).toBe('true')
@@ -122,4 +122,28 @@ describe('AppHeader Resources navigation', () => {
 
     expect(toggle.attributes('aria-expanded')).toBe('false')
   })
+
+  it('links to both family pages and keeps only one desktop submenu open', async () => {
+    const wrapper = headerWrapper = mountHeader()
+    const couples = wrapper.get('[aria-controls="site-header-couples-menu"]')
+    const resources = wrapper.get('[aria-controls="site-header-resources-menu"]')
+    await couples.trigger('keydown', { key: 'ArrowDown' })
+    expect(wrapper.findAll('#site-header-couples-menu a').map(link => link.attributes('href'))).toEqual([
+      '/#how-it-works', '/military-divorce', '/divorce-special-needs-children'
+    ])
+    await resources.trigger('mouseenter')
+    await resources.trigger('click')
+    expect(couples.attributes('aria-expanded')).toBe('false')
+    expect(resources.attributes('aria-expanded')).toBe('true')
+  })
+
+  it('exposes both pages in mobile navigation and closes after selection', async () => {
+    const wrapper = headerWrapper = mountHeader()
+    await wrapper.get('.site-header__menu-toggle').trigger('click')
+    const military = wrapper.get('#site-header-mobile-menu a[href="/military-divorce"]')
+    expect(wrapper.get('#site-header-mobile-menu a[href="/divorce-special-needs-children"]').text()).toBe('Special Needs')
+    await military.trigger('click')
+    expect(wrapper.find('#site-header-mobile-menu').exists()).toBe(false)
+  })
+
 })
