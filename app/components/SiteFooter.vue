@@ -77,13 +77,14 @@ const closeNetworkChooser = async () => {
               </li>
               <li>
                 <NuxtLink to="/#pricing">
-                  Solagree Core vs. Compass
+                  Pricing
                 </NuxtLink>
               </li>
               <li>
-                <NuxtLink to="/#pricing">
-                  Pricing
-                </NuxtLink>
+                <NuxtLink to="/military-divorce">Military</NuxtLink>
+              </li>
+              <li>
+                <NuxtLink to="/divorce-special-needs-children">Special Needs</NuxtLink>
               </li>
               <li>
                 <NuxtLink to="/faq">

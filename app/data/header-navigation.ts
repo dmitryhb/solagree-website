@@ -3,10 +3,6 @@ import { resourceNavigationLinks } from '~/data/resource-navigation'
 
 export const headerPrimaryLinks = [
   {
-    label: 'Considering Divorce',
-    to: '/#how-it-works'
-  },
-  {
     label: 'Attorneys',
     to: '/attorneys'
   },
@@ -30,3 +26,13 @@ export const headerQuizLink = {
   label: 'Is This Right for You?',
   to: '/#quiz'
 } as const satisfies AppLink
+
+/** Couples destinations shared by desktop and mobile navigation. */
+export const headerCouplesMenu = {
+  label: 'Considering Divorce',
+  links: [
+    { label: 'For Couples', to: '/#how-it-works' },
+    { label: 'Military', to: '/military-divorce' },
+    { label: 'Special Needs', to: '/divorce-special-needs-children' }
+  ]
+} as const
