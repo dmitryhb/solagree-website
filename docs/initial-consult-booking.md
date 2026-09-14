@@ -76,3 +76,64 @@ Rebuild and deploy the static website after changing this setting. This is an en
 Website visibility does not change Cal.com assignment. Before completing a pause, separately exclude the consultant from the First Available round-robin event and disable their direct event's booking availability. Verify that an old direct URL cannot accept new bookings; hiding a Cal.com link alone may not prevent direct-link bookings. Preserve existing appointments and the member account. Restore Cal.com availability and host assignment before removing the id from the website setting and redeploying.
 
 September 17: website code defaults Jessica to unpublished. Website deployment remains pending. Cal.com First Available now contains only Taj, Stacie, and James. Jessica’s direct event is Hidden and its booking window is restricted to September 16, 2026–September 16, 2026 (past), preventing new slots. To restore it, return Limits & buffers to 14 calendar days, retain the existing unchecked “Always 14 days available” setting unless separately approved, enable visibility, and re-add Jessica to First Available. Her previous two-hour notice and 15-minute post-event buffer are retained. The latest HIR-250 acceptance prerequisites require an isolated test setup with no real charges; the earlier live-payment wording above is historical. Client confirmation that the other three connected their calendars and Zoom is a readiness signal, not completed acceptance evidence.
+
+## September 14, 2026 operational update
+
+The observations below supersede the older August snapshot where stated. HIR-246, HIR-248,
+HIR-249 and HIR-263 were resumed with user authorization; HIR-250 remains queued for integrated
+acceptance. Provider configuration is not evidence of successful payment or delivered messages.
+
+### Email reminders (HIR-249)
+
+| Workflow | ID | Trigger | Scope |
+| --- | --- | --- | --- |
+| Initial Consult — 24-hour email reminder | `450309` | 24 hours before event | All five Initial Consult events |
+| Initial Consult — 1-hour email reminder | `450313` | 1 hour before event | All five Initial Consult events |
+
+Both workflows contain one attendee-email action, use sender name `Solagree`, and explicitly select
+the five event types above; automatic application to future event types is off. Each message states
+30 minutes and $60 USD, with Cal.com's native attendee, event date/end time, timezone, organizer,
+location and meeting-URL variables. Cal.com reported `Workflow saved` for both. Delivery, timezone
+rendering and Phone-versus-Zoom output still require controlled booking acceptance.
+
+First Available's standard attendee and host booking emails remain enabled; an extra confirmation
+workflow was not added. Cancellation/reschedule links remain enabled. Automatic refund policy is
+still `Never`: the available native threshold offers business or calendar days, and equivalence to
+the approved exact 48-hour policy has not been accepted. Do not describe this setting as policy
+enforcement or treat one-reschedule enforcement as verified.
+
+SMS is not enabled by these workflows. The four original events use checkbox key `smsConsent`, while
+Stacie uses `sms_opt_in`. A combined filter warns that fields are missing on some event types. The
+unsaved filter exploration was discarded. Scope future SMS workflows to matching event groups and
+require the relevant checkbox to equal `Yes`; verify declined/unchecked consent never sends SMS and
+never blocks the existing email action. Verify the provider's SMS-recipient field mapping and credit
+requirements before activation.
+
+### Stacie's connections (HIR-246)
+
+The administrator inspected Stacie's current profile and returned to the administrator account.
+Google Calendar `stacie.sanders@solagree.com` is selected both as the destination calendar and for
+conflict checks. Zoom Video is installed and marked default. Her default schedule `2340081`,
+`Stacie's Hours`, is America/New_York: Monday–Thursday 18:30–21:00 and Saturday 12:00–14:00.
+These replace the historical default-hours and email-identity assumptions for Stacie. Actual calendar
+write/conflict behavior and generated Zoom URLs still require a controlled booking.
+
+### Separate case-payment sandbox (HIR-263)
+
+The portal's existing Stripe implementation is available at commit
+`6297202bf43c8094aafc01a74680df5fd4e4b1aa`; see the portal repository's `docs/case-payments.md`.
+A destination named `Solagree Portal staging — case payments` was created in the existing SOLAGREE
+Stripe sandbox, with ID `we_1UFfZ2L3EvUvp66binpzyJ8i`, snapshot payloads, API version
+`2026-06-24.dahlia`, and the nine events documented by the portal. Its URL is
+`https://solagree-portal.qamachine.com/api/webhooks/stripe`.
+
+At preflight, the deployed portal release was `20260828133653`, health returned 200, and this webhook
+returned 404. The payment migration was not applied. The protected staging environment now contains
+the staging success/cancel URLs and tolerance 300, but requires the sandbox API secret and endpoint
+signing secret before the normal deployment gate can pass. No Stripe test events were sent. This
+separate portal sandbox does not switch the live Cal.com payment connection to test mode.
+
+Fresh portal code QA at the above commit passed lint, typecheck, build, 167 unit tests, 97 PostgreSQL
+integration tests, 76 component tests, 15 real-server API tests and 18 email fixtures. The disposable
+PostgreSQL container was removed afterward. Those tests make no real Stripe/email deliveries and do
+not replace the external acceptance gate.
