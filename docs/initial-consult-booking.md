@@ -96,6 +96,12 @@ the five event types above; automatic application to future event types is off. 
 location and meeting-URL variables. Cal.com reported `Workflow saved` for both. Delivery, timezone
 rendering and Phone-versus-Zoom output still require controlled booking acceptance.
 
+In the live SOLAGREE Stripe account, Customer emails had both `Successful payments` and `Refunds`
+disabled. Both were enabled during HIR-249 configuration. These settings apply account-wide, use the
+existing English language and support configuration, and do not constitute an actual receipt/refund
+delivery test. Stripe notes that an API-provided `receipt_email` overrides the successful-payment
+setting. No refund or payment was initiated by changing these settings.
+
 First Available's standard attendee and host booking emails remain enabled; an extra confirmation
 workflow was not added. Cancellation/reschedule links remain enabled. Automatic refund policy is
 still `Never`: the available native threshold offers business or calendar days, and equivalence to
@@ -117,6 +123,20 @@ conflict checks. Zoom Video is installed and marked default. Her default schedul
 `Stacie's Hours`, is America/New_York: Monday–Thursday 18:30–21:00 and Saturday 12:00–14:00.
 These replace the historical default-hours and email-identity assumptions for Stacie. Actual calendar
 write/conflict behavior and generated Zoom URLs still require a controlled booking.
+
+An independent administrator inspection also found Zoom installed/default for James, Jessica and
+Taj. Their selected booking destinations are external Google calendars; Taj additionally has the
+Solagree calendar enabled for conflicts. The intended destination mapping requires host confirmation;
+an external domain alone does not establish an incorrect configuration. Confirm before changing it. External calendar addresses are intentionally not
+recorded here. James's default schedule `2219808` is Monday–Friday 09:00–17:00 America/New_York;
+Taj's `2219811` is Monday–Friday 09:00–17:00 America/Los_Angeles. Jessica's `2219809` is
+America/New_York: Sunday 12:00–17:00, Monday 09:00–17:00, Tuesday 09:00–19:00,
+Wednesday–Thursday 09:00–16:00 and Friday 10:00–14:00. The administrator session was restored after
+inspection. These observations do not prove calendar conflict handling or approved host hours.
+
+Independent read-only QA confirmed both saved email workflows' names, timings, five selected event
+names, single email action, sender and native variables. The workflow selector does not expose numeric
+event IDs, so that pass verified names/count rather than independently proving the ID mapping.
 
 ### Separate case-payment sandbox (HIR-263)
 
