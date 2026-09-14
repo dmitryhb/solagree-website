@@ -108,12 +108,28 @@ still `Never`: the available native threshold offers business or calendar days, 
 the approved exact 48-hour policy has not been accepted. Do not describe this setting as policy
 enforcement or treat one-reschedule enforcement as verified.
 
-SMS is not enabled by these workflows. The four original events use checkbox key `smsConsent`, while
-Stacie uses `sms_opt_in`. A combined filter warns that fields are missing on some event types. The
-unsaved filter exploration was discarded. Scope future SMS workflows to matching event groups and
-require the relevant checkbox to equal `Yes`; verify declined/unchecked consent never sends SMS and
-never blocks the existing email action. Verify the provider's SMS-recipient field mapping and credit
-requirements before activation.
+### Prepared SMS reminders (HIR-249)
+
+| Workflow ID | Trigger | Intended event group | Consent filter |
+| --- | --- | --- | --- |
+| `450318` | 24 hours before event | First Available, Taj, Jessica, James | `smsConsent` equals `Yes` |
+| `450324` | 1 hour before event | First Available, Taj, Jessica, James | `smsConsent` equals `Yes` |
+| `450327` | 24 hours before event | Stacie | `sms_opt_in` equals `Yes` |
+| `450330` | 1 hour before event | Stacie | `sms_opt_in` equals `Yes` |
+
+These workflows are prepared for separate consent-field groups. Each uses a filter before one native
+attendee SMS action, Cal.com's Reminder template and default sender `Calcom`, without an email action.
+Automatic application to future event types is off. Existing required system Phone fields and the
+native `smsReminderNumber` field are visible, but actual recipient mapping/delivery is not accepted.
+
+The team's Billing > Credits page reports current balance **0**. Event scopes were removed and independent QA confirmed all four display
+`Not active on any booking link`; email workflows remain active on five links. Do not activate without
+verifying sufficient provider credits/entitlement and applicable sender requirements; then reselect
+only the matching event group above and test explicit, unchecked and declined consent. No credits
+were purchased and no SMS was sent as a test. The two email workflows remain independent of SMS.
+Independent QA verified the original group predicates before deactivation. With no active links, the
+filter editor hides predicate fields, so Stacie's exact saved predicate is implementer-verified only;
+recheck it independently after selecting the intended scope and before activation.
 
 ### Stacie's connections (HIR-246)
 
