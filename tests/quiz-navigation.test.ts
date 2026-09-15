@@ -1,11 +1,28 @@
 import { describe, expect, it } from 'vitest'
 import {
   getVisibleQuizQuestionIds,
+  normalizeQuizAnswerMap,
   parseQuizSessionSnapshot
 } from '../app/utils/quiz-navigation'
 import { evaluateQuizAnswers } from '../app/utils/quiz-results'
 
 describe('quiz navigation and persisted session safety', () => {
+  it('normalizes answer types and option IDs without retaining duplicates or arbitrary text', () => {
+    expect(normalizeQuizAnswerMap({
+      state: 'NC',
+      children: ['yes'],
+      parentingDetails: ['custody-schedule', 'free-form answer', 'custody-schedule', 7],
+      financialDetails: 'real-estate',
+      paymentReadiness: 'forward this text',
+      unknownQuestion: 'unknown answer'
+    })).toEqual({
+      state: 'NC',
+      parentingDetails: ['custody-schedule']
+    })
+
+    expect(normalizeQuizAnswerMap(Object.create({ state: 'NC' }) as unknown)).toEqual({})
+  })
+
   it('keeps visible branches and result outcomes aligned with the documented matrix', () => {
     const hiddenParentingBranch = {
       state: 'NC',

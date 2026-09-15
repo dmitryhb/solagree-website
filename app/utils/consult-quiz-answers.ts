@@ -1,96 +1,88 @@
 import { solagreeQuizStorageKey } from '~/data/quiz'
 import { solagreeQuizQuestionMap } from '~/data/quiz-schema'
 import type {
-  QuizAnswerMap,
   QuizQuestionId,
   QuizQuestionValue
 } from '~/data/quiz-types'
 import type { ConsultRequestQuizAnswer } from '#shared/types/consult-request'
 import {
   getVisibleQuizQuestionIds,
-  pruneHiddenQuizAnswers
+  parseQuizSessionSnapshot
 } from '~/utils/quiz-navigation'
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null
-}
-
-function isQuizSessionSnapshot(value: unknown): value is { answers: Record<string, unknown> } {
-  return isRecord(value) && isRecord(value.answers)
-}
-
-function normalizeQuizAnswerMap(value: Record<string, unknown>): QuizAnswerMap {
-  const answers: Partial<Record<QuizQuestionId, QuizQuestionValue>> = {}
-
-  Object.entries(value).forEach(([questionId, answer]) => {
-    if (!(questionId in solagreeQuizQuestionMap)) {
-      return
-    }
-
-    const typedQuestionId = questionId as QuizQuestionId
-
-    if (typeof answer === 'string') {
-      answers[typedQuestionId] = answer as QuizQuestionValue
-      return
-    }
-
-    if (Array.isArray(answer) && answer.every(item => typeof item === 'string')) {
-      answers[typedQuestionId] = answer as QuizQuestionValue
-    }
-  })
-
-  return answers as QuizAnswerMap
-}
 
 function getAnswerLabels(questionId: QuizQuestionId, value: QuizQuestionValue | undefined): string[] {
   const question = solagreeQuizQuestionMap[questionId]
   const values = Array.isArray(value) ? value : value ? [value] : []
 
-  return values.map(answerValue => {
-    return question.options.find(option => option.id === answerValue)?.label ?? answerValue
+  return values.flatMap(answerValue => {
+    const label = question.options.find(option => option.id === answerValue)?.label
+    return label ? [label] : []
+  })
+}
+
+/**
+ * Builds the consult request answer list from a supported, schema-valid quiz session.
+ */
+export function getConsultQuizAnswersFromSnapshot(value: unknown): ConsultRequestQuizAnswer[] {
+  const snapshot = parseQuizSessionSnapshot(value)
+
+  if (!snapshot) {
+    return []
+  }
+
+  const answers = snapshot.answers
+
+  return getVisibleQuizQuestionIds(answers).flatMap((questionId) => {
+    const answerValue = answers[questionId]
+    const answerLabels = getAnswerLabels(questionId, answerValue)
+
+    if (!answerValue || answerLabels.length === 0) {
+      return []
+    }
+
+    const question = solagreeQuizQuestionMap[questionId]
+
+    return [{
+      questionId,
+      question: question.title,
+      value: Array.isArray(answerValue) ? [...answerValue] : answerValue,
+      answerLabels
+    }]
   })
 }
 
 /**
  * Reads the persisted quiz session and builds a safe answer snapshot for consult request submission.
  */
-export function getStoredConsultQuizAnswers(): ConsultRequestQuizAnswer[] {
-  if (!import.meta.client) {
-    return []
+export function getStoredConsultQuizAnswers(
+  storage?: Pick<Storage, 'getItem'> | null
+): ConsultRequestQuizAnswer[] {
+  let snapshotStorage = storage
+
+  if (snapshotStorage === undefined) {
+    if (!import.meta.client) {
+      return []
+    }
+
+    try {
+      snapshotStorage = window.localStorage
+    } catch {
+      return []
+    }
   }
 
-  const snapshotText = window.localStorage.getItem(solagreeQuizStorageKey)
-
-  if (!snapshotText) {
+  if (!snapshotStorage) {
     return []
   }
 
   try {
-    const snapshot = JSON.parse(snapshotText) as unknown
+    const snapshotText = snapshotStorage.getItem(solagreeQuizStorageKey)
 
-    if (!isQuizSessionSnapshot(snapshot)) {
+    if (!snapshotText) {
       return []
     }
 
-    const answers = pruneHiddenQuizAnswers(normalizeQuizAnswerMap(snapshot.answers))
-
-    return getVisibleQuizQuestionIds(answers).flatMap((questionId) => {
-      const value = answers[questionId]
-      const answerLabels = getAnswerLabels(questionId, value)
-
-      if (!value || answerLabels.length === 0) {
-        return []
-      }
-
-      const question = solagreeQuizQuestionMap[questionId]
-
-      return [{
-        questionId,
-        question: question.title,
-        value: Array.isArray(value) ? [...value] : value,
-        answerLabels
-      }]
-    })
+    return getConsultQuizAnswersFromSnapshot(JSON.parse(snapshotText) as unknown)
   } catch {
     return []
   }

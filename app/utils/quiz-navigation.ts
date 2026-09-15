@@ -27,6 +27,10 @@ export const normalizeQuizAnswerMap = (value: unknown): QuizAnswerMap => {
   }
 
   return solagreeQuizQuestionIds.reduce<QuizAnswerMap>((answers, questionId) => {
+    if (!Object.prototype.hasOwnProperty.call(value, questionId)) {
+      return answers
+    }
+
     const question = solagreeQuizQuestionMap[questionId]
     const rawValue = value[questionId]
     const optionIds = new Set<string>(question.options.map(option => option.id))
