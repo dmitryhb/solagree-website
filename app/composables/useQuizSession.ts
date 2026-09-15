@@ -33,6 +33,7 @@ export const useQuizSession = () => {
   const maxForwardProgressValue = ref(getQuizProgressValue(initialQuestionId, {}, 'question'))
   const hasRestoredPersistedState = ref(false)
   const didRestorePersistedState = ref(false)
+  const hasCompletedAttempt = ref(false)
 
   const visibleQuestionIds = computed(() => getVisibleQuizQuestionIds(answers.value))
   const currentQuestion = computed(() => getQuizQuestionById(currentQuestionId.value))
@@ -150,6 +151,7 @@ export const useQuizSession = () => {
     answers.value = {}
     currentQuestionId.value = initialQuestionId
     phase.value = 'question'
+    hasCompletedAttempt.value = false
     resetProgressFloorToCurrentBranch()
 
     if (isQuizClient) {
@@ -176,6 +178,7 @@ export const useQuizSession = () => {
         answers.value = snapshot.answers
         currentQuestionId.value = snapshot.currentQuestionId
         phase.value = snapshot.phase
+        hasCompletedAttempt.value = snapshot.hasCompletedAttempt === true
         maxForwardProgressValue.value = snapshot.maxProgressValue
           ?? branchProgressValue.value
         raiseForwardProgressFloor()
@@ -188,7 +191,7 @@ export const useQuizSession = () => {
     })
 
     watch(
-      [answers, currentQuestionId, phase],
+      [answers, currentQuestionId, phase, hasCompletedAttempt],
       () => {
         if (!hasRestoredPersistedState.value) {
           return
@@ -204,7 +207,8 @@ export const useQuizSession = () => {
           phase: phase.value,
           currentQuestionId: currentQuestionId.value,
           answers: answers.value,
-          maxProgressValue: progressValue.value
+          maxProgressValue: progressValue.value,
+          hasCompletedAttempt: hasCompletedAttempt.value || undefined
         }
 
         window.localStorage.setItem(solagreeQuizStorageKey, JSON.stringify(snapshot))
@@ -213,10 +217,15 @@ export const useQuizSession = () => {
     )
   }
 
+  const markAttemptCompleted = () => {
+    hasCompletedAttempt.value = true
+  }
+
   return {
     answers: readonly(answers),
     hasRestoredPersistedState: readonly(hasRestoredPersistedState),
     didRestorePersistedState: readonly(didRestorePersistedState),
+    hasCompletedAttempt: readonly(hasCompletedAttempt),
     currentQuestion,
     currentQuestionId: readonly(currentQuestionId),
     currentValue,
@@ -233,6 +242,7 @@ export const useQuizSession = () => {
     toggleMultiAnswer,
     goNext,
     goBack,
+    markAttemptCompleted,
     reset
   }
 }

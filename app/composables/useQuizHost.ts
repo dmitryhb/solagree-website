@@ -10,6 +10,11 @@ import type {
   QuizResultCta
 } from '~/data/quiz-types'
 import type { useQuizSession } from '~/composables/useQuizSession'
+import {
+  buildHostEventContext,
+  dispatchHostEvent,
+  shouldEmitHostEvents
+} from '~/utils/host-integration'
 
 interface UseQuizHostOptions {
   hostConfig?: MaybeRefOrGetter<QuizHostConfigInput | undefined>
@@ -19,8 +24,6 @@ interface UseQuizHostOptions {
 const createQuizHostSessionId = () => {
   return `quiz-${Math.random().toString(36).slice(2, 10)}`
 }
-
-const isQuizClient = import.meta.client || typeof window !== 'undefined'
 
 /**
  * Connects quiz session state to host configuration, CTA overrides, and embed events.
@@ -46,37 +49,15 @@ export const useQuizHost = (
   })
 
   const shouldEmitEvents = () => {
-    return hostConfig.value.analytics.enabled
-      || hostConfig.value.bridge.postMessage
-      || typeof options.onEvent === 'function'
+    return shouldEmitHostEvents(hostConfig.value, options.onEvent)
   }
 
   const dispatchEvent = (event: QuizHostEvent) => {
-    if (!isQuizClient) {
-      return
-    }
-
-    options.onEvent?.(event)
-
-    if (hostConfig.value.bridge.postMessage && window.parent !== window) {
-      window.parent.postMessage(
-        {
-          source: hostConfig.value.analytics.namespace,
-          payload: event
-        },
-        hostConfig.value.bridge.targetOrigin
-      )
-    }
+    dispatchHostEvent(event, hostConfig.value, options.onEvent)
   }
 
   const buildEventContext = () => {
-    return {
-      hostId: hostConfig.value.hostId,
-      mode: hostConfig.value.mode,
-      sessionId: sessionId.value,
-      trackingId: hostConfig.value.analytics.trackingId,
-      timestamp: new Date().toISOString()
-    } as const
+    return buildHostEventContext(hostConfig.value, sessionId.value)
   }
 
   const buildAnalyticsContext = () => {
@@ -271,6 +252,7 @@ export const useQuizHost = (
         || !shouldEmitEvents()
         || phase !== 'result'
         || previousPhase === 'result'
+        || quizSession.hasCompletedAttempt.value
         || hasTrackedCompletion.value
       ) {
         return
@@ -283,6 +265,7 @@ export const useQuizHost = (
 
       const evaluation = quizSession.evaluation.value
       hasTrackedCompletion.value = true
+      quizSession.markAttemptCompleted()
       dispatchEvent({
         type: 'completed',
         outcome: evaluation.kind === 'resolved' ? evaluation.outcome : 'open-policy',

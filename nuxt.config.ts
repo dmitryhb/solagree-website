@@ -141,8 +141,7 @@ gtag('config', '${gaMeasurementId}', { send_page_view: false });
           trackingId: gaMeasurementId || undefined
         },
         bridge: {
-          postMessage: false,
-          targetOrigin: '*'
+          postMessage: false
         },
         ctas: {
           'solagree-consult': {
@@ -164,8 +163,7 @@ gtag('config', '${gaMeasurementId}', { send_page_view: false });
           trackingId: gaMeasurementId || undefined
         },
         bridge: {
-          postMessage: false,
-          targetOrigin: '*'
+          postMessage: false
         },
         ctas: {
           'solagree-consult': {

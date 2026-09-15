@@ -19,8 +19,8 @@
 - `analytics.enabled`: gate all emitted progression/completion/CTA events
 - `analytics.namespace`: source string used for postMessage payloads
 - `analytics.trackingId`: optional tracking id attached to all emitted events
-- `bridge.postMessage`: mirror host events to `window.parent.postMessage`
-- `bridge.targetOrigin`: target origin for postMessage
+- `bridge.postMessage`: mirror host events to `window.parent.postMessage`; disabled by default
+- `bridge.targetOrigin`: required when `postMessage` is enabled; it must be one explicit `http` or `https` origin such as `https://partner.example`
 - `ctas[actionId]`: override CTA href, target, rel, and CTA-specific tracking id
 
 ## CTA Action IDs
@@ -43,6 +43,10 @@ When analytics is enabled, the quiz emits bounded integration events:
 - `reset`
 
 Vue hosts can listen via `@host-event`. Embedded iframe hosts can opt into `postMessage`.
+
+Callback delivery and iframe delivery are independent. An enabled iframe bridge with a missing, wildcard (`*`), malformed, non-web, or path-bearing target origin is rejected and sends no parent-window message; Vue `@host-event` callbacks still receive the event. `/quiz/embed` continues to work with the default bridge-off configuration.
+
+The persisted v2 quiz snapshot may include `hasCompletedAttempt: true`. This optional metadata prevents a completed attempt from emitting `completed` again after Result → Back → reload → Next. Older v1/v2 snapshots remain valid, restored result snapshots are treated as already completed, and an explicit Reset starts the next logical attempt.
 
 ## Intentional Boundaries
 

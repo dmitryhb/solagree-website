@@ -1,3 +1,12 @@
+import type {
+  HostAnalyticsOptions,
+  HostBridgeOptions,
+  HostConfigInput,
+  HostCtaTargetConfig,
+  HostEventContext,
+  HostRuntimeConfig
+} from '~/utils/host-integration'
+
 export type QuizStateCode =
   | 'AL'
   | 'AK'
@@ -128,6 +137,7 @@ export interface QuizPersistedSession {
   currentQuestionId: QuizQuestionId
   answers: QuizAnswerMap
   maxProgressValue?: number
+  hasCompletedAttempt?: boolean
 }
 
 export type QuizOpenPolicyId = 'state-specific-result-messaging'
@@ -216,49 +226,25 @@ export interface QuizHostDisplayOptions {
   showExplainer: boolean
 }
 
-export interface QuizHostAnalyticsOptions {
-  enabled: boolean
-  namespace: string
-  trackingId?: string
-}
+export type QuizHostAnalyticsOptions = HostAnalyticsOptions
 
-export interface QuizHostBridgeOptions {
-  postMessage: boolean
-  targetOrigin: string
-}
+export type QuizHostBridgeOptions = HostBridgeOptions
 
-export interface QuizCtaTargetConfig {
-  href: string
-  trackingId?: string
-  target?: '_self' | '_blank'
-  rel?: string
-}
+export type QuizCtaTargetConfig = HostCtaTargetConfig
 
-export interface QuizHostRuntimeConfig {
-  hostId: string
-  mode: QuizHostMode
-  display: QuizHostDisplayOptions
-  analytics: QuizHostAnalyticsOptions
-  bridge: QuizHostBridgeOptions
-  ctas: Partial<Record<QuizCtaActionId, QuizCtaTargetConfig>>
-}
+export type QuizHostRuntimeConfig = HostRuntimeConfig<
+  QuizHostMode,
+  QuizHostDisplayOptions,
+  QuizCtaActionId
+>
 
-export interface QuizHostConfigInput {
-  hostId?: string
-  mode?: QuizHostMode
-  display?: Partial<QuizHostDisplayOptions>
-  analytics?: Partial<QuizHostAnalyticsOptions>
-  bridge?: Partial<QuizHostBridgeOptions>
-  ctas?: Partial<Record<QuizCtaActionId, Partial<QuizCtaTargetConfig>>>
-}
+export type QuizHostConfigInput = HostConfigInput<
+  QuizHostMode,
+  QuizHostDisplayOptions,
+  QuizCtaActionId
+>
 
-interface QuizHostEventBase {
-  hostId: string
-  mode: QuizHostMode
-  sessionId: string
-  trackingId?: string
-  timestamp: string
-}
+type QuizHostEventBase = HostEventContext<QuizHostMode>
 
 export interface QuizQuestionViewedEvent extends QuizHostEventBase {
   type: 'question_viewed'

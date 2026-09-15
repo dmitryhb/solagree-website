@@ -74,7 +74,31 @@ describe('quiz navigation and persisted session safety', () => {
         financialScreener: 'no',
         paymentReadiness: 'ready-now'
       },
-      maxProgressValue: 100
+      maxProgressValue: 100,
+      hasCompletedAttempt: true
+    })
+  })
+
+  it('preserves optional v2 completion metadata without changing question snapshots', () => {
+    const baseSnapshot = {
+      version: 2,
+      phase: 'question',
+      currentQuestionId: 'state',
+      answers: { state: 'NC' }
+    } as const
+
+    expect(parseQuizSessionSnapshot(baseSnapshot)).toMatchObject({
+      version: 2,
+      phase: 'question',
+      hasCompletedAttempt: false
+    })
+    expect(parseQuizSessionSnapshot({
+      ...baseSnapshot,
+      hasCompletedAttempt: true
+    })).toMatchObject({
+      version: 2,
+      phase: 'question',
+      hasCompletedAttempt: true
     })
   })
 

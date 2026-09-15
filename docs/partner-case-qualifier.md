@@ -14,3 +14,16 @@ from the public Solagree consumer quiz.
 The unlisted URL is not an authentication boundary. If access must be
 restricted beyond link sharing, add a portal-authenticated route instead of
 relying on obscurity.
+
+## Host integration
+
+The qualifier keeps its own scoring, persistence, and event union (`started`,
+`criterion_toggled`, `completed`, `outcome_changed`, `cta_clicked`, and
+`reset`). It shares only host config merging, event context, callback/iframe
+dispatch, and CTA override mechanics with the public quiz.
+
+The iframe bridge is disabled by default. When `bridge.postMessage` is enabled,
+`bridge.targetOrigin` must be one explicit `http` or `https` origin such as
+`https://partner.example`. Missing, wildcard (`*`), malformed, non-web, and
+path-bearing values send no parent-window message while local Vue callbacks
+continue to receive qualifier events.

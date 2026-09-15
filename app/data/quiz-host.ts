@@ -4,6 +4,11 @@ import type {
   QuizHostRuntimeConfig,
   QuizResultViewModel
 } from '~/data/quiz-types'
+import {
+  resolveHostConfig,
+  resolveHostResultView
+} from '~/utils/host-integration'
+import type { HostConfigAdapter } from '~/utils/host-integration'
 
 const defaultQuizCtaTargets = {
   'solagree-consult': {
@@ -23,21 +28,17 @@ export const defaultQuizHostRuntimeConfig = {
     namespace: 'solagree.quiz'
   },
   bridge: {
-    postMessage: false,
-    targetOrigin: '*'
+    postMessage: false
   },
   ctas: defaultQuizCtaTargets
 } as const satisfies QuizHostRuntimeConfig
 
-const mergeQuizCtaTargets = (overrides?: QuizHostConfigInput['ctas']) => {
-  return Object.entries(defaultQuizCtaTargets).reduce<QuizHostRuntimeConfig['ctas']>((targets, [actionId, target]) => {
-    targets[actionId as QuizCtaActionId] = {
-      ...target,
-      ...overrides?.[actionId as QuizCtaActionId]
-    }
-
-    return targets
-  }, {})
+const quizHostConfigAdapter: HostConfigAdapter<
+  QuizHostRuntimeConfig['mode'],
+  QuizHostRuntimeConfig['display'],
+  QuizCtaActionId
+> = {
+  defaults: defaultQuizHostRuntimeConfig
 }
 
 /**
@@ -47,45 +48,7 @@ export const resolveQuizHostConfig = (
   runtimeConfig?: QuizHostConfigInput,
   overrides?: QuizHostConfigInput
 ): QuizHostRuntimeConfig => {
-  const mergedInput: QuizHostConfigInput = {
-    ...runtimeConfig,
-    ...overrides,
-    display: {
-      ...runtimeConfig?.display,
-      ...overrides?.display
-    },
-    analytics: {
-      ...runtimeConfig?.analytics,
-      ...overrides?.analytics
-    },
-    bridge: {
-      ...runtimeConfig?.bridge,
-      ...overrides?.bridge
-    },
-    ctas: {
-      ...runtimeConfig?.ctas,
-      ...overrides?.ctas
-    }
-  }
-
-  return {
-    hostId: mergedInput.hostId ?? defaultQuizHostRuntimeConfig.hostId,
-    mode: mergedInput.mode ?? defaultQuizHostRuntimeConfig.mode,
-    display: {
-      showShellHeader: mergedInput.display?.showShellHeader ?? defaultQuizHostRuntimeConfig.display.showShellHeader,
-      showExplainer: mergedInput.display?.showExplainer ?? defaultQuizHostRuntimeConfig.display.showExplainer
-    },
-    analytics: {
-      enabled: mergedInput.analytics?.enabled ?? defaultQuizHostRuntimeConfig.analytics.enabled,
-      namespace: mergedInput.analytics?.namespace ?? defaultQuizHostRuntimeConfig.analytics.namespace,
-      trackingId: mergedInput.analytics?.trackingId
-    },
-    bridge: {
-      postMessage: mergedInput.bridge?.postMessage ?? defaultQuizHostRuntimeConfig.bridge.postMessage,
-      targetOrigin: mergedInput.bridge?.targetOrigin ?? defaultQuizHostRuntimeConfig.bridge.targetOrigin
-    },
-    ctas: mergeQuizCtaTargets(mergedInput.ctas)
-  }
+  return resolveHostConfig(quizHostConfigAdapter, runtimeConfig, overrides)
 }
 
 /**
@@ -95,13 +58,5 @@ export const resolveQuizResultViewForHost = (
   result: QuizResultViewModel,
   hostConfig: QuizHostRuntimeConfig
 ): QuizResultViewModel => {
-  const ctaOverride = hostConfig.ctas[result.primaryCta.actionId]
-
-  return {
-    ...result,
-    primaryCta: {
-      ...result.primaryCta,
-      ...ctaOverride
-    }
-  }
+  return resolveHostResultView(result, hostConfig.ctas)
 }

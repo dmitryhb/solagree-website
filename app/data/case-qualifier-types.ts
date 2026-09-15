@@ -1,3 +1,12 @@
+import type {
+  HostAnalyticsOptions,
+  HostBridgeOptions,
+  HostConfigInput,
+  HostCtaTargetConfig,
+  HostEventContext,
+  HostRuntimeConfig
+} from '~/utils/host-integration'
+
 export type CaseQualifierCriterionId =
   | 'simple-estate'
   | 'budget-constraints'
@@ -78,50 +87,26 @@ export interface CaseQualifierHostDisplayOptions {
   headingLevel: 1 | 2 | 3
 }
 
-export interface CaseQualifierHostAnalyticsOptions {
-  enabled: boolean
-  namespace: string
-  trackingId?: string
-}
+export type CaseQualifierHostAnalyticsOptions = HostAnalyticsOptions
 
-export interface CaseQualifierHostBridgeOptions {
-  postMessage: boolean
-  targetOrigin: string
-}
+export type CaseQualifierHostBridgeOptions = HostBridgeOptions
 
-export interface CaseQualifierCtaTargetConfig {
-  href: string
-  trackingId?: string
-  target?: '_self' | '_blank'
-  rel?: string
-}
+export type CaseQualifierCtaTargetConfig = HostCtaTargetConfig
 
 /** Fully resolved behavior for a homepage, standalone, or iframe quiz host. */
-export interface CaseQualifierHostRuntimeConfig {
-  hostId: string
-  mode: CaseQualifierHostMode
-  display: CaseQualifierHostDisplayOptions
-  analytics: CaseQualifierHostAnalyticsOptions
-  bridge: CaseQualifierHostBridgeOptions
-  ctas: Partial<Record<CaseQualifierCtaActionId, CaseQualifierCtaTargetConfig>>
-}
+export type CaseQualifierHostRuntimeConfig = HostRuntimeConfig<
+  CaseQualifierHostMode,
+  CaseQualifierHostDisplayOptions,
+  CaseQualifierCtaActionId
+>
 
-export interface CaseQualifierHostConfigInput {
-  hostId?: string
-  mode?: CaseQualifierHostMode
-  display?: Partial<CaseQualifierHostDisplayOptions>
-  analytics?: Partial<CaseQualifierHostAnalyticsOptions>
-  bridge?: Partial<CaseQualifierHostBridgeOptions>
-  ctas?: Partial<Record<CaseQualifierCtaActionId, Partial<CaseQualifierCtaTargetConfig>>>
-}
+export type CaseQualifierHostConfigInput = HostConfigInput<
+  CaseQualifierHostMode,
+  CaseQualifierHostDisplayOptions,
+  CaseQualifierCtaActionId
+>
 
-interface CaseQualifierHostEventBase {
-  hostId: string
-  mode: CaseQualifierHostMode
-  sessionId: string
-  trackingId?: string
-  timestamp: string
-}
+type CaseQualifierHostEventBase = HostEventContext<CaseQualifierHostMode>
 
 export interface CaseQualifierStartedEvent extends CaseQualifierHostEventBase {
   type: 'started'

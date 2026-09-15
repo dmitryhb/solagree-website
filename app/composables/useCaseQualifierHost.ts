@@ -11,6 +11,11 @@ import type {
   CaseQualifierResultCta,
   CaseQualifierStartedEvent
 } from '~/data/case-qualifier-types'
+import {
+  buildHostEventContext,
+  dispatchHostEvent,
+  shouldEmitHostEvents
+} from '~/utils/host-integration'
 
 interface UseCaseQualifierHostOptions {
   hostConfig?: MaybeRefOrGetter<CaseQualifierHostConfigInput | undefined>
@@ -43,37 +48,15 @@ export const useCaseQualifierHost = (
   })
 
   const shouldEmitEvents = (): boolean => {
-    return hostConfig.value.analytics.enabled
-      || hostConfig.value.bridge.postMessage
-      || typeof options.onEvent === 'function'
+    return shouldEmitHostEvents(hostConfig.value, options.onEvent)
   }
 
   const dispatchEvent = (event: CaseQualifierHostEvent): void => {
-    if (!import.meta.client) {
-      return
-    }
-
-    options.onEvent?.(event)
-
-    if (hostConfig.value.bridge.postMessage && window.parent !== window) {
-      window.parent.postMessage(
-        {
-          source: hostConfig.value.analytics.namespace,
-          payload: event
-        },
-        hostConfig.value.bridge.targetOrigin
-      )
-    }
+    dispatchHostEvent(event, hostConfig.value, options.onEvent)
   }
 
   const buildEventContext = () => {
-    return {
-      hostId: hostConfig.value.hostId,
-      mode: hostConfig.value.mode,
-      sessionId: sessionId.value,
-      trackingId: hostConfig.value.analytics.trackingId,
-      timestamp: new Date().toISOString()
-    } as const
+    return buildHostEventContext(hostConfig.value, sessionId.value)
   }
 
   const buildAnalyticsContext = () => {

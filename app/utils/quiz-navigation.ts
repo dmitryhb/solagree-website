@@ -100,7 +100,8 @@ export const parseQuizSessionSnapshot = (value: unknown): QuizPersistedSession |
       isQuizQuestionId(value.currentQuestionId) ? value.currentQuestionId : undefined
     ),
     answers,
-    maxProgressValue: normalizeProgressValue(value.maxProgressValue)
+    maxProgressValue: normalizeProgressValue(value.maxProgressValue),
+    hasCompletedAttempt: phase === 'result' || value.hasCompletedAttempt === true
   }
 }
 

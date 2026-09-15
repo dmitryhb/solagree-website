@@ -201,4 +201,45 @@ describeClient('quiz lifecycle in the client branch', () => {
     expect(events.find(event => event.type === 'reset')).toMatchObject({ type: 'reset' })
     wrapper.unmount()
   })
+
+  it('does not emit completion again after result, back, reload, and next until reset', async () => {
+    const firstMount = createQuizHarness()
+    await nextTick()
+
+    await finishVisibleBranch(firstMount.host, firstMount.session)
+    expect(firstMount.events.filter(event => event.type === 'completed')).toHaveLength(1)
+
+    firstMount.host.handleBack()
+    await nextTick()
+
+    expect(JSON.parse(window.localStorage.getItem(solagreeQuizStorageKey)!)).toMatchObject({
+      version: 2,
+      phase: 'question',
+      hasCompletedAttempt: true
+    })
+    firstMount.wrapper.unmount()
+    trackEventMock.mockReset()
+
+    const restoredMount = createQuizHarness()
+    await nextTick()
+    await nextTick()
+
+    expect(restoredMount.session.phase.value).toBe('question')
+    expect(restoredMount.session.hasCompletedAttempt.value).toBe(true)
+
+    restoredMount.host.handleAdvance()
+    await nextTick()
+
+    expect(restoredMount.session.phase.value).toBe('result')
+    expect(restoredMount.events.filter(event => event.type === 'completed')).toHaveLength(0)
+    expect(trackEventMock.mock.calls.filter(([name]) => name === 'quiz_completed')).toHaveLength(0)
+
+    restoredMount.host.handleReset()
+    await nextTick()
+    await finishVisibleBranch(restoredMount.host, restoredMount.session)
+
+    expect(restoredMount.events.filter(event => event.type === 'completed')).toHaveLength(1)
+    expect(trackEventMock.mock.calls.filter(([name]) => name === 'quiz_completed')).toHaveLength(1)
+    restoredMount.wrapper.unmount()
+  })
 })

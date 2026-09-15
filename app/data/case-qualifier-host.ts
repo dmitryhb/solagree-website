@@ -4,6 +4,11 @@ import type {
   CaseQualifierHostRuntimeConfig,
   CaseQualifierResultViewModel
 } from '~/data/case-qualifier-types'
+import {
+  resolveHostConfig,
+  resolveHostResultView
+} from '~/utils/host-integration'
+import type { HostConfigAdapter } from '~/utils/host-integration'
 
 const defaultCaseQualifierCtaTargets = {
   'solagree-consult': {
@@ -24,21 +29,17 @@ const defaultCaseQualifierHostRuntimeConfig = {
     namespace: 'solagree.case_qualifier'
   },
   bridge: {
-    postMessage: false,
-    targetOrigin: '*'
+    postMessage: false
   },
   ctas: defaultCaseQualifierCtaTargets
 } as const satisfies CaseQualifierHostRuntimeConfig
 
-const mergeCaseQualifierCtaTargets = (overrides?: CaseQualifierHostConfigInput['ctas']) => {
-  return Object.entries(defaultCaseQualifierCtaTargets).reduce<CaseQualifierHostRuntimeConfig['ctas']>((targets, [actionId, target]) => {
-    targets[actionId as CaseQualifierCtaActionId] = {
-      ...target,
-      ...overrides?.[actionId as CaseQualifierCtaActionId]
-    }
-
-    return targets
-  }, {})
+const caseQualifierHostConfigAdapter: HostConfigAdapter<
+  CaseQualifierHostRuntimeConfig['mode'],
+  CaseQualifierHostRuntimeConfig['display'],
+  CaseQualifierCtaActionId
+> = {
+  defaults: defaultCaseQualifierHostRuntimeConfig
 }
 
 /**
@@ -48,46 +49,7 @@ export const resolveCaseQualifierHostConfig = (
   runtimeConfig?: CaseQualifierHostConfigInput,
   overrides?: CaseQualifierHostConfigInput
 ): CaseQualifierHostRuntimeConfig => {
-  const mergedInput: CaseQualifierHostConfigInput = {
-    ...runtimeConfig,
-    ...overrides,
-    display: {
-      ...runtimeConfig?.display,
-      ...overrides?.display
-    },
-    analytics: {
-      ...runtimeConfig?.analytics,
-      ...overrides?.analytics
-    },
-    bridge: {
-      ...runtimeConfig?.bridge,
-      ...overrides?.bridge
-    },
-    ctas: {
-      ...runtimeConfig?.ctas,
-      ...overrides?.ctas
-    }
-  }
-
-  return {
-    hostId: mergedInput.hostId ?? defaultCaseQualifierHostRuntimeConfig.hostId,
-    mode: mergedInput.mode ?? defaultCaseQualifierHostRuntimeConfig.mode,
-    display: {
-      showShellHeader: mergedInput.display?.showShellHeader ?? defaultCaseQualifierHostRuntimeConfig.display.showShellHeader,
-      showInstructions: mergedInput.display?.showInstructions ?? defaultCaseQualifierHostRuntimeConfig.display.showInstructions,
-      headingLevel: mergedInput.display?.headingLevel ?? defaultCaseQualifierHostRuntimeConfig.display.headingLevel
-    },
-    analytics: {
-      enabled: mergedInput.analytics?.enabled ?? defaultCaseQualifierHostRuntimeConfig.analytics.enabled,
-      namespace: mergedInput.analytics?.namespace ?? defaultCaseQualifierHostRuntimeConfig.analytics.namespace,
-      trackingId: mergedInput.analytics?.trackingId
-    },
-    bridge: {
-      postMessage: mergedInput.bridge?.postMessage ?? defaultCaseQualifierHostRuntimeConfig.bridge.postMessage,
-      targetOrigin: mergedInput.bridge?.targetOrigin ?? defaultCaseQualifierHostRuntimeConfig.bridge.targetOrigin
-    },
-    ctas: mergeCaseQualifierCtaTargets(mergedInput.ctas)
-  }
+  return resolveHostConfig(caseQualifierHostConfigAdapter, runtimeConfig, overrides)
 }
 
 /**
@@ -97,13 +59,5 @@ export const resolveCaseQualifierResultViewForHost = (
   result: CaseQualifierResultViewModel,
   hostConfig: CaseQualifierHostRuntimeConfig
 ): CaseQualifierResultViewModel => {
-  const ctaOverride = hostConfig.ctas[result.primaryCta.actionId]
-
-  return {
-    ...result,
-    primaryCta: {
-      ...result.primaryCta,
-      ...ctaOverride
-    }
-  }
+  return resolveHostResultView(result, hostConfig.ctas)
 }
