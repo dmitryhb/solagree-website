@@ -1,17 +1,41 @@
 import { mount } from '@vue/test-utils'
-import { computed, nextTick, reactive } from 'vue'
+import { computed, nextTick, onScopeDispose, ref } from 'vue'
 import { afterEach, describe, expect, it } from 'vitest'
 import App from '../app/app.vue'
 
-const route = reactive({
-  meta: {} as { appShell?: 'home' | 'internal' | 'bare' },
-  path: '/about-us'
+type AppShell = 'home' | 'internal' | 'bare'
+
+interface TestRoute {
+  meta: { appShell?: AppShell }
+  path: string
+}
+
+const createRoute = (path: string, appShell?: AppShell): TestRoute => ({
+  meta: { appShell },
+  path
 })
+
+const currentRoute = ref(createRoute('/about-us'))
 
 Object.assign(globalThis, {
   computed,
-  useRoute: () => route
+  nextTick,
+  useRouter: () => ({
+    afterEach: (callback: typeof routeCommitted) => {
+      routeCommitted = callback
+
+      return () => {}
+    },
+    currentRoute
+  }),
+  onScopeDispose
 })
+
+let routeCommitted: (
+  route: TestRoute,
+  from?: TestRoute,
+  failure?: Error
+) => void
 
 const mountApp = () => mount(App, {
   global: {
@@ -31,9 +55,13 @@ const expectShell = (wrapper: ReturnType<typeof mountApp>, appShell: 'home' | 'i
   expect(wrapper.findAll('#main-content')).toHaveLength(1)
 }
 
+const settleRouteChange = async () => {
+  await nextTick()
+  await nextTick()
+}
+
 afterEach(() => {
-  route.meta = {}
-  route.path = '/about-us'
+  currentRoute.value = createRoute('/about-us')
 })
 
 describe('App route shell metadata', () => {
@@ -46,8 +74,7 @@ describe('App route shell metadata', () => {
     ['/about-us', 'internal'],
     ['/', 'home']
   ] as const)('uses %s shell on direct entry', (path, appShell) => {
-    route.path = path
-    route.meta = { appShell }
+    currentRoute.value = createRoute(path, appShell)
 
     expectShell(mountApp(), appShell)
   })
@@ -57,14 +84,23 @@ describe('App route shell metadata', () => {
 
     expectShell(wrapper, 'internal')
 
-    route.path = '/quiz/embed'
-    route.meta = { appShell: 'bare' }
-    await nextTick()
+    currentRoute.value = createRoute('/quiz/embed', 'bare')
+    routeCommitted(currentRoute.value)
+    await settleRouteChange()
     expectShell(wrapper, 'bare')
 
-    route.path = '/review/quiz'
-    route.meta = { appShell: 'internal' }
-    await nextTick()
+    currentRoute.value = createRoute('/review/quiz', 'internal')
+    routeCommitted(currentRoute.value)
+    await settleRouteChange()
+    expectShell(wrapper, 'internal')
+  })
+
+  it('ignores shell metadata from a cancelled navigation', async () => {
+    const wrapper = mountApp()
+
+    routeCommitted(createRoute('/quiz', 'bare'), currentRoute.value, new Error('cancelled'))
+    await settleRouteChange()
+
     expectShell(wrapper, 'internal')
   })
 })

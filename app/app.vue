@@ -1,10 +1,22 @@
 <script setup lang="ts">
-const route = useRoute()
-const appShell = computed(() => route.meta.appShell ?? 'internal')
+const router = useRouter()
+const currentRoute = router.currentRoute
+const appShell = ref(currentRoute.value.meta.appShell ?? 'internal')
+
+const removeAfterEach = router.afterEach((to, _from, failure) => {
+  if (!failure) {
+    appShell.value = to.meta.appShell ?? 'internal'
+  }
+})
+
+onScopeDispose(removeAfterEach)
+
 const showSiteHeader = computed(() => appShell.value !== 'bare')
 const isInternalShell = computed(() => appShell.value === 'internal')
 const siteHeaderKey = computed(() => appShell.value)
-const pageKey = computed(() => (route.path === '/' ? route.path : route.path.replace(/\/+$/, '')))
+const pageKey = computed(() => (
+  currentRoute.value.path === '/' ? currentRoute.value.path : currentRoute.value.path.replace(/\/+$/, '')
+))
 const pageTransition = {
   name: 'page-appear',
   mode: 'out-in',

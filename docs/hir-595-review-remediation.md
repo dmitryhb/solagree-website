@@ -35,7 +35,8 @@ Review and QA use independent agents. Public-contract changes and the full integ
 
 ## Route shell and legacy redirect contract
 
-- Pages declare `appShell` metadata (`home`, `internal`, or `bare`); `app.vue` selects shared chrome from that metadata rather than route path sets.
+- Pages declare `appShell` metadata (`home`, `internal`, or `bare`); `app.vue` initializes from Vue Router's current route and applies metadata after each successful committed navigation rather than maintaining route path sets. The single router hook lives for the app component lifetime and ignores cancelled or failed navigations.
+- Browser history coverage waits until the URL, Vue Router route, destination page component and `page-appear` transition agree before it drives another history action. This verifies settled Back/Forward behavior without overlapping Nuxt's existing `out-in` transitions.
 - Production nginx owns direct HTTP redirects. The global client middleware mirrors redirects that resolve to application pages, including bare and trailing `/author` paths.
 - `/site-map` remains nginx-only because its destination is the static `/sitemap.xml` server route. `/c/*` keeps its nginx regex redirect and its client page redirect for SPA and development navigation.
 

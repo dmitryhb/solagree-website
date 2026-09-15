@@ -34,6 +34,10 @@ test('declares typed shell metadata for every route family with custom chrome', 
 test('keeps app shell selection independent of route path lists', () => {
   const appSource = readFileSync(resolve(process.cwd(), 'app/app.vue'), 'utf8')
 
-  assert.match(appSource, /route\.meta\.appShell \?\? 'internal'/)
+  assert.match(appSource, /const currentRoute = router\.currentRoute/)
+  assert.match(appSource, /router\.afterEach/)
+  assert.match(appSource, /if \(!failure\)/)
+  assert.match(appSource, /to\.meta\.appShell \?\? 'internal'/)
+  assert.doesNotMatch(appSource, /popstate|pageshow|window\.location/)
   assert.doesNotMatch(appSource, /quizShellRoutes|CO_BRANDED_PATH_PREFIXES/)
 })
