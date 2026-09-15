@@ -1,5 +1,4 @@
 import {
-  solagreeCaseQualifierLegacyStorageKeys,
   solagreeCaseQualifierSchemaVersion,
   solagreeCaseQualifierStorageKey
 } from '~/data/case-qualifier'
@@ -44,10 +43,6 @@ export const useCaseQualifierSession = () => {
 
   if (import.meta.client) {
     onMounted(() => {
-      solagreeCaseQualifierLegacyStorageKeys.forEach((legacyKey) => {
-        window.localStorage.removeItem(legacyKey)
-      })
-
       const snapshotText = window.localStorage.getItem(solagreeCaseQualifierStorageKey)
 
       if (!snapshotText) {
