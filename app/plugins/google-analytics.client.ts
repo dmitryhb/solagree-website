@@ -1,13 +1,14 @@
 export default defineNuxtPlugin(() => {
-  const route = useRoute()
+  const nuxtApp = useNuxtApp()
   const router = useRouter()
   const { trackPageView } = useGoogleAnalytics()
 
-  trackPageView(route.fullPath, document.title)
+  nuxtApp.hook('page:finish', async () => {
+    // Unhead flushes the document title after Nuxt finishes the page lifecycle.
+    // The next frame observes that rendered title before the analytics event.
+    await nextTick()
+    await new Promise<void>((resolve) => window.requestAnimationFrame(() => resolve()))
 
-  router.afterEach((to) => {
-    nextTick(() => {
-      trackPageView(to.fullPath, document.title)
-    })
+    trackPageView(router.currentRoute.value.fullPath, document.title)
   })
 })
