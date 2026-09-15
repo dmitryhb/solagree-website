@@ -19,14 +19,14 @@
   margin-inline: auto;
 }
 
-.how-it-works-section__intro-grid {
+.process-section__intro-grid {
   display: grid;
   grid-template-columns: minmax(0, 481px) minmax(0, 531px);
   gap: 64px;
   align-items: start;
 }
 
-.how-it-works-section__copy {
+.process-section__copy {
   display: grid;
   justify-items: start;
   gap: 22px;
@@ -42,7 +42,7 @@
   line-height: 1.011;
 }
 
-.how-it-works-section__intro {
+.process-section__intro {
   max-width: 481px;
   margin: 0;
   color: var(--color-accent-text);
@@ -51,11 +51,11 @@
   line-height: 1.431;
 }
 
-.how-it-works-section__intro strong {
+.process-section__intro strong {
   font-weight: 700;
 }
 
-.how-it-works-section__cta.sol-button {
+.process-section__cta.sol-button {
   min-width: 279px;
   margin-top: 20px;
   padding: 15px 24px;
@@ -64,14 +64,14 @@
   line-height: 1;
 }
 
-.how-it-works-section__phases {
+.process-section__phases {
   display: grid;
   padding: 10px 0 0;
   margin: 0;
   list-style: none;
 }
 
-.how-it-works-section__phase {
+.process-section__phase {
   display: grid;
   gap: 9px;
   min-height: 92px;
@@ -79,16 +79,16 @@
   padding: 0 0 18px;
 }
 
-.how-it-works-section__phase + .how-it-works-section__phase {
+.process-section__phase + .process-section__phase {
   padding-top: 10px;
 }
 
-.how-it-works-section__phase:last-child {
+.process-section__phase:last-child {
   min-height: 0;
   border-bottom: 0;
 }
 
-.how-it-works-section__phase-title {
+.process-section__phase-title {
   margin: 0;
   color: #181716;
   font-family: var(--font-nav);
@@ -97,11 +97,11 @@
   line-height: 1.4;
 }
 
-.how-it-works-section__phase-title span {
+.process-section__phase-title span {
   color: var(--color-badge-warm);
 }
 
-.how-it-works-section__phase-description {
+.process-section__phase-description {
   margin: 0;
   color: var(--color-accent-text);
   font-family: var(--font-ui);
@@ -178,14 +178,14 @@
     gap: 48px;
   }
 
-  .how-it-works-section__intro-grid {
+  .process-section__intro-grid {
     grid-template-columns: 1fr;
     max-width: 720px;
     margin-inline: auto;
     gap: 40px;
   }
 
-  .how-it-works-section__copy {
+  .process-section__copy {
     padding-top: 0;
   }
 
@@ -208,17 +208,17 @@
     gap: 40px;
   }
 
-  .how-it-works-section__intro,
-  .how-it-works-section__phase-title,
+  .process-section__intro,
+  .process-section__phase-title,
   .get-started-section__intro {
     font-size: 16.5px;
   }
 
-  .how-it-works-section__phase-description {
+  .process-section__phase-description {
     font-size: 16.5px;
   }
 
-  .how-it-works-section__cta.sol-button,
+  .process-section__cta.sol-button,
   .get-started-section__cta.sol-button {
     width: 100%;
     min-width: 0;

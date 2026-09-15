@@ -84,19 +84,7 @@ const closeConsultModal = (): void => {
       >
     </section>
 
-    <section
-      class="co-branded-page__feature-strip"
-      aria-label="Solagree benefits"
-    >
-      <ul>
-        <li
-          v-for="benefit in content.benefits"
-          :key="benefit"
-        >
-          {{ benefit }}
-        </li>
-      </ul>
-    </section>
+    <FeatureStrip :items="content.benefits" />
 
     <section
       class="co-branded-page__what-is"

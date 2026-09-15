@@ -10,10 +10,10 @@ import { howItWorksPhases } from '~/data/how-it-works-phases'
     aria-labelledby="how-it-works-title"
   >
     <div class="how-it-works-section__inner">
-      <div class="how-it-works-section__intro-grid">
+      <div class="process-section__intro-grid">
         <div
           v-appear
-          class="how-it-works-section__copy"
+          class="process-section__copy"
         >
           <h2
             id="how-it-works-title"
@@ -21,12 +21,12 @@ import { howItWorksPhases } from '~/data/how-it-works-phases'
           >
             How It Works
           </h2>
-          <p class="how-it-works-section__intro">
+          <p class="process-section__intro">
             <strong>Three phases. One resolution.</strong> A structured process designed for couples who can't agree
             on everything.
           </p>
           <SiteButton
-            class="how-it-works-section__cta"
+            class="process-section__cta"
             to="#quiz"
             size="sm"
           >
@@ -34,21 +34,21 @@ import { howItWorksPhases } from '~/data/how-it-works-phases'
           </SiteButton>
         </div>
 
-        <ol class="how-it-works-section__phases">
+        <ol class="process-section__phases">
           <li
             v-for="(phase, index) in howItWorksPhases"
             :key="phase.title"
             v-appear="{ delay: index * 80 }"
-            class="how-it-works-section__phase"
+            class="process-section__phase"
           >
-            <h3 class="how-it-works-section__phase-title">
+            <h3 class="process-section__phase-title">
               <span>{{ phase.eyebrow }}</span>
               {{ phase.title }}
             </h3>
             <p
               v-for="(paragraph, paragraphIndex) in phase.description.split('\n\n')"
               :key="`${phase.title}-${paragraphIndex}`"
-              class="how-it-works-section__phase-description"
+              class="process-section__phase-description"
             >
               {{ paragraph }}
             </p>

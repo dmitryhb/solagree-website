@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import WebinarVideoFrame from '~/components/webinar/WebinarVideoFrame.vue'
 import { howItWorksPhases } from '~/data/how-it-works-phases'
-import { pricingPlans } from '~/data/pricing-plans'
 import type { FamilyLandingPage } from '~/data/family-landing-pages'
 
 const props = defineProps<{ page: FamilyLandingPage }>()
@@ -28,9 +27,10 @@ useSolagreeSeo({
       </div>
     </section>
 
-    <section class="co-branded-page__feature-strip family-page__feature-strip" aria-label="Solagree benefits">
-      <ul><li>Resolve Faster</li><li>Predictable Pricing</li><li>Entirely Virtual</li><li>Binding Process</li></ul>
-    </section>
+    <FeatureStrip
+      class="family-page__feature-strip"
+      :items="['Resolve Faster', 'Predictable Pricing', 'Entirely Virtual', 'Binding Process']"
+    />
 
     <section class="family-page__concerns family-page__section" aria-labelledby="family-concerns-title">
       <h2 id="family-concerns-title">You're Not Just Facing Divorce.<br>You're Facing This Too.</h2>
@@ -52,20 +52,20 @@ useSolagreeSeo({
     </section>
 
     <section class="family-page__process family-page__section" aria-labelledby="family-process-title">
-      <div class="how-it-works-section__intro-grid">
-        <div class="how-it-works-section__copy">
+      <div class="process-section__intro-grid">
+        <div class="process-section__copy">
           <h2 id="family-process-title">How It Works</h2>
-          <p class="how-it-works-section__intro"><strong>Three phases. One resolution.</strong> A structured process designed for couples who can't agree on everything.</p>
-          <SiteButton class="how-it-works-section__cta" to="/quiz" size="sm">Is Solagree Right for You?</SiteButton>
+          <p class="process-section__intro"><strong>Three phases. One resolution.</strong> A structured process designed for couples who can't agree on everything.</p>
+          <SiteButton class="process-section__cta" to="/quiz" size="sm">Is Solagree Right for You?</SiteButton>
         </div>
-        <ol class="how-it-works-section__phases">
-          <li class="how-it-works-section__phase">
-            <h3 class="how-it-works-section__phase-title"><span>Phase 1:</span> Assessment</h3>
-            <p v-for="paragraph in page.assessment" :key="paragraph" class="how-it-works-section__phase-description">{{ paragraph }}</p>
+        <ol class="process-section__phases">
+          <li class="process-section__phase">
+            <h3 class="process-section__phase-title"><span>Phase 1:</span> Assessment</h3>
+            <p v-for="paragraph in page.assessment" :key="paragraph" class="process-section__phase-description">{{ paragraph }}</p>
           </li>
-          <li v-for="phase in howItWorksPhases.slice(1)" :key="phase.title" class="how-it-works-section__phase">
-            <h3 class="how-it-works-section__phase-title"><span>{{ phase.eyebrow }}</span> {{ phase.title }}</h3>
-            <p class="how-it-works-section__phase-description">{{ phase.description }}</p>
+          <li v-for="phase in howItWorksPhases.slice(1)" :key="phase.title" class="process-section__phase">
+            <h3 class="process-section__phase-title"><span>{{ phase.eyebrow }}</span> {{ phase.title }}</h3>
+            <p class="process-section__phase-description">{{ phase.description }}</p>
           </li>
         </ol>
       </div>
@@ -91,15 +91,17 @@ useSolagreeSeo({
       </div>
     </section>
 
-    <section id="pricing" class="pricing-section family-page__pricing" aria-labelledby="family-pricing-title">
-      <div class="pricing-section__inner">
-        <header class="pricing-section__header">
+    <PricingSection
+      class="family-page__pricing"
+      :show-note="false"
+      :animate-cards="false"
+      heading-id="family-pricing-title"
+    >
+      <template #header>
           <h2 id="family-pricing-title">Transparent flat-fee pricing.</h2>
           <p v-for="paragraph in page.pricingIntro" :key="paragraph" class="pricing-section__intro">{{ paragraph }}</p>
-        </header>
-        <div class="pricing-section__grid"><PricingCard v-for="plan in pricingPlans" :key="plan.name" :plan="plan" /></div>
-      </div>
-    </section>
+      </template>
+    </PricingSection>
 
     <section class="family-page__faq family-page__section" aria-labelledby="family-faq-title">
       <div><h2 id="family-faq-title">{{ page.faqTitle }}</h2><p>{{ page.faqIntro }}</p></div>
