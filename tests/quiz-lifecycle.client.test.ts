@@ -153,11 +153,17 @@ describeClient('quiz lifecycle in the client branch', () => {
       }
     }))
 
-    const { events, session, wrapper } = createQuizHarness()
+    const { events, host, session, wrapper } = createQuizHarness()
     await nextTick()
 
     expect(session.phase.value).toBe('result')
     expect(events).toEqual([])
+    expect(trackEventMock).not.toHaveBeenCalledWith('quiz_completed', expect.anything())
+    host.handleBack()
+    await nextTick()
+    host.handleAdvance()
+    await nextTick()
+    expect(events.filter(event => event.type === 'completed')).toHaveLength(0)
     expect(trackEventMock).not.toHaveBeenCalledWith('quiz_completed', expect.anything())
     wrapper.unmount()
   })

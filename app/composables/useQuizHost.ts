@@ -277,6 +277,7 @@ export const useQuizHost = (
       }
 
       if (!previouslyRestoredPersistedState && quizSession.didRestorePersistedState.value) {
+        hasTrackedCompletion.value = true
         return
       }
 
