@@ -7,11 +7,18 @@ interface CapturedPageView {
   renderedTitle: string
 }
 
+interface BrowserRouter {
+  push: (path: string) => Promise<{ type?: number } | undefined>
+}
+
+type AnalyticsCaptureWindow = typeof window & {
+  __hir607PageViews?: CapturedPageView[]
+  __hir607Router?: BrowserRouter
+}
+
 const capturePageViews = async (page: Page): Promise<CapturedPageView[]> => {
   return page.evaluate(() => {
-    const captureWindow = window as typeof window & {
-      __hir607PageViews?: CapturedPageView[]
-    }
+    const captureWindow = window as AnalyticsCaptureWindow
 
     return captureWindow.__hir607PageViews ?? []
   })
@@ -19,12 +26,22 @@ const capturePageViews = async (page: Page): Promise<CapturedPageView[]> => {
 
 const clearPageViews = async (page: Page): Promise<void> => {
   await page.evaluate(() => {
-    const captureWindow = window as typeof window & {
-      __hir607PageViews?: CapturedPageView[]
-    }
+    const captureWindow = window as AnalyticsCaptureWindow
 
     captureWindow.__hir607PageViews?.splice(0)
   })
+}
+
+const navigateWithRouter = async (page: Page, target: string): Promise<number | undefined> => {
+  return page.evaluate(async (targetPath) => {
+    const router = (window as AnalyticsCaptureWindow).__hir607Router
+
+    if (!router) {
+      throw new Error('Nuxt router is unavailable.')
+    }
+
+    return (await router.push(targetPath))?.type
+  }, target)
 }
 
 const expectPageView = async (
@@ -77,13 +94,30 @@ test.beforeEach(async ({ page }) => {
       return push(...entries)
     }
 
-    const captureWindow = window as typeof window & {
-      __hir607PageViews?: CapturedPageView[]
+    const captureWindow = window as AnalyticsCaptureWindow & {
       dataLayer?: unknown[]
     }
 
     captureWindow.__hir607PageViews = pageViews
     captureWindow.dataLayer = dataLayer
+    Object.defineProperty(captureWindow, '__hir607Router', {
+      configurable: true,
+      get: () => {
+        const link = document.querySelector<HTMLAnchorElement>('a[href="/attorneys"]') as HTMLAnchorElement & {
+          __vueParentComponent?: {
+            appContext: {
+              config: {
+                globalProperties: {
+                  $router?: BrowserRouter
+                }
+              }
+            }
+          }
+        }
+
+        return link?.__vueParentComponent?.appContext.config.globalProperties.$router
+      }
+    })
   })
 })
 
@@ -104,19 +138,39 @@ test('waits for the SPA head title before recording a navigation', async ({ page
   await expectPageView(page, '/attorneys', 'Attorney Partners | Solagree')
 })
 
-test('keeps only the final settled page view during rapid SPA navigation', async ({ page }) => {
+test('records a query-only SPA navigation after the title settles', async ({ page }) => {
+  await page.goto('/faq', { waitUntil: 'domcontentloaded' })
+  await expectPageView(page, '/faq', 'Frequently Asked Questions | Solagree')
+  await clearPageViews(page)
+
+  await navigateWithRouter(page, '/faq?section=professional-partners')
+
+  await expect(page).toHaveURL('/faq?section=professional-partners')
+  await expectPageView(page, '/faq?section=professional-partners', 'Frequently Asked Questions | Solagree')
+})
+
+test('records a hash-only SPA navigation after the title settles', async ({ page }) => {
   await page.goto('/', { waitUntil: 'domcontentloaded' })
   await expectPageView(page, '/', 'Virtual Flat-Fee Divorce Without Court | Solagree')
   await clearPageViews(page)
 
-  await page.evaluate(() => {
-    const attorneyLink = document.querySelector<HTMLAnchorElement>('a[href="/attorneys"]')
-    const cdfaLink = document.querySelector<HTMLAnchorElement>('a[href="/cdfa"]')
+  await navigateWithRouter(page, '/#how-it-works')
 
-    attorneyLink?.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }))
-    cdfaLink?.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }))
-  })
+  await expect(page).toHaveURL('/#how-it-works')
+  await expectPageView(page, '/#how-it-works', 'Virtual Flat-Fee Divorce Without Court | Solagree')
+})
 
+test('skips cancelled routes and keeps only the final settled rapid navigation', async ({ page }) => {
+  await page.goto('/', { waitUntil: 'domcontentloaded' })
+  await expectPageView(page, '/', 'Virtual Flat-Fee Divorce Without Court | Solagree')
+  await clearPageViews(page)
+
+  const [firstNavigation] = await Promise.all([
+    navigateWithRouter(page, '/attorneys'),
+    navigateWithRouter(page, '/cdfa')
+  ])
+
+  expect(firstNavigation).toBe(8)
   await expect(page).toHaveURL('/cdfa')
   await expectPageView(page, '/cdfa', 'CDFA Partners | Solagree')
 })

@@ -17,8 +17,10 @@ It verifies these cases:
 | --- | --- | --- | --- |
 | Direct load with query | `/about-us?source=hir607` | `About Us \| Solagree` | Exact path, location, and title |
 | SPA navigation | `/attorneys` | `Attorney Partners \| Solagree` | Exact path, location, and title |
-| Rapid SPA navigation | `/cdfa` | `CDFA Partners \| Solagree` | One final page view only |
+| Query-only SPA navigation | `/faq?section=professional-partners` | `Frequently Asked Questions \| Solagree` | Exact path, location, and title |
+| Hash-only SPA navigation | `/#how-it-works` | `Virtual Flat-Fee Divorce Without Court \| Solagree` | Exact path, location, and title |
+| Rapid cancelled SPA navigation | `/cdfa` | `CDFA Partners \| Solagree` | One final page view only |
 | Error route | `/404` | `Page Not Found \| Solagree` | Exact path, location, and title |
 | Disabled analytics function | `/attorneys` | `Attorney Partners \| Solagree` | No page view |
 
-The pre-fix browser capture showed duplicate direct-load page views and previous-route titles on SPA navigation. The settled `page:finish` lifecycle waits for Nuxt's next render frame before emitting one page view, after the route head applies.
+The pre-fix browser capture showed duplicate direct-load page views and previous-route titles on SPA navigation. The successful router lifecycle waits for Nuxt's next render frame before emitting one page view, after the route head applies. Cancelled and superseded navigation callbacks do not emit.
