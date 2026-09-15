@@ -179,6 +179,7 @@ describe('CoBrandedConsultModal focus behavior (HIR-369 regression)', () => {
     await flushPromises()
 
     expect(query('.co-branded-consult-modal__submit').attributes('disabled')).toBeDefined()
+    expect(query('form').attributes('aria-busy')).toBe('true')
 
     await query('.co-branded-consult-modal').trigger('keydown', { key: 'Escape' })
 

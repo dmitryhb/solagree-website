@@ -70,6 +70,7 @@ const {
     ref="formEl"
     class="contact-form"
     aria-label="Contact form"
+    :aria-busy="submitting"
     @submit.prevent="handleSubmit"
   >
     <label

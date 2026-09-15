@@ -71,6 +71,29 @@ afterEach(() => {
 })
 
 describe('WatchWebinarForm accessibility (HIR-369)', () => {
+  it('marks the form busy only while the registration is pending', async () => {
+    let resolveSubmission: (value: Awaited<ReturnType<typeof submitWebinarRegistration>>) => void = () => {}
+
+    submitWebinarMock.mockReturnValueOnce(new Promise((resolve) => {
+      resolveSubmission = resolve
+    }))
+
+    const wrapper = mountForm()
+
+    await fillValidForm(wrapper)
+    void wrapper.get('form').trigger('submit')
+    await flushPromises()
+
+    expect(wrapper.get('form').attributes('aria-busy')).toBe('true')
+
+    resolveSubmission({} as Awaited<ReturnType<typeof submitWebinarRegistration>>)
+    await flushPromises()
+
+    expect(wrapper.get('form').attributes('aria-busy')).toBe('false')
+
+    wrapper.unmount()
+  })
+
   it('announces submission failures assertively and focuses the message', async () => {
     submitWebinarMock.mockRejectedValueOnce(new Error('portal down'))
 

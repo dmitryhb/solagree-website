@@ -67,6 +67,29 @@ afterEach(() => {
 })
 
 describe('AdminIntakeForm accessibility (HIR-369)', () => {
+  it('marks the form busy only while the submission is pending', async () => {
+    let resolveSubmission: (value: { submissionId: string }) => void = () => {}
+
+    submitIntakeMock.mockReturnValueOnce(new Promise((resolve) => {
+      resolveSubmission = resolve
+    }))
+
+    const wrapper = mountForm()
+
+    await fillValidForm(wrapper)
+    void wrapper.get('form').trigger('submit')
+    await flushPromises()
+
+    expect(wrapper.get('form').attributes('aria-busy')).toBe('true')
+
+    resolveSubmission({ submissionId: 'intake-1' })
+    await flushPromises()
+
+    expect(wrapper.get('form').attributes('aria-busy')).toBe('false')
+
+    wrapper.unmount()
+  })
+
   it('gives the privacy radiogroup a resolvable accessible name', () => {
     const wrapper = mountForm()
     const radiogroup = wrapper.get('[role="radiogroup"]')

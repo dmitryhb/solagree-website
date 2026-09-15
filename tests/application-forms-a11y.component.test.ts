@@ -19,10 +19,12 @@ interface SubmissionResultValue {
 }
 
 interface AttorneyFormHarness {
+  submitting: { value: boolean }
   submissionResult: { value: SubmissionResultValue | null }
 }
 
 interface CdfaFormHarness {
+  submitting: { value: boolean }
   submissionResult: { value: SubmissionResultValue | null }
 }
 
@@ -255,6 +257,27 @@ describe('CDFA service area help text (HIR-369)', () => {
 })
 
 describe('Application submission errors (HIR-369)', () => {
+  it.each([
+    ['attorney', mountAttorneyForm, attorneyHarness],
+    ['CDFA', mountCdfaForm, cdfaHarness]
+  ])('exposes %s form busy state while submitting', async (_name, mountForm, harness) => {
+    const wrapper = mountForm()
+
+    expect(wrapper.get('form').attributes('aria-busy')).toBe('false')
+
+    harness.current!.submitting.value = true
+    await nextTick()
+
+    expect(wrapper.get('form').attributes('aria-busy')).toBe('true')
+
+    harness.current!.submitting.value = false
+    await nextTick()
+
+    expect(wrapper.get('form').attributes('aria-busy')).toBe('false')
+
+    wrapper.unmount()
+  })
+
   it('announces attorney errors assertively and focuses the message', async () => {
     const wrapper = mountAttorneyForm()
 

@@ -122,6 +122,7 @@ const {
     <form
       ref="formEl"
       class="consult-request-form__form"
+      :aria-busy="submitting"
       @submit.prevent="handleSubmit"
     >
       <div class="consult-request-form__field">

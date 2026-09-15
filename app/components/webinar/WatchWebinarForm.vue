@@ -81,6 +81,7 @@ const {
     <form
       ref="formEl"
       class="watch-webinar-form__form"
+      :aria-busy="submitting"
       @submit.prevent="handleSubmit"
     >
       <div class="watch-webinar-form__field watch-webinar-form__field--full">

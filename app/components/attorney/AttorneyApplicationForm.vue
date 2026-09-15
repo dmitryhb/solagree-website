@@ -36,6 +36,7 @@ const {
       ref="formEl"
       class="attorney-application-form__form"
       novalidate
+      :aria-busy="submitting"
       @submit.prevent="handleSubmit"
     >
       <ApplicationTextField

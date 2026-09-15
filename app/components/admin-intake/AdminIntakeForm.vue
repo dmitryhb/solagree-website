@@ -80,6 +80,7 @@ const {
     <form
       ref="formEl"
       class="consult-request-form__form"
+      :aria-busy="submitting"
       @submit.prevent="handleSubmit"
     >
       <fieldset class="admin-intake-form__fieldset">

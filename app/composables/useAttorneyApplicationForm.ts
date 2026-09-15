@@ -108,14 +108,39 @@ export const useAttorneyApplicationForm = (): UseAttorneyApplicationFormReturn =
     }
   }
 
+  const focusFirstNativeInvalidControl = async (): Promise<void> => {
+    await nextTick()
+
+    const controls = formEl.value?.querySelectorAll<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>(
+      'input, select, textarea'
+    )
+    const firstInvalidControl = controls && Array.from(controls).find((control) => !control.validity.valid)
+
+    firstInvalidControl?.focus()
+  }
+
+  const focusFirstBarState = async (): Promise<void> => {
+    await nextTick()
+
+    formEl.value?.querySelector<HTMLInputElement>('input[name="barStates"]')?.focus()
+  }
+
   const submission = useApplicationSubmission<AttorneyApplicationFormState, Awaited<ReturnType<typeof submitAttorneyApplication>>>({
-    validate: () => {
+    validate: async () => {
       hasAttemptedSubmit.value = true
 
       const hasCustomErrors = hasBarStateError.value || hasLicenseNumberError.value
+      const hasNativeErrors = !formEl.value?.checkValidity()
 
-      if (!formEl.value?.checkValidity() || hasCustomErrors) {
+      if (hasNativeErrors || hasCustomErrors) {
         formEl.value?.reportValidity()
+
+        if (hasNativeErrors) {
+          await focusFirstNativeInvalidControl()
+        } else if (hasBarStateError.value) {
+          await focusFirstBarState()
+        }
+
         return false
       }
 

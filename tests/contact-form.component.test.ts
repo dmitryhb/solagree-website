@@ -58,6 +58,30 @@ beforeEach(() => {
 })
 
 describe('ContactForm accessibility (HIR-369)', () => {
+  it('clears the busy state after a failed submission', async () => {
+    let rejectSubmission: (reason: Error) => void = () => {}
+
+    submitContactMock.mockReturnValueOnce(new Promise((_, reject) => {
+      rejectSubmission = reject
+    }))
+
+    const wrapper = mountForm()
+
+    await fillValidForm(wrapper)
+    void wrapper.get('form').trigger('submit')
+    await flushPromises()
+
+    expect(wrapper.get('form').attributes('aria-busy')).toBe('true')
+
+    rejectSubmission(new Error('portal down'))
+    await flushPromises()
+
+    expect(wrapper.get('form').attributes('aria-busy')).toBe('false')
+    expect(wrapper.find('[role="alert"]').exists()).toBe(true)
+
+    wrapper.unmount()
+  })
+
   it('announces submission failures assertively and focuses the message', async () => {
     submitContactMock.mockRejectedValueOnce(new Error('portal down'))
 

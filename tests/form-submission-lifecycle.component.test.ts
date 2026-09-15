@@ -342,10 +342,12 @@ describe('ConsultRequestForm submission lifecycle (HIR-370)', () => {
     await flushPromises()
 
     expect(submitConsultMock).toHaveBeenCalledTimes(1)
+    expect(wrapper.get('form').attributes('aria-busy')).toBe('true')
 
     resolveSubmission({})
     await flushPromises()
 
+    expect(wrapper.get('form').attributes('aria-busy')).toBe('false')
     expect(trackEventMock).toHaveBeenCalledTimes(1)
     expect(trackEventMock).toHaveBeenCalledWith('consultation_booked', {
       consult_type: 'initial',
