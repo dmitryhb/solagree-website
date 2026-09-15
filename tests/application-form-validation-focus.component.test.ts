@@ -3,6 +3,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { useApplicationSubmission } from '../app/composables/useApplicationSubmission'
 import { useAttorneyApplicationForm } from '../app/composables/useAttorneyApplicationForm'
 import { useCdfaApplicationForm } from '../app/composables/useCdfaApplicationForm'
+import { validateNativeForm } from '../app/utils/native-form-validation'
 
 Object.assign(globalThis, {
   computed,
@@ -102,5 +103,27 @@ describe('application form validation focus (HIR-599)', () => {
 
     expect(submission.hasSpecializationError.value).toBe(true)
     expect(document.activeElement).toBe(specialization)
+  })
+})
+
+describe('shared native form validation (HIR-600)', () => {
+  it('reports the invalid native form and prevents submission', () => {
+    const form = createForm()
+    const checkValidity = vi.spyOn(form, 'checkValidity').mockReturnValue(false)
+    const reportValidity = vi.spyOn(form, 'reportValidity').mockReturnValue(false)
+
+    expect(validateNativeForm(form)).toBe(false)
+    expect(checkValidity).toHaveBeenCalledOnce()
+    expect(reportValidity).toHaveBeenCalledOnce()
+  })
+
+  it('accepts a valid native form without reporting it', () => {
+    const form = createForm()
+    const checkValidity = vi.spyOn(form, 'checkValidity').mockReturnValue(true)
+    const reportValidity = vi.spyOn(form, 'reportValidity')
+
+    expect(validateNativeForm(form)).toBe(true)
+    expect(checkValidity).toHaveBeenCalledOnce()
+    expect(reportValidity).not.toHaveBeenCalled()
   })
 })

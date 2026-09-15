@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import FormCheckboxField from '~/components/form/FormCheckboxField.vue'
 import {
   attorneyMediationOptions,
   attorneyYesNoOptions
@@ -22,19 +23,19 @@ const {
 
 <template>
   <section
-    class="attorney-application-form"
+    class="application-form"
     aria-labelledby="attorney-application-title"
   >
     <h1
       id="attorney-application-title"
-      class="attorney-application-form__title"
+      class="application-form__title"
     >
       Attorney Partners
     </h1>
 
     <form
       ref="formEl"
-      class="attorney-application-form__form"
+      class="application-form__form"
       novalidate
       :aria-busy="submitting"
       @submit.prevent="handleSubmit"
@@ -190,24 +191,20 @@ const {
         v-model="form.smsOptIn"
       />
 
-      <label class="attorney-application-form__terms">
-        <input
-          v-model="form.termsAccepted"
-          name="termsAccepted"
-          type="checkbox"
-          required
+      <FormCheckboxField
+        v-model="form.termsAccepted"
+        name="termsAccepted"
+        required
+      >
+        I have read and agree to the
+        <NuxtLink
+          to="/legal/terms-of-service"
+          target="_blank"
+          rel="noopener noreferrer"
         >
-        <span>
-          I have read and agree to the
-          <NuxtLink
-            to="/legal/terms-of-service"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            terms and conditions
-          </NuxtLink>.
-        </span>
-      </label>
+          terms and conditions
+        </NuxtLink>.
+      </FormCheckboxField>
 
       <SiteFormSubmit
         label="SEND"

@@ -1,12 +1,15 @@
 <script setup lang="ts">
+import ApplicationSelectField from '~/components/application/ApplicationSelectField.vue'
+import ApplicationTextField from '~/components/application/ApplicationTextField.vue'
+import { usePortalFormSubmissionOptions } from '~/composables/usePortalFormSubmissionOptions'
 import { stateOptions } from '~/data/us-states'
 import { attorneyWebinarRegistrationContent } from '~/data/webinar-registration'
 import {
   getWebinarRegistrationErrorMessage,
   submitWebinarRegistration
 } from '~/services/webinar-registration-api'
-import { websitePortalFetcher } from '~/services/portal-api'
 import { focusPageDestination } from '~/utils/focus-destination'
+import { validateNativeForm } from '~/utils/native-form-validation'
 import type { WebinarFormState, WebinarRegistrationContent } from '~/types/webinar'
 
 interface WatchWebinarFormProps {
@@ -21,7 +24,7 @@ const props = withDefaults(defineProps<WatchWebinarFormProps>(), {
   submissionType: attorneyWebinarRegistrationContent.submissionType
 })
 
-const runtimeConfig = useRuntimeConfig()
+const portalSubmissionOptions = usePortalFormSubmissionOptions()
 const formEl = ref<HTMLFormElement | null>(null)
 const form = reactive<WebinarFormState>({
   businessEmail: '',
@@ -38,18 +41,10 @@ const {
   submissionResult,
   handleSubmit
 } = useApplicationSubmission<WebinarFormState, Awaited<ReturnType<typeof submitWebinarRegistration>>>({
-  validate: () => {
-    if (!formEl.value?.checkValidity()) {
-      formEl.value?.reportValidity()
-      return false
-    }
-
-    return true
-  },
+  validate: () => validateNativeForm(formEl.value),
   getFormState: () => form,
   submit: (formState) => submitWebinarRegistration(formState, {
-    portalApiBaseUrl: runtimeConfig.public.portalApiBaseUrl,
-    fetcher: websitePortalFetcher,
+    ...portalSubmissionOptions,
     submissionType: props.submissionType,
     sourceUrl
   }),
@@ -84,117 +79,69 @@ const {
       :aria-busy="submitting"
       @submit.prevent="handleSubmit"
     >
-      <div class="watch-webinar-form__field watch-webinar-form__field--full">
-        <label
-          class="sr-only"
-          for="webinar-business-email"
-        >
-          Business email
-        </label>
-        <input
-          id="webinar-business-email"
-          v-model="form.businessEmail"
-          class="watch-webinar-form__control"
-          name="businessEmail"
-          type="email"
-          autocomplete="email"
-          placeholder="Business email*"
+      <ApplicationTextField
+        id="webinar-business-email"
+        v-model="form.businessEmail"
+        class="watch-webinar-form__field--full"
+        label="Business email"
+        name="businessEmail"
+        type="email"
+        autocomplete="email"
+        placeholder="Business email*"
+        label-visually-hidden
+        variant="webinar"
+        required
+      />
+
+      <div class="watch-webinar-form__row">
+        <ApplicationTextField
+          id="webinar-first-name"
+          v-model="form.firstName"
+          label="First name"
+          name="firstName"
+          autocomplete="given-name"
+          placeholder="First name *"
+          label-visually-hidden
+          variant="webinar"
           required
-        >
+        />
+
+        <ApplicationTextField
+          id="webinar-last-name"
+          v-model="form.lastName"
+          label="Last name"
+          name="lastName"
+          autocomplete="family-name"
+          placeholder="Last name *"
+          label-visually-hidden
+          variant="webinar"
+          required
+        />
       </div>
 
       <div class="watch-webinar-form__row">
-        <div class="watch-webinar-form__field">
-          <label
-            class="sr-only"
-            for="webinar-first-name"
-          >
-            First name
-          </label>
-          <input
-            id="webinar-first-name"
-            v-model="form.firstName"
-            class="watch-webinar-form__control"
-            name="firstName"
-            type="text"
-            autocomplete="given-name"
-            placeholder="First name *"
-            required
-          >
-        </div>
+        <ApplicationTextField
+          id="webinar-company-name"
+          v-model="form.companyName"
+          label="Company name"
+          name="companyName"
+          autocomplete="organization"
+          placeholder="Company name"
+          label-visually-hidden
+          variant="webinar"
+        />
 
-        <div class="watch-webinar-form__field">
-          <label
-            class="sr-only"
-            for="webinar-last-name"
-          >
-            Last name
-          </label>
-          <input
-            id="webinar-last-name"
-            v-model="form.lastName"
-            class="watch-webinar-form__control"
-            name="lastName"
-            type="text"
-            autocomplete="family-name"
-            placeholder="Last name *"
-            required
-          >
-        </div>
-      </div>
-
-      <div class="watch-webinar-form__row">
-        <div class="watch-webinar-form__field">
-          <label
-            class="sr-only"
-            for="webinar-company-name"
-          >
-            Company name
-          </label>
-          <input
-            id="webinar-company-name"
-            v-model="form.companyName"
-            class="watch-webinar-form__control"
-            name="companyName"
-            type="text"
-            autocomplete="organization"
-            placeholder="Company name"
-          >
-        </div>
-
-        <div class="watch-webinar-form__field watch-webinar-form__select-field">
-          <label
-            class="sr-only"
-            for="webinar-state"
-          >
-            State
-          </label>
-          <select
-            id="webinar-state"
-            v-model="form.state"
-            class="watch-webinar-form__control watch-webinar-form__select"
-            name="state"
-            required
-          >
-            <option
-              value=""
-              disabled
-            >
-              Select state*
-            </option>
-            <option
-              v-for="state in stateOptions"
-              :key="state.value"
-              :value="state.value"
-            >
-              {{ state.label }}
-            </option>
-          </select>
-          <span
-            class="watch-webinar-form__chevron"
-            aria-hidden="true"
-          />
-        </div>
+        <ApplicationSelectField
+          id="webinar-state"
+          v-model="form.state"
+          label="State"
+          name="state"
+          :options="stateOptions"
+          placeholder="Select state*"
+          label-visually-hidden
+          variant="webinar"
+          required
+        />
       </div>
 
       <SiteFormSubmit

@@ -208,6 +208,80 @@ describe('ApplicationTextField described text (HIR-369)', () => {
   })
 })
 
+describe('neutral shared field contract (HIR-600)', () => {
+  it('forwards native text constraints without an attorney-specific class dependency', () => {
+    const wrapper = mount(ApplicationTextField, {
+      props: {
+        id: 'neutral-phone',
+        modelValue: '',
+        label: 'Phone',
+        name: 'phone',
+        type: 'tel',
+        autocomplete: 'tel-national',
+        inputmode: 'tel',
+        maxlength: 40,
+        pattern: '\\d{10}',
+        title: 'Enter ten digits.',
+        variant: 'co-branded'
+      }
+    })
+
+    const input = wrapper.get('input')
+
+    expect(wrapper.classes()).toEqual(expect.arrayContaining(['form-field', 'form-field--co-branded']))
+    expect(wrapper.html()).not.toContain('attorney-application-form__')
+    expect(input.attributes()).toMatchObject({
+      autocomplete: 'tel-national',
+      inputmode: 'tel',
+      maxlength: '40',
+      name: 'phone',
+      pattern: '\\d{10}',
+      title: 'Enter ten digits.',
+      type: 'tel'
+    })
+    expect(input.attributes('placeholder')).toBeUndefined()
+  })
+
+  it('supports an enabled placeholder and disabled domain options in selects', () => {
+    const wrapper = mount(ApplicationSelectField, {
+      props: {
+        id: 'contact-method',
+        modelValue: '',
+        label: 'Preferred contact method',
+        name: 'preferredContactMethod',
+        options: [
+          { value: 'email', label: 'Email' },
+          { value: 'phone', label: 'Phone', disabled: true }
+        ],
+        placeholder: 'No preference',
+        placeholderDisabled: false
+      }
+    })
+
+    const options = wrapper.findAll('option')
+
+    expect(options[0]!.attributes('disabled')).toBeUndefined()
+    expect(options[0]!.text()).toBe('No preference')
+    expect(options[2]!.attributes('disabled')).toBeDefined()
+  })
+
+  it('keeps visually hidden labels free of visual required markers', () => {
+    const wrapper = mount(ApplicationTextField, {
+      props: {
+        id: 'contact-email',
+        modelValue: '',
+        label: 'Email',
+        name: 'email',
+        labelVisuallyHidden: true,
+        required: true
+      }
+    })
+
+    expect(wrapper.get('label').text()).toBe('Email')
+    expect(wrapper.get('input').attributes('required')).toBeDefined()
+  })
+})
+
 describe('Attorney and CDFA phone parity (HIR-369)', () => {
   it('presents consistent US phone instructions and validation', () => {
     const attorneyWrapper = mountAttorneyForm()
@@ -328,7 +402,7 @@ describe('aria-invalid placement in fieldsets (HIR-369)', () => {
       }
     })
 
-    const stateList = wrapper.get('.attorney-application-form__state-list')
+    const stateList = wrapper.get('.form-checkbox-group__options')
 
     expect(stateList.attributes('aria-invalid')).toBeUndefined()
     expect(stateList.attributes('aria-describedby')).toBeUndefined()

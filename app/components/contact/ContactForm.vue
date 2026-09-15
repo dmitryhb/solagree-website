@@ -1,13 +1,15 @@
 <script setup lang="ts">
+import ApplicationTextField from '~/components/application/ApplicationTextField.vue'
+import { usePortalFormSubmissionOptions } from '~/composables/usePortalFormSubmissionOptions'
 import {
   getContactSubmissionErrorMessage,
   submitContactSubmission
 } from '~/services/contact-submission-api'
-import { websitePortalFetcher } from '~/services/portal-api'
 import { useSourceUrl } from '~/composables/useSourceUrl'
 import type { ContactFormState } from '~/types/contact'
+import { validateNativeForm } from '~/utils/native-form-validation'
 
-const runtimeConfig = useRuntimeConfig()
+const portalSubmissionOptions = usePortalFormSubmissionOptions()
 const { trackEvent } = useGoogleAnalytics()
 const formEl = ref<HTMLFormElement | null>(null)
 const submitted = ref(false)
@@ -27,18 +29,10 @@ const {
   submissionResult,
   handleSubmit
 } = useApplicationSubmission<ContactFormState, Awaited<ReturnType<typeof submitContactSubmission>>>({
-  validate: () => {
-    if (!formEl.value?.checkValidity()) {
-      formEl.value?.reportValidity()
-      return false
-    }
-
-    return true
-  },
+  validate: () => validateNativeForm(formEl.value),
   getFormState: () => form,
   submit: (formState) => submitContactSubmission(formState, {
-    portalApiBaseUrl: runtimeConfig.public.portalApiBaseUrl,
-    fetcher: websitePortalFetcher,
+    ...portalSubmissionOptions,
     sourceUrl: sourceUrl
   }),
   onSuccess: () => {
@@ -73,65 +67,53 @@ const {
     :aria-busy="submitting"
     @submit.prevent="handleSubmit"
   >
-    <label
-      class="sr-only"
-      for="contact-name"
-    >
-      Name
-    </label>
-    <input
+    <ApplicationTextField
       id="contact-name"
       v-model="form.name"
+      label="Name"
       name="name"
-      type="text"
       autocomplete="name"
       placeholder="Name"
+      label-visually-hidden
+      variant="contact"
       required
-    >
+    />
 
-    <label
-      class="sr-only"
-      for="contact-email"
-    >
-      Email
-    </label>
-    <input
+    <ApplicationTextField
       id="contact-email"
       v-model="form.email"
+      label="Email"
       name="email"
       type="email"
       autocomplete="email"
       placeholder="Email"
+      label-visually-hidden
+      variant="contact"
       required
-    >
+    />
 
-    <label
-      class="sr-only"
-      for="contact-phone"
-    >
-      Phone
-    </label>
-    <input
+    <ApplicationTextField
       id="contact-phone"
       v-model="form.phone"
+      label="Phone"
       name="phone"
       type="tel"
       autocomplete="tel"
       placeholder="Phone (optional)"
-    >
+      label-visually-hidden
+      variant="contact"
+    />
 
-    <label
-      class="sr-only"
-      for="contact-message"
-    >
-      Message
-    </label>
-    <textarea
+    <ApplicationTextField
       id="contact-message"
       v-model="form.message"
+      label="Message"
       name="message"
-      rows="5"
       placeholder="Message"
+      label-visually-hidden
+      multiline
+      rows="5"
+      variant="contact"
       required
     />
 

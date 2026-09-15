@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import FormCheckboxField from '~/components/form/FormCheckboxField.vue'
 import {
   cdfaCertificationStatusOptions,
   cdfaClientExperienceOptions,
@@ -18,19 +19,19 @@ const {
 
 <template>
   <section
-    class="attorney-application-form"
+    class="application-form"
     aria-labelledby="cdfa-application-title"
   >
     <h1
       id="cdfa-application-title"
-      class="attorney-application-form__title"
+      class="application-form__title"
     >
       CDFA® Network
     </h1>
 
     <form
       ref="formEl"
-      class="attorney-application-form__form"
+      class="application-form__form"
       novalidate
       :aria-busy="submitting"
       @submit.prevent="handleSubmit"
@@ -124,7 +125,7 @@ const {
       />
       <p
         id="cdfa-service-area-hint"
-        class="attorney-application-form__hint"
+        class="form-field__hint"
       >
         CDFAs can work remotely nationwide, but we match based on client preference
       </p>
@@ -166,24 +167,20 @@ const {
         v-model="form.smsOptIn"
       />
 
-      <label class="attorney-application-form__terms">
-        <input
-          v-model="form.termsAccepted"
-          name="termsAccepted"
-          type="checkbox"
-          required
+      <FormCheckboxField
+        v-model="form.termsAccepted"
+        name="termsAccepted"
+        required
+      >
+        I have read and agree to the
+        <NuxtLink
+          to="/legal/terms-of-service"
+          target="_blank"
+          rel="noopener noreferrer"
         >
-        <span>
-          I have read and agree to the
-          <NuxtLink
-            to="/legal/terms-of-service"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            terms and conditions
-          </NuxtLink>.
-        </span>
-      </label>
+          terms and conditions
+        </NuxtLink>.
+      </FormCheckboxField>
 
       <SiteFormSubmit
         label="SEND"

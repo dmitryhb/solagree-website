@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import FormCheckboxGroup from '~/components/form/FormCheckboxGroup.vue'
 import { stateOptions } from '~/data/us-states'
 
 const selectedStates = defineModel<string[]>({ required: true })
@@ -9,45 +10,15 @@ defineProps<{
 </script>
 
 <template>
-  <fieldset
-    class="attorney-application-form__fieldset"
-    :class="{ 'attorney-application-form__fieldset--invalid': hasError }"
-  >
-    <legend>
-      State(s) of Bar License<span aria-hidden="true">*</span>
-    </legend>
-    <p
-      id="attorney-bar-states-hint"
-      class="attorney-application-form__hint"
-    >
-      Select all that apply.
-    </p>
-
-    <div class="attorney-application-form__state-list">
-      <label
-        v-for="state in stateOptions"
-        :key="state.value"
-        class="attorney-application-form__checkbox-card"
-      >
-        <input
-          v-model="selectedStates"
-          type="checkbox"
-          name="barStates"
-          :value="state.value"
-          :aria-invalid="hasError ? 'true' : undefined"
-          :aria-describedby="hasError ? 'attorney-bar-states-hint attorney-bar-states-error' : 'attorney-bar-states-hint'"
-        >
-        <span>{{ state.label }}</span>
-      </label>
-    </div>
-
-    <p
-      v-if="hasError"
-      id="attorney-bar-states-error"
-      class="attorney-application-form__error"
-      role="alert"
-    >
-      Select at least one state.
-    </p>
-  </fieldset>
+  <FormCheckboxGroup
+    v-model="selectedStates"
+    name="barStates"
+    legend="State(s) of Bar License"
+    :options="stateOptions"
+    hint="Select all that apply."
+    hint-id="attorney-bar-states-hint"
+    :error="hasError ? 'Select at least one state.' : undefined"
+    error-id="attorney-bar-states-error"
+    required
+  />
 </template>

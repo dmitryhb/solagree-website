@@ -5,8 +5,12 @@ import {
   getAttorneyApplicationSubmissionErrorMessage,
   submitAttorneyApplication
 } from '~/services/attorney-application-api'
-import { websitePortalFetcher } from '~/services/portal-api'
+import { usePortalFormSubmissionOptions } from '~/composables/usePortalFormSubmissionOptions'
 import { focusPageDestination } from '~/utils/focus-destination'
+import {
+  focusFirstNativeInvalidControl,
+  validateNativeForm
+} from '~/utils/native-form-validation'
 import type {
   AttorneyApplicationFormState,
   AttorneyLicenseNumberRow
@@ -34,7 +38,7 @@ export interface UseAttorneyApplicationFormReturn {
 
 export const useAttorneyApplicationForm = (): UseAttorneyApplicationFormReturn => {
   const currentYear = new Date().getFullYear()
-  const runtimeConfig = useRuntimeConfig()
+  const portalSubmissionOptions = usePortalFormSubmissionOptions()
   const { trackEvent } = useGoogleAnalytics()
   const formEl = ref<HTMLFormElement | null>(null)
   const hasAttemptedSubmit = ref(false)
@@ -108,17 +112,6 @@ export const useAttorneyApplicationForm = (): UseAttorneyApplicationFormReturn =
     }
   }
 
-  const focusFirstNativeInvalidControl = async (): Promise<void> => {
-    await nextTick()
-
-    const controls = formEl.value?.querySelectorAll<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>(
-      'input, select, textarea'
-    )
-    const firstInvalidControl = controls && Array.from(controls).find((control) => !control.validity.valid)
-
-    firstInvalidControl?.focus()
-  }
-
   const focusFirstBarState = async (): Promise<void> => {
     await nextTick()
 
@@ -130,13 +123,11 @@ export const useAttorneyApplicationForm = (): UseAttorneyApplicationFormReturn =
       hasAttemptedSubmit.value = true
 
       const hasCustomErrors = hasBarStateError.value || hasLicenseNumberError.value
-      const hasNativeErrors = !formEl.value?.checkValidity()
+      const hasNativeErrors = !validateNativeForm(formEl.value)
 
       if (hasNativeErrors || hasCustomErrors) {
-        formEl.value?.reportValidity()
-
         if (hasNativeErrors) {
-          await focusFirstNativeInvalidControl()
+          await focusFirstNativeInvalidControl(formEl.value)
         } else if (hasBarStateError.value) {
           await focusFirstBarState()
         }
@@ -148,8 +139,7 @@ export const useAttorneyApplicationForm = (): UseAttorneyApplicationFormReturn =
     },
     getFormState: createSubmissionState,
     submit: (formState) => submitAttorneyApplication(formState, {
-      portalApiBaseUrl: runtimeConfig.public.portalApiBaseUrl,
-      fetcher: websitePortalFetcher
+      ...portalSubmissionOptions
     }),
     onSuccess: async () => {
       trackEvent('partner_application_submitted', {

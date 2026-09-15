@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import type { CoBrandedPageType } from '#shared/co-branded-page-variant'
+import ApplicationSelectField from '~/components/application/ApplicationSelectField.vue'
+import ApplicationTextField from '~/components/application/ApplicationTextField.vue'
 import { useModalDialog } from '~/composables/useModalDialog'
+import { usePortalFormSubmissionOptions } from '~/composables/usePortalFormSubmissionOptions'
 import {
   getConsultRequestSubmissionErrorMessage,
   submitCoBrandedConsultRequest
 } from '~/services/consult-request-api'
-import { websitePortalFetcher } from '~/services/portal-api'
 import type { CoBrandedConsultRequestFormState } from '~/types/consult-request'
+import { validateNativeForm } from '~/utils/native-form-validation'
 
 const props = defineProps<{
   open: boolean
@@ -19,13 +22,12 @@ const emit = defineEmits<{
   close: []
 }>()
 
-const runtimeConfig = useRuntimeConfig()
+const portalSubmissionOptions = usePortalFormSubmissionOptions()
 const sourceUrl = useSourceUrl()
 const { trackEvent } = useGoogleAnalytics()
 
 const formEl = ref<HTMLFormElement | null>(null)
 const panelEl = ref<HTMLElement | null>(null)
-const firstNameInput = ref<HTMLInputElement | null>(null)
 const successHeading = ref<HTMLElement | null>(null)
 const submitted = ref(false)
 
@@ -50,18 +52,10 @@ const {
   resetSubmissionResult,
   handleSubmit
 } = useApplicationSubmission<CoBrandedConsultRequestFormState, Awaited<ReturnType<typeof submitCoBrandedConsultRequest>>>({
-  validate: () => {
-    if (!formEl.value?.checkValidity()) {
-      formEl.value?.reportValidity()
-      return false
-    }
-
-    return true
-  },
+  validate: () => validateNativeForm(formEl.value),
   getFormState: () => form,
   submit: (formState) => submitCoBrandedConsultRequest(formState, {
-    portalApiBaseUrl: runtimeConfig.public.portalApiBaseUrl,
-    fetcher: websitePortalFetcher,
+    ...portalSubmissionOptions,
     pageType: props.pageType,
     referralCode: props.partnerSlug,
     sourceUrl
@@ -98,7 +92,7 @@ const handleClose = (): void => {
 
 const modalDialog = useModalDialog({
   getContainer: () => panelEl.value,
-  getInitialFocusTarget: () => firstNameInput.value,
+  getInitialFocusTarget: () => formEl.value?.querySelector<HTMLInputElement>('#co-branded-first-name') ?? null,
   onRequestClose: handleClose
 })
 
@@ -202,60 +196,57 @@ watch(
           </div>
 
           <div class="co-branded-consult-modal__fields">
-            <label for="co-branded-first-name">
-              <span>First name</span>
-              <input
-                id="co-branded-first-name"
-                ref="firstNameInput"
-                v-model="form.firstName"
-                name="firstName"
-                type="text"
-                autocomplete="given-name"
-                maxlength="60"
-                required
-              >
-            </label>
+            <ApplicationTextField
+              id="co-branded-first-name"
+              v-model="form.firstName"
+              label="First name"
+              name="firstName"
+              autocomplete="given-name"
+              maxlength="60"
+              :show-required-indicator="false"
+              variant="co-branded"
+              required
+            />
 
-            <label for="co-branded-last-name">
-              <span>Last name</span>
-              <input
-                id="co-branded-last-name"
-                v-model="form.lastName"
-                name="lastName"
-                type="text"
-                autocomplete="family-name"
-                maxlength="60"
-                required
-              >
-            </label>
+            <ApplicationTextField
+              id="co-branded-last-name"
+              v-model="form.lastName"
+              label="Last name"
+              name="lastName"
+              autocomplete="family-name"
+              maxlength="60"
+              :show-required-indicator="false"
+              variant="co-branded"
+              required
+            />
 
-            <label for="co-branded-email">
-              <span>Email</span>
-              <input
-                id="co-branded-email"
-                v-model="form.email"
-                name="email"
-                type="email"
-                autocomplete="email"
-                maxlength="254"
-                required
-              >
-            </label>
+            <ApplicationTextField
+              id="co-branded-email"
+              v-model="form.email"
+              label="Email"
+              name="email"
+              type="email"
+              autocomplete="email"
+              maxlength="254"
+              :show-required-indicator="false"
+              variant="co-branded"
+              required
+            />
 
-            <label for="co-branded-phone">
-              <span>Phone <small>(optional)</small></span>
-              <input
-                id="co-branded-phone"
-                v-model="form.phone"
-                name="phone"
-                type="tel"
-                autocomplete="tel-national"
-                inputmode="tel"
-                pattern="\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}"
-                title="Use a 10-digit US phone number, e.g. 415-555-1234."
-                maxlength="40"
-              >
-            </label>
+            <ApplicationTextField
+              id="co-branded-phone"
+              v-model="form.phone"
+              label="Phone"
+              optional-label="(optional)"
+              name="phone"
+              type="tel"
+              autocomplete="tel-national"
+              inputmode="tel"
+              pattern="\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}"
+              title="Use a 10-digit US phone number, e.g. 415-555-1234."
+              maxlength="40"
+              variant="co-branded"
+            />
 
             <FormSmsOptInField
               id="co-branded-sms-opt-in"
@@ -264,27 +255,21 @@ watch(
               label="I agree to receive text messages from Solagree about my consult request."
             />
 
-            <label
+            <ApplicationSelectField
               v-if="hasPhone"
-              for="co-branded-preferred-contact"
-            >
-              <span>Preferred contact method <small>(optional)</small></span>
-              <select
-                id="co-branded-preferred-contact"
-                v-model="form.preferredContactMethod"
-                name="preferredContactMethod"
-              >
-                <option value="">
-                  No preference
-                </option>
-                <option value="email">
-                  Email
-                </option>
-                <option value="phone">
-                  Phone
-                </option>
-              </select>
-            </label>
+              id="co-branded-preferred-contact"
+              v-model="form.preferredContactMethod"
+              label="Preferred contact method"
+              optional-label="(optional)"
+              name="preferredContactMethod"
+              :options="[
+                { value: 'email', label: 'Email' },
+                { value: 'phone', label: 'Phone' }
+              ]"
+              placeholder="No preference"
+              :placeholder-disabled="false"
+              variant="co-branded"
+            />
 
             <template v-if="isAttorneyVariant">
               <p
@@ -294,31 +279,29 @@ watch(
                 Before scheduling, we check for a conflict of interest. We will not contact your spouse — we only use this information internally to check our records.
               </p>
 
-              <label for="co-branded-spouse-first-name">
-                <span>Spouse first name</span>
-                <input
-                  id="co-branded-spouse-first-name"
-                  v-model="form.spouseFirstName"
-                  name="spouseFirstName"
-                  type="text"
-                  autocomplete="section-spouse given-name"
-                  maxlength="60"
-                  required
-                >
-              </label>
+              <ApplicationTextField
+                id="co-branded-spouse-first-name"
+                v-model="form.spouseFirstName"
+                label="Spouse first name"
+                name="spouseFirstName"
+                autocomplete="section-spouse given-name"
+                maxlength="60"
+                :show-required-indicator="false"
+                variant="co-branded"
+                required
+              />
 
-              <label for="co-branded-spouse-last-name">
-                <span>Spouse last name</span>
-                <input
-                  id="co-branded-spouse-last-name"
-                  v-model="form.spouseLastName"
-                  name="spouseLastName"
-                  type="text"
-                  autocomplete="section-spouse family-name"
-                  maxlength="60"
-                  required
-                >
-              </label>
+              <ApplicationTextField
+                id="co-branded-spouse-last-name"
+                v-model="form.spouseLastName"
+                label="Spouse last name"
+                name="spouseLastName"
+                autocomplete="section-spouse family-name"
+                maxlength="60"
+                :show-required-indicator="false"
+                variant="co-branded"
+                required
+              />
             </template>
           </div>
 

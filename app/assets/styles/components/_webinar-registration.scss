@@ -193,57 +193,6 @@
   gap: 1rem;
 }
 
-.watch-webinar-form__field {
-  position: relative;
-  min-width: 0;
-}
-
-.watch-webinar-form__control {
-  width: 100%;
-  min-height: 52px;
-  border: 1px solid transparent;
-  border-radius: 10px;
-  background: #fafcfd;
-  color: var(--color-ink);
-  font-family: var(--font-nav);
-  font-size: 1rem;
-  line-height: 1.35;
-  letter-spacing: 0;
-  padding: 0.875rem 1rem;
-  transition:
-    border-color 160ms ease,
-    box-shadow 160ms ease,
-    background-color 160ms ease;
-}
-
-.watch-webinar-form__control::placeholder {
-  color: var(--color-ink);
-  opacity: 1;
-}
-
-.watch-webinar-form__control:focus {
-  outline: none;
-  border-color: rgba(62, 64, 89, 0.38);
-  box-shadow: 0 0 0 3px rgba(62, 64, 89, 0.12);
-}
-
-.watch-webinar-form__select {
-  appearance: none;
-  padding-right: 2.75rem;
-}
-
-.watch-webinar-form__chevron {
-  position: absolute;
-  top: 50%;
-  right: 1rem;
-  width: 10px;
-  height: 10px;
-  border-right: 2px solid #0a0e12;
-  border-bottom: 2px solid #0a0e12;
-  pointer-events: none;
-  transform: translateY(-65%) rotate(45deg);
-}
-
 .watch-webinar-form__submit {
   display: inline-flex;
   width: fit-content;

@@ -15,7 +15,7 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <fieldset class="attorney-application-form__fieldset">
+  <fieldset class="form-fieldset">
     <legend>
       License #<span aria-hidden="true">*</span>
     </legend>
@@ -37,6 +37,7 @@ const emit = defineEmits<{
           :value="row.value"
           :name="`licenseNumber-${index}`"
           type="text"
+          class="form-field__control"
           placeholder="Type here..."
           :aria-invalid="hasAttemptedSubmit && !row.value.trim() ? 'true' : undefined"
           :aria-describedby="hasError ? 'attorney-license-error' : undefined"
@@ -65,7 +66,7 @@ const emit = defineEmits<{
     <p
       v-if="hasError"
       id="attorney-license-error"
-      class="attorney-application-form__error"
+      class="form-field__error"
       role="alert"
     >
       Enter a license number for every license field.

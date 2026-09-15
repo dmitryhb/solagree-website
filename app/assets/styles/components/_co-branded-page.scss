@@ -1123,8 +1123,6 @@
 
 .co-branded-consult-modal__close:focus-visible,
 .co-branded-consult-modal__submit:focus-visible,
-.co-branded-consult-modal__fields input:focus,
-.co-branded-consult-modal__fields select:focus,
 .co-branded-consult-modal__error:focus,
 .co-branded-consult-modal h2:focus {
   outline: 3px solid rgba(62, 64, 89, 0.28);
@@ -1177,44 +1175,12 @@
   gap: 16px;
 }
 
-.co-branded-consult-modal__fields label {
+.co-branded-consult-modal__fields .sms-opt-in__label {
   display: grid;
   gap: 8px;
   color: var(--color-ink);
   font-size: 14px;
   font-weight: 700;
-}
-
-.co-branded-consult-modal__fields label small {
-  color: #73758a;
-  font: inherit;
-  font-weight: 500;
-}
-
-.co-branded-consult-modal__fields input,
-.co-branded-consult-modal__fields select {
-  width: 100%;
-  min-height: 48px;
-  border: 1px solid #d8d9e4;
-  border-radius: 6px;
-  background: var(--color-white);
-  color: #33354d;
-  font: inherit;
-  font-weight: 500;
-  padding: 0 14px;
-}
-
-.co-branded-consult-modal__fields select {
-  appearance: none;
-  background-image:
-    linear-gradient(45deg, transparent 50%, currentColor 50%),
-    linear-gradient(135deg, currentColor 50%, transparent 50%);
-  background-position:
-    calc(100% - 18px) 52%,
-    calc(100% - 13px) 52%;
-  background-repeat: no-repeat;
-  background-size: 5px 5px;
-  padding-right: 42px;
 }
 
 .co-branded-consult-modal__conflict-copy {

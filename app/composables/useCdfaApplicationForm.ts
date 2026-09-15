@@ -3,8 +3,9 @@ import {
   getCdfaApplicationSubmissionErrorMessage,
   submitCdfaApplication
 } from '~/services/cdfa-application-api'
-import { websitePortalFetcher } from '~/services/portal-api'
+import { usePortalFormSubmissionOptions } from '~/composables/usePortalFormSubmissionOptions'
 import { focusPageDestination } from '~/utils/focus-destination'
+import { validateNativeForm } from '~/utils/native-form-validation'
 import type { CdfaApplicationFormState } from '~/types/cdfa-application'
 import type { ApplicationResult } from '~/types/form-options'
 
@@ -19,7 +20,7 @@ export interface UseCdfaApplicationFormReturn {
 }
 
 export const useCdfaApplicationForm = (): UseCdfaApplicationFormReturn => {
-  const runtimeConfig = useRuntimeConfig()
+  const portalSubmissionOptions = usePortalFormSubmissionOptions()
   const { trackEvent } = useGoogleAnalytics()
   const formEl = ref<HTMLFormElement | null>(null)
   const hasAttemptedSubmit = ref(false)
@@ -48,9 +49,7 @@ export const useCdfaApplicationForm = (): UseCdfaApplicationFormReturn => {
 
       const hasCustomErrors = hasSpecializationError.value
 
-      if (!formEl.value?.checkValidity() || hasCustomErrors) {
-        formEl.value?.reportValidity()
-
+      if (!validateNativeForm(formEl.value) || hasCustomErrors) {
         if (hasCustomErrors) {
           await focusFirstSpecialization()
         }
@@ -62,8 +61,7 @@ export const useCdfaApplicationForm = (): UseCdfaApplicationFormReturn => {
     },
     getFormState: () => form,
     submit: (formState) => submitCdfaApplication(formState, {
-      portalApiBaseUrl: runtimeConfig.public.portalApiBaseUrl,
-      fetcher: websitePortalFetcher
+      ...portalSubmissionOptions
     }),
     onSuccess: async () => {
       trackEvent('partner_application_submitted', {

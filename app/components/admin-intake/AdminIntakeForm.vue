@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import ApplicationTextField from '~/components/application/ApplicationTextField.vue'
+import { usePortalFormSubmissionOptions } from '~/composables/usePortalFormSubmissionOptions'
 import {
   adminIntakeInitialState,
   adminIntakePageContent,
@@ -8,16 +10,16 @@ import {
   getAdminIntakeSubmissionErrorMessage,
   submitAdminIntake
 } from '~/services/admin-intake-api'
-import { websitePortalFetcher } from '~/services/portal-api'
 import { useSourceUrl } from '~/composables/useSourceUrl'
 import { focusPageDestination } from '~/utils/focus-destination'
+import { validateNativeForm } from '~/utils/native-form-validation'
 import type { AdminIntakeFormState } from '~/types/admin-intake'
 
 const props = defineProps<{
   slug: string
 }>()
 
-const runtimeConfig = useRuntimeConfig()
+const portalSubmissionOptions = usePortalFormSubmissionOptions()
 
 const formEl = ref<HTMLFormElement | null>(null)
 
@@ -34,18 +36,10 @@ const {
   submissionResult,
   handleSubmit
 } = useApplicationSubmission<AdminIntakeFormState, Awaited<ReturnType<typeof submitAdminIntake>>>({
-  validate: () => {
-    if (!formEl.value?.checkValidity()) {
-      formEl.value?.reportValidity()
-      return false
-    }
-
-    return true
-  },
+  validate: () => validateNativeForm(formEl.value),
   getFormState: () => form,
   submit: (formState) => submitAdminIntake(formState, props.slug, {
-    portalApiBaseUrl: runtimeConfig.public.portalApiBaseUrl,
-    fetcher: websitePortalFetcher,
+    ...portalSubmissionOptions,
     sourceUrl: sourceUrl
   }),
   onSuccess: async () => {
@@ -59,27 +53,27 @@ const {
 
 <template>
   <section
-    class="consult-request-form admin-intake-form"
+    class="request-form admin-intake-form"
     aria-labelledby="admin-intake-title"
   >
-    <div class="consult-request-form__intro">
+    <div class="request-form__intro">
       <p class="eyebrow">
         {{ adminIntakePageContent.eyebrow }}
       </p>
       <h1
         id="admin-intake-title"
-        class="consult-request-form__title"
+        class="request-form__title"
       >
         {{ adminIntakePageContent.title }}
       </h1>
-      <p class="consult-request-form__copy">
+      <p class="request-form__copy">
         {{ adminIntakePageContent.description }}
       </p>
     </div>
 
     <form
       ref="formEl"
-      class="consult-request-form__form"
+      class="request-form__form"
       :aria-busy="submitting"
       @submit.prevent="handleSubmit"
     >
@@ -88,52 +82,36 @@ const {
           Your Information
         </legend>
 
-        <div class="consult-request-form__field">
-          <label for="intake-primary-first-name">
-            First name<span aria-hidden="true">*</span>
-          </label>
-          <input
-            id="intake-primary-first-name"
-            v-model="form.primaryFirstName"
-            name="primaryFirstName"
-            type="text"
-            autocomplete="given-name"
-            placeholder="Type here..."
-            maxlength="80"
-            required
-          >
-        </div>
+        <ApplicationTextField
+          id="intake-primary-first-name"
+          v-model="form.primaryFirstName"
+          label="First name"
+          name="primaryFirstName"
+          autocomplete="given-name"
+          maxlength="80"
+          required
+        />
 
-        <div class="consult-request-form__field">
-          <label for="intake-primary-last-name">
-            Last name<span aria-hidden="true">*</span>
-          </label>
-          <input
-            id="intake-primary-last-name"
-            v-model="form.primaryLastName"
-            name="primaryLastName"
-            type="text"
-            autocomplete="family-name"
-            placeholder="Type here..."
-            maxlength="80"
-            required
-          >
-        </div>
+        <ApplicationTextField
+          id="intake-primary-last-name"
+          v-model="form.primaryLastName"
+          label="Last name"
+          name="primaryLastName"
+          autocomplete="family-name"
+          maxlength="80"
+          required
+        />
 
-        <div class="consult-request-form__field">
-          <label for="intake-primary-email">
-            Email<span aria-hidden="true">*</span>
-          </label>
-          <input
-            id="intake-primary-email"
-            v-model="form.primaryEmail"
-            name="primaryEmail"
-            type="email"
-            autocomplete="email"
-            placeholder="hello@example.com"
-            required
-          >
-        </div>
+        <ApplicationTextField
+          id="intake-primary-email"
+          v-model="form.primaryEmail"
+          label="Email"
+          name="primaryEmail"
+          type="email"
+          autocomplete="email"
+          placeholder="hello@example.com"
+          required
+        />
       </fieldset>
 
       <fieldset class="admin-intake-form__fieldset">
@@ -141,51 +119,35 @@ const {
           Your Spouse’s Information
         </legend>
 
-        <div class="consult-request-form__field">
-          <label for="intake-spouse-first-name">
-            First name<span aria-hidden="true">*</span>
-          </label>
-          <input
-            id="intake-spouse-first-name"
-            v-model="form.spouseFirstName"
-            name="spouseFirstName"
-            type="text"
-            autocomplete="off"
-            placeholder="Type here..."
-            maxlength="80"
-            required
-          >
-        </div>
+        <ApplicationTextField
+          id="intake-spouse-first-name"
+          v-model="form.spouseFirstName"
+          label="First name"
+          name="spouseFirstName"
+          autocomplete="off"
+          maxlength="80"
+          required
+        />
 
-        <div class="consult-request-form__field">
-          <label for="intake-spouse-last-name">
-            Last name<span aria-hidden="true">*</span>
-          </label>
-          <input
-            id="intake-spouse-last-name"
-            v-model="form.spouseLastName"
-            name="spouseLastName"
-            type="text"
-            autocomplete="off"
-            placeholder="Type here..."
-            maxlength="80"
-            required
-          >
-        </div>
+        <ApplicationTextField
+          id="intake-spouse-last-name"
+          v-model="form.spouseLastName"
+          label="Last name"
+          name="spouseLastName"
+          autocomplete="off"
+          maxlength="80"
+          required
+        />
 
-        <div class="consult-request-form__field">
-          <label for="intake-spouse-email">
-            Email
-          </label>
-          <input
-            id="intake-spouse-email"
-            v-model="form.spouseEmail"
-            name="spouseEmail"
-            type="email"
-            autocomplete="off"
-            placeholder="hello@example.com"
-          >
-        </div>
+        <ApplicationTextField
+          id="intake-spouse-email"
+          v-model="form.spouseEmail"
+          label="Email"
+          name="spouseEmail"
+          type="email"
+          autocomplete="off"
+          placeholder="hello@example.com"
+        />
       </fieldset>
 
       <div class="admin-intake-form__privacy">
