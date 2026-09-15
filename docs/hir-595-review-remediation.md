@@ -18,7 +18,7 @@ Implementation branches start from that current develop baseline with bare issue
 | HIR-602 | Route/service error mapping | Terra/high | — |
 | HIR-603 | Shared host infrastructure | Sol/xhigh | 596, 597 |
 | HIR-604 | Qualifier tokens and shared section styles | Terra/high | 601 |
-| HIR-605 | Shell metadata and legacy redirects | Terra/high | 602, 603 |
+| HIR-605 | Shell metadata and legacy redirects | Terra/high → Sol/xhigh for SPA diagnosis | 602, 603 |
 | HIR-606 | Unused scaffolding cleanup | Luna/medium | 603 |
 | HIR-607 | Analytics title investigation | Terra/high | — |
 | HIR-608 | Independent integrated acceptance | Sol/xhigh | All above |
@@ -46,8 +46,50 @@ Memory CLI fallback: `/Users/dmitry/work/dai/agent-knowledge`, repository `solag
 
 Read-only Portal inspection found quiz-answer shape/text validation in `server/utils/consult-requests/validation.ts`, persistence in `server/utils/consult-requests/creation.ts`, and intake export in `server/utils/hubspot/form-submissions.ts`. None establishes a quiz completion or retention policy.
 
-Baseline local screenshots are under `artifacts/hir-595/` in the integration worktree: homepage, military family landing and qualifier at 390, 768, 960, 980 and 1440 CSS pixels. External requests were blocked. These are comparison inputs, not final acceptance.
+Baseline and final local screenshots are under `artifacts/hir-595/` in the integration worktree: homepage, military family landing and qualifier at 390, 768, 960, 980 and 1440 CSS pixels. External requests were blocked.
 
 ## Acceptance evidence
 
-Pending implementation, independent review and integrated QA. Do not interpret this plan as a passing verification report.
+### Reviewed revisions
+
+Verification date: 2026-09-15. Integration branch: `hir-595`.
+
+- Independent Sol integrated review covered `fa8132d..bc5d762` and found no additional production-code defects after the individual reviews and corrections.
+- The remaining test-environment finding was resolved by reviewed supplemental commit `fef116e`, integrated as `032ed23`: bare Vue tests now provide Nuxt's `definePageMeta` macro. Final `npm test` passes at `032ed23`.
+- Production build and static generation ran in the isolated `hir-608` checkout at `7646081`, whose tracked tree was identical to `bc5d762`. The later supplement changes only test setup.
+- All independent reviewers returned **reusable memory: none**; there was nothing to promote. The authoritative `origin/develop` was fetched again and remained `fa8132d`.
+
+### Repository gates
+
+| Check | Result | Local evidence under `artifacts/hir-595/` |
+| --- | --- | --- |
+| `npm test` | 344 Vitest tests across 34 files + 35 Node tests passed | `final-unit-tests.log` |
+| `npm run lint` | Passed; supplemental test setup also passed focused ESLint | `final-lint.log` |
+| `npm run typecheck` | Passed | `final-typecheck.log` |
+| `npm run build` | Passed, including resource-content validation | `final-build.log` |
+| `npm run generate` | Passed, 79 routes prerendered | `final-generate.log` |
+| `npm run verify:sitemap` | Passed | `final-sitemap.log` |
+| `npm run verify:co-branded-noindex-nginx` | Passed configuration check | `final-noindex.log` |
+| Generated HTML | One `main-content` anchor on sampled routes; quiz/embed, qualifier and review retain noindex | `static-html-checks.json` |
+| Full diff and corrections | `git diff --check` passed | Independent review comments in HIR-595 children |
+
+No knip entrypoint is configured in this repository.
+
+### Browser and visual acceptance
+
+- Independent six-form QA passed: connected labels and exact baseline control contracts, native/custom invalid focus with zero requests, pending/disabled state, focused error/success states, destinations and exact payloads. Attorney missing bar states focuses its first checkbox. All POSTs were intercepted locally. See [forms QA report](../artifacts/hir-595/forms-qa-report.md) and its reproducible runner/results.
+- Independent interactive QA passed **63/63 browser checks**, plus 100 focused Vitest and 10 Node tests: representative quiz branches, restoration/reset/back/reload and once-per-attempt completion; separate qualifier storage/events; bridge off and explicit trusted-origin delivery with unsafe origins rejected; four co-branded variants; FAQ/modal keyboard behavior; optional configuration and attorney/CDFA form lifecycle/payloads. All four page/embed variants include held error and success responses, with eight POSTs intercepted locally. See [interactive QA report](../artifacts/hir-595/interactive-qa-report.md).
+- Analytics was reproduced and verified with a fake local GA identifier and blocked external traffic. Seven browser scenarios, plus a rapid A→B→A probe, cover direct/SPA/query/hash title and deduplication behavior. See [analytics verification](analytics-page-view-verification.md).
+- HIR-605 independent re-review passed its three Chrome scenarios, nine component tests and two metadata tests. Ordinary navigation, settled repeated history, cancelled navigation and direct embed are covered. Broader independent route QA passed 10/10 direct entries and 9/9 SPA destinations after hydration, plus legacy/client redirects and 10 redirect/noindex Node tests. Every checked route retained its expected header, robots metadata and single main anchor. See [route QA matrix](../artifacts/hir-595/route-qa-results.json).
+- Attorney/CDFA standalone/embed semantic text and link arrays match the baseline exactly; all eight screenshot dimensions match. Vue's removal of whitespace-only nodes between blocks changes raw concatenated `textContent`, without changing visible copy or links.
+- Homepage and qualifier dimensions match at all five widths. Corrected family screenshots match exactly at all five widths; threshold-30 pixel differences are at most 0.00105%, consistent with the development overlay. See `after604-visual-comparison.json` and `corrected604-visual-comparison.json`.
+- All seven forms retain desktop/mobile geometry. The co-branded optional-label separator and 21px label line height were corrected and re-reviewed; native control contracts match exactly. See `corrected600-form-check.json` and `corrected600-visual-comparison.json`.
+
+### Remaining external acceptance and existing limitations
+
+- No deployment, merge, real customer submission, payment or production analytics event was performed. Live booking/payment/provider acceptance remains HIR-250.
+- nginx is not installed locally. Its redirect/noindex configuration and client equivalents are checked; actual deployed HTTP redirects and `X-Robots-Tag` headers still require the deployment environment. `/site-map` remains an intentional server-only redirect.
+- Chrome rejects the pre-existing `[-.\s]` phone patterns in attorney/CDFA/consult forms under its HTML `v`-mode grammar. Baseline source and DOM confirm these strings were unchanged. Local QA recorded that invalid phone text can reach the intercepted POST; Portal-side rejection/delivery was not tested. This is a separate existing validation issue, not a migration regression.
+- Valid partial quiz answers remain eligible for consult payloads. No existing contract establishes a TTL or completed-only rule; this execution does not invent one.
+
+Raw browser screenshots, fixture runners and logs are local acceptance artifacts, not tracked production files. No designated Notion mirror was found for these repository documents.
