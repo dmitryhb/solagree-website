@@ -80,7 +80,7 @@ const resolvedDescribedBy = computed(() => {
       {{ label }}<small
         v-if="optionalLabel"
         class="form-field__optional"
-      > {{ optionalLabel }}</small><span
+      >{{ ' ' + optionalLabel }}</small><span
         v-if="required && showRequiredIndicator && !labelVisuallyHidden"
         class="form-field__required"
         aria-hidden="true"

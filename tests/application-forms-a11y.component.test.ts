@@ -215,6 +215,7 @@ describe('neutral shared field contract (HIR-600)', () => {
         id: 'neutral-phone',
         modelValue: '',
         label: 'Phone',
+        optionalLabel: '(optional)',
         name: 'phone',
         type: 'tel',
         autocomplete: 'tel-national',
@@ -240,6 +241,7 @@ describe('neutral shared field contract (HIR-600)', () => {
       type: 'tel'
     })
     expect(input.attributes('placeholder')).toBeUndefined()
+    expect(input.element.labels?.[0]?.textContent?.trim()).toBe('Phone (optional)')
   })
 
   it('supports an enabled placeholder and disabled domain options in selects', () => {
@@ -248,6 +250,7 @@ describe('neutral shared field contract (HIR-600)', () => {
         id: 'contact-method',
         modelValue: '',
         label: 'Preferred contact method',
+        optionalLabel: '(optional)',
         name: 'preferredContactMethod',
         options: [
           { value: 'email', label: 'Email' },
@@ -263,6 +266,7 @@ describe('neutral shared field contract (HIR-600)', () => {
     expect(options[0]!.attributes('disabled')).toBeUndefined()
     expect(options[0]!.text()).toBe('No preference')
     expect(options[2]!.attributes('disabled')).toBeDefined()
+    expect(wrapper.get('select').element.labels?.[0]?.textContent?.trim()).toBe('Preferred contact method (optional)')
   })
 
   it('keeps visually hidden labels free of visual required markers', () => {
