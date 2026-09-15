@@ -10,7 +10,7 @@ export default defineConfig({
     channel: 'chrome'
   },
   webServer: {
-    command: 'pnpm exec nuxt dev --host 127.0.0.1 --port 3106',
+    command: 'npm exec nuxt -- dev --host 127.0.0.1 --port 3106',
     url: 'http://127.0.0.1:3106/quiz',
     timeout: 60000,
     reuseExistingServer: false

@@ -59,6 +59,38 @@ directly to ESLint:
 npx eslint app/components/ExampleComponent.vue app/utils/example.ts
 ```
 
+## Testing
+
+Install the npm dependencies before running tests:
+
+```bash
+npm install
+```
+
+Run all local unit, component, and `node:test` suites:
+
+```bash
+npm test
+```
+
+The aggregate command runs `npm run test:vitest` for Vue, Nuxt, and component
+tests, then `npm run test:node` for TypeScript `node:test` suites. It does not
+start a browser or call external providers. Individual `test:*` scripts remain
+available for focused checks.
+
+Browser acceptance uses Playwright and is kept separate because it requires a
+local browser installation and starts a local web server:
+
+```bash
+npm run test:initial-consult-booking-e2e
+npm run test:case-qualifier-e2e
+npm exec playwright test -c playwright.resources.config.ts
+```
+
+These commands use the repository's npm-installed `vite` and `nuxt` binaries.
+They are local browser checks; provider-backed acceptance needs the required
+provider configuration and must be run deliberately outside `npm test`.
+
 ## Portal API integration
 
 The attorney application and Solagree consult forms submit to the Solagree Portal API.
