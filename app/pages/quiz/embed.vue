@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import SolagreeQuizEmbed from '~/components/quiz/SolagreeQuizEmbed.vue'
 
+definePageMeta({
+  appShell: 'bare'
+})
+
 useSolagreeSeo({
   title: 'Solagree Quiz Embed',
   description: 'Embedded Solagree quiz for partner sites.',

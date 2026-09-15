@@ -1,4 +1,8 @@
 <script setup lang="ts">
+definePageMeta({
+  appShell: 'internal'
+})
+
 useSolagreeSeo({
   title: 'Foundation Review | Solagree',
   description: 'Internal signoff surface for the live Solagree foundation layer.',

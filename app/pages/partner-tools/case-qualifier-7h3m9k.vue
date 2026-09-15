@@ -1,4 +1,8 @@
 <script setup lang="ts">
+definePageMeta({
+  appShell: 'bare'
+})
+
 useSolagreeSeo({
   title: 'Partner Case Qualifier',
   description: 'An interactive case-selection guide for approved Solagree partners.',

@@ -33,6 +33,12 @@ Review and QA use independent agents. Public-contract changes and the full integ
 - Preserve HTTP and client legacy redirects, including the documented server-only sitemap exception.
 - Live booking/payment/provider acceptance remains separate from local stubbed checks and HIR-250.
 
+## Route shell and legacy redirect contract
+
+- Pages declare `appShell` metadata (`home`, `internal`, or `bare`); `app.vue` selects shared chrome from that metadata rather than route path sets.
+- Production nginx owns direct HTTP redirects. The global client middleware mirrors redirects that resolve to application pages, including bare and trailing `/author` paths.
+- `/site-map` remains nginx-only because its destination is the static `/sitemap.xml` server route. `/c/*` keeps its nginx regex redirect and its client page redirect for SPA and development navigation.
+
 ## Preflight evidence
 
 Memory CLI fallback: `/Users/dmitry/work/dai/agent-knowledge`, repository `solagree-website`, domain `frontend`, limit 5. Searches for quiz persistence/restore/validation, form validation/busy/focus, test/build/npm and route status/slug errors returned no matches. Existing repository build-entrypoint memory was checked against `package.json`: use `npm run build` so resource-content validation executes.

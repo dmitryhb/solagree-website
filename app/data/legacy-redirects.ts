@@ -5,6 +5,7 @@
 const exactLegacyRedirects: Record<string, string> = {
   '/about': '/about-us',
   '/accessibility': '/legal/accessibility',
+  '/author': '/faq',
   '/be-a-part-of-the-future-with-us-for-lawyers-mediators-and-cdfa-professionals': '/attorneys',
   '/category': '/faq',
   '/comments/feed': '/faq',

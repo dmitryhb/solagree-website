@@ -1,4 +1,8 @@
 <script setup lang="ts">
+definePageMeta({
+  appShell: 'bare'
+})
+
 const route = useRoute()
 const slug = computed(() => String(route.params.slug || '').trim())
 </script>

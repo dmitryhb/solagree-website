@@ -1,4 +1,8 @@
 <script setup lang="ts">
+definePageMeta({
+  appShell: 'internal'
+})
+
 useSolagreeSeo({
   title: 'Quiz Review | Solagree',
   description: 'Internal signoff surface for the Solagree embeddable quiz flow.',

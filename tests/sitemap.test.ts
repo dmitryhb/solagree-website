@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { legalNavItems } from '../app/data/legal-pages'
+import { militaryLandingPage, specialNeedsLandingPage } from '../app/data/family-landing-pages'
 import { publishedNewsItems, resourceContentEntries } from '../app/data/resource-content'
 import { getArticleSitemapRoutes, sitemapRoutes } from '../app/data/sitemap-routes'
 import { normalizeSiteUrl, renderSitemapXml } from '../app/utils/sitemap-xml'
@@ -138,5 +139,12 @@ describe('Sitemap route list', () => {
       expect(paths.filter(path => pattern.test(path)), `unexpected ${label} in sitemap routes`).toEqual([])
       expect(locs.filter(loc => pattern.test(loc.replace(SITE_URL, ''))), `unexpected ${label} in rendered sitemap`).toEqual([])
     }
+  })
+
+  it('keeps each published family landing path in the sitemap', () => {
+    const sitemapPaths = sitemapRoutes.map(route => route.path)
+
+    expect(sitemapPaths).toContain(militaryLandingPage.path)
+    expect(sitemapPaths).toContain(specialNeedsLandingPage.path)
   })
 })

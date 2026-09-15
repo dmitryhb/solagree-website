@@ -1,23 +1,10 @@
 <script setup lang="ts">
-const router = useRouter()
-const currentRoute = computed(() => router.currentRoute.value)
-const normalizedRoutePath = computed(() => (
-  currentRoute.value.path === '/' ? currentRoute.value.path : currentRoute.value.path.replace(/\/+$/, '')
-))
-const quizShellRoutes = new Set([
-  '/quiz',
-  '/quiz/embed',
-  '/partner-tools/case-qualifier-7h3m9k'
-])
-const CO_BRANDED_PATH_PREFIXES = ['/co-branded/', '/go/', '/cdfa/go/'] as const
-const isQuizRoute = computed(() => quizShellRoutes.has(normalizedRoutePath.value))
-const isCoBrandedRoute = computed(() => (
-  CO_BRANDED_PATH_PREFIXES.some((prefix) => normalizedRoutePath.value.startsWith(prefix))
-))
-const showSiteHeader = computed(() => !isQuizRoute.value && !isCoBrandedRoute.value)
-const isInternalShell = computed(() => normalizedRoutePath.value !== '/' && !isQuizRoute.value && !isCoBrandedRoute.value)
-const siteHeaderKey = computed(() => (isInternalShell.value ? 'internal' : 'home'))
-const pageKey = computed(() => normalizedRoutePath.value)
+const route = useRoute()
+const appShell = computed(() => route.meta.appShell ?? 'internal')
+const showSiteHeader = computed(() => appShell.value !== 'bare')
+const isInternalShell = computed(() => appShell.value === 'internal')
+const siteHeaderKey = computed(() => appShell.value)
+const pageKey = computed(() => (route.path === '/' ? route.path : route.path.replace(/\/+$/, '')))
 const pageTransition = {
   name: 'page-appear',
   mode: 'out-in',

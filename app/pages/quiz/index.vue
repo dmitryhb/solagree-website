@@ -1,4 +1,8 @@
 <script setup lang="ts">
+definePageMeta({
+  appShell: 'bare'
+})
+
 useSolagreeSeo({
   title: 'Divorce Plan Quiz',
   description:

@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { solagreeSocialLinks } from '~/data/social-links'
 
+definePageMeta({
+  appShell: 'home'
+})
+
 const runtimeConfig = useRuntimeConfig()
 const siteUrl = runtimeConfig.public.siteUrl.replace(/\/+$/, '')
 

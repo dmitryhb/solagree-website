@@ -2,6 +2,10 @@
 import SolagreeQuizEmbed from '~/components/quiz/SolagreeQuizEmbed.vue'
 import type { QuizHostEvent } from '~/data/quiz-types'
 
+definePageMeta({
+  appShell: 'internal'
+})
+
 const events = ref<QuizHostEvent[]>([])
 const hostConfig = {
   hostId: 'review-embed-host',
