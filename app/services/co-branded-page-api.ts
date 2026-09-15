@@ -1,4 +1,4 @@
-import { normalizePortalApiBaseUrl } from '~/services/portal-api'
+import { getPortalErrorStatusCode, normalizePortalApiBaseUrl } from '~/services/portal-api'
 import type { CoBrandedPagePublicConfig } from '#shared/types/co-branded-page'
 import {
   resolveCoBrandedPageTemplateId,
@@ -239,12 +239,7 @@ export const fetchCoBrandedPageConfig = async (
 
     return normalizeCoBrandedPageConfig(payload, slug, portalApiBaseUrl, options.pageType ?? 'standard')
   } catch (error) {
-    if (
-      typeof error === 'object'
-      && error !== null
-      && 'statusCode' in error
-      && error.statusCode === 404
-    ) {
+    if (getPortalErrorStatusCode(error) === 404) {
       return null
     }
 

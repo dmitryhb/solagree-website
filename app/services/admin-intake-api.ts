@@ -1,10 +1,11 @@
 import {
+  getPortalErrorStatusCode,
   getPortalSubmissionErrorMessage,
   isNonEmptyString,
   normalizePortalApiBaseUrl,
   submitToPortal
 } from '~/services/portal-api'
-import type { PortalFetcher, PortalSubmitOptions } from '~/services/portal-api'
+import type { PortalFetcher, PortalGetFetcher, PortalSubmitOptions } from '~/services/portal-api'
 import type {
   AdminIntakeFormState,
   AdminIntakeSubmissionPayload
@@ -29,7 +30,7 @@ export interface SubmitAdminIntakeOptions extends PortalSubmitOptions<AdminIntak
  */
 export interface VerifyAdminIntakeSlugOptions {
   portalApiBaseUrl: string
-  fetcher: <TResponse>(request: string) => Promise<TResponse>
+  fetcher: PortalGetFetcher
 }
 
 /**
@@ -75,12 +76,7 @@ export type AdminIntakeSlugVerification =
  * Guards portal fetch errors that confirm a slug does not exist.
  */
 const isPortalSlugNotFound = (error: unknown): boolean => {
-  return (
-    typeof error === 'object'
-    && error !== null
-    && 'statusCode' in error
-    && error.statusCode === 404
-  )
+  return getPortalErrorStatusCode(error) === 404
 }
 
 /**

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import CoBrandedPageRenderer from '~/components/co-branded/CoBrandedPageRenderer.vue'
 import { fetchCoBrandedPageConfig } from '~/services/co-branded-page-api'
-import { isPortalApiConfigurationError } from '~/services/portal-api'
+import { getPortalRouteErrorDetails } from '~/services/portal-api'
 import type { CoBrandedPageRenderMode } from '~/types/co-branded-page'
 
 const CO_BRANDED_UNAVAILABLE_STATUS_MESSAGE = 'We could not load this Solagree partner page right now. Please try again.'
@@ -28,47 +28,17 @@ const runtimeConfig = useRuntimeConfig()
 const slug = computed(() => String(route.params.slug || '').trim())
 const asyncDataKey = computed(() => `co-branded-page:${props.pageType}:${props.mode}:${slug.value}`)
 
-const getPortalErrorStatusCode = (error: unknown): number | null => {
-  if (typeof error !== 'object' || error === null || !('statusCode' in error)) {
-    return null
-  }
-
-  const { statusCode } = error as { statusCode?: unknown }
-
-  return typeof statusCode === 'number' ? statusCode : null
-}
-
 /**
  * Converts a portal lookup failure into the route error that should be
  * surfaced: a 404 only when the portal confirmed the slug is missing, and the
  * preserved upstream status (or a 502/500 fallback) for everything else.
  */
 const createCoBrandedRouteError = (error: unknown) => {
-  if (isPortalApiConfigurationError(error)) {
-    return createError({
-      statusCode: 500,
-      statusMessage: CO_BRANDED_UNAVAILABLE_STATUS_MESSAGE,
-      fatal: true
-    })
-  }
-
-  const statusCode = getPortalErrorStatusCode(error)
-
-  if (statusCode === 404) {
-    return createError({ statusCode: 404, fatal: true })
-  }
-
-  if (statusCode !== null && statusCode >= 400) {
-    return createError({
-      statusCode,
-      statusMessage: CO_BRANDED_UNAVAILABLE_STATUS_MESSAGE,
-      fatal: true
-    })
-  }
-
   return createError({
-    statusCode: CO_BRANDED_FALLBACK_STATUS_CODE,
-    statusMessage: CO_BRANDED_UNAVAILABLE_STATUS_MESSAGE,
+    ...getPortalRouteErrorDetails(error, {
+      fallbackStatusCode: CO_BRANDED_FALLBACK_STATUS_CODE,
+      unavailableStatusMessage: CO_BRANDED_UNAVAILABLE_STATUS_MESSAGE
+    }),
     fatal: true
   })
 }
@@ -133,6 +103,13 @@ watch(routeError, (coBrandedError) => {
 
 const routeClass = computed(() => ['co-branded-page-route', props.wrapperClass].filter(Boolean))
 const isCoBrandedPageLoading = computed(() => status.value === 'idle' || status.value === 'pending')
+const verifiedCoBrandedPage = computed(() => {
+  if (status.value !== 'success' || !coBrandedPage.value) {
+    return null
+  }
+
+  return coBrandedPage.value
+})
 const coBrandedSeoTitle = computed(() => {
   const companyName = coBrandedPage.value?.companyName?.trim() || 'Solagree partner'
 
@@ -150,8 +127,8 @@ useSolagreeSeo({
 <template>
   <main :class="routeClass">
     <CoBrandedPageRenderer
-      v-if="coBrandedPage"
-      :config="coBrandedPage"
+      v-if="verifiedCoBrandedPage"
+      :config="verifiedCoBrandedPage"
       :mode="mode"
     />
 

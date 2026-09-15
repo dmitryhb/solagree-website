@@ -15,7 +15,7 @@ import type {
 import type { CdfaApplicationFormState } from '~/types/cdfa-application'
 import {
   getPortalSubmissionErrorMessage,
-  isNonEmptyString,
+  parsePortalApplicationIdSuccess,
   submitToPortal
 } from '~/services/portal-api'
 import type { PortalFetcher, PortalSubmitOptions } from '~/services/portal-api'
@@ -80,18 +80,6 @@ export const getCdfaApplicationSubmissionErrorMessage = (error: unknown): string
   return getPortalSubmissionErrorMessage(error, DEFAULT_SUBMISSION_ERROR_MESSAGE)
 }
 
-/**
- * Runtime parser for the CDFA application success response.
- *
- * Requires a non-empty string `applicationId` per the documented
- * `CdfaApplicationApiResponse` contract.
- */
-const parseCdfaApplicationSuccess = (response: object): CdfaApplicationApiResponse | null => {
-  return 'applicationId' in response && isNonEmptyString(response.applicationId)
-    ? response as CdfaApplicationApiResponse
-    : null
-}
-
 export const submitCdfaApplication = async (
   form: CdfaApplicationFormState,
   options: SubmitCdfaApplicationOptions
@@ -101,7 +89,7 @@ export const submitCdfaApplication = async (
     fetcher: options.fetcher,
     endpoint: CDFA_APPLICATIONS_ENDPOINT,
     payload: createCdfaApplicationSubmissionPayload(form),
-    parseSuccess: parseCdfaApplicationSuccess,
+    parseSuccess: parsePortalApplicationIdSuccess<CdfaApplicationApiResponse>,
     fallbackMessage: DEFAULT_SUBMISSION_ERROR_MESSAGE
   })
 }

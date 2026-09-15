@@ -18,7 +18,7 @@ import { useSolagreeSeo } from '../app/composables/useSolagreeSeo'
 import AdminIntakeRoute from '../app/pages/meet/[slug]/index.vue'
 import { verifyAdminIntakeSlug } from '../app/services/admin-intake-api'
 import type { AdminIntakeSlugVerification } from '../app/services/admin-intake-api'
-import { PortalApiConfigurationError } from '../app/services/portal-api'
+import { PortalApiConfigurationError, websitePortalFetcher } from '../app/services/portal-api'
 
 vi.mock('~/services/admin-intake-api', () => ({
   verifyAdminIntakeSlug: vi.fn()
@@ -242,7 +242,7 @@ describe('Admin intake route runtime', () => {
     expect(verifySlugMock).toHaveBeenCalledTimes(1)
     expect(verifySlugMock).toHaveBeenCalledWith('alpha-link', {
       portalApiBaseUrl: 'https://portal.solagree.test',
-      fetcher: expect.any(Function)
+      fetcher: websitePortalFetcher
     })
     expect(getRenderedSlug(wrapper)).toBe('alpha-link')
   })
@@ -281,7 +281,7 @@ describe('Admin intake route runtime', () => {
     expect(verifySlugMock).toHaveBeenCalledTimes(2)
     expect(verifySlugMock).toHaveBeenLastCalledWith('beta-link', {
       portalApiBaseUrl: 'https://portal.solagree.test',
-      fetcher: expect.any(Function)
+      fetcher: websitePortalFetcher
     })
     expect(wrapper.find('.admin-intake-page-stub').exists()).toBe(false)
     expect(wrapper.get('[role="status"]').attributes('aria-label')).toBe('Verifying intake link')

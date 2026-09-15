@@ -2,7 +2,7 @@
 import AdminIntakePage from '~/components/admin-intake/AdminIntakePage.vue'
 import { verifyAdminIntakeSlug } from '~/services/admin-intake-api'
 import type { AdminIntakeSlugVerification } from '~/services/admin-intake-api'
-import { isPortalApiConfigurationError } from '~/services/portal-api'
+import { getPortalRouteErrorDetails, websitePortalFetcher } from '~/services/portal-api'
 
 const VERIFICATION_UNAVAILABLE_STATUS_MESSAGE = 'We could not verify this intake link right now. Please try again.'
 const VERIFICATION_FALLBACK_STATUS_CODE = 502
@@ -12,46 +12,16 @@ const runtimeConfig = useRuntimeConfig()
 const slug = computed(() => String(route.params.slug || '').trim())
 const asyncDataKey = computed(() => `admin-intake-slug:${slug.value}`)
 
-const getPortalErrorStatusCode = (error: unknown): number | null => {
-  if (typeof error !== 'object' || error === null || !('statusCode' in error)) {
-    return null
-  }
-
-  const { statusCode } = error as { statusCode?: unknown }
-
-  return typeof statusCode === 'number' ? statusCode : null
-}
-
 /**
  * Converts a portal verification failure into the route error that should be
  * surfaced, never labelling an upstream failure as a missing slug.
  */
 const createVerificationRouteError = (error: unknown) => {
-  if (isPortalApiConfigurationError(error)) {
-    return createError({
-      statusCode: 500,
-      statusMessage: VERIFICATION_UNAVAILABLE_STATUS_MESSAGE,
-      fatal: true
-    })
-  }
-
-  const statusCode = getPortalErrorStatusCode(error)
-
-  if (statusCode === 404) {
-    return createError({ statusCode: 404, fatal: true })
-  }
-
-  if (statusCode !== null && statusCode >= 400) {
-    return createError({
-      statusCode,
-      statusMessage: VERIFICATION_UNAVAILABLE_STATUS_MESSAGE,
-      fatal: true
-    })
-  }
-
   return createError({
-    statusCode: VERIFICATION_FALLBACK_STATUS_CODE,
-    statusMessage: VERIFICATION_UNAVAILABLE_STATUS_MESSAGE,
+    ...getPortalRouteErrorDetails(error, {
+      fallbackStatusCode: VERIFICATION_FALLBACK_STATUS_CODE,
+      unavailableStatusMessage: VERIFICATION_UNAVAILABLE_STATUS_MESSAGE
+    }),
     fatal: true
   })
 }
@@ -66,7 +36,7 @@ const {
     try {
       return await verifyAdminIntakeSlug(slug.value, {
         portalApiBaseUrl: runtimeConfig.public.portalApiBaseUrl,
-        fetcher: $fetch as <TResponse>(request: string) => Promise<TResponse>
+        fetcher: websitePortalFetcher
       })
     } catch (portalError) {
       throw createVerificationRouteError(portalError)

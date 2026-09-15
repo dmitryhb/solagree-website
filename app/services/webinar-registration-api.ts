@@ -1,6 +1,7 @@
 import {
   getPortalSubmissionErrorMessage,
   parsePortalSubmissionIdSuccess,
+  PORTAL_CONTACT_SUBMISSIONS_ENDPOINT,
   submitToPortal
 } from '~/services/portal-api'
 import type { PortalFetcher, PortalSubmitOptions } from '~/services/portal-api'
@@ -10,7 +11,6 @@ import type {
 } from '#shared/types/contact-submission'
 import type { WebinarFormState, WebinarRegistrationContent } from '~/types/webinar'
 
-const CONTACT_SUBMISSIONS_ENDPOINT = '/api/contact-submissions'
 const DEFAULT_SUBMISSION_ERROR_MESSAGE = 'We could not register you for the webinar. Please try again.'
 
 type WebinarSubmissionType = WebinarRegistrationContent['submissionType']
@@ -68,7 +68,7 @@ export const submitWebinarRegistration = async (
   return await submitToPortal({
     portalApiBaseUrl: options.portalApiBaseUrl,
     fetcher: options.fetcher,
-    endpoint: CONTACT_SUBMISSIONS_ENDPOINT,
+    endpoint: PORTAL_CONTACT_SUBMISSIONS_ENDPOINT,
     payload: createWebinarRegistrationPayload(form, options),
     parseSuccess: parsePortalSubmissionIdSuccess<ContactSubmissionApiResponse>,
     fallbackMessage: DEFAULT_SUBMISSION_ERROR_MESSAGE

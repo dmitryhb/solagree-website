@@ -155,6 +155,15 @@ const createErrorStub = (input: { fatal?: boolean, statusCode?: number, statusMe
   return Object.assign(new Error(input.statusMessage ?? ''), input)
 }
 
+const createDeferred = <T>() => {
+  let resolve!: (value: T) => void
+  const promise = new Promise<T>((promiseResolve) => {
+    resolve = promiseResolve
+  })
+
+  return { promise, resolve }
+}
+
 Object.assign(globalThis, {
   computed,
   createError: createErrorStub,
@@ -381,6 +390,33 @@ describe('Co-branded route runtime', () => {
 
     expect(showErrorCalls).toHaveLength(1)
     expect(showErrorCalls[0]).toMatchObject({ statusCode: 404, fatal: true })
+  })
+
+  it('does not render the previous partner configuration while a new slug is loading', async () => {
+    const betaConfig = createDeferred<CoBrandedPagePublicConfig>()
+
+    fetchConfigMock.mockImplementation(async (slug: { slug: string }) => {
+      return slug.slug === 'beta-partner' ? betaConfig.promise : createPortalConfig()
+    })
+
+    const { wrapper } = mountRoute(GoPage)
+
+    await settleAsyncData()
+
+    expect(wrapper.find('.co-branded-page-renderer-stub').exists()).toBe(true)
+
+    routeState.slug = 'beta-partner'
+
+    await nextTick()
+
+    expect(wrapper.find('.co-branded-page-renderer-stub').exists()).toBe(false)
+    expect(wrapper.get('[role="status"]').attributes('aria-label')).toBe('Loading co-branded page')
+
+    betaConfig.resolve(createPortalConfig())
+
+    await settleAsyncData()
+
+    expect(wrapper.get('.co-branded-page-renderer-stub').attributes('data-company-name')).toBe('Rivera Mediation')
   })
 
   it('parameter navigation to an upstream failure raises the preserved status through showError', async () => {

@@ -13,7 +13,7 @@ import type {
 } from '~/types/attorney-application'
 import {
   getPortalSubmissionErrorMessage,
-  isNonEmptyString,
+  parsePortalApplicationIdSuccess,
   submitToPortal
 } from '~/services/portal-api'
 import type { PortalFetcher, PortalSubmitOptions } from '~/services/portal-api'
@@ -84,18 +84,6 @@ export const getAttorneyApplicationSubmissionErrorMessage = (error: unknown): st
 }
 
 /**
- * Runtime parser for the attorney application success response.
- *
- * Requires a non-empty string `applicationId` per the documented
- * `AttorneyApplicationApiResponse` contract.
- */
-const parseAttorneyApplicationSuccess = (response: object): AttorneyApplicationApiResponse | null => {
-  return 'applicationId' in response && isNonEmptyString(response.applicationId)
-    ? response as AttorneyApplicationApiResponse
-    : null
-}
-
-/**
  * Submits an attorney application to the portal API and returns the successful API response.
  *
  * @throws Error when the portal returns an application-level error response.
@@ -109,7 +97,7 @@ export const submitAttorneyApplication = async (
     fetcher: options.fetcher,
     endpoint: ATTORNEY_APPLICATIONS_ENDPOINT,
     payload: createAttorneyApplicationSubmissionPayload(form),
-    parseSuccess: parseAttorneyApplicationSuccess,
+    parseSuccess: parsePortalApplicationIdSuccess<AttorneyApplicationApiResponse>,
     fallbackMessage: DEFAULT_SUBMISSION_ERROR_MESSAGE
   })
 }

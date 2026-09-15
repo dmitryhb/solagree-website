@@ -21,6 +21,9 @@ export type PortalFetcher<TBody> = <TResponse>(
   options: PortalFetchOptions<TBody>
 ) => Promise<TResponse>
 
+/** Fetch implementation used by portal lookups that do not send a body. */
+export type PortalGetFetcher = <TResponse>(request: string) => Promise<TResponse>
+
 /**
  * Shared dependencies required by portal submission services.
  */
@@ -39,18 +42,77 @@ export interface PortalSubmitOptions<TBody> {
  */
 export const websitePortalFetcher = async <TResponse>(
   request: string,
-  options: PortalFetchOptions<unknown>
+  options?: PortalFetchOptions<unknown>
 ): Promise<TResponse> => {
-  const response: unknown = await $fetch(
-    request,
-    options as PortalFetchOptions<Record<string, unknown>>
-  )
+  const response: unknown = options
+    ? await $fetch(request, options as PortalFetchOptions<Record<string, unknown>>)
+    : await $fetch(request)
 
   return response as TResponse
 }
 
 export const isPortalApiConfigurationError = (error: unknown): error is PortalApiConfigurationError => {
   return error instanceof PortalApiConfigurationError
+}
+
+/**
+ * Reads an HTTP status from Nuxt/fetch failures without assuming an error
+ * shape for network or native failures.
+ */
+export const getPortalErrorStatusCode = (error: unknown): number | null => {
+  if (typeof error !== 'object' || error === null || !('statusCode' in error)) {
+    return null
+  }
+
+  const { statusCode } = error as { statusCode?: unknown }
+
+  return typeof statusCode === 'number' ? statusCode : null
+}
+
+export interface PortalRouteErrorOptions {
+  fallbackStatusCode: number
+  unavailableStatusMessage: string
+}
+
+export interface PortalRouteErrorDetails {
+  statusCode: number
+  statusMessage?: string
+}
+
+/**
+ * Converts a portal lookup failure into route-safe status details. A 404 is
+ * reserved for portal-confirmed missing resources; configuration, network,
+ * malformed-payload, and other upstream failures retain their own status or
+ * use the caller's gateway fallback and message.
+ */
+export const getPortalRouteErrorDetails = (
+  error: unknown,
+  options: PortalRouteErrorOptions
+): PortalRouteErrorDetails => {
+  if (isPortalApiConfigurationError(error)) {
+    return {
+      statusCode: 500,
+      statusMessage: options.unavailableStatusMessage
+    }
+  }
+
+  const statusCode = getPortalErrorStatusCode(error)
+
+  if (statusCode === 404) {
+    return { statusCode }
+  }
+
+  if (statusCode !== null && statusCode >= 400) {
+    return {
+      statusCode,
+      statusMessage: options.unavailableStatusMessage
+    }
+  }
+
+  return {
+    statusCode: options.fallbackStatusCode,
+    statusMessage: options.unavailableStatusMessage
+  }
 }
 
 /**
@@ -151,6 +213,21 @@ export const parsePortalSubmissionIdSuccess = <TSuccess extends { submissionId: 
     ? response as TSuccess
     : null
 }
+
+/**
+ * Success parser for application endpoints whose response carries an
+ * `applicationId`.
+ */
+export const parsePortalApplicationIdSuccess = <TSuccess extends { applicationId: string }>(
+  response: object
+): TSuccess | null => {
+  return 'applicationId' in response && isNonEmptyString(response.applicationId)
+    ? response as TSuccess
+    : null
+}
+
+/** Shared portal endpoint for contact messages and webinar registrations. */
+export const PORTAL_CONTACT_SUBMISSIONS_ENDPOINT = '/api/contact-submissions'
 
 /**
  * Success parser for endpoints whose response carries a `requestId`.
