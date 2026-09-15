@@ -90,3 +90,10 @@ The quiz returns `solagree-fit` whenever payment readiness is not `need-payment-
 - Spouse and legal-advice answers currently do not affect the displayed recommendation. They only collect metadata and tags.
 - State currently does not affect the displayed recommendation. It adds a deferred policy marker for future state-specific messaging.
 - Every completed path displays the Initial Consult CTA and no post-CTA resource list.
+
+## Session and Analytics Lifecycle
+
+- Persisted v1 `complete` sessions are migrated to the v2 `result` phase. Unknown question IDs, answer values, and hidden-branch answers are removed before restoration.
+- Malformed or unsupported snapshots are removed. An empty in-progress session is not persisted, so reset remains clear after Vue watchers flush.
+- Restoring a session does not emit `completed` or an initial `question_viewed` event. A live completion emits once for the attempt; returning from the result does not create a second completion. Reset starts another attempt.
+- Reset and result CTA actions keep their existing host callback and bridge event payloads and also send `quiz_reset` and `quiz_cta_clicked` to GA when analytics is enabled.

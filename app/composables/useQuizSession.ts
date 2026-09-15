@@ -15,46 +15,12 @@ import {
   getQuizQuestionById,
   getVisibleQuizQuestionIds,
   isQuizAnswerPresent,
+  parseQuizSessionSnapshot,
   pruneHiddenQuizAnswers
 } from '~/utils/quiz-navigation'
 import { evaluateQuizAnswers, getQuizResultViewModel } from '~/utils/quiz-results'
 
-const isQuizSessionSnapshot = (value: unknown): value is QuizPersistedSession => {
-  if (!value || typeof value !== 'object') {
-    return false
-  }
-
-  const snapshot = value as {
-    version?: unknown
-    phase?: unknown
-    currentQuestionId?: unknown
-    answers?: unknown
-  }
-
-  return (
-    (snapshot.version === 1 || snapshot.version === 2) &&
-    (snapshot.phase === 'question' || snapshot.phase === 'complete' || snapshot.phase === 'result') &&
-    typeof snapshot.currentQuestionId === 'string' &&
-    !!snapshot.answers &&
-    typeof snapshot.answers === 'object'
-  )
-}
-
-const normalizeQuizSessionPhase = (snapshot: { phase?: unknown }): QuizSessionPhase => {
-  if (snapshot.phase === 'complete') {
-    return 'result'
-  }
-
-  return snapshot.phase === 'result' ? 'result' : 'question'
-}
-
-const normalizeProgressValue = (value: unknown): number | undefined => {
-  if (typeof value !== 'number' || !Number.isFinite(value)) {
-    return undefined
-  }
-
-  return Math.min(Math.max(Math.round(value), 0), 100)
-}
+const isQuizClient = import.meta.client || typeof window !== 'undefined'
 
 /**
  * Owns quiz answer state, branching navigation, result evaluation, and persistence.
@@ -66,6 +32,7 @@ export const useQuizSession = () => {
   const phase = ref<QuizSessionPhase>('question')
   const maxForwardProgressValue = ref(getQuizProgressValue(initialQuestionId, {}, 'question'))
   const hasRestoredPersistedState = ref(false)
+  const didRestorePersistedState = ref(false)
 
   const visibleQuestionIds = computed(() => getVisibleQuizQuestionIds(answers.value))
   const currentQuestion = computed(() => getQuizQuestionById(currentQuestionId.value))
@@ -185,12 +152,12 @@ export const useQuizSession = () => {
     phase.value = 'question'
     resetProgressFloorToCurrentBranch()
 
-    if (import.meta.client) {
+    if (isQuizClient) {
       window.localStorage.removeItem(solagreeQuizStorageKey)
     }
   }
 
-  if (import.meta.client) {
+  if (isQuizClient) {
     onMounted(() => {
       const snapshotText = window.localStorage.getItem(solagreeQuizStorageKey)
 
@@ -200,19 +167,19 @@ export const useQuizSession = () => {
       }
 
       try {
-        const parsedSnapshot = JSON.parse(snapshotText) as unknown
-        if (!isQuizSessionSnapshot(parsedSnapshot)) {
-          hasRestoredPersistedState.value = true
+        const snapshot = parseQuizSessionSnapshot(JSON.parse(snapshotText) as unknown)
+        if (!snapshot) {
+          window.localStorage.removeItem(solagreeQuizStorageKey)
           return
         }
 
-        const prunedAnswers = pruneHiddenQuizAnswers(parsedSnapshot.answers)
-        answers.value = prunedAnswers
-        currentQuestionId.value = coerceQuizCurrentQuestionId(prunedAnswers, parsedSnapshot.currentQuestionId)
-        phase.value = normalizeQuizSessionPhase(parsedSnapshot)
-        maxForwardProgressValue.value = normalizeProgressValue(parsedSnapshot.maxProgressValue)
+        answers.value = snapshot.answers
+        currentQuestionId.value = snapshot.currentQuestionId
+        phase.value = snapshot.phase
+        maxForwardProgressValue.value = snapshot.maxProgressValue
           ?? branchProgressValue.value
         raiseForwardProgressFloor()
+        didRestorePersistedState.value = true
       } catch {
         window.localStorage.removeItem(solagreeQuizStorageKey)
       } finally {
@@ -224,6 +191,11 @@ export const useQuizSession = () => {
       [answers, currentQuestionId, phase],
       () => {
         if (!hasRestoredPersistedState.value) {
+          return
+        }
+
+        if (Object.keys(answers.value).length === 0 && phase.value === 'question') {
+          window.localStorage.removeItem(solagreeQuizStorageKey)
           return
         }
 
@@ -243,6 +215,8 @@ export const useQuizSession = () => {
 
   return {
     answers: readonly(answers),
+    hasRestoredPersistedState: readonly(hasRestoredPersistedState),
+    didRestorePersistedState: readonly(didRestorePersistedState),
     currentQuestion,
     currentQuestionId: readonly(currentQuestionId),
     currentValue,

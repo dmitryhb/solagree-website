@@ -20,6 +20,8 @@ const createQuizHostSessionId = () => {
   return `quiz-${Math.random().toString(36).slice(2, 10)}`
 }
 
+const isQuizClient = import.meta.client || typeof window !== 'undefined'
+
 /**
  * Connects quiz session state to host configuration, CTA overrides, and embed events.
  */
@@ -31,6 +33,7 @@ export const useQuizHost = (
   const { trackEvent } = useGoogleAnalytics()
   const sessionId = ref(createQuizHostSessionId())
   const hasTrackedQuizStart = ref(false)
+  const hasTrackedCompletion = ref(false)
   const hostConfig = computed(() => {
     return resolveQuizHostConfig(
       runtimeConfig.public.solagreeQuiz as QuizHostConfigInput | undefined,
@@ -49,7 +52,7 @@ export const useQuizHost = (
   }
 
   const dispatchEvent = (event: QuizHostEvent) => {
-    if (!import.meta.client) {
+    if (!isQuizClient) {
       return
     }
 
@@ -186,42 +189,66 @@ export const useQuizHost = (
   const handleReset = () => {
     quizSession.reset()
     hasTrackedQuizStart.value = false
+    hasTrackedCompletion.value = false
 
-    if (!shouldEmitEvents()) {
-      return
+    if (shouldEmitEvents()) {
+      const event: QuizResetEvent = {
+        type: 'reset',
+        ...buildEventContext()
+      }
+
+      dispatchEvent(event)
     }
 
-    const event: QuizResetEvent = {
-      type: 'reset',
-      ...buildEventContext()
+    if (hostConfig.value.analytics.enabled) {
+      trackEvent('quiz_reset', buildAnalyticsContext())
     }
-
-    dispatchEvent(event)
   }
 
   const handleResultCtaClick = (cta: QuizResultCta) => {
-    if (!shouldEmitEvents()) {
-      return
-    }
-
     const evaluation = quizSession.evaluation.value
-    const event: QuizCtaClickedEvent = {
-      type: 'cta_clicked',
-      actionId: cta.actionId,
-      href: cta.href,
-      ctaTrackingId: cta.trackingId,
-      outcome: evaluation.kind === 'resolved' ? evaluation.outcome : 'open-policy',
-      policyId: evaluation.kind === 'open-policy' ? evaluation.policyId : undefined,
-      ...buildEventContext()
+    const outcome = evaluation.kind === 'resolved' ? evaluation.outcome : 'open-policy'
+    const policyId = evaluation.kind === 'open-policy' ? evaluation.policyId : undefined
+
+    if (shouldEmitEvents()) {
+      const event: QuizCtaClickedEvent = {
+        type: 'cta_clicked',
+        actionId: cta.actionId,
+        href: cta.href,
+        ctaTrackingId: cta.trackingId,
+        outcome,
+        policyId,
+        ...buildEventContext()
+      }
+
+      dispatchEvent(event)
     }
 
-    dispatchEvent(event)
+    if (hostConfig.value.analytics.enabled) {
+      trackEvent('quiz_cta_clicked', {
+        action_id: cta.actionId,
+        cta_tracking_id: cta.trackingId,
+        outcome,
+        policy_id: policyId,
+        ...buildAnalyticsContext()
+      })
+    }
   }
 
   watch(
-    [() => quizSession.currentQuestionId.value, () => quizSession.phase.value] as const,
-    ([questionId, phase]) => {
-      if (phase !== 'question') {
+    [
+      () => quizSession.currentQuestionId.value,
+      () => quizSession.phase.value,
+      () => quizSession.hasRestoredPersistedState.value
+    ] as const,
+    ([questionId, phase, hasRestoredPersistedState], previousState) => {
+      const previouslyRestoredPersistedState = previousState?.[2] ?? false
+
+      if (!hasRestoredPersistedState || phase !== 'question') {
+        return
+      }
+
+      if (!previouslyRestoredPersistedState && quizSession.didRestorePersistedState.value) {
         return
       }
 
@@ -231,13 +258,30 @@ export const useQuizHost = (
   )
 
   watch(
-    () => quizSession.phase.value,
-    (phase, previousPhase) => {
-      if (!shouldEmitEvents() || phase !== 'result' || previousPhase === 'result') {
+    [
+      () => quizSession.phase.value,
+      () => quizSession.hasRestoredPersistedState.value
+    ] as const,
+    ([phase, hasRestoredPersistedState], previousState) => {
+      const previousPhase = previousState?.[0]
+      const previouslyRestoredPersistedState = previousState?.[1] ?? false
+
+      if (
+        !hasRestoredPersistedState
+        || !shouldEmitEvents()
+        || phase !== 'result'
+        || previousPhase === 'result'
+        || hasTrackedCompletion.value
+      ) {
+        return
+      }
+
+      if (!previouslyRestoredPersistedState && quizSession.didRestorePersistedState.value) {
         return
       }
 
       const evaluation = quizSession.evaluation.value
+      hasTrackedCompletion.value = true
       dispatchEvent({
         type: 'completed',
         outcome: evaluation.kind === 'resolved' ? evaluation.outcome : 'open-policy',

@@ -1,5 +1,104 @@
 import { solagreeQuizQuestionIds, solagreeQuizQuestionMap, solagreeQuizQuestions } from '~/data/quiz-schema'
-import type { QuizAnswerMap, QuizQuestionDefinition, QuizQuestionId, QuizQuestionValue } from '~/data/quiz-types'
+import type {
+  QuizAnswerMap,
+  QuizPersistedSession,
+  QuizQuestionDefinition,
+  QuizQuestionId,
+  QuizQuestionValue,
+  QuizSessionPhase
+} from '~/data/quiz-types'
+
+const isRecord = (value: unknown): value is Record<string, unknown> => {
+  return value !== null && typeof value === 'object' && !Array.isArray(value)
+}
+
+/** Checks whether a value names a question in the current schema. */
+export const isQuizQuestionId = (value: unknown): value is QuizQuestionId => {
+  return typeof value === 'string' && value in solagreeQuizQuestionMap
+}
+
+/**
+ * Keeps only schema-backed answer values. This is shared by persistence
+ * consumers so a stale browser snapshot cannot introduce unknown values.
+ */
+export const normalizeQuizAnswerMap = (value: unknown): QuizAnswerMap => {
+  if (!isRecord(value)) {
+    return {}
+  }
+
+  return solagreeQuizQuestionIds.reduce<QuizAnswerMap>((answers, questionId) => {
+    const question = solagreeQuizQuestionMap[questionId]
+    const rawValue = value[questionId]
+    const optionIds = new Set<string>(question.options.map(option => option.id))
+
+    if (question.kind === 'multi-select') {
+      if (!Array.isArray(rawValue)) {
+        return answers
+      }
+
+      const normalizedValues = [...new Set(rawValue.filter(
+        answer => typeof answer === 'string' && optionIds.has(answer)
+      ))]
+
+      if (normalizedValues.length > 0) {
+        answers[questionId] = normalizedValues as never
+      }
+
+      return answers
+    }
+
+    if (typeof rawValue === 'string' && optionIds.has(rawValue)) {
+      answers[questionId] = rawValue as never
+    }
+
+    return answers
+  }, {})
+}
+
+const normalizeQuizSessionPhase = (value: unknown): QuizSessionPhase | null => {
+  if (value === 'complete' || value === 'result') {
+    return 'result'
+  }
+
+  return value === 'question' ? 'question' : null
+}
+
+const normalizeProgressValue = (value: unknown): number | undefined => {
+  if (typeof value !== 'number' || !Number.isFinite(value)) {
+    return undefined
+  }
+
+  return Math.min(Math.max(Math.round(value), 0), 100)
+}
+
+/**
+ * Parses v1 and v2 persisted sessions into the current v2 shape. Unknown
+ * question IDs and answer values are discarded while known legacy state is
+ * retained for the active branch.
+ */
+export const parseQuizSessionSnapshot = (value: unknown): QuizPersistedSession | null => {
+  if (!isRecord(value) || (value.version !== 1 && value.version !== 2)) {
+    return null
+  }
+
+  const phase = normalizeQuizSessionPhase(value.phase)
+  if (!phase || !isRecord(value.answers)) {
+    return null
+  }
+
+  const answers = pruneHiddenQuizAnswers(normalizeQuizAnswerMap(value.answers))
+
+  return {
+    version: 2,
+    phase,
+    currentQuestionId: coerceQuizCurrentQuestionId(
+      answers,
+      isQuizQuestionId(value.currentQuestionId) ? value.currentQuestionId : undefined
+    ),
+    answers,
+    maxProgressValue: normalizeProgressValue(value.maxProgressValue)
+  }
+}
 
 /**
  * Resolves conditional visibility for a quiz question against current answers.
