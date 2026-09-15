@@ -4,6 +4,7 @@ import type { CoBrandedPagePublicConfig } from '#shared/types/co-branded-page'
 import CoBrandedConsultLink from '~/components/co-branded/CoBrandedConsultLink.vue'
 import CoBrandedConsultModal from '~/components/co-branded/CoBrandedConsultModal.vue'
 import CoBrandedFaqAccordion from '~/components/co-branded/CoBrandedFaqAccordion.vue'
+import FeatureStrip from '~/components/FeatureStrip.vue'
 import { resolveCoBrandedPageContent } from '~/templates/co-branded-page'
 import type { CoBrandedPageRenderMode } from '~/types/co-branded-page'
 

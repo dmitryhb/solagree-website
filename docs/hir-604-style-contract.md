@@ -9,3 +9,5 @@
 - `FeatureStrip`, `process-section__*`, and `PricingSection` own the neutral
   shells shared by family and site/co-branded pages. Family copy, prices, FAQ
   data, `PricingCard`, and `BaseAccordion` remain unchanged.
+- Family uses deliberate deep selectors for PricingSection's header and intro
+  geometry; those elements are slotted through the child component boundary.

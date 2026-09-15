@@ -123,9 +123,15 @@
 .family-page__video { padding-top: 80px; }
 .family-page__get-started { display: grid; justify-items: center; gap: 24px; padding-top: 64px; text-align: center; }
 .family-page__get-started p { font-size: 18px; line-height: 1.5; }
-.family-page__pricing { background: var(--color-page); padding-block: 90px 64px; }
-.family-page__pricing .pricing-section__header { margin-bottom: 54px; }
-.family-page__pricing .pricing-section__intro { max-width: 760px; margin-top: 24px; }
+.family-page__pricing {
+  background: var(--color-page);
+  padding-block: 90px 64px;
+
+  // PricingSection owns this markup; deep selectors intentionally preserve
+  // family-specific geometry across the component boundary.
+  :deep(.pricing-section__header) { margin-bottom: 54px; }
+  :deep(.pricing-section__header .pricing-section__intro) { max-width: 760px; margin-top: 24px; }
+}
 .family-page__faq { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 64px; padding-block: 48px 80px; }
 .family-page__faq p { margin-top: 24px; font-size: 18px; line-height: 1.5; }
 .family-page__closing { padding: 64px 2rem 80px; background: var(--color-surface-footer); }
