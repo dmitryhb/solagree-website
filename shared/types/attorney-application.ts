@@ -32,6 +32,8 @@ export interface AttorneyApplicationSubmissionPayload {
   adrNetworks: string
   consultationInterest: AttorneyYesNoAnswer
   termsAccepted: boolean
+  termsVersion: string
+  termsUrl: string
 }
 
 export interface AttorneyApplicationApiResponse {

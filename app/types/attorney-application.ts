@@ -25,6 +25,8 @@ export interface AttorneyApplicationFormState {
   adrNetworks: string
   consultationInterest: AttorneyYesNo
   termsAccepted: boolean
+  termsVersion: string
+  termsUrl: string
 }
 
 export interface AttorneyLicenseNumberRow {

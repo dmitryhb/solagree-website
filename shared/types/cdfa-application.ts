@@ -60,6 +60,8 @@ export interface CdfaApplicationSubmissionPayload {
   clientSource: CdfaClientSourceValue
   consultationInterest: CdfaConsultationInterestValue
   termsAccepted: boolean
+  termsVersion: string
+  termsUrl: string
 }
 
 export interface CdfaApplicationApiResponse {

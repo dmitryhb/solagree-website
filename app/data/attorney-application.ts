@@ -33,5 +33,7 @@ export const attorneyApplicationInitialState = {
   neutralInterest: '',
   adrNetworks: '',
   consultationInterest: '',
-  termsAccepted: false
+  termsAccepted: false,
+  termsVersion: '',
+  termsUrl: ''
 } as const

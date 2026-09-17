@@ -114,6 +114,11 @@ vi.mock('~/composables/useCdfaApplicationForm', async () => {
   return { useCdfaApplicationForm: createHarness }
 })
 
+vi.mock('~/composables/useProfessionalTerms', async () => {
+  const { ref } = await import('vue')
+  return { useProfessionalTerms: () => ({ terms: ref({ available: false, current: null }), refresh: async () => {} }) }
+})
+
 Object.assign(globalThis, {
   nextTick,
   reactive,

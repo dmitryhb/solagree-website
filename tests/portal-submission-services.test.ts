@@ -128,7 +128,9 @@ const attorneyForm: AttorneyApplicationFormState = {
   neutralInterest: 'yes',
   adrNetworks: 'APR',
   consultationInterest: 'yes',
-  termsAccepted: true
+  termsAccepted: true,
+  termsVersion: 'approved-v1',
+  termsUrl: 'https://example.com/terms/v1'
 }
 
 const cdfaForm: CdfaApplicationFormState = {
@@ -146,7 +148,9 @@ const cdfaForm: CdfaApplicationFormState = {
   adrNetworks: 'APR',
   clientSource: 'referrals',
   consultationInterest: 'yes',
-  termsAccepted: true
+  termsAccepted: true,
+  termsVersion: 'approved-v1',
+  termsUrl: 'https://example.com/terms/v1'
 }
 
 const consultForm: ConsultRequestFormState = {
@@ -242,7 +246,9 @@ const serviceEntries: ServiceEntry[] = [
       neutralInterest: 'yes',
       adrNetworks: 'APR',
       consultationInterest: 'yes',
-      termsAccepted: true
+      termsAccepted: true,
+      termsVersion: 'approved-v1',
+      termsUrl: 'https://example.com/terms/v1'
     },
     successResponse: { applicationId: 'attorney_123', status: 'pending' },
     expectedSuccessValue: { applicationId: 'attorney_123', status: 'pending' },
@@ -276,7 +282,9 @@ const serviceEntries: ServiceEntry[] = [
       adrNetworks: 'APR',
       clientSource: 'referrals',
       consultationInterest: 'yes',
-      termsAccepted: true
+      termsAccepted: true,
+      termsVersion: 'approved-v1',
+      termsUrl: 'https://example.com/terms/v1'
     },
     successResponse: { applicationId: 'cdfa_123', status: 'pending' },
     expectedSuccessValue: { applicationId: 'cdfa_123', status: 'pending' },

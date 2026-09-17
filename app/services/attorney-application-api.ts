@@ -72,7 +72,9 @@ export const createAttorneyApplicationSubmissionPayload = (
     neutralInterest: form.neutralInterest,
     adrNetworks: form.adrNetworks,
     consultationInterest: form.consultationInterest,
-    termsAccepted: form.termsAccepted
+    termsAccepted: form.termsAccepted,
+    termsVersion: form.termsVersion,
+    termsUrl: form.termsUrl
   }
 }
 

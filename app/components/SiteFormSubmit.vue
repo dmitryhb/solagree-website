@@ -4,6 +4,7 @@ withDefaults(defineProps<{
   /** Label rendered (and politely announced) while the request is in flight. */
   submittingLabel?: string
   submitting?: boolean
+  disabled?: boolean
   /** Whether to render the default trailing send icon. */
   icon?: boolean
 }>(), {
@@ -17,7 +18,7 @@ withDefaults(defineProps<{
   <button
     class="site-form-submit"
     type="submit"
-    :disabled="submitting"
+    :disabled="submitting || disabled"
   >
     <span aria-live="polite">{{ submitting ? submittingLabel : label }}</span>
     <slot name="icon">

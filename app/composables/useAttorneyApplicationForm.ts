@@ -5,6 +5,7 @@ import {
   getAttorneyApplicationSubmissionErrorMessage,
   submitAttorneyApplication
 } from '~/services/attorney-application-api'
+import { refreshTermsAfterVersionConflict } from '~/utils/professional-terms'
 import { usePortalFormSubmissionOptions } from '~/composables/usePortalFormSubmissionOptions'
 import { focusPageDestination } from '~/utils/focus-destination'
 import {
@@ -36,7 +37,9 @@ export interface UseAttorneyApplicationFormReturn {
   handleSubmit: () => Promise<void>
 }
 
-export const useAttorneyApplicationForm = (): UseAttorneyApplicationFormReturn => {
+export const useAttorneyApplicationForm = (
+  options: { refreshTerms?: () => Promise<void> } = {}
+): UseAttorneyApplicationFormReturn => {
   const currentYear = new Date().getFullYear()
   const portalSubmissionOptions = usePortalFormSubmissionOptions()
   const { trackEvent } = useGoogleAnalytics()
@@ -138,9 +141,14 @@ export const useAttorneyApplicationForm = (): UseAttorneyApplicationFormReturn =
       return true
     },
     getFormState: createSubmissionState,
-    submit: (formState) => submitAttorneyApplication(formState, {
-      ...portalSubmissionOptions
-    }),
+    submit: async (formState) => {
+      try {
+        return await submitAttorneyApplication(formState, { ...portalSubmissionOptions })
+      } catch (error) {
+        await refreshTermsAfterVersionConflict(error, options.refreshTerms, () => { form.termsAccepted = false })
+        throw error
+      }
+    },
     onSuccess: async () => {
       trackEvent('partner_application_submitted', {
         partner_type: 'attorney',

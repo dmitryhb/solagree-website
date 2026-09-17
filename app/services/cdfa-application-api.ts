@@ -72,7 +72,9 @@ export const createCdfaApplicationSubmissionPayload = (
     adrNetworks: form.adrNetworks,
     clientSource: form.clientSource,
     consultationInterest: form.consultationInterest,
-    termsAccepted: form.termsAccepted
+    termsAccepted: form.termsAccepted,
+    termsVersion: form.termsVersion,
+    termsUrl: form.termsUrl
   }
 }
 
