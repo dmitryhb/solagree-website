@@ -9,3 +9,5 @@ The catalogue API returns only public metadata. Live actions go through the Port
 HIR-259 owns registration email delivery and complete HubSpot lifecycle. HIR-255 does not send those emails or replace Zoom's native registration/reminders. Existing legacy lead flows stay functional.
 
 Verify catalogue loading/error/empty states, live Zoom CTA, past events without recordings, on-demand lead capture and player fallback, keyboard navigation, mobile layout, legacy URLs, and Portal rejection of Partner-Only IDs. Provider delivery and restricted hosting settings require separate live acceptance.
+
+The shared operations mirror is [Webinars — Catalogue, Access and Operations (HIR-255)](https://app.notion.com/p/3dea9e902a248187b3e6c5e682d46982) in the Hirebrains/Solagree Portal documentation.
