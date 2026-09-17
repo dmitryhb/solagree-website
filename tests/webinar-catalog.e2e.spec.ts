@@ -6,6 +6,21 @@ const events = [
   { id: 'public-past', title: 'Working together', description: 'Our recent session.', host: 'Anne', startsAt: '2026-01-01T18:00:00Z', timeZone: 'America/New_York', format: 'live', audience: 'public', state: 'recording_coming_soon' }
 ]
 
+test('catalogue recovers from failure and safely handles an empty response', async ({ page }) => {
+  let available = false
+  await page.route(/\/api\/public\/webinars$/, async route => {
+    await route.fulfill(available
+      ? { json: { webinars: [] }, headers: { 'access-control-allow-origin': '*' } }
+      : { status: 503, json: { message: 'Unavailable' }, headers: { 'access-control-allow-origin': '*' } })
+  })
+  await page.goto('/webinars')
+  await expect(page.getByRole('alert')).toContainText('Webinars are temporarily unavailable')
+  available = true
+  await page.getByRole('button', { name: 'Try again' }).click()
+  await expect(page.getByText('New webinars will be announced here soon.')).toBeVisible()
+  await expect(page.locator('article')).toHaveCount(0)
+})
+
 test('catalogue states, mobile layout, branded gate and legacy routes', async ({ page }) => {
   await page.route(/\/api\/public\/webinars(?:\/|$)/, async route => {
     const path = new URL(route.request().url()).pathname
