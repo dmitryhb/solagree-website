@@ -11,17 +11,22 @@ import {
 import { focusPageDestination } from '~/utils/focus-destination'
 import { validateNativeForm } from '~/utils/native-form-validation'
 import type { WebinarFormState, WebinarRegistrationContent } from '~/types/webinar'
+import { requestWebinarAccess } from '~/services/webinar-catalog-api'
 
 interface WatchWebinarFormProps {
   subtitle?: string
   redirectPath?: string
   submissionType?: WebinarRegistrationContent['submissionType']
+  webinarId?: string
 }
+
+const emit = defineEmits<{ unlocked: [accessPath: string] }>()
 
 const props = withDefaults(defineProps<WatchWebinarFormProps>(), {
   subtitle: attorneyWebinarRegistrationContent.formSubtitle,
   redirectPath: attorneyWebinarRegistrationContent.formRedirectPath,
-  submissionType: attorneyWebinarRegistrationContent.submissionType
+  submissionType: attorneyWebinarRegistrationContent.submissionType,
+  webinarId: undefined
 })
 
 const portalSubmissionOptions = usePortalFormSubmissionOptions()
@@ -40,15 +45,21 @@ const {
   submitting,
   submissionResult,
   handleSubmit
-} = useApplicationSubmission<WebinarFormState, Awaited<ReturnType<typeof submitWebinarRegistration>>>({
+} = useApplicationSubmission<WebinarFormState, { accessPath?: string }>({
   validate: () => validateNativeForm(formEl.value),
   getFormState: () => form,
-  submit: (formState) => submitWebinarRegistration(formState, {
+  submit: async (formState) => props.webinarId
+    ? await requestWebinarAccess(props.webinarId, formState, portalSubmissionOptions)
+    : await submitWebinarRegistration(formState, {
     ...portalSubmissionOptions,
     submissionType: props.submissionType,
     sourceUrl
-  }),
-  onSuccess: async () => {
+    }).then(() => ({})),
+  onSuccess: async (result) => {
+    if (result.accessPath) {
+      emit('unlocked', result.accessPath)
+      return
+    }
     await navigateTo(props.redirectPath)
     await focusPageDestination()
   },
