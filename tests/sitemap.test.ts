@@ -78,6 +78,7 @@ describe('Sitemap route list', () => {
     const publishedArticlePaths = getArticleSitemapRoutes(getPublishedArticles(resourceContentEntries))
       .map(route => route.path)
     const expectedPaths = [
+      '/webinars',
       '/military-divorce',
       '/divorce-special-needs-children',
       '/',

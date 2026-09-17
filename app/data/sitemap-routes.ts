@@ -4,6 +4,7 @@ import type { ResourceArticle } from '#shared/types/resource-content'
 import type { SitemapRoute } from '~/types/sitemap'
 
 const publicRoutes: SitemapRoute[] = [
+  { path: '/webinars', changefreq: 'weekly', priority: 0.7 },
   { path: '/military-divorce', changefreq: 'monthly', priority: 0.7 },
   { path: '/divorce-special-needs-children', changefreq: 'monthly', priority: 0.7 },
   {

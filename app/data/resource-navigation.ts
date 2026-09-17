@@ -12,6 +12,6 @@ export const resourceNavigationLinks = [
   },
   {
     label: 'Webinars & Events',
-    to: '/webinar'
+    to: '/webinars'
   }
 ] as const satisfies readonly AppLink[]
