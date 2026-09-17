@@ -3,6 +3,7 @@ export type InitialConsultSelectionId = 'first-available' | 'taj' | 'stacie' | '
 
 /** Public runtime values used to configure Cal.com Initial Consult event paths. */
 export interface InitialConsultBookingRuntimeConfig {
+  unpublishedConsultants?: unknown
   firstAvailableEventPath?: unknown
   tajEventPath?: unknown
   stacieEventPath?: unknown
@@ -98,12 +99,24 @@ export const normalizeInitialConsultEventPath = (value: unknown): string | null 
 
 /**
  * Resolves all event paths from public runtime configuration.
- * Returns an empty list when any required event is missing or malformed so the page cannot offer a partial flow.
+ * Unpublished consultants keep their content but are excluded before event validation.
+ * Returns an empty list when any published event is missing or malformed.
  */
 export const resolveInitialConsultBookingEvents = (
   config: InitialConsultBookingRuntimeConfig
 ): InitialConsultBookingEvent[] => {
-  const events = initialConsultEventDefinitions.map((definition): InitialConsultBookingEvent | null => {
+  const unpublishedValue = config.unpublishedConsultants ?? 'jessica'
+  if (typeof unpublishedValue !== 'string') return []
+
+  const unpublished = unpublishedValue.split(',').map(id => id.trim()).filter(Boolean)
+  if (unpublished.some(id => !initialConsultEventDefinitions.some(
+    definition => definition.id !== 'first-available' && definition.id === id
+  ))) return []
+
+  const publishedDefinitions = initialConsultEventDefinitions.filter(definition => !unpublished.includes(definition.id))
+  if (publishedDefinitions.length === 1) return []
+
+  const events = publishedDefinitions.map((definition): InitialConsultBookingEvent | null => {
     const eventPath = normalizeInitialConsultEventPath(config[definition.configKey])
     const profile = initialConsultantProfileContent[definition.id]
 

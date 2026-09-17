@@ -10,6 +10,7 @@ import {
 import { resolveInitialConsultBookingEvents } from '../shared/initial-consult-booking.ts'
 
 const events = resolveInitialConsultBookingEvents({
+  unpublishedConsultants: '',
   firstAvailableEventPath: 'initial-consults/initial-consult',
   tajEventPath: 'initial-consults/initial-consult-taj',
   stacieEventPath: 'initial-consults/initial-consult-stacie',

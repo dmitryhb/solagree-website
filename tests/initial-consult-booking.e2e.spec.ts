@@ -4,13 +4,13 @@ const expectedEvents = [
   ['first-available', 'initial-consults/initial-consult'],
   ['taj', 'initial-consults/initial-consult-taj'],
   ['stacie', 'initial-consults/initial-consult-stacie'],
-  ['james', 'initial-consults/initial-consult-james'],
-  ['jessica', 'initial-consults/initial-consult-jessica']
+  ['james', 'initial-consults/initial-consult-james']
 ] as const
 
 test('switches the live booking iframe to each selected Cal.com event', async ({ page }) => {
   await page.route(/https:\/\/.*\.cal\.com\//, route => route.abort())
   await page.goto('/', { waitUntil: 'domcontentloaded' })
+  await expect(page.locator('[data-consultant-id="jessica"]')).toHaveCount(0)
 
   const embed = page.locator('.calcom-booking-embed__frame')
   await expect(embed).toHaveCount(1)

@@ -8,6 +8,7 @@ import {
 } from '../shared/initial-consult-booking'
 
 const events = resolveInitialConsultBookingEvents({
+  unpublishedConsultants: '',
   firstAvailableEventPath: 'initial-consults/initial-consult',
   tajEventPath: 'initial-consults/initial-consult-taj',
   stacieEventPath: 'initial-consults/initial-consult-stacie',
@@ -34,6 +35,16 @@ afterEach(() => {
 })
 
 describe('InitialConsultBookingPage', () => {
+  it('omits an unpublished consultant from the rendered selector', () => {
+    const publishedEvents = events.filter(event => event.id !== 'jessica')
+    const wrapper = mount(InitialConsultBookingPage, {
+      props: { events: publishedEvents, selectedEvent: firstEvent, trackingContext: {} },
+      global: { stubs: { CalComBookingEmbed: true, SiteFooter: true } }
+    })
+    expect(wrapper.find('[data-consultant-id="jessica"]').exists()).toBe(false)
+    expect(wrapper.findAll('.consultant-selector__headshot')).toHaveLength(3)
+  })
+
   it('renders the client-approved booking policy', () => {
     const wrapper = mount(InitialConsultBookingPage, {
       props: {

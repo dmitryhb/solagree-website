@@ -8,7 +8,7 @@ The Nuxt runtime configuration uses paths relative to `https://solagree.cal.com`
 
 | Selection | Cal.com event ID | Event path | Host assignment |
 | --- | ---: | --- | --- |
-| First Available | `6658910` | `initial-consults/initial-consult` | Round robin: Taj, Stacie, Jessica, James |
+| First Available | `6658910` | `initial-consults/initial-consult` | Round robin: Taj, Stacie, James (Jessica paused September 17) |
 | Taj Chiu | `6658975` | `initial-consults/initial-consult-taj` | Taj only |
 | Stacie Sanders | `6658981` | `initial-consults/initial-consult-stacie` | Stacie only |
 | Jessica Urash | `6659009` | `initial-consults/initial-consult-jessica` | Jessica only |
@@ -65,3 +65,14 @@ The client confirmed the following requirements on August 28, 2026. Cal.com owns
 - Configure and reload-verify the approved booking fields on all five events. The current public form does not yet satisfy the full approved field set.
 - Complete the safe live-payment test matrix under HIR-248; Stripe account activation itself is complete.
 - Run the full Phone and Zoom booking/cancellation acceptance matrix under HIR-250, including direct-host and First Available paths, before production sign-off.
+
+
+## Temporarily unpublishing consultants
+
+The website setting `NUXT_PUBLIC_CALCOM_INITIAL_CONSULT_UNPUBLISHED_CONSULTANTS` accepts comma-separated consultant ids: `taj`, `stacie`, `james`, `jessica`. It defaults to `jessica`. An explicitly empty value publishes everyone. Profiles and event paths are retained for restoration; unpublished event paths are not required. Invalid ids or unpublishing the entire team disable the booking UI.
+
+Rebuild and deploy the static website after changing this setting. This is an environment setting, not a Portal admin draft control.
+
+Website visibility does not change Cal.com assignment. Before completing a pause, separately exclude the consultant from the First Available round-robin event and disable their direct event's booking availability. Verify that an old direct URL cannot accept new bookings; hiding a Cal.com link alone may not prevent direct-link bookings. Preserve existing appointments and the member account. Restore Cal.com availability and host assignment before removing the id from the website setting and redeploying.
+
+September 17: website code defaults Jessica to unpublished. Website deployment remains pending. Cal.com First Available now contains only Taj, Stacie, and James. Jessica’s direct event is Hidden and its booking window is restricted to September 16, 2026–September 16, 2026 (past), preventing new slots. To restore it, return Limits & buffers to 14 calendar days, retain the existing unchecked “Always 14 days available” setting unless separately approved, enable visibility, and re-add Jessica to First Available. Her previous two-hour notice and 15-minute post-event buffer are retained. The latest HIR-250 acceptance prerequisites require an isolated test setup with no real charges; the earlier live-payment wording above is historical. Client confirmation that the other three connected their calendars and Zoom is a readiness signal, not completed acceptance evidence.

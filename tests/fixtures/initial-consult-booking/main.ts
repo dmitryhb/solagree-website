@@ -17,8 +17,8 @@ const events = resolveInitialConsultBookingEvents({
 })
 const firstEvent = events[0]
 
-if (!firstEvent || events.length !== 5) {
-  throw new Error('Initial Consult E2E fixture must resolve five booking events.')
+if (!firstEvent || events.length !== 4) {
+  throw new Error('Initial Consult E2E fixture must resolve First Available and three published consultants.')
 }
 
 const app = createApp({

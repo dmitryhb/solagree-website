@@ -9,6 +9,7 @@ import {
 } from '../shared/initial-consult-booking.ts'
 
 const configuredEvents: InitialConsultBookingRuntimeConfig = {
+  unpublishedConsultants: '',
   firstAvailableEventPath: 'initial-consults/initial-consult',
   tajEventPath: 'initial-consults/initial-consult-taj',
   stacieEventPath: 'initial-consults/initial-consult-stacie',
@@ -90,4 +91,19 @@ test('forwards only a compact non-identifying Cal.com tracking allowlist', () =>
     utm_source: 'newsletter',
     utm_campaign: 'summer_2026'
   })
+})
+
+
+test('unpublishes Jessica by default without requiring her event path and supports restoration', () => {
+  const events = resolveInitialConsultBookingEvents({ ...configuredEvents, unpublishedConsultants: undefined, jessicaEventPath: '' })
+  assert.deepEqual(events.map(event => event.id), ['first-available', 'taj', 'stacie', 'james'])
+  assert.equal(resolveInitialConsultBookingEvent(events, 'jessica'), null)
+  assert.equal(resolveInitialConsultBookingEvents(configuredEvents).length, 5)
+  assert.equal(resolveInitialConsultBookingEvents({ ...configuredEvents, unpublishedConsultants: ' taj, jessica ', tajEventPath: '' }).length, 3)
+})
+
+test('rejects invalid publishing settings and an entirely unpublished team', () => {
+  for (const unpublishedConsultants of [false, 'jesica', 'first-available', 'taj,stacie,james,jessica']) {
+    assert.deepEqual(resolveInitialConsultBookingEvents({ ...configuredEvents, unpublishedConsultants }), [])
+  }
 })
