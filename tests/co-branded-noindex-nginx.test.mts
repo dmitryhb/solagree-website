@@ -11,10 +11,10 @@ test('co-branded noindex nginx snippet passes the textual configuration check', 
   assert.deepEqual(verifyCoBrandedNoindexNginxConfig(), [])
 })
 
-test('nginx snippet keeps both co-branded route families on the static fallback with a noindex header', () => {
+test('nginx snippet keeps dynamic route families on the static fallback with a noindex header', () => {
   const config = readRepoFile('config/nginx/co-branded-noindex.conf')
 
-  for (const prefix of ['/go/', '/cdfa/go/']) {
+  for (const prefix of ['/go/', '/cdfa/go/', '/webinars/']) {
     assert.match(config, new RegExp(`location\\s+\\^~\\s+${prefix}\\s*\\{`), `missing location block for ${prefix}`)
   }
 
@@ -23,7 +23,14 @@ test('nginx snippet keeps both co-branded route families on the static fallback 
   assert.doesNotMatch(config, /return\s+404/)
 })
 
-test('robots.txt never disallows the co-branded route families', () => {
+test('webinar catalogue remains indexable while event detail paths are noindexed', () => {
+  const config = readRepoFile('config/nginx/co-branded-noindex.conf')
+  assert.match(config, /location\s+=\s+\/webinars\s*\{\s*try_files\s+\/webinars\/index\.html\s+=404;\s*\}/)
+  assert.match(config, /location\s+=\s+\/webinars\/\s*\{\s*return\s+301\s+\/webinars;\s*\}/)
+  assert.match(config, /location\s+\^~\s+\/webinars\/\s*\{\s*add_header X-Robots-Tag "noindex, nofollow" always;/)
+})
+
+test('robots.txt never disallows the dynamic route families', () => {
   const robots = readRepoFile('public/robots.txt')
   const disallowLines = robots
     .split('\n')
@@ -32,9 +39,9 @@ test('robots.txt never disallows the co-branded route families', () => {
 
   for (const line of disallowLines) {
     assert.equal(
-      /\/(go|cdfa\/go)(\/|$|\?)/.test(line),
+      /\/(go|cdfa\/go|webinars)(\/|$|\?)/.test(line),
       false,
-      `robots.txt must not disallow co-branded routes (found "${line}") — crawlers must fetch these URLs to see the noindex signal`
+      `robots.txt must not disallow dynamic routes (found "${line}") — crawlers must fetch these URLs to see the noindex signal`
     )
   }
 })
@@ -49,6 +56,8 @@ test('deployment scripts verify the noindex header after upload', () => {
   ] as const) {
     assert.ok(script.includes('X-Robots-Tag'), `${name} must assert the X-Robots-Tag header`)
     assert.ok(script.includes('noindex, nofollow'), `${name} must assert the full noindex, nofollow value`)
+    assert.ok(script.includes('/webinars/__webinar-route-check__'), `${name} must probe a webinar detail URL`)
+    assert.ok(script.includes('WEBINAR_CATALOG_STATUS'), `${name} must check the indexable webinar catalogue`)
   }
 
   assert.ok(

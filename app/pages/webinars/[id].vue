@@ -22,7 +22,8 @@ useSolagreeSeo({
   title: () => webinar.value?.title || 'Webinar',
   description: () => webinar.value?.description || 'Join a Solagree webinar.',
   path: () => `/webinars/${encodeURIComponent(id.value)}`,
-  noIndex: () => !webinar.value
+  // Static hosting serves the same /200.html shell for every event ID.
+  noIndex: true
 })
 </script>
 

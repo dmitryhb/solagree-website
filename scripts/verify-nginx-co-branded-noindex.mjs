@@ -3,7 +3,7 @@ import { fileURLToPath } from 'node:url'
 
 const ROOT_DIR = fileURLToPath(new URL('..', import.meta.url))
 
-export const CO_BRANDED_LOCATION_PREFIXES = ['/go/', '/cdfa/go/']
+export const DYNAMIC_NOINDEX_LOCATION_PREFIXES = ['/go/', '/cdfa/go/', '/webinars/']
 export const EXPECTED_X_ROBOTS_TAG_DIRECTIVE = 'add_header X-Robots-Tag "noindex, nofollow" always;'
 export const EXPECTED_TRY_FILES_DIRECTIVE = 'try_files $uri $uri/ /200.html;'
 
@@ -30,11 +30,11 @@ const extractLocationBlock = (config, prefix) => {
 const normalizeDirective = (line) => line.trim().replace(/\s+/g, ' ')
 
 /**
- * Textual regression check for the co-branded noindex nginx snippet.
+ * Textual regression check for the dynamic-route noindex nginx snippet.
  *
  * `nginx -t` is not available in CI or on developer laptops for this repo, so
  * this validates the structure the static hosting contract depends on:
- * both co-branded location families, the X-Robots-Tag noindex header on every
+ * all dynamic location families, the X-Robots-Tag noindex header on every
  * response, the /200.html SPA fallback (never a true HTTP 404), and deploy
  * scripts that install and verify the snippet.
  *
@@ -50,7 +50,7 @@ export const verifyCoBrandedNoindexNginxConfig = () => {
     return ['config/nginx/co-branded-noindex.conf is missing.']
   }
 
-  for (const prefix of CO_BRANDED_LOCATION_PREFIXES) {
+  for (const prefix of DYNAMIC_NOINDEX_LOCATION_PREFIXES) {
     const block = extractLocationBlock(config, prefix)
 
     if (block === null) {
@@ -73,6 +73,11 @@ export const verifyCoBrandedNoindexNginxConfig = () => {
         `"location ^~ ${prefix}" must contain exactly "${EXPECTED_TRY_FILES_DIRECTIVE}".`
       )
     }
+  }
+
+  if (!/location\s+=\s+\/webinars\s*\{\s*try_files\s+\/webinars\/index\.html\s+=404;\s*\}/.test(config)
+    || !/location\s+=\s+\/webinars\/\s*\{\s*return\s+301\s+\/webinars;\s*\}/.test(config)) {
+    failures.push('The indexable /webinars catalogue needs exact locations before the dynamic noindex prefix.')
   }
 
   if (/return\s+404/.test(config)) {

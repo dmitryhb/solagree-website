@@ -81,6 +81,7 @@ if [ "$DRY_RUN" = false ] && [ "$SKIP_ROUTE_CHECK" = false ]; then
   ROUTE_CHECK_PATHS=(
     "/go/__co-branded-route-check__"
     "/cdfa/go/__co-branded-route-check__"
+    "/webinars/__webinar-route-check__"
   )
 
   for route_check_path in "${ROUTE_CHECK_PATHS[@]}"; do
@@ -95,8 +96,8 @@ if [ "$DRY_RUN" = false ] && [ "$SKIP_ROUTE_CHECK" = false ]; then
       cat >&2 <<MESSAGE
 Staging route check failed: $ROUTE_CHECK_URL returned HTTP 404.
 
-The generated static website must route dynamic Nuxt paths such as /go/:slug
-and /cdfa/go/:slug to /200.html. Update the nginx server block for $STAGING_SITE_URL with:
+The generated static website must route dynamic Nuxt paths such as /go/:slug,
+/cdfa/go/:slug, and /webinars/:id to /200.html. Update the nginx server block for $STAGING_SITE_URL with:
 
   location / {
       try_files \$uri \$uri/ /200.html;
@@ -113,7 +114,7 @@ MESSAGE
 Staging noindex check failed: $ROUTE_CHECK_URL responded without an
 X-Robots-Tag: noindex, nofollow header.
 
-Co-branded routes are client-only behind the static /200.html fallback, so the
+Dynamic routes are client-only behind the static /200.html fallback, so the
 initial HTTP response must carry the noindex signal as a response header. Add
 the co-branded noindex locations from config/nginx/co-branded-noindex.conf to
 the nginx server block for $STAGING_SITE_URL, before the SPA fallback:
@@ -128,6 +129,19 @@ the nginx server block for $STAGING_SITE_URL, before the SPA fallback:
       try_files \$uri \$uri/ /200.html;
   }
 
+  location = /webinars {
+      try_files /webinars/index.html =404;
+  }
+
+  location = /webinars/ {
+      return 301 /webinars;
+  }
+
+  location ^~ /webinars/ {
+      add_header X-Robots-Tag "noindex, nofollow" always;
+      try_files \$uri \$uri/ /200.html;
+  }
+
 Then reload nginx and rerun this deployment.
 MESSAGE
       exit 1
@@ -136,4 +150,16 @@ MESSAGE
     rm -f "$ROUTE_CHECK_HEADER_FILE"
     echo "Route check passed: $ROUTE_CHECK_URL returned HTTP $ROUTE_CHECK_STATUS with X-Robots-Tag noindex"
   done
+
+  WEBINAR_CATALOG_HEADER_FILE="$(mktemp)"
+  WEBINAR_CATALOG_STATUS="$(curl -sS -o /dev/null \
+    -D "$WEBINAR_CATALOG_HEADER_FILE" \
+    -w "%{http_code}" "${STAGING_SITE_URL%/}/webinars" || true)"
+  if [ "$WEBINAR_CATALOG_STATUS" != "200" ] \
+    || grep -iq '^x-robots-tag:.*noindex' "$WEBINAR_CATALOG_HEADER_FILE"; then
+    rm -f "$WEBINAR_CATALOG_HEADER_FILE"
+    echo "Staging webinar catalogue check failed: /webinars must return HTTP 200 without noindex." >&2
+    exit 1
+  fi
+  rm -f "$WEBINAR_CATALOG_HEADER_FILE"
 fi

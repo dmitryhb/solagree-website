@@ -161,6 +161,7 @@ if [ "$DRY_RUN" = false ] && [ "$SKIP_ROUTE_CHECK" = false ]; then
   ROUTE_CHECK_PATHS=(
     "/go/__co-branded-route-check__"
     "/cdfa/go/__co-branded-route-check__"
+    "/webinars/__webinar-route-check__"
   )
 
   for route_check_path in "${ROUTE_CHECK_PATHS[@]}"; do
@@ -177,7 +178,7 @@ if [ "$DRY_RUN" = false ] && [ "$SKIP_ROUTE_CHECK" = false ]; then
 Production route check failed: $ROUTE_CHECK_URL returned HTTP 404.
 
 The static website nginx server block for $ROUTE_CHECK_HOST must route dynamic
-Nuxt paths such as /go/:slug and /cdfa/go/:slug to /200.html. Confirm the nginx config has:
+Nuxt paths such as /go/:slug, /cdfa/go/:slug, and /webinars/:id to /200.html. Confirm the nginx config has:
 
   location / {
       try_files \$uri \$uri/ /200.html;
@@ -192,7 +193,7 @@ MESSAGE
 Production noindex check failed: $ROUTE_CHECK_URL responded without an
 X-Robots-Tag: noindex, nofollow header.
 
-Co-branded routes are client-only behind the static /200.html fallback, so the
+Dynamic routes are client-only behind the static /200.html fallback, so the
 initial HTTP response must carry the noindex signal as a response header. The
 nginx server block for $ROUTE_CHECK_HOST must include the co-branded noindex
 snippet (deployed from config/nginx/co-branded-noindex.conf) before the SPA fallback:
@@ -205,6 +206,19 @@ MESSAGE
     rm -f "$ROUTE_CHECK_HEADER_FILE"
     echo "Route check passed: $ROUTE_CHECK_URL returned HTTP $ROUTE_CHECK_STATUS with X-Robots-Tag noindex"
   done
+
+  WEBINAR_CATALOG_HEADER_FILE="$(mktemp)"
+  WEBINAR_CATALOG_STATUS="$(curl -sS -o /dev/null -k \
+    --resolve "${ROUTE_CHECK_HOST}:443:${ROUTE_CHECK_RESOLVE_IP}" \
+    -D "$WEBINAR_CATALOG_HEADER_FILE" \
+    -w "%{http_code}" "https://${ROUTE_CHECK_HOST}/webinars" || true)"
+  if [ "$WEBINAR_CATALOG_STATUS" != "200" ] \
+    || grep -iq '^x-robots-tag:.*noindex' "$WEBINAR_CATALOG_HEADER_FILE"; then
+    rm -f "$WEBINAR_CATALOG_HEADER_FILE"
+    echo "Production webinar catalogue check failed: /webinars must return HTTP 200 without noindex." >&2
+    exit 1
+  fi
+  rm -f "$WEBINAR_CATALOG_HEADER_FILE"
 
   LEGACY_REDIRECT_CHECK_URL="https://${ROUTE_CHECK_HOST}/about/"
   LEGACY_REDIRECT_CHECK_RESULT="$(curl -sS -o /dev/null -k \
