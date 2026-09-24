@@ -36,6 +36,7 @@
     "test:case-qualifier-e2e": "playwright test -c playwright.case-qualifier.config.ts",
     "test:resource-content-validation": "node --experimental-strip-types --test tests/resource-content-validation.test.mts",
     "test:resources-navigation": "vitest run tests/resources-navigation.component.test.ts",
+    "test:phone-validation-e2e": "playwright test -c playwright.phone-validation.config.ts",
     "prebuild": "npm run validate:resource-content",
     "postinstall": "nuxt prepare",
     "postgenerate": "node scripts/write-release-manifest.mjs"

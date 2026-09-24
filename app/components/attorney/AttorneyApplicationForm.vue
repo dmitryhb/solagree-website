@@ -85,7 +85,7 @@ watchEffect(() => {
         type="tel"
         autocomplete="tel"
         inputmode="tel"
-        pattern="(?:\+?1[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}"
+        pattern="(?:\+?1[.\s\-]?)?\(?\d{3}\)?[.\s\-]?\d{3}[.\s\-]?\d{4}"
         title="Use a 10-digit US phone number, e.g. 1-415-555-1234 or 415-555-1234."
         placeholder="1-415-555-1234..."
         required
