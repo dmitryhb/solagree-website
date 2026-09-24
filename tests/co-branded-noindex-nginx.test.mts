@@ -6,8 +6,11 @@ import { execFileSync, spawnSync } from 'node:child_process'
 import test from 'node:test'
 
 import {
+  EXPECTED_FALLBACK_DIRECTIVE,
+  EXPECTED_TRY_FILES_DIRECTIVE,
   EXPECTED_X_ROBOTS_TAG_DIRECTIVE,
   NOINDEX_HEADER_VARIABLE,
+  SPA_FALLBACK_LOCATION,
   verifyCoBrandedNoindexNginxConfig
 } from '../scripts/verify-nginx-co-branded-noindex.mjs'
 
@@ -23,7 +26,7 @@ test('co-branded noindex nginx snippet passes the textual configuration check', 
   assert.deepEqual(verifyCoBrandedNoindexNginxConfig(), [])
 })
 
-test('nginx snippet keeps dynamic route families on the static fallback with a server-scoped noindex header', () => {
+test('nginx snippet keeps dynamic route families on a named static fallback with a server-scoped noindex header', () => {
   const config = readRepoFile('config/nginx/co-branded-noindex.conf')
 
   for (const prefix of ['/go/', '/cdfa/go/', '/webinars/']) {
@@ -35,7 +38,11 @@ test('nginx snippet keeps dynamic route families on the static fallback with a s
     config.indexOf(EXPECTED_X_ROBOTS_TAG_DIRECTIVE) > config.lastIndexOf('location ^~ /webinars/'),
     'X-Robots-Tag must remain at server scope after the locations define its marker variable'
   )
-  assert.match(config, /try_files \$uri \$uri\/ \/200\.html;/)
+  assert.ok(config.includes(EXPECTED_TRY_FILES_DIRECTIVE))
+  assert.match(
+    config,
+    new RegExp(`location\\s+${SPA_FALLBACK_LOCATION}\\s*\\{\\s*${EXPECTED_FALLBACK_DIRECTIVE.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*\\}`)
+  )
   assert.doesNotMatch(config, /return\s+404/)
 
   for (const prefix of ['/go/', '/cdfa/go/', '/webinars/']) {
@@ -69,13 +76,9 @@ test('noindex matching uses normalized dynamic locations through the SPA fallbac
   const config = readRepoFile('config/nginx/co-branded-noindex.conf')
 
   assert.match(config, /Nginx normalizes the request URI before location matching/)
-  assert.match(config, /if\s*\(\$uri\s+!=\s+\/200\.html\)/)
-  assert.match(config, /if\s*\(\$request_uri\s+~\s+\^\/200\\\.html\(\?:\[\?#\]\|\$\)\)/)
-  assert.doesNotMatch(
-    config,
-    /if\s*\(\$request_uri\s+~\s+\^\/(?:\(\?:go\|cdfa\/go\)|webinars)/,
-    'raw dynamic-route matching misses percent-encoded aliases'
-  )
+  assert.match(config, /^set\s+\$co_branded_noindex_header\s+"";$/m)
+  assert.doesNotMatch(config, /\bif\s*\(/, 'marker initialization must not depend on URI exceptions')
+  assert.ok(config.includes(`location ${SPA_FALLBACK_LOCATION}`))
 })
 
 test('nginx normalizes encoded dynamic aliases before the fallback without dropping auth or security headers', {
@@ -86,8 +89,11 @@ test('nginx normalizes encoded dynamic aliases before the fallback without dropp
 
   try {
     mkdirSync(join(runtimeDir, 'site', 'webinars'), { recursive: true })
+    mkdirSync(join(runtimeDir, 'site', 'go'), { recursive: true })
     cpSync(new URL('../config/nginx/co-branded-noindex.conf', import.meta.url), join(runtimeDir, 'noindex.conf'))
     writeFileSync(join(runtimeDir, 'site', '200.html'), 'SPA fallback')
+    writeFileSync(join(runtimeDir, 'site', 'plain.html'), 'Ordinary static page')
+    writeFileSync(join(runtimeDir, 'site', 'go', 'existing.html'), 'Existing dynamic-family static file')
     writeFileSync(join(runtimeDir, 'site', 'webinars', 'index.html'), 'Webinar catalogue')
     writeFileSync(join(runtimeDir, 'users'), 'user:$apr1$hir611$HkWMaK0PkjgCJmQFAYotH/\n')
     writeFileSync(join(runtimeDir, 'nginx.conf'), `error_log /dev/stderr notice;
@@ -121,36 +127,56 @@ http {
     const baseUrl = `http://127.0.0.1:${port}`
     const authorization = `Basic ${Buffer.from('user:pass').toString('base64')}`
     const dynamicPaths = [
-      '/go/partner',
-      '/cdfa/go/partner',
-      '/webinars/event-1',
-      '/%67o/example',
-      '/cdfa/%67o/example?source=review',
-      '/web%69nars/example'
-    ]
+      ['/go/partner', 'SPA fallback'],
+      ['/go//partner?source=duplicate-slash', 'SPA fallback'],
+      ['/go/existing.html', 'Existing dynamic-family static file'],
+      ['/cdfa/go/partner', 'SPA fallback'],
+      ['/webinars/event-1', 'SPA fallback'],
+      ['/%67o/example', 'SPA fallback'],
+      ['/cdfa/%67o/example?source=review', 'SPA fallback'],
+      ['/web%69nars/example', 'SPA fallback'],
+      ['/webinars/%65vent-1?source=encoded', 'SPA fallback']
+    ] as const
 
-    for (const path of dynamicPaths) {
+    for (const [path, expectedBody] of dynamicPaths) {
       const response = await fetch(`${baseUrl}${path}`, {
         headers: { authorization },
         redirect: 'manual'
       })
 
-      assert.equal(response.status, 200, `${path} must use the SPA fallback`)
-      assert.equal(await response.text(), 'SPA fallback', `${path} must serve /200.html`)
+      assert.equal(response.status, 200, `${path} must return an authenticated HTTP 200`)
+      assert.equal(await response.text(), expectedBody, `${path} must serve the expected static response`)
       assert.equal(response.headers.get('x-robots-tag'), 'noindex, nofollow', `${path} must be noindexed`)
       assert.equal(response.headers.get('x-frame-options'), 'SAMEORIGIN', `${path} must retain security headers`)
       assert.equal(response.headers.get('x-content-type-options'), 'nosniff', `${path} must retain security headers`)
     }
 
-    for (const [path, expectedStatus] of [['/webinars', 200], ['/webinars/', 301], ['/200.html', 200]] as const) {
+    const indexablePaths = [
+      ['/webinars', 200, 'Webinar catalogue'],
+      ['/webinars?source=catalogue', 200, 'Webinar catalogue'],
+      ['/web%69nars?source=encoded-catalogue', 200, 'Webinar catalogue'],
+      ['/webinars/', 301, null],
+      ['/webinars/?source=trailing-slash', 301, null],
+      ['/200.html', 200, 'SPA fallback'],
+      ['/%32%30%30.html', 200, 'SPA fallback'],
+      ['//200.html?source=duplicate-slash', 200, 'SPA fallback'],
+      ['/plain.html', 200, 'Ordinary static page'],
+      ['/ordinary-client-route?source=fallback', 200, 'SPA fallback']
+    ] as const
+
+    for (const [path, expectedStatus, expectedBody] of indexablePaths) {
       const response = await fetch(`${baseUrl}${path}`, {
         headers: { authorization },
         redirect: 'manual'
       })
 
-      assert.equal(response.status, expectedStatus, `${path} must preserve catalogue handling`)
+      assert.equal(response.status, expectedStatus, `${path} must preserve indexable handling`)
+      if (expectedBody !== null) {
+        assert.equal(await response.text(), expectedBody, `${path} must serve the expected indexable response`)
+      }
       assert.equal(response.headers.get('x-robots-tag'), null, `${path} must remain indexable`)
       assert.equal(response.headers.get('x-frame-options'), 'SAMEORIGIN', `${path} must retain security headers`)
+      assert.equal(response.headers.get('x-content-type-options'), 'nosniff', `${path} must retain security headers`)
     }
 
     const unauthorized = await fetch(`${baseUrl}/%67o/example`, { redirect: 'manual' })
@@ -158,12 +184,22 @@ http {
     assert.match(unauthorized.headers.get('www-authenticate') ?? '', /^Basic /)
     assert.equal(unauthorized.headers.get('x-robots-tag'), 'noindex, nofollow')
     assert.equal(unauthorized.headers.get('x-frame-options'), 'SAMEORIGIN')
+
+    rmSync(join(runtimeDir, 'site', '200.html'))
+    const missingFallback = await fetch(`${baseUrl}/go/missing-fallback`, {
+      headers: { authorization },
+      redirect: 'manual'
+    })
+    assert.equal(missingFallback.status, 404, 'a missing /200.html fallback must fail closed')
+    assert.equal(missingFallback.headers.get('x-robots-tag'), 'noindex, nofollow')
+    assert.equal(missingFallback.headers.get('x-frame-options'), 'SAMEORIGIN')
+
     const logs = spawnSync('docker', ['logs', containerName], { encoding: 'utf8' })
     assert.equal(logs.status, 0, 'Docker logs must remain readable for regression diagnostics')
     assert.doesNotMatch(
       `${logs.stdout}${logs.stderr}`,
-      /using uninitialized "co_branded_noindex_header" variable/,
-      'indexable requests must not emit an uninitialized noindex-marker warning'
+      /uninitialized .*co_branded_noindex_header/i,
+      'no request shape may emit an uninitialized noindex-marker warning'
     )
   } finally {
     spawnSync('docker', ['stop', containerName], { stdio: 'ignore' })

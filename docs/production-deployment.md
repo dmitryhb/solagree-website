@@ -68,14 +68,14 @@ The noindex snippet sets a marker in each normalized dynamic location and adds
 its `X-Robots-Tag` header at `server` scope. Nginx normalizes escaped path
 characters before choosing a location, so this covers canonical paths and
 aliases such as `/%67o/example`, `/cdfa/%67o/example`, and
-`/web%69nars/example`. The marker survives the `try_files` internal redirect
-to `/200.html`. Keeping the output header at server scope keeps inherited
+`/web%69nars/example`. Dynamic misses enter the snippet's named fallback,
+which serves `/200.html` without restarting server rewrite processing or
+clearing the marker. Keeping the output header at server scope keeps inherited
 BasicAuth and security headers intact. The exact `/webinars` catalogue and its
 `/webinars/` canonical redirect do not enter a dynamic location and remain
-indexable. The snippet initializes the empty marker for ordinary requests but
-does not reset it during the fallback; direct `/200.html` requests are also
-initialized explicitly. This avoids Nginx uninitialized-variable warnings
-without masking the fallback marker.
+indexable. The snippet initializes the marker unconditionally, so ordinary
+pages plus direct, encoded, and duplicate-slash aliases of `/200.html` emit no
+robots header and no uninitialized-variable warning.
 
 ## Dynamic URLs cannot return a true HTTP 404
 

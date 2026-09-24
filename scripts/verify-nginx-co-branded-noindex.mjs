@@ -6,7 +6,9 @@ const ROOT_DIR = fileURLToPath(new URL('..', import.meta.url))
 export const DYNAMIC_NOINDEX_LOCATION_PREFIXES = ['/go/', '/cdfa/go/', '/webinars/']
 export const NOINDEX_HEADER_VARIABLE = '$co_branded_noindex_header'
 export const EXPECTED_X_ROBOTS_TAG_DIRECTIVE = `add_header X-Robots-Tag ${NOINDEX_HEADER_VARIABLE} always;`
-export const EXPECTED_TRY_FILES_DIRECTIVE = 'try_files $uri $uri/ /200.html;'
+export const SPA_FALLBACK_LOCATION = '@solagree_spa_fallback'
+export const EXPECTED_TRY_FILES_DIRECTIVE = `try_files $uri $uri/ ${SPA_FALLBACK_LOCATION};`
+export const EXPECTED_FALLBACK_DIRECTIVE = 'try_files /200.html =404;'
 
 const readRepoFile = (relativePath) => readFileSync(`${ROOT_DIR}${relativePath}`, 'utf8')
 
@@ -36,11 +38,12 @@ const normalizeDirective = (line) => line.trim().replace(/\s+/g, ' ')
  * `nginx -t` is not available in CI or on developer laptops for this repo, so
  * this validates the structure the static hosting contract depends on:
  * all dynamic location families, the X-Robots-Tag noindex header on every
- * fallback response, the /200.html SPA fallback (never a true HTTP 404), and
+ * fallback response, the /200.html SPA fallback, and
  * deploy scripts that install and verify the snippet. The header is configured
  * at server scope, while a marker is set in normalized dynamic locations. That
- * preserves inherited security headers and covers percent-encoded aliases
- * before the /200.html internal redirect.
+ * preserves inherited security headers and covers percent-encoded aliases. A
+ * named fallback serves /200.html without restarting server rewrites, so the
+ * marker remains set on dynamic responses.
  *
  * Returns an array of failure messages; empty means the configuration passed.
  */
@@ -62,16 +65,15 @@ export const verifyCoBrandedNoindexNginxConfig = () => {
     )
   }
 
-  if (!/if\s*\(\$uri\s+!=\s+\/200\.html\)\s*\{\s*set\s+\$co_branded_noindex_header\s+"";\s*\}/.test(config)
-    || !/if\s*\(\$request_uri\s+~\s+\^\/200\\\.html\(\?:\[\?#\]\|\$\)\)\s*\{\s*set\s+\$co_branded_noindex_header\s+"";\s*\}/.test(config)) {
+  if (!/^set\s+\$co_branded_noindex_header\s+"";$/m.test(config)) {
     failures.push(
-      'The server-scoped noindex marker must initialize ordinary requests without resetting the marker after the /200.html fallback.'
+      'The server-scoped noindex marker must initialize unconditionally before location matching.'
     )
   }
 
-  if (/if\s*\(\$request_uri\s+~\s+\^\/(?:\(\?:go\|cdfa\/go\)|webinars)/.test(config)) {
+  if (/\bif\s*\(/.test(config)) {
     failures.push(
-      'The noindex marker must be set from normalized location matching, not raw dynamic-route $request_uri regexes that percent-encoded aliases can bypass.'
+      'The noindex snippet must not depend on raw or normalized URI exceptions for marker initialization.'
     )
   }
 
@@ -104,6 +106,12 @@ export const verifyCoBrandedNoindexNginxConfig = () => {
         `"location ^~ ${prefix}" must contain exactly "${EXPECTED_TRY_FILES_DIRECTIVE}".`
       )
     }
+  }
+
+  if (!new RegExp(`location\\s+${SPA_FALLBACK_LOCATION}\\s*\\{\\s*${EXPECTED_FALLBACK_DIRECTIVE.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*\\}`).test(config)) {
+    failures.push(
+      `"location ${SPA_FALLBACK_LOCATION}" must contain exactly "${EXPECTED_FALLBACK_DIRECTIVE}".`
+    )
   }
 
   if (!/location\s+=\s+\/webinars\s*\{\s*try_files\s+\/webinars\/index\.html\s+=404;\s*\}/.test(config)
