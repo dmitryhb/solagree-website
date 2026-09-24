@@ -271,8 +271,8 @@ location / {
 }
 ```
 
-`npm run deploy:staging` checks this after upload by requesting a `/go/...`
-route and fails if nginx still returns `404`. Use `--skip-route-check` only when
+`npm run deploy:staging` checks this after upload by requesting dynamic routes
+and requiring HTTP 200 with noindex. Use `--skip-route-check` only when
 the server fallback is being changed separately.
 
 ### Co-branded routes are non-indexable
@@ -285,8 +285,9 @@ every `/go/*` and `/cdfa/go/*` URL is treated as non-indexable:
 
 - nginx sends `X-Robots-Tag: noindex, nofollow` on the initial HTTP response for
   `/go/*` and `/cdfa/go/*` (production installs `config/nginx/co-branded-noindex.conf`
-  automatically; the staging server block needs the same location blocks —
-  `npm run deploy:staging` fails the route check until they are added).
+  automatically; staging must include the complete canonical snippet directly
+  in its server block, including its server-scoped header configuration —
+  copying only the location blocks is insufficient).
 - The rendered app applies `noindex, nofollow` meta after hydration as a
   second layer, including the embed routes.
 - `robots.txt` deliberately has no `Disallow` rules for these paths: crawlers

@@ -42,6 +42,11 @@ const isCatalogue = url.endsWith('/webinars')
 
 appendFileSync(process.env.TEST_DEPLOY_LOG, 'curl auth=' + (auth ? 'provided' : 'none') + ' url=' + url + '\\n')
 
+if (mode === 'transport-failure') {
+  process.stdout.write('000')
+  process.exit(7)
+}
+
 let status = '200'
 let headers = ''
 if (mode === 'protected-success' && auth !== 'user = "test-user:${testPassword}"\\n') status = '401'
@@ -49,7 +54,10 @@ if (mode === 'public-success' && auth) status = '500'
 if (mode === 'invalid-credentials' && url.endsWith('/')) status = '401'
 if (mode === 'status-failure' && isDynamic) status = '500'
 if (isDynamic && mode !== 'header-failure') headers = 'X-Robots-Tag: noindex, nofollow\\n'
-if (isCatalogue) headers = ''
+if (isCatalogue) {
+  headers = mode === 'catalogue-noindex' ? 'X-Robots-Tag: noindex, nofollow\\n' : ''
+  if (mode === 'catalogue-status-failure') status = '500'
+}
 if (headerPath && headerPath !== '-w') writeFileSync(headerPath, headers)
 process.stdout.write(status)
 `)
@@ -60,8 +68,9 @@ process.stdout.write(status)
     env: {
       ...process.env,
       PATH: `${binDir}:${process.env.PATH}`,
-      STATIC_OUTPUT_DIR: outputDir,
-      STAGING_SITE_URL: 'https://staging.example.test',
+      NUXT_PUBLIC_SITE_URL: 'https://staging.example.test',
+      STAGING_BASIC_AUTH_USER: '',
+      STAGING_BASIC_AUTH_PASSWORD: '',
       TEST_CURL_MODE: mode,
       TEST_DEPLOY_LOG: logPath,
       ...(credentials ? {
@@ -71,7 +80,7 @@ process.stdout.write(status)
     }
   })
 
-  const log = readFileSync(logPath, 'utf8')
+  const log = existsSync(logPath) ? readFileSync(logPath, 'utf8') : ''
   rmSync(fixtureRoot, { force: true, recursive: true })
   if (!outputAlreadyExists) rmSync(outputDir, { force: true, recursive: true })
   return { ...result, log }
@@ -130,3 +139,28 @@ test('staging deployment rejects missing noindex headers on dynamic route respon
   assert.equal(result.status, 1)
   assert.match(result.stderr, /without an[\n ]+X-Robots-Tag: noindex, nofollow header/)
 })
+
+test('staging deployment rejects preflight transport failures before upload', () => {
+  const result = runDeployment({ mode: 'transport-failure' })
+
+  assert.equal(result.status, 1)
+  assert.match(result.stderr, /preflight failed: could not reach the staging site/)
+  assert.doesNotMatch(result.log, /rsync/)
+})
+
+test('staging deployment rejects partial credentials before requests or upload', () => {
+  const result = runDeployment({ credentials: { user: 'test-user', password: '' } })
+
+  assert.equal(result.status, 1)
+  assert.match(result.stderr, /must be set together/)
+  assert.equal(result.log, '')
+})
+
+for (const mode of ['catalogue-noindex', 'catalogue-status-failure']) {
+  test(`staging deployment rejects ${mode}`, () => {
+    const result = runDeployment({ mode })
+
+    assert.equal(result.status, 1)
+    assert.match(result.stderr, /catalogue check failed/)
+  })
+}

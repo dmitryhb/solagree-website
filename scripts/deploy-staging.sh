@@ -109,7 +109,10 @@ node "$ROOT_DIR/scripts/verify-sitemap.mjs"
 # Other status failures are left to the post-deployment route checks because a
 # deploy can be the fix for an existing application or server error.
 if [ "$DRY_RUN" = false ]; then
-  BASIC_AUTH_PREFLIGHT_STATUS="$(curl_staging -o /dev/null -w "%{http_code}" "${STAGING_SITE_URL%/}/" || true)"
+  if ! BASIC_AUTH_PREFLIGHT_STATUS="$(curl_staging -o /dev/null -w "%{http_code}" "${STAGING_SITE_URL%/}/")"; then
+    echo "Staging BasicAuth preflight failed: could not reach the staging site. No files were uploaded." >&2
+    exit 1
+  fi
   if [ "$BASIC_AUTH_PREFLIGHT_STATUS" = "401" ] || [ "$BASIC_AUTH_PREFLIGHT_STATUS" = "403" ]; then
     if [ -z "$STAGING_BASIC_AUTH_USER" ]; then
       cat >&2 <<MESSAGE
