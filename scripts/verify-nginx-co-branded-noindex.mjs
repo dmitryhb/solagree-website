@@ -4,7 +4,8 @@ import { fileURLToPath } from 'node:url'
 const ROOT_DIR = fileURLToPath(new URL('..', import.meta.url))
 
 export const DYNAMIC_NOINDEX_LOCATION_PREFIXES = ['/go/', '/cdfa/go/', '/webinars/']
-export const EXPECTED_X_ROBOTS_TAG_DIRECTIVE = 'add_header X-Robots-Tag "noindex, nofollow" always;'
+export const NOINDEX_HEADER_VARIABLE = '$co_branded_noindex_header'
+export const EXPECTED_X_ROBOTS_TAG_DIRECTIVE = `add_header X-Robots-Tag ${NOINDEX_HEADER_VARIABLE} always;`
 export const EXPECTED_TRY_FILES_DIRECTIVE = 'try_files $uri $uri/ /200.html;'
 
 const readRepoFile = (relativePath) => readFileSync(`${ROOT_DIR}${relativePath}`, 'utf8')
@@ -35,8 +36,10 @@ const normalizeDirective = (line) => line.trim().replace(/\s+/g, ' ')
  * `nginx -t` is not available in CI or on developer laptops for this repo, so
  * this validates the structure the static hosting contract depends on:
  * all dynamic location families, the X-Robots-Tag noindex header on every
- * response, the /200.html SPA fallback (never a true HTTP 404), and deploy
- * scripts that install and verify the snippet.
+ * fallback response, the /200.html SPA fallback (never a true HTTP 404), and
+ * deploy scripts that install and verify the snippet. The header must be
+ * configured at server scope from `$request_uri`, which remains stable through
+ * the internal redirect to /200.html and preserves inherited security headers.
  *
  * Returns an array of failure messages; empty means the configuration passed.
  */
@@ -48,6 +51,23 @@ export const verifyCoBrandedNoindexNginxConfig = () => {
     config = readRepoFile('config/nginx/co-branded-noindex.conf')
   } catch {
     return ['config/nginx/co-branded-noindex.conf is missing.']
+  }
+
+  const firstLocationIndex = config.search(/^\s*location\b/m)
+  const noindexHeaderIndex = config.indexOf(EXPECTED_X_ROBOTS_TAG_DIRECTIVE)
+
+  if (noindexHeaderIndex === -1 || noindexHeaderIndex > firstLocationIndex) {
+    failures.push(
+      `config/nginx/co-branded-noindex.conf must add X-Robots-Tag from ${NOINDEX_HEADER_VARIABLE} at server scope before its location blocks.`
+    )
+  }
+
+  if (!/set\s+\$co_branded_noindex_header\s+"";/.test(config)
+    || !/if\s*\(\$request_uri\s+~\s+\^\/\(\?:go\|cdfa\/go\)\/\)\s*\{\s*set\s+\$co_branded_noindex_header\s+"noindex, nofollow";\s*\}/.test(config)
+    || !/if\s*\(\$request_uri\s+~\s+\^\/webinars\/\[\^\?\]\)\s*\{\s*set\s+\$co_branded_noindex_header\s+"noindex, nofollow";\s*\}/.test(config)) {
+    failures.push(
+      'The server-scoped X-Robots-Tag header must derive noindex from the original $request_uri for co-branded and webinar-detail routes only.'
+    )
   }
 
   for (const prefix of DYNAMIC_NOINDEX_LOCATION_PREFIXES) {
@@ -62,9 +82,9 @@ export const verifyCoBrandedNoindexNginxConfig = () => {
 
     const directives = block.split('\n').map(normalizeDirective).filter(Boolean)
 
-    if (!directives.includes(EXPECTED_X_ROBOTS_TAG_DIRECTIVE)) {
+    if (directives.some(directive => directive.startsWith('add_header X-Robots-Tag '))) {
       failures.push(
-        `"location ^~ ${prefix}" must contain exactly "${EXPECTED_X_ROBOTS_TAG_DIRECTIVE}".`
+        `"location ^~ ${prefix}" must not define X-Robots-Tag: it must inherit the server-level header through the /200.html internal redirect.`
       )
     }
 

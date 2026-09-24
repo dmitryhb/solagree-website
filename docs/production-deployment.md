@@ -64,10 +64,14 @@ location / {
 }
 ```
 
-Note: nginx `add_header` directives on a `location` block replace inherited
-`server`-level `add_header` directives for that location. If security headers
-are later added at the `server` level, repeat them inside the co-branded
-`location` blocks from the snippet.
+The noindex snippet sets its `X-Robots-Tag` header at `server` scope from the
+original `$request_uri`, then leaves the dynamic locations free of
+`add_header` directives. This matters because their `try_files` fallback
+internally redirects to `/200.html`: `$uri` changes to `/200.html`, but
+`$request_uri` remains the requested `/go/:slug`, `/cdfa/go/:slug`, or webinar
+detail URL. Keeping the header at server scope makes it survive that redirect
+and keeps inherited BasicAuth and security headers intact. The rule excludes
+the exact `/webinars` catalogue and its `/webinars/` canonical redirect.
 
 ## Dynamic URLs cannot return a true HTTP 404
 
@@ -97,8 +101,9 @@ static HTML and no runtime server that knows the valid slug set, so:
 
 The `/webinars` catalogue is a generated, indexable landing page. The nginx
 snippet serves it from `/webinars/index.html`, redirects `/webinars/` to the
-canonical path, and applies noindex only to event detail paths. Event detail
-metadata updates in the browser and is intentionally excluded from indexing.
+canonical path, and applies noindex only to event detail paths, including
+paths with query strings. Event detail metadata updates in the browser and is
+intentionally excluded from indexing.
 
 ## Pre-DNS testing
 
