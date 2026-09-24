@@ -22,6 +22,7 @@
     "test:co-branded-route": "vitest run tests/co-branded-route.component.test.ts",
     "test:co-branded-page-config": "vitest run tests/co-branded-page-config.test.ts",
     "test:co-branded-noindex-nginx": "node --experimental-strip-types --test tests/co-branded-noindex-nginx.test.mts",
+    "test:deploy-staging": "node --test tests/deploy-staging.test.mjs",
     "test:error-page-content": "vitest run tests/error-page-content.component.test.ts",
     "test:portal-submission-services": "vitest run tests/portal-submission-services.test.ts",
     "test:blog-content": "vitest run tests/blog-content.test.ts",
