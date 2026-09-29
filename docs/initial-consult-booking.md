@@ -103,10 +103,9 @@ delivery test. Stripe notes that an API-provided `receipt_email` overrides the s
 setting. No refund or payment was initiated by changing these settings.
 
 First Available's standard attendee and host booking emails remain enabled; an extra confirmation
-workflow was not added. Cancellation/reschedule links remain enabled. Automatic refund policy is
-still `Never`: the available native threshold offers business or calendar days, and equivalence to
-the approved exact 48-hour policy has not been accepted. Do not describe this setting as policy
-enforcement or treat one-reschedule enforcement as verified.
+workflow was not added. Cancellation/reschedule links remained enabled at this September 14
+checkpoint. Automatic refund policy was then `Never`; the September 29 update below supersedes
+that setting. One-reschedule enforcement remains unverified.
 
 ### Prepared SMS reminders (HIR-249)
 
@@ -130,6 +129,46 @@ were purchased and no SMS was sent as a test. The two email workflows remain ind
 Independent QA verified the original group predicates before deactivation. With no active links, the
 filter editor hides predicate fields, so Stacie's exact saved predicate is implementer-verified only;
 recheck it independently after selecting the intended scope and before activation.
+
+### September 29 refund and reschedule update (HIR-249)
+
+The client accepted Cal.com's native `If cancelled 2 calendar days before` threshold in place of
+an exact elapsed 48-hour rule. On September 29, the refund policy was changed from `Never` to
+`If cancelled 2 calendar days before` on the five $60 production event types (`6658910`,
+`6658975`, `6658981`, `6659009`, `6659015`) and the hidden $0.50 test event (`7253414`). Each
+setting was reload-verified. The Stripe connection, amount, currency and `Collect payment on
+booking` setting remained in place. Jessica's event remains paused. This confirms configuration
+only: no cancellation under the new rule, automatic Stripe refund, boundary case, or delivered
+refund email has yet been observed. Cal.com Support ticket `215476139006847` described the
+calendar-day boundary ambiguously; do not promise an exact elapsed-hour cutoff or claim a
+particular DST/equality behavior without a controlled provider test.
+
+Cal.com Support confirmed that hosted Teams has no native one-reschedule counter or UID-chain
+tracker, and no separately configurable 2-day reschedule notice while new-booking notice stays
+at 2 hours. The supported manual procedure is:
+
+1. Direct the client to request a reschedule from Solagree rather than using a self-service link.
+2. An operator checks the original paid booking, appointment start, calendar-day policy window,
+   and whether a complimentary reschedule was already used. Record the original and replacement
+   booking UIDs and the one-reschedule decision in the restricted operations record, not in the
+   public website repository.
+3. For an eligible first request, the organizer changes the booking in Cal.com, confirms that
+   payment remains attached and the old slot is released, and checks the new calendar and
+   meeting-location details. Send the reschedule confirmation through Cal.com.
+4. For a late or second request, do not promise a complimentary change; route it to Solagree's
+   cancellation/no-show decision and, when applicable, a new paid booking.
+
+To prevent unlimited guest self-rescheduling, Support recommended `Disable rescheduling` while
+organizers reschedule manually in the dashboard. Public Cal.com help has described this control
+differently, so verify both guest and organizer behavior on the hidden event before enabling it
+on production events. Until that check passes, the one-reschedule limit is an operational policy,
+not an enforced booking rule. The site's customer-facing copy should request contact with
+Solagree and state `2 calendar days` without an exact 48-hour promise.
+
+Email delivery still needs inspection in a controlled attendee inbox and the host inboxes.
+Stripe customer receipt/refund email switches and Cal.com email workflows are enabled, but their
+saved state is not delivery evidence. SMS workflows remain inactive while the team credit balance
+is zero; do not activate them or claim SMS delivery.
 
 ### Stacie's connections (HIR-246)
 
