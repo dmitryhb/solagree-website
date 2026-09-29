@@ -69,3 +69,27 @@ still pending; no calendar change was inferred from the lack of a reply.
 
 Memory preflight: the agent-memory MCP is unavailable and the available repository registry contains
 no Solagree entry. Continued using repository and provider evidence; no memory was promoted.
+
+## September 29 follow-up: duplicate phone and remaining host checks
+
+Cal.com Support ticket `215476139006847` confirmed that `Attendee phone number` injects a
+separate required `location.optionField` when the built-in required `attendeePhoneNumber` booking
+question is enabled. Support suggested `Custom attendee location` with the built-in phone field.
+On hidden test event `7253414`, that option was saved with the label “Phone call — we call you”.
+The public test form still rendered both the required Phone number field and an `optionField`
+for the selected phone location. No booking or payment was submitted. The hidden event was
+restored to `Attendee phone number` plus `Organizer's default app` (`Zoom`), and the saved
+settings were verified. The suggested option therefore does not meet the collect-phone-once
+requirement in this hosted tenant. Production events were not changed.
+
+Read-only administrator inspection on September 29 confirmed that Stacie's Solagree Google
+Calendar is the event destination and selected conflict calendar; Zoom Video remains Default
+without a displayed authorization warning. James's destination remains the owner-confirmed
+`Inner State` calendar. Its Google account, `Inner State`, and his Hello Divorce calendar are
+enabled for conflict checking; Zoom Video remains Default without a displayed warning.
+These settings do not prove that calendar writes, conflict exclusion, or Zoom meeting creation
+work for Stacie or James. Those checks require controlled bookings, and every additional live
+payment needs separate user approval. Jessica remains paused and outside the active host pool.
+Taj's September 28 user-paid hidden-event booking did generate a real Zoom link after his
+authorization was renewed; Cal.com cancellation was verified afterward. His actual calendar
+write, conflict exclusion, reminder delivery, and Zoom-side cancellation were not verified.
