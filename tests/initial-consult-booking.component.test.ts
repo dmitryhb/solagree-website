@@ -62,8 +62,8 @@ describe('InitialConsultBookingPage', () => {
     const policy = wrapper.get('.initial-consult-booking-policy')
 
     expect(policy.get('h2').text()).toBe('Booking policy')
-    expect(policy.text()).toContain('Reschedule once, free, up to 48 hours before your appointment.')
-    expect(policy.text()).toContain('Cancel 48+ hours ahead for a full refund. Less than 48 hours: non-refundable.')
+    expect(policy.text()).toContain('Request one complimentary reschedule from Solagree up to 2 calendar days before your appointment.')
+    expect(policy.text()).toContain('Cancel 2 calendar days before your appointment for a full refund. Less than 2 calendar days: non-refundable.')
     expect(policy.text()).toContain('Missed appointments are non-refundable and must be rebooked.')
     expect(policy.find('em').exists()).toBe(false)
     expect(policy.get('.initial-consult-booking-policy__agreement').text())
