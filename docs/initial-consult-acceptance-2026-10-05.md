@@ -1,5 +1,9 @@
 # Initial Consult acceptance preparation — October 5, 2026
 
+Latest update: [approved full staging refresh](initial-consult-staging-refresh-2026-10-05.md)
+records the restored access, current build and deployment verification. Production and remaining
+native lifecycle acceptance stay open; earlier staging observations below are historical.
+
 Scope: HIR-246 → HIR-248 → HIR-249 → HIR-250; HIR-609 is the consultant-publication dependency.
 This is a review/acceptance packet, **not a launch sign-off**. No merge, production deployment,
 Done, new payment, refund or outbound test submission was performed **by the agent**.

@@ -1,5 +1,8 @@
 # Initial Consult booking operations
 
+Latest deployment evidence: [October 5 full staging refresh](initial-consult-staging-refresh-2026-10-05.md).
+It supersedes earlier staging access/copy snapshots, with runtime still mixed and production gated.
+
 This runbook records the non-secret Cal.com configuration used by the Initial Consult booking page. Keep credentials, OAuth tokens, recovery codes, and 2FA codes out of this file and out of Linear.
 
 ## Current acceptance contract — October 5, 2026
