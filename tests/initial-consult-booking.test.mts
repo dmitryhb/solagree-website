@@ -5,6 +5,8 @@ import {
   normalizeInitialConsultEventPath,
   resolveInitialConsultBookingEvent,
   resolveInitialConsultBookingEvents,
+  resolveInitialConsultBookingMethodEvent,
+  resolveInitialConsultMeetingMethodMode,
   type InitialConsultBookingRuntimeConfig
 } from '../shared/initial-consult-booking.ts'
 
@@ -106,4 +108,59 @@ test('rejects invalid publishing settings and an entirely unpublished team', () 
   for (const unpublishedConsultants of [false, 'jesica', 'first-available', 'taj,stacie,james,jessica']) {
     assert.deepEqual(resolveInitialConsultBookingEvents({ ...configuredEvents, unpublishedConsultants }), [])
   }
+})
+
+const separateConfig: InitialConsultBookingRuntimeConfig = {
+  ...configuredEvents,
+  meetingMethodMode: 'separate',
+  unpublishedConsultants: 'jessica',
+  firstAvailablePhoneEventPath: 'initial-consults/initial-consult-phone',
+  tajPhoneEventPath: 'initial-consults/initial-consult-taj-phone',
+  staciePhoneEventPath: 'initial-consults/initial-consult-stacie-phone',
+  jamesPhoneEventPath: 'initial-consults/initial-consult-james-phone'
+}
+
+test('keeps mixed routing by default and requires an explicit supported mode', () => {
+  assert.equal(resolveInitialConsultMeetingMethodMode(configuredEvents), 'mixed')
+  assert.deepEqual(resolveInitialConsultBookingEvents({
+    ...configuredEvents, meetingMethodMode: 'mixed', tajPhoneEventPath: 'not/a/valid?path'
+  }), resolveInitialConsultBookingEvents(configuredEvents))
+  for (const meetingMethodMode of ['', 'Separate', 'other', false, null]) {
+    assert.equal(resolveInitialConsultMeetingMethodMode({ meetingMethodMode }), null)
+    assert.deepEqual(resolveInitialConsultBookingEvents({ ...separateConfig, meetingMethodMode }), [])
+  }
+})
+
+test('resolves eight separate native routes without requiring paused Jessica paths', () => {
+  const events = resolveInitialConsultBookingEvents({ ...separateConfig, jessicaEventPath: '', jessicaPhoneEventPath: 'invalid' })
+  assert.deepEqual(events.map(event => event.id), ['first-available', 'taj', 'stacie', 'james'])
+  assert.equal(new Set(events.flatMap(event => [event.eventPath, event.phoneEventPath])).size, 8)
+  for (const event of events) {
+    assert.equal(resolveInitialConsultBookingMethodEvent(event, null), null)
+    assert.equal(resolveInitialConsultBookingMethodEvent(event, 'zoom')?.eventPath, event.eventPath)
+    assert.equal(resolveInitialConsultBookingMethodEvent(event, 'phone')?.eventPath, event.phoneEventPath)
+    assert.equal(resolveInitialConsultBookingMethodEvent(event, 'phone')?.id, event.id)
+  }
+  assert.equal(resolveInitialConsultBookingMethodEvent(resolveInitialConsultBookingEvents(configuredEvents)[0]!, 'phone'), null)
+})
+
+test('fails closed on partial, malformed or colliding separate routes', () => {
+  for (const config of [
+    { tajPhoneEventPath: '' },
+    { tajPhoneEventPath: undefined },
+    { staciePhoneEventPath: 'https://solagree.cal.com/initial-consults/initial-consult-stacie-phone' },
+    { jamesEventPath: 'initial-consults/initial-consult-james?method=zoom' },
+    { tajPhoneEventPath: separateConfig.tajEventPath },
+    { tajPhoneEventPath: separateConfig.staciePhoneEventPath },
+    { tajPhoneEventPath: 'INITIAL-CONSULTS/INITIAL-CONSULT-JAMES' },
+    { tajEventPath: separateConfig.stacieEventPath },
+    { unpublishedConsultants: '' }
+  ]) {
+    assert.deepEqual(resolveInitialConsultBookingEvents({ ...separateConfig, ...config }), [], JSON.stringify(config))
+  }
+  assert.equal(resolveInitialConsultBookingEvents({
+    ...separateConfig,
+    unpublishedConsultants: '',
+    jessicaPhoneEventPath: 'initial-consults/initial-consult-jessica-phone'
+  }).length, 5)
 })

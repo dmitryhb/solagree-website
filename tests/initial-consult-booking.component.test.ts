@@ -45,12 +45,13 @@ describe('InitialConsultBookingPage', () => {
     expect(wrapper.findAll('.consultant-selector__headshot')).toHaveLength(3)
   })
 
-  it('renders the client-approved booking policy', () => {
+  it.each(['mixed', 'separate'] as const)('renders the client-approved booking policy in %s mode', (meetingMethodMode) => {
     const wrapper = mount(InitialConsultBookingPage, {
       props: {
         events,
         selectedEvent: firstEvent,
-        trackingContext: {}
+        trackingContext: {},
+        meetingMethodMode
       },
       global: {
         stubs: {
@@ -291,5 +292,98 @@ describe('InitialConsultBookingPage', () => {
     expect(wrapper.findAll('iframe.calcom-booking-embed__frame')).toHaveLength(1)
     expect(wrapper.get('iframe.calcom-booking-embed__frame').attributes('data-calcom-event-path'))
       .toBe(events.at(-1)?.eventPath)
+  })
+
+  it('gates separate calendars on explicit method selection and remounts on method or consultant changes', async () => {
+    const separateEvents = resolveInitialConsultBookingEvents({
+      meetingMethodMode: 'separate',
+      firstAvailableEventPath: 'initial-consults/initial-consult',
+      tajEventPath: 'initial-consults/initial-consult-taj',
+      stacieEventPath: 'initial-consults/initial-consult-stacie',
+      jamesEventPath: 'initial-consults/initial-consult-james',
+      firstAvailablePhoneEventPath: 'initial-consults/initial-consult-phone',
+      tajPhoneEventPath: 'initial-consults/initial-consult-taj-phone',
+      staciePhoneEventPath: 'initial-consults/initial-consult-stacie-phone',
+      jamesPhoneEventPath: 'initial-consults/initial-consult-james-phone'
+    })
+    const mountedPaths: string[] = []
+    const unmountedPaths: string[] = []
+    const BookingEmbedStub = defineComponent({
+      props: { event: { type: Object, required: true } },
+      setup(props) {
+        const path = (props.event as InitialConsultBookingEvent).eventPath
+        onMounted(() => mountedPaths.push(path))
+        onBeforeUnmount(() => unmountedPaths.push(path))
+        return () => h('iframe', { 'data-calcom-event-path': path })
+      }
+    })
+    const BookingHarness = defineComponent({
+      setup() {
+        const selectedEvent = ref(separateEvents[0]!)
+        return () => h(InitialConsultBookingPage, {
+          events: separateEvents,
+          selectedEvent: selectedEvent.value,
+          meetingMethodMode: 'separate',
+          trackingContext: {},
+          onSelect: (event: InitialConsultBookingEvent) => { selectedEvent.value = event }
+        })
+      }
+    })
+    const wrapper = mount(BookingHarness, {
+      attachTo: document.body,
+      global: { stubs: { CalComBookingEmbed: BookingEmbedStub, SiteFooter: true } }
+    })
+
+    expect(wrapper.find('iframe').exists()).toBe(false)
+    expect(wrapper.find('.meeting-method-selector').exists()).toBe(false)
+    await wrapper.get('[data-consultant-id="stacie"]').trigger('click')
+    expect(wrapper.find('iframe').exists()).toBe(false)
+    expect(wrapper.find('input:checked').exists()).toBe(false)
+    const phone = wrapper.get('input[value="phone"]')
+    expect(document.activeElement).toBe(phone.element)
+
+    await phone.setValue()
+    expect(document.activeElement).toBe(phone.element)
+    expect(wrapper.get('.consultant-selection-summary__details').text()).toContain('Phone call')
+    expect(wrapper.get('iframe').attributes('data-calcom-event-path')).toBe('initial-consults/initial-consult-stacie-phone')
+
+    await wrapper.get('input[value="zoom"]').setValue()
+    expect(wrapper.get('.consultant-selection-summary').text()).toContain('Stacie Sanders')
+    expect(wrapper.get('.consultant-selection-summary__details').text()).toContain('Zoom')
+    expect(wrapper.get('iframe').attributes('data-calcom-event-path')).toBe('initial-consults/initial-consult-stacie')
+
+    await wrapper.get('.consultant-selection-summary button').trigger('click')
+    await wrapper.get('[data-consultant-id="james"]').trigger('click')
+    expect(wrapper.get('input[value="zoom"]').element).toHaveProperty('checked', true)
+    expect(wrapper.findAll('iframe')).toHaveLength(1)
+    expect(wrapper.get('iframe').attributes('data-calcom-event-path')).toBe('initial-consults/initial-consult-james')
+    expect(mountedPaths).toEqual([
+      'initial-consults/initial-consult-stacie-phone',
+      'initial-consults/initial-consult-stacie',
+      'initial-consults/initial-consult-james'
+    ])
+    expect(unmountedPaths).toEqual(mountedPaths.slice(0, -1))
+    wrapper.unmount()
+    expect(unmountedPaths).toEqual(mountedPaths)
+  })
+
+  it('does not scroll toward an unavailable calendar before a separate meeting method is chosen', async () => {
+    const scrollIntoView = vi.fn()
+    Object.defineProperty(Element.prototype, 'scrollIntoView', { configurable: true, value: scrollIntoView })
+    vi.stubGlobal('matchMedia', vi.fn((query: string) => ({ matches: query === '(max-width: 960px)' })))
+    const wrapper = mount(InitialConsultBookingPage, {
+      props: {
+        events,
+        selectedEvent: { ...firstEvent, phoneEventPath: 'initial-consults/initial-consult-phone' },
+        meetingMethodMode: 'separate',
+        trackingContext: {}
+      },
+      global: { stubs: { CalComBookingEmbed: true, SiteFooter: true } }
+    })
+    await wrapper.get('[data-consultant-id="first-available"]').trigger('click')
+    expect(scrollIntoView).not.toHaveBeenCalled()
+    await wrapper.get('input[value="phone"]').setValue()
+    expect(scrollIntoView).toHaveBeenCalledWith({ behavior: 'smooth', block: 'start' })
+    wrapper.unmount()
   })
 })

@@ -1,5 +1,9 @@
 # Initial Consult configuration follow-up — 2026-09-15
 
+Historical September snapshot. Current roster, individually authorized paid tests, two-calendar-day
+policy and hosted role settings supersede the dated blockers below; see the October5 acceptance
+and method-routing packets. Private additional calendar names are omitted from shareable evidence.
+
 Scope: HIR-246 and HIR-248, with HIR-249 policy observations. The user authorized continuing
 Cal.com setup and test-data acceptance. No live payment, booking confirmation or outbound message
 has been submitted in this pass.
@@ -85,8 +89,7 @@ requirement in this hosted tenant. Production events were not changed.
 Read-only administrator inspection on September 29 confirmed that Stacie's Solagree Google
 Calendar is the event destination and selected conflict calendar; Zoom Video remains Default
 without a displayed authorization warning. James's destination remains the owner-confirmed
-`Inner State` calendar. Its Google account, `Inner State`, and his Hello Divorce calendar are
-enabled for conflict checking; Zoom Video remains Default without a displayed warning.
+`Inner State` calendar. Three owner-selected calendars are enabled for conflict checking; Zoom Video remains Default without a displayed warning.
 These settings do not prove that calendar writes, conflict exclusion, or Zoom meeting creation
 work for Stacie or James. Those checks require controlled bookings, and every additional live
 payment needs separate user approval. Jessica remains paused and outside the active host pool.

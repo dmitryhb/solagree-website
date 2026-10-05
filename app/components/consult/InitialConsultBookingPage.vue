@@ -2,15 +2,20 @@
 import { computed } from 'vue'
 import type {
   InitialConsultBookingEvent,
-  InitialConsultBookingTrackingContext
+  InitialConsultBookingTrackingContext,
+  InitialConsultMeetingMethod,
+  InitialConsultMeetingMethodMode
 } from '#shared/initial-consult-booking'
+import { resolveInitialConsultBookingMethodEvent } from '#shared/initial-consult-booking'
 import CalComBookingEmbed from '~/components/consult/CalComBookingEmbed.vue'
 import ConsultantSelector from '~/components/consult/ConsultantSelector.vue'
+import MeetingMethodSelector from '~/components/consult/MeetingMethodSelector.vue'
 
 const props = defineProps<{
   events: readonly InitialConsultBookingEvent[]
   selectedEvent: InitialConsultBookingEvent
   trackingContext: InitialConsultBookingTrackingContext
+  meetingMethodMode?: InitialConsultMeetingMethodMode
 }>()
 
 const emit = defineEmits<{
@@ -21,6 +26,41 @@ const bookingPanel = ref<HTMLElement | null>(null)
 const selectorPanel = ref<HTMLElement | null>(null)
 const bookingSummary = ref<HTMLElement | null>(null)
 const isSelectorExpanded = ref(true)
+const methodPanel = ref<HTMLElement | null>(null)
+const selectedMethod = ref<InitialConsultMeetingMethod | null>(null)
+const isSeparateMode = computed(() => props.meetingMethodMode === 'separate')
+const bookingEvent = computed(() => isSeparateMode.value
+  ? resolveInitialConsultBookingMethodEvent(props.selectedEvent, selectedMethod.value)
+  : props.selectedEvent)
+const meetingMethodLabel = computed(() => {
+  if (!isSeparateMode.value) return 'Phone Call or Zoom'
+  return selectedMethod.value === 'phone'
+    ? 'Phone call'
+    : selectedMethod.value === 'zoom' ? 'Zoom' : 'Choose Phone call or Zoom'
+})
+
+/** Moves the calendar into view only after all choices are complete. */
+const scrollToBooking = (): void => {
+  if (
+    !bookingEvent.value
+    || typeof window === 'undefined'
+    || typeof window.matchMedia !== 'function'
+    || !window.matchMedia('(max-width: 960px)').matches
+  ) return
+
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  bookingPanel.value?.scrollIntoView({
+    behavior: prefersReducedMotion ? 'auto' : 'smooth',
+    block: 'start'
+  })
+}
+
+/** Keeps the consultant selected and lets native radio keyboard navigation retain focus. */
+const handleMethodSelection = async (method: InitialConsultMeetingMethod): Promise<void> => {
+  selectedMethod.value = method
+  await nextTick()
+  scrollToBooking()
+}
 
 /** Keeps the team option informative without presenting it as an individual consultant. */
 const selectedConsultantBio = computed(() => {
@@ -40,23 +80,12 @@ const handleSelection = async (selectionId: InitialConsultBookingEvent['id']): P
   emit('select', event)
 
   await nextTick()
-  bookingSummary.value?.focus()
-
-  if (
-    typeof window === 'undefined'
-    || typeof window.matchMedia !== 'function'
-    || !window.matchMedia('(max-width: 960px)').matches
-  ) {
+  if (isSeparateMode.value && !selectedMethod.value) {
+    methodPanel.value?.querySelector<HTMLInputElement>('input[type="radio"]')?.focus()
     return
   }
-
-  await nextTick()
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-
-  bookingPanel.value?.scrollIntoView({
-    behavior: prefersReducedMotion ? 'auto' : 'smooth',
-    block: 'start'
-  })
+  bookingSummary.value?.focus()
+  scrollToBooking()
 }
 
 /** Reopens the consultant choices and restores focus to the current selection. */
@@ -78,7 +107,8 @@ const openSelector = async (): Promise<void> => {
           30 minutes · $60
         </p>
         <h1>Book a Solagree Initial Consult</h1>
-        <p>Choose a consultant, then pick the date and time that work best for you.</p>
+        <p v-if="isSeparateMode">Choose a consultant and Phone call or Zoom, then pick your date and time.</p>
+        <p v-else>Choose a consultant, then pick the date and time that work best for you.</p>
       </header>
 
       <div class="initial-consult-booking-page__workflow">
@@ -131,7 +161,7 @@ const openSelector = async (): Promise<void> => {
               </div>
               <div>
                 <dt>How we’ll meet</dt>
-                <dd>Phone Call or Zoom</dd>
+                <dd>{{ meetingMethodLabel }}</dd>
               </div>
               <div>
                 <dt>Price</dt>
@@ -145,6 +175,16 @@ const openSelector = async (): Promise<void> => {
             >
               Change consultant
             </button>
+
+            <div
+              v-if="isSeparateMode"
+              ref="methodPanel"
+            >
+              <MeetingMethodSelector
+                :selected-method="selectedMethod"
+                @select="handleMethodSelection"
+              />
+            </div>
           </section>
         </div>
 
@@ -153,10 +193,19 @@ const openSelector = async (): Promise<void> => {
           class="initial-consult-booking-page__calendar"
         >
           <CalComBookingEmbed
-            :key="selectedEvent.id"
-            :event="selectedEvent"
+            v-if="bookingEvent"
+            :key="bookingEvent.eventPath"
+            :event="bookingEvent"
             :tracking-context="trackingContext"
           />
+          <section
+            v-else
+            aria-label="Booking choices"
+            aria-live="polite"
+          >
+            <h2>Choose how we’ll meet</h2>
+            <p>Choose a consultant, then Phone call or Zoom to see available dates and times.</p>
+          </section>
         </div>
       </div>
 

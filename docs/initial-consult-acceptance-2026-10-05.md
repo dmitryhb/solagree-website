@@ -28,6 +28,19 @@ Saved non-financial workflow isolation and hidden-event assignment changes are r
   `/Users/dmitry/work/dai/agent-knowledge` for repository `solagree-website`, domain
   `initial-consult`, limit 5 returned no entries. No lesson was assumed from that result.
 
+## Approved separate-method preparation — later October 5
+
+PR #5 was merged by the user into develop d994f69. The user now approved site Phone/Zoom choice,
+existing links retained for Zoom, and four new Phone counterparts (eight active method routes).
+The new events are Hidden/closed September16; old mixed public links and deployed runtime remain
+unchanged. Independent isolated Phone/Zoom field QA confirms saved exactly-one visible required
+phone and blank browser constraints; actual submission/number propagation remains unproved.
+Code and configuration preparation in hir-246 passed independent review/full source QA and
+fresh saved-setting provider QA; [dedicated packet and matrix](initial-consult-method-routing-2026-10-05.md)
+records paths, checks and coordinated release/rollback. Current production reminders intentionally
+expand to nine links (old five + four closed Phone); earlier five-link snapshots remain dated evidence.
+No new payment, booking, sends, public method conversion, deployment or Done occurred.
+
 ## Later October 5 support and policy implementation
 
 The user merged PR #4 into develop (`36ed4ed`) at October5 15:09:52 UTC. The existing
@@ -144,7 +157,7 @@ charge. It cannot establish production $60 payment, receipt or payment-dependent
 cancellation/cleanup notices are authorized; inspect the original destination, Zoom record and
 slot exclusion after submission before proposing cleanup. Preserve T3's future reminders.
 
-### Phone-only scope preparation — not implemented
+### Earlier Phone-only scope preparation — superseded by separate-method packet
 
 Current [hosted update contract](https://cal.com/docs/api-reference/v2/event-types/update-an-event-type)
 and [OpenAPI](https://cal.com/docs/api-reference/v2/openapi.json) support universal system phone
@@ -167,8 +180,9 @@ no field settings were saved. This preview is not the isolated Phone-only public
 Smallest active inventory would be four choices × two methods = eight events, with Jessica
 paused. It needs method selection before the calendar, paired runtime paths and preserved native
 Stripe/Zoom/calendar/workflow settings. Existing mixed URLs need an explicit mapping decision;
-leaving them mixed keeps the defect reachable. Product direction is awaiting the user's answer.
-No alternate events, API mutations, new submissions or source routing changes were made.
+leaving them mixed keeps the defect reachable. This earlier candidate was subsequently approved for preparation; saved Phone probes/counterparts
+and source preparation are recorded in the later method-routing packet. No hosted API mutation or
+new booking submission occurred.
 
 ### Final verification of this policy/preparation supplement
 
@@ -303,12 +317,12 @@ Historical configuration evidence is not current saved state, delivery, calendar
 | First Available / Direct Choice | Selector resolves four visible paths and mounts one selected embed | Oct 5 public event titles/price; prior Sep 28 staging iframe paths matched | Real RR union/routing and direct booking host reconciliation |
 | Duration, price, payment mode | Site states 30 min / $60; provider owns checkout | Oct 5: all five $60 USD, Stripe Initial Consults, ON_BOOKING, Save disabled; hidden event $0.50; public duration 30m | Existing $0.50 dashboard reconciliation below; controlled $60/direct-routing acceptance remains |
 | Rules / hours / timezones | Website delegates availability to Cal.com | Oct 5: five rules rechecked (Jessica has closed range); RR common/restriction schedule off; Taj Mon–Fri09–17 PT, James Mon–Fri09–17 ET, Stacie Mon–Thu18:30–21 and Sat12–14 ET | Confirm approved hours and intended Taj destination; actual notice/buffer/horizon boundaries, calendar conflicts, concurrency |
-| Phone exactly once, required for both methods | Native provider fields are inside cross-origin embed | Oct 5 First Available/Taj/Stacie/James: Phone still renders required attendeePhoneNumber + optionField; First Available/Stacie Zoom remove location input. Hidden editor has no conditional/mapping controls | Supported conditional/mapping/location correction; recheck all five forms. Failed Custom attendee location experiment is not repeated |
+| Phone exactly once, required for both methods | Prepared separate mode/path validation/explicit method gate passed independent source QA; default remains mixed | Old four public mixed routes still duplicate Phone; isolated Phone-only/Zoom-only render and browser constraints PASS; four new closed Phone saved-field QA PASS | Authorized coordinated old-route Zoom conversion/new Phone opening/runtime deployment, then actual form rejection/number propagation and lifecycle acceptance. Failed Custom attendee experiment not repeated |
 | Required Name/Email/State, optional Notes/SMS | Website does not add a duplicate contact form | Sep 15 approved fields; Oct 5 public form recheck; SMS unchecked | Confirm provider validation, no attribution field, current forms and consent on all five |
 | Calendar / Zoom | No website-side meeting generation | Oct 5 all three settings rechecked; Taj Sep28 and StacieT3 paid tests generated Zoom URLs; T3 calendar addition client-attested | Direct destination/event-detail inspection and external busy conflicts; Zoom join/cleanup and James actual creation. Free James test prepared above, not submitted |
 | Historical T1/T2 and new T3 $0.50 tests | No fixture claims live-payment success | Earlier Oct5: T1/T2 succeeded and A1Incomplete, no refunds. After userT3: All4records, three Succeeded$0.50 with one charge/receipt per test and A1Incomplete | T3 immediate delivery client-attested; historical inbox delivery/direct content evidence and strict numeric-ID↔UID bridge if needed; no refund has been accepted; broad retry/concurrency/$60 acceptance remains |
 | Decline / abandon / retry / duplicate protection | Website invokes native checkout, no custom payments | Sep 28 cancel checkout left Pending payment/Unconfirmed; redirect to admin's empty public profile; rejected in cleanup. Error collecting card is T1 rescheduled original, not independent decline evidence; Oct 5 Stripe abandoned intent Incomplete, no payment method/charge/receipt | Slot-hold expiry and retry/concurrency acceptance; no usable unpaid confirmation; no duplicate charge/booking |
-| Confirmation / receipt / reminders | Site copy stays 30 min / $60 | Oct 5 resumed: 450309/450313 active on five production links, hidden test excluded with one attendee action, 24h/1h, event/date/end/timezone/organizer/LOCATION/MEETING_URL, hard-coded30m/$60. Oct 5 guest notifications enabled, including confirmation/cancel/change/payment pending; Stripe shows one sent receipt per T1/T2/T3 paid test, each rendered at $0.50; client attests T3 immediate emails received | Direct message content/count/header timestamps; historical/other-host delivery; future 24h/1h reminders; matching host/timezone/Phone or Zoom and no broken Zoom links in Phone mail |
+| Confirmation / receipt / reminders | Site copy stays 30 min / $60 | Earlier Oct5: 450309/450313 active on five production links; later method prep nine (original five + four closed Phone), fresh QA PASS. Hidden test excluded with one attendee action, 24h/1h, event/date/end/timezone/organizer/LOCATION/MEETING_URL, hard-coded30m/$60. Oct 5 guest notifications enabled, including confirmation/cancel/change/payment pending; Stripe shows one sent receipt per T1/T2/T3 paid test, each rendered at $0.50; client attests T3 immediate emails received | Direct message content/count/header timestamps; historical/other-host delivery; future 24h/1h reminders; matching host/timezone/Phone or Zoom and no broken Zoom links in Phone mail |
 | Hidden test reminder accuracy | Not website controlled | Oct 5 resumed: hidden excluded from production templates; 473280/473288 saved with $0.50 copy, now active only on hidden after specific Stacie approval; independent config QA PASS | T3 user checkout complete; actual reminder token rendering and 24h/1h dispatch/inbox delivery pending |
 | Refund | Site copy now says 2 calendar days | Oct 5 all five + hidden event rechecked as If cancelled 2 calendar days before; earlier pre-T3 full/pending/partial refund list empty; T3 remains Succeeded with no refund activity observed in its detail | Hosted threshold before/equal/after, DST; user performs actual refund; confirm Stripe refund object/status and email. Cal “refund on the way” text is insufficient |
 | One manual reschedule | Site directs request to Solagree | Later Oct5 all five + hidden saved Attendee only/Always and same-host/Always; cancellation available; hidden guest confirmation Cancel-only; Stacie own-host picker accessible | Paid change/retention, slot release, UID lineage/notices, old guest URL rejection and manual ledger/second/late-request handling remain untested |
@@ -537,7 +551,9 @@ supplement; previous source/fixture checks below were not rerun. Reusable memory
 
 ## Launch gates and rollback
 
-1. Resolve phone-once defect. Saved guest-only role restriction and own-host picker access are
+1. Release the prepared separate-method solution only with explicit coordinated provider/website
+   authorization, then finish actual field/number acceptance; old mixed Phone still duplicates.
+   Saved guest-only role restriction and own-host picker access are
    verified within the stated bounds; finish actual paid manual-reschedule lifecycle and old-link enforcement.
 2. Historical T1/T2 dashboard reconciliation is complete within the stated bounds; finish receipt
    inbox/strict ID bridge and active-host calendar/Zoom, payment failures/retry/slot release and email delivery.

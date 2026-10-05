@@ -148,6 +148,26 @@ NUXT_PUBLIC_CALCOM_INITIAL_CONSULT_UNPUBLISHED_CONSULTANTS=jessica
 
 These paths are relative to Solagree's Cal.com organization origin, `https://solagree.cal.com`.
 
+Meeting-method routing stays `mixed` by default. The prepared separate mode uses the existing
+paths for Zoom and corresponding Phone paths; it requires an explicit Phone/Zoom choice before
+mounting a calendar. Enable only as part of an authorized, coordinated provider/website release:
+
+```bash
+NUXT_PUBLIC_CALCOM_INITIAL_CONSULT_MEETING_METHOD_MODE=separate
+NUXT_PUBLIC_CALCOM_INITIAL_CONSULT_FIRST_AVAILABLE_PHONE_EVENT_PATH=initial-consults/initial-consult-phone
+NUXT_PUBLIC_CALCOM_INITIAL_CONSULT_TAJ_PHONE_EVENT_PATH=initial-consults/initial-consult-taj-phone
+NUXT_PUBLIC_CALCOM_INITIAL_CONSULT_STACIE_PHONE_EVENT_PATH=initial-consults/initial-consult-stacie-phone
+NUXT_PUBLIC_CALCOM_INITIAL_CONSULT_JAMES_PHONE_EVENT_PATH=initial-consults/initial-consult-james-phone
+NUXT_PUBLIC_CALCOM_INITIAL_CONSULT_JESSICA_PHONE_EVENT_PATH=
+```
+
+Jessica is excluded before path validation. Separate mode requires all published Phone and Zoom
+paths to be valid and distinct; incomplete/invalid configuration leaves booking unavailable.
+The new Phone events are Hidden with a closed past date range during preparation; the old paths
+still offer both methods until the authorized release. Do not enable separate mode against this
+unreleased service state. See [method-routing preparation and release steps](docs/initial-consult-method-routing-2026-10-05.md).
+
+
 See `docs/initial-consult-booking.md` for event IDs, the verified non-secret Cal.com configuration, and the remaining production acceptance work.
 
 The embed forwards only a compact allowlist of marketing identifiers: `ref`, `source`, and `utm_source`, `utm_medium`, `utm_campaign`, `utm_term`, and `utm_content`. Do not use the URL to pass contact details or other booking answers; Cal.com collects those in its own flow.
