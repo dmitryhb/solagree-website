@@ -1,5 +1,9 @@
 # Initial Consult method routing — October 5 preparation
 
+Later update: [full staging refresh](initial-consult-staging-refresh-2026-10-05.md) after the user's
+PR #6 merge. Staging now uses the reviewed build in mixed mode; separate-route preparation below
+does not establish its public activation or native lifecycle acceptance.
+
 HIR-246 → HIR-248 → HIR-249 → HIR-250; HIR-609 publication dependency remains in develop.
 The user approved preparation of site Phone/Zoom selection and eight active native events:
 First Available/Taj/Stacie/James × two methods. Existing paths will serve Zoom; four new paths
