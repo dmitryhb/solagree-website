@@ -171,12 +171,12 @@ const openSelector = async (): Promise<void> => {
         <div class="initial-consult-booking-policy__rules">
           <section>
             <h3>Rescheduling</h3>
-            <p>Reschedule once, free, up to 48 hours before your appointment.</p>
+            <p>Request one complimentary reschedule from Solagree up to 2 calendar days before your appointment.</p>
           </section>
 
           <section>
             <h3>Cancellations</h3>
-            <p>Cancel 48+ hours ahead for a full refund. Less than 48 hours: non-refundable.</p>
+            <p>Cancel 2 calendar days before your appointment for a full refund. Less than 2 calendar days: non-refundable.</p>
           </section>
 
           <section>
