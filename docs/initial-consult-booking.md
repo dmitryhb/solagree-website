@@ -1,8 +1,9 @@
 # Initial Consult booking operations
 
-Latest prepared action: [approved free James Phone test](initial-consult-phone-preparation-2026-10-05.md).
-One visible required phone field, payments/workflows OFF, exact approved slot and independent
-preparation QA PASS. The form is still unsubmitted; user final Confirm is pending.
+Latest Phone result: [user-completed James Phone booking](initial-consult-phone-booking-2026-10-05.md).
+Independent actual host/time/phone in confirmed booking PASS; manual calendar exports omit the
+phone location. Delivered invitation contents and native calendar write remain open. The earlier
+[Phone preparation](initial-consult-phone-preparation-2026-10-05.md) is historical.
 
 Latest native acceptance: [James free booking / expired Zoom authorization](initial-consult-james-booking-2026-10-05.md).
 Host/time confirmed; meeting location is Cal Video, so Zoom remains blocked pending reauthorization/retest.
@@ -58,7 +59,8 @@ See [method-routing packet](initial-consult-method-routing-2026-10-05.md) for pa
 verification bounds and coordinated rollout/rollback. Original T3 and its test reminder bindings
 remain intact. The separately approved free James Zoom test was submitted by the user;
 actual location is Cal Video, with expired/revoked James Zoom authorization as the current blocker.
-The approved free Phone test is separately prepared and still awaiting user final Confirm.
+The separately approved free Phone test was subsequently submitted by the user; actual host/time
+and booking phone passed independent QA, while manual calendar export phone propagation did not.
 
 Production reminder scope now intentionally adds the four closed Phone counterparts to the
 original five links (nine intended). Earlier five-link evidence below predates this preparation.
