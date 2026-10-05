@@ -2,7 +2,8 @@
 
 Scope: HIR-246 → HIR-248 → HIR-249 → HIR-250; HIR-609 is the consultant-publication dependency.
 This is a review/acceptance packet, **not a launch sign-off**. No merge, production deployment,
-Done, new payment, refund or outbound test submission was performed in this pass.
+Done, new payment, refund or outbound test submission was performed **by the agent**.
+The user completed the separately approved third $0.50 test below; no additional charge is authorized.
 Saved non-financial workflow isolation and hidden-event assignment changes are recorded below.
 
 ## Recovery and source of truth
@@ -27,7 +28,52 @@ Saved non-financial workflow isolation and hidden-event assignment changes are r
   `/Users/dmitry/work/dai/agent-knowledge` for repository `solagree-website`, domain
   `initial-consult`, limit 5 returned no entries. No lesson was assumed from that result.
 
-## Saved configuration implementation — October 5, resumed
+## User-completed Stacie paid test — T3, October 5
+
+PR #3 was merged by the user into develop (`989827a`); the existing hir-249 worktree was
+synchronized before this evidence supplement. Root local changes and untracked test artifacts
+remain preserved. No production deployment or Done occurred.
+
+The user filled the remaining fields and completed the specifically approved Stacie checkout.
+This is the third separately approved $0.50 test, **not authorization for James, further charges
+or refunds**. Public/admin/Stripe identifiers are correlated only in restricted provider views;
+shareable evidence uses T3 and omits attendee contacts, booking/payment IDs and Zoom tokens.
+
+| T3 criterion | Observed evidence | Acceptance limit |
+| --- | --- | --- |
+| Paid booking / routing | One current Upcoming record, Confirmed/Paid; assigned Stacie; technical-only notes; $0.50; 30 minutes, October7 22:30–23:00 UTC | Hidden one-host test, not production Direct Choice/RR or $60 acceptance |
+| Timezone | Attendee zone recorded Europe/Amsterdam; appointment equals October8 00:30–01:00 Amsterdam and October7 18:30–19:00 New York. Viewer confirmation/admin display British Summer Time, October7 23:30–00:00 | Same instant corroborated by public calendar-link UTC dates; email timezone output still unverified |
+| Payment | SOLAGREE live Stripe All1–4of4: exactly one new Succeeded $0.50 USD intent, one latest charge, one charge-success event, payment-success event; metadata references Stacie/test event/numeric booking ID | No duplicate new successful charge in visible dataset; future retry/concurrency protection and strict numeric-ID↔Cal UID bridge remain unaccepted |
+| Provider acceptance | Cal history Accepted, actor Stripe, Source WEBHOOK, PENDING→ACCEPTED | Native webhook acceptance, not email/calendar-delivery proof |
+| Zoom | Generated Zoom Video URL appears in admin Where and canonical public confirmation; same link is included in public add-to-calendar URL | Initial payment redirect showed generic conferencing placeholder; canonical confirmation resolves it. No Zoom join or native Zoom-console record checked |
+| Receipt | Exactly one Payment receipt-sent row to approved controlled attendee, October5 10:50 in Stripe display timezone; rendered receipt SOLAGREE / amount paid$0.50 | Dashboard send/render proof only; inbox delivery and Stripe display timezone not independently verified. No resend action used |
+| Calendar | Public confirmation offers invitation/add-to-calendar with matching UTC time and Zoom | This is not proof of a write to Stacie Solagree destination. Calendar connector and browser Google profile do not expose that host calendar; no substitute-calendar acceptance |
+| Hosted slot exclusion | Independent public TEST/$0.50 and Stacie/$60 availability on October8 Amsterdam exclude booked00:30 and post-buffer01:00; adjacent01:30/02:00/02:30 remain. Viewer calendar overlay turned off for checks and restored | Cal.com exclusion only, not native Google calendar write or arbitrary external busy conflict |
+| Email reminders | Test473280/473288 active only on hidden; production450309/450313 off for hidden | Native timers and inbox delivery not accepted yet |
+| SMS | Prepared checkbox was unchecked. Actual user-completed record contains consentYes; independent current event-workflow check confirms all four SMS workflowsOFF | User changed consent during completion; default is not inferred from finalYes. No SMS delivery claim or activation |
+| Refund / lifecycle | T3 currently Paid/Confirmed and StripeSucceeded; no agent cancellation, reschedule or refund | User alone performs financial cleanup; native cutoff and manual-reschedule gaps remain |
+
+Independent fresh provider QA PASS for this bounded T3 scope: paid Stacie booking/time, Zoom
+URL, Stripe webhook, one new successful intent/charge/receipt-sent row, and hidden email-only
+workflow scope with all SMS off. A second independent public check confirmed canonical Zoom
+confirmation and hosted slot/post-buffer exclusion on hidden and Stacie direct, with viewer
+calendar overlay off during observation and restored afterward. Calendar write/conflicts, inbox delivery, Zoom join, refunds and
+production paths remain explicitly unaccepted. QA made no booking, payment or provider-configuration
+changes and sent no messages; the temporary viewer overlay change was restored.
+
+Expected reminder trigger instants for T3: 24h at October6 22:30 UTC (October7 00:30 Amsterdam),
+1h at October7 21:30 UTC (October7 23:30 Amsterdam). These are planned trigger times, not
+observed dispatch/delivery timestamps. Keep this paid test and its test workflow bindings until
+inspection; then disable test reminders and restore hidden hosts. Do not initiate cancellation
+that could auto-refund, delete Zoom or modify the booking as cleanup without the applicable
+user instruction. Timed follow-up and recipient/host-calendar evidence remain external actions.
+
+Independent review of this T3 documentation diff (GPT-6.1-Sol, high): PASS after updating
+stale payment counts, pre-T3 Upcoming/refund snapshots and merged PR context. `git diff --check`
+passed. Reusable memory: none. This supplement changes only evidence/runbook documentation;
+source checks below were not rerun because no source behavior changed.
+
+## Saved configuration implementation — earlier October 5 configuration pass
 
 PR #2 was merged by the user into `origin/develop` (`aa24ff8`). The existing `hir-249` worktree
 was rebased onto that develop before this supplement; unrelated files remain preserved.
@@ -55,7 +101,7 @@ The refreshed Cal.com UI identifies itself as `6.9.11-h`, superseding the earlie
   saved configuration; no booking, calendar write, Zoom generation, delivery or refund claim.
   Header status was Hidden with its visibility switch off; this is not access control—direct URL remains bookable.
 
-## Approved Stacie test handoff — October 5
+## Approved Stacie test handoff — earlier October 5, superseded by T3 result above
 
 The user approved the specifically presented Stacie Zoom/$0.50 USD/SOLAGREE scenario and
 controlled attendee/host recipients, and approved sending the prepared technical support question.
@@ -92,12 +138,12 @@ Historical configuration evidence is not current saved state, delivery, calendar
 | Rules / hours / timezones | Website delegates availability to Cal.com | Oct 5: five rules rechecked (Jessica has closed range); RR common/restriction schedule off; Taj Mon–Fri09–17 PT, James Mon–Fri09–17 ET, Stacie Mon–Thu18:30–21 and Sat12–14 ET | Confirm approved hours and intended Taj destination; actual notice/buffer/horizon boundaries, calendar conflicts, concurrency |
 | Phone exactly once, required for both methods | Native provider fields are inside cross-origin embed | Oct 5 First Available/Taj/Stacie/James: Phone still renders required attendeePhoneNumber + optionField; First Available/Stacie Zoom remove location input. Hidden editor has no conditional/mapping controls | Supported conditional/mapping/location correction; recheck all five forms. Failed Custom attendee location experiment is not repeated |
 | Required Name/Email/State, optional Notes/SMS | Website does not add a duplicate contact form | Sep 15 approved fields; Oct 5 public form recheck; SMS unchecked | Confirm provider validation, no attribution field, current forms and consent on all five |
-| Calendar / Zoom | No website-side meeting generation | Oct 5 all three destination/conflict settings and Zoom default rechecked; Taj Sep 28 paid test generated actual Zoom URL | Actual writes/conflict exclusion for all active hosts; generated Zoom and cleanup for Stacie/James; Taj calendar and Zoom deletion |
-| Existing two $0.50 tests | No fixture claims live-payment success | Oct 5 Stripe: two Succeeded $0.50 USD payments, one charge event and one sent receipt each; third intent Incomplete; current refund view empty | Inbox delivery, strict numeric-ID↔UID bridge if needed; no refund has been accepted; broad retry/concurrency/$60 acceptance remains |
+| Calendar / Zoom | No website-side meeting generation | Oct 5 all three settings rechecked; Taj Sep28 and StacieT3 paid tests generated Zoom URLs | Actual calendar writes/conflict exclusion; Zoom join/cleanup and James actual creation; do not infer calendar write from public invitation |
+| Historical T1/T2 and new T3 $0.50 tests | No fixture claims live-payment success | Earlier Oct5: T1/T2 succeeded and A1Incomplete, no refunds. After userT3: All4records, three Succeeded$0.50 with one charge/receipt per test and A1Incomplete | Inbox delivery, strict numeric-ID↔UID bridge if needed; no refund has been accepted; broad retry/concurrency/$60 acceptance remains |
 | Decline / abandon / retry / duplicate protection | Website invokes native checkout, no custom payments | Sep 28 cancel checkout left Pending payment/Unconfirmed; redirect to admin's empty public profile; rejected in cleanup. Error collecting card is T1 rescheduled original, not independent decline evidence; Oct 5 Stripe abandoned intent Incomplete, no payment method/charge/receipt | Slot-hold expiry and retry/concurrency acceptance; no usable unpaid confirmation; no duplicate charge/booking |
-| Confirmation / receipt / reminders | Site copy stays 30 min / $60 | Oct 5 resumed: 450309/450313 active on five production links, hidden test excluded with one attendee action, 24h/1h, event/date/end/timezone/organizer/LOCATION/MEETING_URL, hard-coded30m/$60. Oct 5 guest notifications enabled, including confirmation/cancel/change/payment pending; Stripe shows one sent receipt per historical paid test, each rendered at $0.50 | Actual inbox delivery and one message each, matching host/timezone/Phone or Zoom; no broken Zoom links in Phone mail |
-| Hidden test reminder accuracy | Not website controlled | Oct 5 resumed: hidden excluded from production templates; 473280/473288 saved with $0.50 copy, now active only on hidden after specific Stacie approval; independent config QA PASS | User completes checkout; rendered content and actual 24h/1h delivery acceptance |
-| Refund | Site copy now says 2 calendar days | Oct 5 all five + hidden event rechecked as If cancelled 2 calendar days before; Stripe paid tests remain Succeeded, full/pending/partial refund list empty | Hosted threshold before/equal/after, DST; user performs actual refund; confirm Stripe refund object/status and email. Cal “refund on the way” text is insufficient |
+| Confirmation / receipt / reminders | Site copy stays 30 min / $60 | Oct 5 resumed: 450309/450313 active on five production links, hidden test excluded with one attendee action, 24h/1h, event/date/end/timezone/organizer/LOCATION/MEETING_URL, hard-coded30m/$60. Oct 5 guest notifications enabled, including confirmation/cancel/change/payment pending; Stripe shows one sent receipt per T1/T2/T3 paid test, each rendered at $0.50 | Actual inbox delivery and one message each, matching host/timezone/Phone or Zoom; no broken Zoom links in Phone mail |
+| Hidden test reminder accuracy | Not website controlled | Oct 5 resumed: hidden excluded from production templates; 473280/473288 saved with $0.50 copy, now active only on hidden after specific Stacie approval; independent config QA PASS | T3 user checkout complete; actual reminder token rendering and 24h/1h dispatch/inbox delivery pending |
+| Refund | Site copy now says 2 calendar days | Oct 5 all five + hidden event rechecked as If cancelled 2 calendar days before; earlier pre-T3 full/pending/partial refund list empty; T3 remains Succeeded with no refund activity observed in its detail | Hosted threshold before/equal/after, DST; user performs actual refund; confirm Stripe refund object/status and email. Cal “refund on the way” text is insufficient |
 | One manual reschedule | Site directs request to Solagree | Oct 5: guest cancellation and rescheduling enabled on all five; native preview shows Reschedule/Cancel; hidden event same. Past/cancelled rebooking off; RR same-host switch off | Official hosted Help says Disable rescheduling blocks guests AND organizers; do not roll it out as an organizer-only solution. Obtain supported handling, then verify payment retention, slot release, UID lineage and second/late-request handling |
 | SMS | No requirement to enable SMS for email launch | Oct 5 all four SMS workflows show No active links; First Available switches off; prior zero credits not revalidated | Keep inactive; optional future sender/credits/predicate/mapping/consent acceptance. Not a blocker for email acceptance |
 | Desktop/mobile, keyboard, fallback/privacy | Existing selector, focus, embed retry/fallback and tracking tests; independent result below | Sep 28 staging smoke at 390/768/1440; no overflow, selection worked; legacy production form was still served | Actual current build iframe desktop/mobile/keyboard/screen-reader verification; provider empty/error behavior; authorized production release later |
@@ -149,7 +195,7 @@ All four SMS workflows (450318/450324/450327/450330) currently show No active li
 setting or workflow was saved during that earlier inspection. The later workflow saves are recorded
 above; no test message has been sent in either pass.
 
-## Existing Cal.com booking reconciliation — October 5
+## Existing Cal.com booking reconciliation — earlier October 5, pre-T3 snapshot
 
 The administrator booking views expose two canceled paid $0.50 Taj test records, one rejected
 unpaid checkout record and the first test's rescheduled original. The first test has an explicit
@@ -171,7 +217,7 @@ view's result, not proof that every calendar or organization scope is empty. Rec
 phone numbers, booking UIDs and conferencing secrets were read only inside provider views and
 are deliberately absent from this document.
 
-## Authenticated Stripe reconciliation — October 5, resumed
+## Authenticated Stripe reconciliation — earlier October 5 T1/T2/A1 snapshot
 
 The user restored the live SOLAGREE dashboard. The unfiltered All payment view has exactly three
 results (no further page): T1, T2 and abandoned A1. This resolves the access blocker. No payment,
@@ -247,7 +293,7 @@ native Phone and Zoom events/routing: Phone collects its location phone once, Zo
 universal phone. This changes event inventory/selection, requires SMS mapping and all native
 payment/lifecycle acceptance again, and remains a proposed scope decision rather than an implemented fix.
 
-## Controlled test plan — prepared, not submitted
+## Controlled test plan — Stacie completed as T3; other scenarios not submitted
 
 The existing tests now have the bounded dashboard reconciliation above. Before any new test,
 finish any required strict ID bridge and receipt inbox verification in Stripe/Cal.com. Label them T1/T2 in shareable
@@ -272,7 +318,8 @@ $60 event types remain unchanged. No invalid Stripe test-card numbers are used i
 A $0.50 hidden test proves integration behavior only; it does not prove a $60 charge or every direct
 production event. Public $60 settings plus hidden results must be explicitly accepted as sufficient,
 or a separately approved $60 scenario remains. The specific first Stacie Zoom test and exact attendee/host recipients were approved by the
-user. No booking form submission or payment has occurred in the agent pass; user checkout is pending.
+user; checkout is now completed by the user and reconciled as T3 above. No agent financial
+action occurred. The prepared-form details below describe the earlier handoff, not current booking state.
 The unsubmitted public form is prepared for October 8, 00:30–01:00 Europe/Amsterdam
 (October 7, 18:30–19:00 America/New_York), more than 24 hours ahead of preparation. Zoom
 selected, approved attendee identity/notes filled, required phone and State still empty, SMS unchecked. Revalidate availability before submission; the
