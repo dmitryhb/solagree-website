@@ -12,6 +12,10 @@ Done, new payment, refund or outbound test submission was performed in this pass
 - HIR-246 branch `8d8524b` retains the September 15/29 configuration and duplicate-phone evidence.
   HIR-248 branch `d576811` retains the September 29 native payment ledger. PR #1 head at recovery
   was `846d9f9`, including the policy change, focused expectations and dated operational runbook.
+- During the later Stripe resumption, PR #1 was found already merged outside this agent run,
+  with merge commit `9951295` in fetched `origin/develop`. The Stripe evidence supplement is
+  prepared separately on the reused `hir-249` branch rebased onto that current develop. No
+  merge or production deployment was performed by this agent.
 - All five issue descriptions, relations and complete available comment lists were read. They
   belong to Hirebrains/HIR, project SOL — Solagree. HIR-246/248/249 are In Progress, HIR-250 was
   Todo and is now In Progress for acceptance preparation; HIR-609 remains In Review. HIR-247 is Done and is not reopened.
@@ -253,7 +257,7 @@ Sending this question to support needs a separate user instruction. No support m
 3. Obtain the provider-boundary decision and prove Stripe refund handling, not just Cal copy.
 4. Source review/code QA passed as documented below; finish current integrated browser acceptance and maintain explicit gaps.
 5. User separately authorizes merge, production deployment and Done. HIR-609 is already in develop,
-   while PR #1 policy copy still needs merge/release. Verify generated output has exactly
+   PR #1 policy copy is now in develop after an external merge; production release remains unverified. Verify generated output has exactly
    First Available/Taj/Stacie/James and no legacy primary request form at the booking route.
 6. Record approved production artifact and known-good rollback artifact. To disable paid booking,
    remove public CTA exposure/use the website unavailable state **and** pause Cal.com booking windows

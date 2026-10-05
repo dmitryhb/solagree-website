@@ -22,8 +22,10 @@ of Taj, Stacie and James, with Jessica paused and her profile retained.
   $0.50 payments are historical evidence only; they authorize no new payments. The user completes
   every new payment and real refund. Obtain scenario/recipient approval before a test submission
   that can send mail, create calendar entries or generate conferencing links.
-- PR #1 contains the pending policy copy. Merge, production deployment and Done require a separate
-  user instruction. The historical HIR-609 staging deployment is not production acceptance.
+- PR #1 policy copy is now in develop after an external merge (`9951295`) discovered during
+  the later October 5 Stripe resumption. This agent performed no merge or production deployment.
+  The Stripe evidence supplement has a separate PR; merge, production deployment and Done
+  require separate user instruction. The historical HIR-609 staging deployment is not production acceptance.
 
 Historical observations are dated evidence, not proof that today's saved configuration or delivery
 is correct. The user restored Cal.com admin access on October 5 and current configuration rechecks are recorded
