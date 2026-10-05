@@ -1,14 +1,23 @@
 /** Identifies a bookable Initial Consult path in the website selector. */
 export type InitialConsultSelectionId = 'first-available' | 'taj' | 'stacie' | 'jessica' | 'james'
 
+export type InitialConsultMeetingMethod = 'phone' | 'zoom'
+export type InitialConsultMeetingMethodMode = 'mixed' | 'separate'
+
 /** Public runtime values used to configure Cal.com Initial Consult event paths. */
 export interface InitialConsultBookingRuntimeConfig {
+  meetingMethodMode?: unknown
   unpublishedConsultants?: unknown
   firstAvailableEventPath?: unknown
   tajEventPath?: unknown
   stacieEventPath?: unknown
   jessicaEventPath?: unknown
   jamesEventPath?: unknown
+  firstAvailablePhoneEventPath?: unknown
+  tajPhoneEventPath?: unknown
+  staciePhoneEventPath?: unknown
+  jessicaPhoneEventPath?: unknown
+  jamesPhoneEventPath?: unknown
 }
 
 /** Optional client-approved consultant content. Empty fields deliberately render as neutral cards. */
@@ -22,7 +31,10 @@ export interface ConsultantProfileContent {
 export interface InitialConsultBookingEvent {
   id: InitialConsultSelectionId
   label: string
+  /** Existing mixed route, or the Zoom route when separate mode is enabled. */
   eventPath: string
+  /** Required for every published option in separate mode. */
+  phoneEventPath?: string
   profile?: ConsultantProfileContent
 }
 
@@ -36,14 +48,15 @@ type InitialConsultEventDefinition = {
   id: InitialConsultSelectionId
   label: string
   configKey: keyof InitialConsultBookingRuntimeConfig
+  phoneConfigKey: keyof InitialConsultBookingRuntimeConfig
 }
 
 const initialConsultEventDefinitions = [
-  { id: 'first-available', label: 'First Available', configKey: 'firstAvailableEventPath' },
-  { id: 'taj', label: 'Taj Johnson Chiu', configKey: 'tajEventPath' },
-  { id: 'stacie', label: 'Stacie Sanders', configKey: 'stacieEventPath' },
-  { id: 'james', label: 'James Traub', configKey: 'jamesEventPath' },
-  { id: 'jessica', label: 'Jessica Urash', configKey: 'jessicaEventPath' }
+  { id: 'first-available', label: 'First Available', configKey: 'firstAvailableEventPath', phoneConfigKey: 'firstAvailablePhoneEventPath' },
+  { id: 'taj', label: 'Taj Johnson Chiu', configKey: 'tajEventPath', phoneConfigKey: 'tajPhoneEventPath' },
+  { id: 'stacie', label: 'Stacie Sanders', configKey: 'stacieEventPath', phoneConfigKey: 'staciePhoneEventPath' },
+  { id: 'james', label: 'James Traub', configKey: 'jamesEventPath', phoneConfigKey: 'jamesPhoneEventPath' },
+  { id: 'jessica', label: 'Jessica Urash', configKey: 'jessicaEventPath', phoneConfigKey: 'jessicaPhoneEventPath' }
 ] as const satisfies readonly InitialConsultEventDefinition[]
 
 /**
@@ -97,6 +110,24 @@ export const normalizeInitialConsultEventPath = (value: unknown): string | null 
   return eventPathPattern.test(eventPath) ? eventPath : null
 }
 
+/** Keeps the current provider flow until separate routing is explicitly enabled. */
+export const resolveInitialConsultMeetingMethodMode = (
+  config: InitialConsultBookingRuntimeConfig
+): InitialConsultMeetingMethodMode | null => {
+  const mode = config.meetingMethodMode === undefined ? 'mixed' : config.meetingMethodMode
+  return mode === 'mixed' || mode === 'separate' ? mode : null
+}
+
+/** Resolves one native event after the booker explicitly chooses a meeting method. */
+export const resolveInitialConsultBookingMethodEvent = (
+  event: InitialConsultBookingEvent,
+  method: InitialConsultMeetingMethod | null
+): InitialConsultBookingEvent | null => {
+  if (!method) return null
+  if (method === 'zoom') return event
+  return event.phoneEventPath ? { ...event, eventPath: event.phoneEventPath } : null
+}
+
 /**
  * Resolves all event paths from public runtime configuration.
  * Unpublished consultants keep their content but are excluded before event validation.
@@ -105,6 +136,9 @@ export const normalizeInitialConsultEventPath = (value: unknown): string | null 
 export const resolveInitialConsultBookingEvents = (
   config: InitialConsultBookingRuntimeConfig
 ): InitialConsultBookingEvent[] => {
+  const meetingMethodMode = resolveInitialConsultMeetingMethodMode(config)
+  if (!meetingMethodMode) return []
+
   const unpublishedValue = config.unpublishedConsultants ?? 'jessica'
   if (typeof unpublishedValue !== 'string') return []
 
@@ -118,22 +152,35 @@ export const resolveInitialConsultBookingEvents = (
 
   const events = publishedDefinitions.map((definition): InitialConsultBookingEvent | null => {
     const eventPath = normalizeInitialConsultEventPath(config[definition.configKey])
+    const phoneEventPath = meetingMethodMode === 'separate'
+      ? normalizeInitialConsultEventPath(config[definition.phoneConfigKey])
+      : null
     const profile = initialConsultantProfileContent[definition.id]
 
-    if (!eventPath) {
+    if (!eventPath || (meetingMethodMode === 'separate' && !phoneEventPath)) {
       return null
     }
 
-    return profile
-      ? { id: definition.id, label: definition.label, eventPath, profile }
-      : { id: definition.id, label: definition.label, eventPath }
+    return {
+      id: definition.id,
+      label: definition.label,
+      eventPath,
+      ...(phoneEventPath ? { phoneEventPath } : {}),
+      ...(profile ? { profile } : {})
+    }
   })
 
   if (events.some((event) => event === null)) {
     return []
   }
 
-  return events.filter((event): event is InitialConsultBookingEvent => event !== null)
+  const validEvents = events.filter((event): event is InitialConsultBookingEvent => event !== null)
+  if (meetingMethodMode === 'separate') {
+    const paths = validEvents.flatMap(event => [event.eventPath, event.phoneEventPath!].map(path => path.toLowerCase()))
+    if (new Set(paths).size !== paths.length) return []
+  }
+
+  return validEvents
 }
 
 /** Returns the event associated with a selector choice, or null when configuration is incomplete. */

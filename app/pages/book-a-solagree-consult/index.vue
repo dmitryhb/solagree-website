@@ -3,6 +3,7 @@ import {
   getInitialConsultBookingTrackingContext,
   resolveInitialConsultBookingEvent,
   resolveInitialConsultBookingEvents,
+  resolveInitialConsultMeetingMethodMode,
   type InitialConsultBookingEvent,
   type InitialConsultSelectionId
 } from '#shared/initial-consult-booking'
@@ -18,6 +19,7 @@ const runtimeConfig = useRuntimeConfig()
 const route = useRoute()
 const { trackEvent } = useGoogleAnalytics()
 const bookingEvents = computed(() => resolveInitialConsultBookingEvents(runtimeConfig.public.initialConsultBooking))
+const meetingMethodMode = computed(() => resolveInitialConsultMeetingMethodMode(runtimeConfig.public.initialConsultBooking))
 const selectedId = ref<InitialConsultSelectionId>('first-available')
 const trackingContext = computed(() => getInitialConsultBookingTrackingContext(route.query))
 const selectedEvent = computed(() => resolveInitialConsultBookingEvent(bookingEvents.value, selectedId.value))
@@ -40,10 +42,11 @@ watch(bookingEvents, (events) => {
 
 <template>
   <InitialConsultBookingPage
-    v-if="selectedEvent"
+    v-if="selectedEvent && meetingMethodMode"
     :events="bookingEvents"
     :selected-event="selectedEvent"
     :tracking-context="trackingContext"
+    :meeting-method-mode="meetingMethodMode"
     @select="selectEvent"
   />
 

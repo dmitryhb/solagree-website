@@ -71,3 +71,54 @@ test('keeps the Solagree booking sidebar beside the Cal.com embed on desktop', a
   expect((policyAgreementBox?.y ?? 0) - ((policyRulesBox?.y ?? 0) + (policyRulesBox?.height ?? 0)))
     .toBeGreaterThanOrEqual(32)
 })
+
+test('requires a method choice, supports radio keyboard navigation and switches all eight native paths', async ({ page }) => {
+  await page.route(/https:\/\/.*\.cal\.com\//, route => route.abort())
+  await page.goto('/?mode=separate', { waitUntil: 'domcontentloaded' })
+  const embed = page.locator('.calcom-booking-embed__frame')
+  await expect(embed).toHaveCount(0)
+  await page.locator('[data-consultant-id="first-available"]').click()
+  await expect(embed).toHaveCount(0)
+  const phone = page.getByRole('radio', { name: 'Phone call', exact: false })
+  const zoom = page.getByRole('radio', { name: 'Zoom', exact: false })
+  await expect(phone).toBeFocused()
+  await expect(phone).not.toBeChecked()
+  await phone.press('Space')
+  await expect(phone).toBeChecked()
+  await expect(embed).toHaveAttribute('data-calcom-event-path', 'initial-consults/initial-consult-phone')
+  await phone.press('ArrowRight')
+  await expect(zoom).toBeChecked()
+  await expect(zoom).toBeFocused()
+  await expect(embed).toHaveAttribute('data-calcom-event-path', 'initial-consults/initial-consult')
+
+  for (const [id, zoomPath] of expectedEvents) {
+    if (id !== 'first-available') {
+      await page.getByRole('button', { name: 'Change consultant' }).click()
+      await page.locator(`[data-consultant-id="${id}"]`).click()
+      await expect(zoom).toBeChecked()
+    }
+    await phone.check()
+    await expect(embed).toHaveCount(1)
+    await expect(embed).toHaveAttribute('data-calcom-event-path', `${zoomPath}-phone`)
+    await expect(page.locator('.consultant-selection-summary__details')).toContainText('Phone call')
+    await zoom.check()
+    await expect(embed).toHaveCount(1)
+    await expect(embed).toHaveAttribute('data-calcom-event-path', zoomPath)
+    await expect(page.locator('.consultant-selection-summary__details')).toContainText('Zoom')
+  }
+})
+
+test('keeps separate meeting choices above the calendar on mobile', async ({ page }) => {
+  await page.route(/https:\/\/.*\.cal\.com\//, route => route.abort())
+  await page.setViewportSize({ width: 390, height: 844 })
+  await page.goto('/?mode=separate', { waitUntil: 'domcontentloaded' })
+  await page.locator('[data-consultant-id="taj"]').click()
+  await expect(page.locator('.calcom-booking-embed__frame')).toHaveCount(0)
+  await page.getByRole('radio', { name: 'Phone call', exact: false }).check()
+  const [methodBox, calendarBox] = await Promise.all([
+    page.locator('.meeting-method-selector').boundingBox(),
+    page.locator('.initial-consult-booking-page__calendar').boundingBox()
+  ])
+  expect((methodBox?.y ?? 0) + (methodBox?.height ?? 0)).toBeLessThanOrEqual(calendarBox?.y ?? 0)
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390)
+})

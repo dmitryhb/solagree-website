@@ -62,7 +62,8 @@ const createEmbedClientSpy = (): {
   return { calls, listeners, createClient }
 }
 
-test('remounts each Cal.com event once and ignores callbacks from replaced embeds', () => {
+test('remounts consultant and method routes and ignores callbacks from replaced embeds', () => {
+  const eventTransitions = events.flatMap(event => [event, { ...event, eventPath: `${event.eventPath}-phone` }])
   const host = {
     replaceChildrenCalls: 0,
     replaceChildren: (): void => {
@@ -77,7 +78,7 @@ test('remounts each Cal.com event once and ignores callbacks from replaced embed
     onFailed: () => { failureCount += 1 }
   })
 
-  const mounts = events.map(event => {
+  const mounts = eventTransitions.map(event => {
     const mountId = controller.mount({ event, host, trackingContext: {} })
 
     return {
@@ -91,14 +92,14 @@ test('remounts each Cal.com event once and ignores callbacks from replaced embed
     throw new Error('Initial Consult test configuration must produce a current booking mount.')
   }
 
-  assert.equal(host.replaceChildrenCalls, events.length)
+  assert.equal(host.replaceChildrenCalls, eventTransitions.length)
   assert.deepEqual(
     cal.calls.filter(call => call.method === 'init').map(call => call.options),
-    events.map(() => ({ origin: 'https://solagree.cal.com' }))
+    eventTransitions.map(() => ({ origin: 'https://solagree.cal.com' }))
   )
   assert.deepEqual(
     cal.calls.filter(call => call.method === 'ui').map(call => call.options),
-    events.map(() => ({
+    eventTransitions.map(() => ({
       hideEventTypeDetails: true,
       showTimezoneWhenEventDetailsHidden: true,
       layout: 'month_view'

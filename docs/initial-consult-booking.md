@@ -39,6 +39,23 @@ The earlier pre-T3 refund list was empty; T3 detail shows no refund activity. No
 T3 immediate email receipt and calendar addition are now client-attested. Direct content/count/
 header timestamps, historical delivery, future reminders and the broader payment/lifecycle matrix remain open.
 
+## Approved method-routing preparation — later October 5
+
+The user approved separate Phone/Zoom selection and eight active event routes. Existing paths
+will serve Zoom; four new Phone counterparts are saved Hidden/closed Sep16 until an authorized
+release. Source mode remains mixed by default; no deployed config/public old location switched.
+See [method-routing packet](initial-consult-method-routing-2026-10-05.md) for paths, settings,
+verification bounds and coordinated rollout/rollback. Original T3 and its test reminder bindings
+remain intact; James free-test scenario/recipient approval and user Confirm remain pending.
+
+Production reminder scope now intentionally adds the four closed Phone counterparts to the
+original five links (nine intended). Earlier five-link evidence below predates this preparation.
+Isolated Phone probe saved/rendered exactly-one required phone and blank browser constraints PASS;
+new four fresh saved-setting provider QA PASS. Actual submit/number propagation, paid lifecycle
+and coordinated release remain open. Independent code review/focused implementation checks PASS;
+independent full lint/typecheck and focused source/browser QA PASS; bounded evidence is recorded
+in the method-routing packet.
+
 ## Later October 5 policy verification
 
 PR #4 was merged by the user into develop36ed4ed. Support215476247361743 now replied:

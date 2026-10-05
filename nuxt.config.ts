@@ -122,12 +122,18 @@ gtag('config', '${gaMeasurementId}', { send_page_view: false });
       portalApiBaseUrl,
       gaMeasurementId,
       initialConsultBooking: {
+        meetingMethodMode: process.env.NUXT_PUBLIC_CALCOM_INITIAL_CONSULT_MEETING_METHOD_MODE ?? 'mixed',
         unpublishedConsultants: process.env.NUXT_PUBLIC_CALCOM_INITIAL_CONSULT_UNPUBLISHED_CONSULTANTS ?? 'jessica',
         firstAvailableEventPath: process.env.NUXT_PUBLIC_CALCOM_INITIAL_CONSULT_FIRST_AVAILABLE_EVENT_PATH?.trim() || '',
         tajEventPath: process.env.NUXT_PUBLIC_CALCOM_INITIAL_CONSULT_TAJ_EVENT_PATH?.trim() || '',
         stacieEventPath: process.env.NUXT_PUBLIC_CALCOM_INITIAL_CONSULT_STACIE_EVENT_PATH?.trim() || '',
         jessicaEventPath: process.env.NUXT_PUBLIC_CALCOM_INITIAL_CONSULT_JESSICA_EVENT_PATH?.trim() || '',
-        jamesEventPath: process.env.NUXT_PUBLIC_CALCOM_INITIAL_CONSULT_JAMES_EVENT_PATH?.trim() || ''
+        jamesEventPath: process.env.NUXT_PUBLIC_CALCOM_INITIAL_CONSULT_JAMES_EVENT_PATH?.trim() || '',
+        firstAvailablePhoneEventPath: process.env.NUXT_PUBLIC_CALCOM_INITIAL_CONSULT_FIRST_AVAILABLE_PHONE_EVENT_PATH?.trim() || '',
+        tajPhoneEventPath: process.env.NUXT_PUBLIC_CALCOM_INITIAL_CONSULT_TAJ_PHONE_EVENT_PATH?.trim() || '',
+        staciePhoneEventPath: process.env.NUXT_PUBLIC_CALCOM_INITIAL_CONSULT_STACIE_PHONE_EVENT_PATH?.trim() || '',
+        jessicaPhoneEventPath: process.env.NUXT_PUBLIC_CALCOM_INITIAL_CONSULT_JESSICA_PHONE_EVENT_PATH?.trim() || '',
+        jamesPhoneEventPath: process.env.NUXT_PUBLIC_CALCOM_INITIAL_CONSULT_JAMES_PHONE_EVENT_PATH?.trim() || ''
       },
       solagreeQuiz: {
         hostId: 'solagree-quiz',
