@@ -22,12 +22,16 @@ of Taj, Stacie and James, with Jessica paused and her profile retained.
   $0.50 payments are historical evidence only; they authorize no new payments. The user completes
   every new payment and real refund. Obtain scenario/recipient approval before a test submission
   that can send mail, create calendar entries or generate conferencing links.
-- PR #1 contains the pending policy copy. Merge, production deployment and Done require a separate
-  user instruction. The historical HIR-609 staging deployment is not production acceptance.
+- PR #1 policy copy is now in develop after an external merge (`9951295`) discovered during
+  the later October 5 Stripe resumption. This agent performed no merge or production deployment.
+  The Stripe evidence supplement has a separate PR; merge, production deployment and Done
+  require separate user instruction. The historical HIR-609 staging deployment is not production acceptance.
 
 Historical observations are dated evidence, not proof that today's saved configuration or delivery
 is correct. The user restored Cal.com admin access on October 5 and current configuration rechecks are recorded
-in the matrix. Stripe still requires authenticated read-only access for payment reconciliation.
+in the matrix. Stripe access was restored later the same day: the matrix now records two successful
+$0.50 payments, one incomplete checkout, one sent receipt per paid test and no current refund evidence.
+Inbox delivery and the broader payment/lifecycle matrix remain open.
 
 ## Runtime event paths
 
@@ -95,8 +99,10 @@ Use the current matrix for per-criterion status and controlled test preparation.
 2. Recheck event rules, hours, timezones, destinations/conflict calendars and Zoom. Stacie's saved
    hours differ from the old Mon–Fri default; James's `Inner State` destination was explicitly
    retained by the owner. Preserve these mappings pending actual provider acceptance.
-3. Reconcile the two existing $0.50 bookings against authenticated Stripe before requesting more
-   paid tests: payment/booking/host/amount/currency, receipt, duplicates and actual refund state.
+3. Use the October 5 bounded Stripe reconciliation before requesting more paid tests: two successful
+   $0.50 payments, no duplicate successful charge in the visible dataset, one sent receipt each,
+   one incomplete unpaid intent and no current refunds. Finish inbox delivery/strict ID bridging
+   if required; no historical payment authorizes another charge or refund.
 4. Verify delivered email confirmation/receipt, 24h/1h reminders, Phone/Zoom instructions,
    cancellation and operator-managed reschedule, including slot release and payment retention.
 5. Complete negative-payment, calendar conflict/concurrency, timezone/DST and policy-boundary
