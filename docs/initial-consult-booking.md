@@ -1,5 +1,9 @@
 # Initial Consult booking operations
 
+Latest prepared action: [approved free James Phone test](initial-consult-phone-preparation-2026-10-05.md).
+One visible required phone field, payments/workflows OFF, exact approved slot and independent
+preparation QA PASS. The form is still unsubmitted; user final Confirm is pending.
+
 Latest native acceptance: [James free booking / expired Zoom authorization](initial-consult-james-booking-2026-10-05.md).
 Host/time confirmed; meeting location is Cal Video, so Zoom remains blocked pending reauthorization/retest.
 
@@ -52,7 +56,9 @@ will serve Zoom; four new Phone counterparts are saved Hidden/closed Sep16 until
 release. Source mode remains mixed by default; no deployed config/public old location switched.
 See [method-routing packet](initial-consult-method-routing-2026-10-05.md) for paths, settings,
 verification bounds and coordinated rollout/rollback. Original T3 and its test reminder bindings
-remain intact; James free-test scenario/recipient approval and user Confirm remain pending.
+remain intact. The separately approved free James Zoom test was submitted by the user;
+actual location is Cal Video, with expired/revoked James Zoom authorization as the current blocker.
+The approved free Phone test is separately prepared and still awaiting user final Confirm.
 
 Production reminder scope now intentionally adds the four closed Phone counterparts to the
 original five links (nine intended). Earlier five-link evidence below predates this preparation.
@@ -162,7 +168,12 @@ October7 21:30 UTC are not observed delivery. After inspection disable templates
 host pool; cancellation may refund, so user financial cleanup remains required. PR #3 is
 merged in develop989827a; no agent deploy/Done or new financial action.
 
-## Isolated James free test — prepared, not submitted
+## Earlier isolated James free preparation — superseded by completed booking
+
+This dated pre-approval snapshot is retained for history. The user subsequently approved and
+pressed Confirm; [actual result](initial-consult-james-booking-2026-10-05.md) records correct host/time,
+Cal Video instead of Zoom, and expired/revoked Zoom authorization. Pending statements and
+the five-link reminder scope below predate that result and the later nine-link method preparation.
 
 Hidden event7352395 (`initial-consults/test-james-calendar-zoom-20261005`) is James-only, Zoom-only,
 30 minutes, payment OFF, with technical $0/no-consultation copy. Independent fresh QA PASS for
