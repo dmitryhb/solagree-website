@@ -1,5 +1,11 @@
 # Initial Consult acceptance preparation — October 5, 2026
 
+Latest preparation: [approved free James Phone test](initial-consult-phone-preparation-2026-10-05.md).
+Independent copy/operations review and fresh provider preparation QA PASS. The exact approved
+October 6, 21:00–21:30 Europe/Amsterdam slot is open in the unsubmitted form. User Confirm,
+actual phone propagation and email/calendar delivery remain pending; preparation is not acceptance.
+The user merged PR #8 into develop `0065b96289aa91412dd242001cf46c50a198a188`.
+
 Latest native test: [James free booking result and Zoom blocker](initial-consult-james-booking-2026-10-05.md).
 User Confirm completed; host/time PASS, intended Zoom FAIL with invalid authorization. This
 supersedes pending-Confirm snapshots; actual inbox/calendar delivery remains unconfirmed.
@@ -144,7 +150,12 @@ not Solagree's refund/manual-reschedule copy; website policy is a separate sourc
 Viewer Amsterdam/overlayON restored, viewport reset and own tab closed. No contacts entered,
 submissions, charges, sends or calendar writes. Overall external acceptance remains NOT ACCEPTED.
 
-### Isolated free James test — preparation only
+### Earlier isolated free James preparation — superseded by completed booking
+
+This is the earlier pre-approval snapshot. The user later approved and pressed Confirm;
+[actual James result](initial-consult-james-booking-2026-10-05.md) records host/time PASS,
+Cal Video instead of Zoom and expired/revoked Zoom authorization. Pending statements below
+are historical; reminder scope was later expanded to nine production/closed Phone links.
 
 Created hidden event7352395, `initial-consults/test-james-calendar-zoom-20261005`, without
 modifying paid T3. Independent fresh provider QA PASS: Hidden,30m, Zoom-only organizer default
@@ -327,7 +338,7 @@ Historical configuration evidence is not current saved state, delivery, calendar
 | Rules / hours / timezones | Website delegates availability to Cal.com | Oct 5: five rules rechecked (Jessica has closed range); RR common/restriction schedule off; Taj Mon–Fri09–17 PT, James Mon–Fri09–17 ET, Stacie Mon–Thu18:30–21 and Sat12–14 ET | Confirm approved hours and intended Taj destination; actual notice/buffer/horizon boundaries, calendar conflicts, concurrency |
 | Phone exactly once, required for both methods | Prepared separate mode/path validation/explicit method gate passed independent source QA; default remains mixed | Old four public mixed routes still duplicate Phone; isolated Phone-only/Zoom-only render and browser constraints PASS; four new closed Phone saved-field QA PASS | Authorized coordinated old-route Zoom conversion/new Phone opening/runtime deployment, then actual form rejection/number propagation and lifecycle acceptance. Failed Custom attendee experiment not repeated |
 | Required Name/Email/State, optional Notes/SMS | Website does not add a duplicate contact form | Sep 15 approved fields; Oct 5 public form recheck; SMS unchecked | Confirm provider validation, no attribution field, current forms and consent on all five |
-| Calendar / Zoom | No website-side meeting generation | Oct 5 all three settings rechecked; Taj Sep28 and StacieT3 paid tests generated Zoom URLs; T3 calendar addition client-attested | Direct destination/event-detail inspection and external busy conflicts; Zoom join/cleanup and James actual creation. Free James test prepared above, not submitted |
+| Calendar / Zoom | No website-side meeting generation | Taj Sep28 and Stacie T3 paid tests generated Zoom URLs; T3 calendar addition client-attested. Free James Confirm completed: correct host/time, but actual location is Cal Video. James Zoom is already default with expired/revoked permissions; native calendar connection settings alone do not prove writes | James/client reauthorizes existing Zoom, then a separately approved retest. Free James inbox/native calendar attestation, direct destination/event-detail inspection and arbitrary busy conflicts remain open. Existing Cal Video booking remains intact |
 | Historical T1/T2 and new T3 $0.50 tests | No fixture claims live-payment success | Earlier Oct5: T1/T2 succeeded and A1Incomplete, no refunds. After userT3: All4records, three Succeeded$0.50 with one charge/receipt per test and A1Incomplete | T3 immediate delivery client-attested; historical inbox delivery/direct content evidence and strict numeric-ID↔UID bridge if needed; no refund has been accepted; broad retry/concurrency/$60 acceptance remains |
 | Decline / abandon / retry / duplicate protection | Website invokes native checkout, no custom payments | Sep 28 cancel checkout left Pending payment/Unconfirmed; redirect to admin's empty public profile; rejected in cleanup. Error collecting card is T1 rescheduled original, not independent decline evidence; Oct 5 Stripe abandoned intent Incomplete, no payment method/charge/receipt | Slot-hold expiry and retry/concurrency acceptance; no usable unpaid confirmation; no duplicate charge/booking |
 | Confirmation / receipt / reminders | Site copy stays 30 min / $60 | Earlier Oct5: 450309/450313 active on five production links; later method prep nine (original five + four closed Phone), fresh QA PASS. Hidden test excluded with one attendee action, 24h/1h, event/date/end/timezone/organizer/LOCATION/MEETING_URL, hard-coded30m/$60. Oct 5 guest notifications enabled, including confirmation/cancel/change/payment pending; Stripe shows one sent receipt per T1/T2/T3 paid test, each rendered at $0.50; client attests T3 immediate emails received | Direct message content/count/header timestamps; historical/other-host delivery; future 24h/1h reminders; matching host/timezone/Phone or Zoom and no broken Zoom links in Phone mail |
@@ -335,7 +346,7 @@ Historical configuration evidence is not current saved state, delivery, calendar
 | Refund | Site copy now says 2 calendar days | Oct 5 all five + hidden event rechecked as If cancelled 2 calendar days before; earlier pre-T3 full/pending/partial refund list empty; T3 remains Succeeded with no refund activity observed in its detail | Hosted threshold before/equal/after, DST; user performs actual refund; confirm Stripe refund object/status and email. Cal “refund on the way” text is insufficient |
 | One manual reschedule | Site directs request to Solagree | Later Oct5 all five + hidden saved Attendee only/Always and same-host/Always; cancellation available; hidden guest confirmation Cancel-only; Stacie own-host picker accessible | Paid change/retention, slot release, UID lineage/notices, old guest URL rejection and manual ledger/second/late-request handling remain untested |
 | SMS | No requirement to enable SMS for email launch | Oct 5 all four SMS workflows show No active links; First Available switches off; prior zero credits not revalidated | Keep inactive; optional future sender/credits/predicate/mapping/consent acceptance. Not a blocker for email acceptance |
-| Desktop/mobile, keyboard, fallback/privacy | Existing selector, focus, embed retry/fallback and tracking tests; independent result below | Sep 28 staging smoke at 390/768/1440; no overflow, selection worked; legacy production form was still served | Actual current build iframe desktop/mobile/keyboard/screen-reader verification; provider empty/error behavior; authorized production release later |
+| Desktop/mobile, keyboard, fallback/privacy | Reviewed separate-method implementation and focused source/browser QA PASS; fixture tests do not prove native paid lifecycle | Approved full staging refresh from d4f344e: independent direct and Home/About client navigation, four correct single embeds, Jessica absent, desktop 1728/mobile 390 with no overflow PASS. Runtime remains mixed. Production remains legacy | Coordinated separated-method activation and production release require separate authorization; remaining screen-reader/provider empty/error and native lifecycle checks stay open |
 
 ## Public read-only recheck — earlier October 5, before role-policy implementation
 
@@ -482,7 +493,12 @@ native Phone and Zoom events/routing: Phone collects its location phone once, Zo
 universal phone. This changes event inventory/selection, requires SMS mapping and all native
 payment/lifecycle acceptance again, and remains a proposed scope decision rather than an implemented fix.
 
-## Controlled test plan — Stacie completed as T3; other scenarios not submitted
+## Controlled test plan — historical before James Confirm
+
+The proposals below predate the completed free James test. Stacie T3 is completed; James
+host/time is confirmed, but intended Zoom failed with Cal Video. The later free Phone scenario
+is approved and prepared, awaiting user Confirm. Remaining paid lifecycle scenarios still need
+their own specific approvals; this historical plan authorizes no new submissions or sends.
 
 The existing tests now have the bounded dashboard reconciliation above. Before any new test,
 finish any required strict ID bridge and receipt inbox verification in Stripe/Cal.com. Label them T1/T2 in shareable
@@ -499,7 +515,7 @@ price/payment amounts remain $60. No invalid Stripe test-card numbers are used i
 | --- | --- | --- | --- |
 | Guest-link vs organizer reschedule | Existing hidden T3; no new payment; a new booking needs separate $0.50 approval/user payment | Original authenticated Stacie organizer and approved controlled attendee/host; obtain specific change-notice approval before submitting | Use saved Attendee only/Always and Always same host. Preserve reminder bindings; choose timing after initial mailbox/calendar evidence. One authorized change, payment retention, slot release, UID lineage/notices; old guest URL rejection and second/late request handling still untested. No cancel/request-reschedule/rebook substitute; user performs financial cleanup |
 | Stacie calendar/conflict/Zoom | Hidden one-host scope matching Stacie settings; $0.50 USD to SOLAGREE | Exact controlled attendee inbox + Stacie host inbox approved before submit; user pays | Single booking/payment, Solagree destination entry, busy-time exclusion, valid Zoom meeting, confirmation/receipt; user handles financial cleanup |
-| James calendar/conflict/Zoom | Prepared hidden7352395 James-only/Zoom-only; payment OFF / $0; no payee or receipt | Exact controlled attendee + James host confirmation/calendar-invitation recipients require approval; user final Confirm pending | Actual Inner State destination entry, Zoom record, hosted slot/external conflict evidence; no submission or cleanup notices yet. Paid lifecycle needs its own later approval |
+| James calendar/conflict/Zoom | Free hidden7352395; user Confirm completed; no payment | Specific controlled attendee/James scenario approved and completed by user | Correct host/time, actual Cal Video instead of Zoom. James/client reauthorization and separately approved retest; native destination/inbox/conflict evidence remains open. Cleanup notices and paid lifecycle are not authorized |
 | Email 24h and 1h, Phone/Zoom | Hidden event with price-correct isolated workflow templates; $0.50 USD to SOLAGREE if new booking required | Approved attendee + explicit host; no SMS; user pays | Scheduled event >24h ahead, receive both reminders at correct times/timezone; inspect Phone instructions vs Zoom URL, actual confirmation/receipt/cancel/change emails; requires timed follow-up separately requested by user |
 | Abandon / failed / retry / concurrency | Hidden event; no charge for abandoned checkout; any successful retry $0.50 USD to SOLAGREE | Approve recipient/host side effects before booking form submission; final successful payment by user | Record hold start/expiry, no usable unpaid booking, safe return/retry, exactly one successful charge/booking. A deliberate live decline needs a provider-approved scenario first |
 | Refund boundaries | Hidden event; each proposed new booking $0.50 USD to SOLAGREE | Approve each scenario/recipient separately; user pays and performs any real refund | Before/equal/after native threshold and DST; hosted version/timezone and exact decision, Stripe refund object/status, mailbox evidence. Clarify if Cal cancellation itself auto-refunds before acting |
@@ -514,8 +530,9 @@ The unsubmitted public form is prepared for October 8, 00:30–01:00 Europe/Amst
 selected, approved attendee identity/notes filled, required phone and State still empty, SMS unchecked. Revalidate availability before submission; the
 preview does not reserve a slot. Required phone and State must be supplied by the controlled
 attendee/user before checkout, not invented by the agent.
-Original hidden7253414 retains Stacie/T3 and its reminders. James is already scoped on separate
-free7352395 above; approval and user final Confirm are pending.
+Original hidden7253414 retains Stacie/T3 and its reminders. James free7352395 was subsequently
+approved and completed; its [actual result](initial-consult-james-booking-2026-10-05.md) supersedes
+the earlier pending handoff. The approved Phone preparation is a separate unsubmitted scenario.
 
 ## Earlier configuration decisions and provider question — superseded by later reply above
 
