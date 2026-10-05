@@ -1,5 +1,8 @@
 # Initial Consult booking operations
 
+Latest native acceptance: [James free booking / expired Zoom authorization](initial-consult-james-booking-2026-10-05.md).
+Host/time confirmed; meeting location is Cal Video, so Zoom remains blocked pending reauthorization/retest.
+
 Latest deployment evidence: [October 5 full staging refresh](initial-consult-staging-refresh-2026-10-05.md).
 It supersedes earlier staging access/copy snapshots, with runtime still mixed and production gated.
 

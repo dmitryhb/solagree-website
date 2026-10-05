@@ -1,5 +1,9 @@
 # Initial Consult acceptance preparation — October 5, 2026
 
+Latest native test: [James free booking result and Zoom blocker](initial-consult-james-booking-2026-10-05.md).
+User Confirm completed; host/time PASS, intended Zoom FAIL with invalid authorization. This
+supersedes pending-Confirm snapshots; actual inbox/calendar delivery remains unconfirmed.
+
 Latest update: [approved full staging refresh](initial-consult-staging-refresh-2026-10-05.md)
 records the restored access, current build and deployment verification. Production and remaining
 native lifecycle acceptance stay open; earlier staging observations below are historical.
