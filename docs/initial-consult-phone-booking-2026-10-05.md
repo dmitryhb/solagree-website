@@ -4,6 +4,21 @@ HIR-246 → HIR-248 → HIR-249 → HIR-250; HIR-609 publication dependency reta
 This records an actual free Phone booking and a calendar export gap, not launch or paid acceptance.
 No attendee contacts, phone values, booking identifiers or meeting tokens are included.
 
+## October 6 client attestation and fresh Zoom check
+
+The user confirms that the Phone number is present in the received invitation and calendar
+record. Record those contents/calendar presence as **client-confirmed**, superseding the earlier
+awaiting-attestation status below. This is not direct agent inspection of the delivered attachment,
+message headers/counts, exact calendar destination/owner or native write pipeline. The observed
+manual Google/Office/ICS omission remains; it does not describe the client-confirmed invitation.
+
+After that reply, a fresh independent read-only James Conferencing check (GPT-6.1-Sol high)
+still shows Zoom Video Default with the explicit expired-or-revoked permissions warning.
+Reauthorization is not UI-confirmed, and no new Zoom creation is proved. Official impersonation
+exit restored Jill, with no banner/stop control remaining; own diagnostic tab closed. No OAuth,
+settings, booking or notification action was performed. The user merged PR #10 into develop
+`0e4051566a24814df1ad0f5c69d6ab81fe18d185`; existing worktree synchronized, evidence preserved.
+
 ## Authorized action and actual result
 
 The user merged [PR #9](https://github.com/dmitryhb/solagree-website/pull/9) into develop
@@ -30,7 +45,7 @@ collected number, not two collection inputs. No Zoom/Cal Video meeting link is s
 The native numeric event-ID bridge was not separately exposed during actual booking QA;
 the event association is bounded to matching saved title/context, host and approved interval.
 
-## Manual calendar exports — phone propagation not accepted
+## Manual calendar exports — phone location omitted
 
 Root and independent QA observe correct Google/Office timestamps, but no location parameter.
 The Other link's inline ICS has DTSTART at 19:00 UTC and DURATION PT30M, but no LOCATION,
@@ -39,8 +54,9 @@ description alone does not supply the organizer's call number. Manual Add to cal
 therefore do not establish phone propagation into a calendar entry.
 
 These are the public manual exports, not the delivered email attachment or the organizer's native
-connected-calendar entry. The confirmation says invitations were sent, but inbox delivery,
-delivered invitation contents and actual attendee/host calendar writes require separate evidence.
+connected-calendar entry. At the original independent inspection, invitation delivery/calendar
+contents lacked attestation; the October 6 client confirmation above supersedes that waiting state.
+Direct attachment/host-destination inspection and the exact native write pipeline remain unverified.
 Neither agent clicked Add to calendar, joined a service, called the number or sent a message.
 Do not infer that an emailed invitation or native host entry has the same omission without inspecting it.
 
@@ -62,7 +78,8 @@ Hosted Confirmation → Calendar event name exposes Location and location variab
 [official customName contract](https://cal.com/docs/api-reference/v2/event-types/update-an-event-type#body-custom-name)
 also documents Location. Putting a phone in the title is an untested candidate and could expose
 it in shared calendar titles. No title was changed; custom name stayed empty and Save disabled.
-Inspect the delivered invitation/native host entry before choosing a workaround. Static Phone
+Retain the client-confirmed invitation/calendar result and inspect specific contents/destination
+if a workaround is needed. Static Phone
 instructions cannot dynamically replace the manual export's missing location.
 
 Prepared support wording, not sent:
@@ -90,11 +107,11 @@ are not claimed. Actual blank-submit/server validation remains untested.
 | --- | --- | --- | --- |
 | Method routing | Existing reviewed separate-method source and QA retained; this supplement changes docs only | Current runtime mixed; prepared Phone counterparts Hidden/closed | Authorized coordinated conversion/opening/runtime release later |
 | Single phone collection / booking | Website adds no second contact form | One required input before Confirm; actual phone in confirmed booking Who/Where/admin Where PASS | Actual blank rejection/server validation and paid Phone lifecycle remain open |
-| Host/time/one record | Native provider owns booking | Independent matching Confirmed James record and UTC interval PASS | Actual attendee/host inbox and native calendar attestation/entry inspection |
-| Phone calendar content | No website calendar export engine | Manual Google/Office/ICS correct time but phone location absent; propagation not accepted | Inspect delivered invitation/native host entry; reconcile manual export limitation before Phone acceptance |
+| Host/time/one record | Native provider owns booking | Independent matching Confirmed James record and UTC interval PASS; invitation/calendar number present client-confirmed October 6 | Direct attendee/host inbox/header and exact calendar owner/destination inspection, arbitrary busy conflicts |
+| Phone calendar content | No website calendar export engine | Received invitation/calendar number client-confirmed. Manual Google/Office/ICS correct time but phone location absent | Direct attachment/destination details remain uninspected; reconcile known manual export limitation for release |
 | Free payment/SMS isolation | No payment/SMS engine added | Payments/all eight event workflows OFF; global SMS inactive; bounded Stripe All list unchanged | Free result does not cover paid lifecycle or directly prove stored SMS No/delivery absence |
 | Conflicts/buffers | Availability delegated to provider | Entire October 6 unavailable; cause not isolated | Controlled busy/conflict/adjacent-slot evidence; no additional bookings or cleanup are authorized |
-| James Zoom | Website does not create meetings | Earlier Zoom-intended booking uses Cal Video; default Zoom authorization expired/revoked | James/client reconnects existing Zoom and separately approved controlled retest |
+| James Zoom | Website does not create meetings | Earlier Zoom-intended booking uses Cal Video; fresh October 6 check still shows Zoom Default and expired/revoked permissions | James/client reconnects existing Zoom, confirm warning clears, then separately approved controlled retest |
 
 Existing Cal Video James and paid Stacie records/reminder bindings remain intact. No agent
 payment, refund, cancellation, new booking, reminder/SMS activation, production activation or Done.

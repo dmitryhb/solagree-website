@@ -4,6 +4,15 @@ HIR-246 → HIR-248 → HIR-249 → HIR-250. This record supersedes the earlier 
 Confirm snapshots. It records a completed free test and an unresolved Zoom integration blocker,
 not paid or launch acceptance. No attendee contacts, booking identifiers or meeting tokens are stored.
 
+## October 6 follow-up
+
+The later Phone invitation/calendar number is now client-confirmed; see the
+[Phone result](initial-consult-phone-booking-2026-10-05.md). That attestation is scoped to Phone,
+not independent delivery inspection of this earlier Cal Video booking.
+Fresh independent read-only James Conferencing inspection still shows Zoom Video Default with
+the expired-or-revoked permissions warning. Reauthorization/new Zoom creation remain unconfirmed.
+Jill was restored through official exit; no OAuth/settings/booking change or send was performed.
+
 ## Authorized action and observed result
 
 The user merged [PR #7](https://github.com/dmitryhb/solagree-website/pull/7) into develop
