@@ -1,5 +1,9 @@
 # Initial Consult free Phone preparation — October 5, 2026
 
+**Historical preparation snapshot:** the user subsequently pressed Confirm. The
+[actual Phone result](initial-consult-phone-booking-2026-10-05.md) supersedes pending statements
+below: host/time/phone in confirmed booking PASS; manual calendar exports omit phone location.
+
 HIR-246 → HIR-248 → HIR-249 → HIR-250; HIR-609 remains the consultant publication dependency.
 This record describes saved preparation and an unsubmitted form, not Phone lifecycle acceptance.
 No attendee contacts, phone values, booking identifiers or meeting tokens are included.
