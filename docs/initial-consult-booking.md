@@ -14,9 +14,9 @@ of Taj, Stacie and James, with Jessica paused and her profile retained.
   September 29. October 5 admin recheck confirms this setting on all five events and hidden test 7253414.
   The actual threshold and Stripe refunds still require acceptance.
   Do not promise exactly 48 elapsed hours, midnight, a specific timezone or equality/DST behavior.
-- One complimentary reschedule is requested from Solagree and processed by an operator. Native Disable rescheduling
-  blocks both guests and organizers according to current hosted Help. Do not use it as an
-  organizer-only solution; supported handling and paid-booking lifecycle acceptance remain open.
+- One complimentary reschedule is requested from Solagree and processed by an operator.
+  The Host and attendee scope blocks both roles. Later October5 the hosted selector was configured as
+  Attendee only / Always; own-host picker access passed. Paid lifecycle acceptance remains open.
 - Email is sufficient for launch. SMS is a separate optional channel, remains inactive, and does
   not block email acceptance. Preserve voluntary, unchecked consent on every event.
 - Cal.com Support reports no hosted sandbox for native paid bookings. The two earlier separately approved
@@ -27,7 +27,8 @@ of Taj, Stacie and James, with Jessica paused and her profile retained.
 - PR #1 policy copy is now in develop after an external merge (`9951295`) discovered during
   the later October 5 Stripe resumption. This agent performed no merge or production deployment.
   The user also merged Stripe evidence PR #2 (`aa24ff8`) and configuration PR #3 (`989827a`).
-  The current T3 evidence supplement is prepared separately; merge, production deployment and Done
+  T3 evidence PR #4 is also merged (`36ed4ed`); this later policy/QA supplement is prepared
+  separately. Merge, production deployment and Done
   require separate user instruction. The historical HIR-609 staging deployment is not production acceptance.
 
 Historical observations are dated evidence, not proof that today's saved configuration or delivery
@@ -35,7 +36,68 @@ is correct. The user restored Cal.com admin access on October 5 and current conf
 in the matrix. Stripe access was restored later the same day: after user-completed T3 the matrix records
 three successful $0.50 payments, one incomplete checkout and one sent receipt per paid test.
 The earlier pre-T3 refund list was empty; T3 detail shows no refund activity. No refund is accepted.
-Inbox delivery and the broader payment/lifecycle matrix remain open.
+T3 immediate email receipt and calendar addition are now client-attested. Direct content/count/
+header timestamps, historical delivery, future reminders and the broader payment/lifecycle matrix remain open.
+
+## Later October 5 policy verification
+
+PR #4 was merged by the user into develop36ed4ed. Support215476247361743 now replied:
+no phone-field mapping/conditional editor visibility; making the universal phone optional does
+not satisfy Zoom-required. Separate Phone/Zoom routing is under scope review, not implemented.
+
+The user now reports client confirmation that all immediate emails were received and the
+calendar entry added for Stacie T3. Record these as client-attested results; no direct inbox/
+host-destination inspection, exact message counts/content/timestamps or arbitrary busy conflict
+was supplied. This does not prove other hosts, historical tests or future24h/1h reminders.
+Awaiting access is no longer the status for the reported delivery/calendar addition.
+
+Hidden7253414 and all five production rescheduling settings now saved ON / Attendee only /
+Always, plus same RR host ON / Always reschedule with the same host. Cancellation remains
+enabled; past/cancelled rebooking remain off. T3 canonical confirmation
+has Cancel only, retains paid status/Zoom. The selector exists in hosted6.9.11-h; the prior
+blanket no-organizer interpretation of the Help article is superseded for this role setting.
+Support's own-organizer no-recharge claim and manual one-change handling still need lifecycle
+acceptance; no booking was changed or lifecycle email sent. Independent hidden saved-policy and
+Stacie-own-host/admin pre-submit access PASS; independent all-six saved rollout QA PASS.
+Fully loaded price/refund views still show five$60USD/hidden$0.50USD on booking /2calendar days.
+Jessica remains Hidden/closedSep16; hidden test email24h/1hON, productionremindersOFFforhidden,
+allSMSOFF. No paid booking was changed.
+Support's UTC/inclusive/48h refund explanation is not actual threshold/refund evidence. Retain
+approved two-calendar-day wording/setting pending reconciliation.
+
+All five production descriptions were empty; the approved30m/$60, Phone/Zoom instructions,
+manual one-free request up to2calendar days, cancellation2calendar/full refund/late non-refundable
+and no-show/new paid booking copy is now saved. Independent copy review PASS; persistence and
+public rendering QA PASS: all five persisted exactly with Save disabled; public First Available/Stacie
+show the copy in a 180px scrollable description panel without Read more. Hidden T3 description was not touched. Source behavior is unchanged.
+
+Independent live public desktop/mobile/timezone QA: all4 paths30m/$60/Phone+Zoom, required
+labels Name/Email/Phone/State, optional Notes/SMSunchecked/noattribution. Zoom phone-once PASS;
+Phone exactlyonce FAIL (two required inputs). Bounded1440/390 layouts and one equivalent UTC
+slot across Amsterdam/NewYork/LosAngeles passed; no production payment/validation/delivery
+inference. Native form lacked Solagree policy copy in that earlier pass; the later native
+description implementation above is checked separately from website copy.
+
+Separate Phone/Zoom candidate is documented, not implemented: eight active events, method
+selection before calendar, hidden optional universal phone on Phone-only plus native required
+location number; visible required universal phone on Zoom-only. Hosted save/render and blank
+validation probe must pass before rollout; preserve all existing fields/settings/workflows.
+Omitted default fields are restored and bookingFields replaces the field array. Await product
+direction, preserve T3, and never change meeting method by assumed cancel/rebook migration.
+
+Manual operation checklist (not an executed-test record):
+
+1. Use the original consultant's authenticated organizer account. Verify Paid status, original
+   host, approved request timing and zero prior complimentary changes in the restricted operations
+   ledger; guest self-service is disabled and provider does not count free changes.
+2. Prepare a same-host target slot. Obtain approval for controlled test attendee/host notices
+   before submitting a test change; do not use request-reschedule/cancel/rebook as a substitute.
+3. After one authorized change, verify paid amount/charge retained, old slot release/new slot
+   reservation, booking lineage, calendar/Zoom changes and exactly one change notice per recipient.
+   Stop if payment, cancellation or refund is requested. No new payment/refund is authorized.
+4. Record request/change timestamps, prior/new slot, original host, change-used and verification
+   result only in restricted operations views. A second/late request follows approved policy;
+   do not grant another free change automatically. No actual ledger entries are published here.
 
 ## Current saved test isolation — October 5, resumed
 
@@ -50,7 +112,7 @@ disable without submitting a booking. SMS remains inactive.
 Hidden 7253414 is temporarily Stacie-only for the first proposed Zoom test, with 30m/$0.50 USD,
 Stripe ON_BOOKING and two-calendar-day refund settings rechecked. The user approved the specific Stacie test; checkout is handed to the user with phone/State
 required and SMS unchecked. The user has now completed checkout as T3 below; no agent booking submission, payment or refund. Cal.com Support
-ticket 215476247361743 was submitted after specific user approval; response pending.
+ticket 215476247361743 was submitted after specific user approval; its later reply is recorded above.
 The original hidden pool was Taj/James/Stacie; restore it after the controlled test sequence.
 Production host assignments and existing bookings were not changed. Unsaved Phone call/
 Organizer Address alternatives were rejected for incorrect meeting semantics and restored.
@@ -65,8 +127,10 @@ Cal Accepted history identifies Stripe/WEBHOOK. Generated Zoom URL is visible in
 canonical public confirmation; the initial redirect placeholder is superseded. Independent
 provider QA PASS for this bounded scope. Independent public hidden/Stacie direct checks
 exclude the booked slot and 15-minute post-buffer while adjacent slots remain, with viewer
-overlay off during verification and restored. Native calendar write/conflicts, inbox delivery,
-Zoom join, reminder dispatch, refund/manual lifecycle and production$60 paths remain open.
+overlay off during verification and restored. Later client attestation confirms T3 immediate emails
+and calendar addition. Direct host-destination/event details, inbox content/count/header timestamps,
+external busy conflicts, Zoom join, future reminder dispatch, refund/manual lifecycle and
+production$60 paths remain open.
 
 The final booking records SMS consentYes after user completion; all four SMS workflows are
 OFF for hidden, independently checked. No SMS activation/delivery claimed. Test24h/1h
@@ -74,6 +138,20 @@ email workflows remain hidden-only for this test. Planned triggers October6 22:3
 October7 21:30 UTC are not observed delivery. After inspection disable templates/restore
 host pool; cancellation may refund, so user financial cleanup remains required. PR #3 is
 merged in develop989827a; no agent deploy/Done or new financial action.
+
+## Isolated James free test — prepared, not submitted
+
+Hidden event7352395 (`initial-consults/test-james-calendar-zoom-20261005`) is James-only, Zoom-only,
+30 minutes, payment OFF, with technical $0/no-consultation copy. Independent fresh QA PASS for
+saved assignment, rules, inherited guest/same-host restrictions and all eight workflows OFF;
+original T3 and five-production reminder scopes/payment settings remain intact.
+
+Prepared October6 14:30–15:00 UTC slot (16:30 Amsterdam /10:30 New York) shows Confirm, one
+required empty phone, required State and unchecked optional SMS. Exact controlled attendee/James
+recipients and confirmation/calendar-invitation scenario await user approval; user final Confirm
+is proposed. No submission, calendar write, Zoom generation or sends occurred. This is a free
+integration check, not paid $60/receipt acceptance. No cancellation notices/cleanup are authorized;
+preserve T3 paid booking and future reminder bindings.
 
 ## Runtime event paths
 
@@ -143,8 +221,9 @@ Use the current matrix for per-criterion status and controlled test preparation.
    retained by the owner. Preserve these mappings pending actual provider acceptance.
 3. Use the October 5 bounded Stripe reconciliation before requesting more paid tests: three successful
    $0.50 payments, no duplicate successful charge in the visible dataset, one sent receipt each,
-   one incomplete unpaid intent, earlier pre-T3 refund list empty and no T3 refund activity observed. Finish inbox delivery/strict ID bridging
-   if required; no historical payment authorizes another charge or refund.
+   one incomplete unpaid intent, earlier pre-T3 refund list empty and no T3 refund activity observed.
+   T3 immediate emails/calendar addition are client-attested; finish direct content and historical
+   delivery evidence/strict ID bridging if required; no historical payment authorizes another charge or refund.
 4. Verify delivered email confirmation/receipt, 24h/1h reminders, Phone/Zoom instructions,
    cancellation and operator-managed reschedule, including slot release and payment retention.
 5. Complete negative-payment, calendar conflict/concurrency, timezone/DST and policy-boundary
@@ -228,7 +307,7 @@ particular DST/equality behavior without a controlled provider test.
 
 Cal.com Support confirmed that hosted Teams has no native one-reschedule counter or UID-chain
 tracker, and no separately configurable 2-day reschedule notice while new-booking notice stays
-at 2 hours. The intended manual policy is (supported organizer-only enforcement remains unresolved):
+at 2 hours. The manual operation policy, with later role enforcement recorded above, is:
 
 1. Direct the client to request a reschedule from Solagree rather than using a self-service link.
 2. An operator checks the original paid booking, appointment start, calendar-day policy window,
@@ -241,11 +320,12 @@ at 2 hours. The intended manual policy is (supported organizer-only enforcement 
 4. For a late or second request, do not promise a complimentary change; route it to Solagree's
    cancellation/no-show decision and, when applicable, a new paid booking.
 
-The earlier Support recommendation to enable `Disable rescheduling` while organizers change
-bookings in the dashboard is **withdrawn as an implementation proposal**. Current official Help
-explicitly says the control blocks both roles. No flag was changed in the resumed pass; obtain
-a supported organizer-only method or an explicitly accepted alternative before claiming
-enforcement. The one-reschedule limit remains an intended operational policy, not an enforced
+The earlier blanket-switch proposal was withdrawn because the default Host and attendee scope
+blocks both roles. Later October5 Support identified the hosted Attendee only selector; that
+role/Always policy and Always same host are now saved on all five production events plus hidden,
+independently QA verified. Guest confirmation hides Reschedule and own-host picker access passed;
+actual paid-change retention, old-link rejection and delivery still need acceptance.
+The one-reschedule limit remains an internal operational policy, not an enforced
 booking rule. The site's customer-facing copy should request contact with
 Solagree and state `2 calendar days` without an exact 48-hour promise.
 
