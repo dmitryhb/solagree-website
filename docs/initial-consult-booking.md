@@ -19,20 +19,22 @@ of Taj, Stacie and James, with Jessica paused and her profile retained.
   organizer-only solution; supported handling and paid-booking lifecycle acceptance remain open.
 - Email is sufficient for launch. SMS is a separate optional channel, remains inactive, and does
   not block email acceptance. Preserve voluntary, unchecked consent on every event.
-- Cal.com Support reports no hosted sandbox for native paid bookings. The two separately approved
-  $0.50 payments are historical evidence only; they authorize no new payments. The user completes
+- Cal.com Support reports no hosted sandbox for native paid bookings. The two earlier separately approved
+  $0.50 tests are historical evidence; on October5 the user separately approved/completed one
+  Stacie Zoom/$0.50 test (T3). None authorizes another payment or refund. The user completes
   every new payment and real refund. Obtain scenario/recipient approval before a test submission
   that can send mail, create calendar entries or generate conferencing links.
 - PR #1 policy copy is now in develop after an external merge (`9951295`) discovered during
   the later October 5 Stripe resumption. This agent performed no merge or production deployment.
-  The user also merged Stripe evidence PR #2 (`aa24ff8`). The current configuration supplement
-  is prepared separately; merge, production deployment and Done
+  The user also merged Stripe evidence PR #2 (`aa24ff8`) and configuration PR #3 (`989827a`).
+  The current T3 evidence supplement is prepared separately; merge, production deployment and Done
   require separate user instruction. The historical HIR-609 staging deployment is not production acceptance.
 
 Historical observations are dated evidence, not proof that today's saved configuration or delivery
 is correct. The user restored Cal.com admin access on October 5 and current configuration rechecks are recorded
-in the matrix. Stripe access was restored later the same day: the matrix now records two successful
-$0.50 payments, one incomplete checkout, one sent receipt per paid test and no current refund evidence.
+in the matrix. Stripe access was restored later the same day: after user-completed T3 the matrix records
+three successful $0.50 payments, one incomplete checkout and one sent receipt per paid test.
+The earlier pre-T3 refund list was empty; T3 detail shows no refund activity. No refund is accepted.
 Inbox delivery and the broader payment/lifecycle matrix remain open.
 
 ## Current saved test isolation — October 5, resumed
@@ -47,12 +49,31 @@ disable without submitting a booking. SMS remains inactive.
 
 Hidden 7253414 is temporarily Stacie-only for the first proposed Zoom test, with 30m/$0.50 USD,
 Stripe ON_BOOKING and two-calendar-day refund settings rechecked. The user approved the specific Stacie test; checkout is handed to the user with phone/State
-required and SMS unchecked. No agent booking submission, payment or refund. Cal.com Support
+required and SMS unchecked. The user has now completed checkout as T3 below; no agent booking submission, payment or refund. Cal.com Support
 ticket 215476247361743 was submitted after specific user approval; response pending.
 The original hidden pool was Taj/James/Stacie; restore it after the controlled test sequence.
 Production host assignments and existing bookings were not changed. Unsaved Phone call/
 Organizer Address alternatives were rejected for incorrect meeting semantics and restored.
 Cal.com UI version for this resumed configuration pass is 6.9.11-h.
+
+## Current user-completed Stacie test — October 5
+
+T3 is one Confirmed/Paid Stacie booking, 30m/$0.50 USD, October7 22:30–23:00 UTC
+(October8 00:30 Amsterdam / October7 18:30 New York). Stripe shows one new Succeeded
+intent, one charge event and one receipt-sent row; rendered receipt matches SOLAGREE/$0.50.
+Cal Accepted history identifies Stripe/WEBHOOK. Generated Zoom URL is visible in admin and
+canonical public confirmation; the initial redirect placeholder is superseded. Independent
+provider QA PASS for this bounded scope. Independent public hidden/Stacie direct checks
+exclude the booked slot and 15-minute post-buffer while adjacent slots remain, with viewer
+overlay off during verification and restored. Native calendar write/conflicts, inbox delivery,
+Zoom join, reminder dispatch, refund/manual lifecycle and production$60 paths remain open.
+
+The final booking records SMS consentYes after user completion; all four SMS workflows are
+OFF for hidden, independently checked. No SMS activation/delivery claimed. Test24h/1h
+email workflows remain hidden-only for this test. Planned triggers October6 22:30 UTC and
+October7 21:30 UTC are not observed delivery. After inspection disable templates/restore
+host pool; cancellation may refund, so user financial cleanup remains required. PR #3 is
+merged in develop989827a; no agent deploy/Done or new financial action.
 
 ## Runtime event paths
 
@@ -120,9 +141,9 @@ Use the current matrix for per-criterion status and controlled test preparation.
 2. Recheck event rules, hours, timezones, destinations/conflict calendars and Zoom. Stacie's saved
    hours differ from the old Mon–Fri default; James's `Inner State` destination was explicitly
    retained by the owner. Preserve these mappings pending actual provider acceptance.
-3. Use the October 5 bounded Stripe reconciliation before requesting more paid tests: two successful
+3. Use the October 5 bounded Stripe reconciliation before requesting more paid tests: three successful
    $0.50 payments, no duplicate successful charge in the visible dataset, one sent receipt each,
-   one incomplete unpaid intent and no current refunds. Finish inbox delivery/strict ID bridging
+   one incomplete unpaid intent, earlier pre-T3 refund list empty and no T3 refund activity observed. Finish inbox delivery/strict ID bridging
    if required; no historical payment authorizes another charge or refund.
 4. Verify delivered email confirmation/receipt, 24h/1h reminders, Phone/Zoom instructions,
    cancellation and operator-managed reschedule, including slot release and payment retention.
