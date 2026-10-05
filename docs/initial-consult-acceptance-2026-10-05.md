@@ -55,6 +55,30 @@ The refreshed Cal.com UI identifies itself as `6.9.11-h`, superseding the earlie
   saved configuration; no booking, calendar write, Zoom generation, delivery or refund claim.
   Header status was Hidden with its visibility switch off; this is not access control—direct URL remains bookable.
 
+## Approved Stacie test handoff — October 5
+
+The user approved the specifically presented Stacie Zoom/$0.50 USD/SOLAGREE scenario and
+controlled attendee/host recipients, and approved sending the prepared technical support question.
+This approval covers this Stacie scenario only; it does not authorize James, new financial tests
+or refunds. The user still performs the final payment and any real refund.
+
+- Test reminders 473280/473288 now saved/reloaded **active only on hidden 7253414**, one test
+  link each, no production links and no future-event application. Independent fresh-tab QA
+  PASS for these saved scopes, 24h/1h triggers, $0.50 technical copy, native tokens and no SMS.
+  Earlier inactive-template observations remain historical. No scheduler/delivery claim.
+- The public form is prepared for Stacie/Zoom at October 8, 00:30–01:00 Amsterdam (October 7,
+  18:30–19:00 New York), 30m/$0.50 USD. Approved attendee identity and technical-only notes
+  filled; phone and State left to the user, SMS unchecked. Pay to book not pressed by the
+  agent. No new booking, PaymentIntent, charge, calendar write or Zoom meeting is accepted yet.
+  Reconcile user-completed checkout before any further submission; do not create duplicates.
+- Cal.com Support message submitted via authenticated Help messenger. Ticket
+  `215476247361743`, status Submitted, message initially Not seen yet. It asks about phone reuse,
+  organizer-only manual changes preserving payment, and cutoff timezone/equality/DST. No
+  client details or payment identifiers included. Creation is not a provider resolution.
+- Keep test reminder scope only for the approved test. After delivery inspection, disable both
+  templates and restore hidden host scope; do not cancel/refund a paid booking automatically.
+  If the user declines checkout, disable the templates without submitting a booking.
+
 ## Evidence matrix
 
 “Code” means repository behavior/fixtures. “Services” records the observation date and extent.
@@ -72,7 +96,7 @@ Historical configuration evidence is not current saved state, delivery, calendar
 | Existing two $0.50 tests | No fixture claims live-payment success | Oct 5 Stripe: two Succeeded $0.50 USD payments, one charge event and one sent receipt each; third intent Incomplete; current refund view empty | Inbox delivery, strict numeric-ID↔UID bridge if needed; no refund has been accepted; broad retry/concurrency/$60 acceptance remains |
 | Decline / abandon / retry / duplicate protection | Website invokes native checkout, no custom payments | Sep 28 cancel checkout left Pending payment/Unconfirmed; redirect to admin's empty public profile; rejected in cleanup. Error collecting card is T1 rescheduled original, not independent decline evidence; Oct 5 Stripe abandoned intent Incomplete, no payment method/charge/receipt | Slot-hold expiry and retry/concurrency acceptance; no usable unpaid confirmation; no duplicate charge/booking |
 | Confirmation / receipt / reminders | Site copy stays 30 min / $60 | Oct 5 resumed: 450309/450313 active on five production links, hidden test excluded with one attendee action, 24h/1h, event/date/end/timezone/organizer/LOCATION/MEETING_URL, hard-coded30m/$60. Oct 5 guest notifications enabled, including confirmation/cancel/change/payment pending; Stripe shows one sent receipt per historical paid test, each rendered at $0.50 | Actual inbox delivery and one message each, matching host/timezone/Phone or Zoom; no broken Zoom links in Phone mail |
-| Hidden test reminder accuracy | Not website controlled | Oct 5 resumed: hidden excluded from production templates; 473280/473288 saved with $0.50 copy and no active links; independent config QA PASS | Recipient/scenario approval, hidden-only activation, rendered content and actual 24h/1h delivery acceptance |
+| Hidden test reminder accuracy | Not website controlled | Oct 5 resumed: hidden excluded from production templates; 473280/473288 saved with $0.50 copy, now active only on hidden after specific Stacie approval; independent config QA PASS | User completes checkout; rendered content and actual 24h/1h delivery acceptance |
 | Refund | Site copy now says 2 calendar days | Oct 5 all five + hidden event rechecked as If cancelled 2 calendar days before; Stripe paid tests remain Succeeded, full/pending/partial refund list empty | Hosted threshold before/equal/after, DST; user performs actual refund; confirm Stripe refund object/status and email. Cal “refund on the way” text is insufficient |
 | One manual reschedule | Site directs request to Solagree | Oct 5: guest cancellation and rescheduling enabled on all five; native preview shows Reschedule/Cancel; hidden event same. Past/cancelled rebooking off; RR same-host switch off | Official hosted Help says Disable rescheduling blocks guests AND organizers; do not roll it out as an organizer-only solution. Obtain supported handling, then verify payment retention, slot release, UID lineage and second/late-request handling |
 | SMS | No requirement to enable SMS for email launch | Oct 5 all four SMS workflows show No active links; First Available switches off; prior zero credits not revalidated | Keep inactive; optional future sender/credits/predicate/mapping/consent acceptance. Not a blocker for email acceptance |
@@ -247,18 +271,19 @@ $60 event types remain unchanged. No invalid Stripe test-card numbers are used i
 
 A $0.50 hidden test proves integration behavior only; it does not prove a $60 charge or every direct
 production event. Public $60 settings plus hidden results must be explicitly accepted as sufficient,
-or a separately approved $60 scenario remains. The specific first Stacie Zoom test and exact attendee/host recipients have now been presented
-to the user for approval. Approval is pending; no form submission or payment has occurred.
+or a separately approved $60 scenario remains. The specific first Stacie Zoom test and exact attendee/host recipients were approved by the
+user. No booking form submission or payment has occurred in the agent pass; user checkout is pending.
 The unsubmitted public form is prepared for October 8, 00:30–01:00 Europe/Amsterdam
 (October 7, 18:30–19:00 America/New_York), more than 24 hours ahead of preparation. Zoom
-selected, contact fields empty, SMS unchecked. Revalidate availability before submission; the
+selected, approved attendee identity/notes filled, required phone and State still empty, SMS unchecked. Revalidate availability before submission; the
 preview does not reserve a slot. Required phone and State must be supplied by the controlled
 attendee/user before checkout, not invented by the agent.
 The prepared hidden event currently has only Stacie; James will be scoped separately before his test.
 
-## Prepared configuration changes and unsent provider question
+## Configuration decisions and provider question
 
-The reminder isolation and inactive test templates above are now saved. No test submission is
+The reminder isolation and test templates above are saved; templates were initially inactive
+and are now active only on the hidden event after specific Stacie approval. No test submission is
 authorized merely by their creation. Phone/Zoom output still needs actual confirmation/ICS/mail
 inspection. The proposed reschedule switch rollout is withdrawn following fresh independent
 provider investigation.
@@ -274,7 +299,7 @@ and has no demonstrated atomic organizer-only guarantee. No reschedule/cancellat
 existing booking lifecycle were changed. Support clarification or an explicitly accepted product
 alternative remains necessary; hiding a website link alone cannot enforce the policy.
 
-Unsent Cal.com support question:
+Cal.com support question — submitted October 5 after specific user approval (ticket 215476247361743):
 
 > On hosted 6.9.11-h, our paid 30-minute event offers Attendee phone number and Zoom.
 > We require one phone number for both choices. With the required attendeePhoneNumber field,
@@ -287,7 +312,8 @@ Unsent Cal.com support question:
 > cancellation, refund, a second payment or reopening guest access? Please also clarify the precise two-calendar-day refund cutoff, including timezone, equality
 > and DST. We have no hosted payment sandbox; we will not use live test-card numbers.
 
-Sending this question to support needs a separate user instruction. No support message was sent.
+The user authorized this technical message and it was submitted through authenticated Help.
+The messenger confirms ticket creation/Submitted, not a support answer or resolved behavior.
 
 Independent review of this configuration-documentation diff: PASS after correcting two stale
 snapshots/proposals and a support-question typo. Independent provider QA: PASS for saved

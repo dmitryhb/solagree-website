@@ -40,12 +40,15 @@ Inbox delivery and the broader payment/lifecycle matrix remain open.
 Production reminders 450309/450313 now select exactly five production events; hidden 7253414
 was removed and future-event application stays off. Their 30-minute/$60 copy is unchanged.
 Test reminders 473280/473288 are saved for 24h/1h, use explicit $0.50 technical-test copy and
-native tokens, and have **no active booking links**. Independent configuration QA passed; no
-mail execution or delivery is claimed. Activate hidden-only after specific scenario/recipient
-approval, then disable after the approved test. SMS remains inactive.
+native tokens, and were initially inactive. After specific Stacie scenario/recipient approval, both are now
+**active only on hidden 7253414**; independent fresh-tab configuration QA passed. No mail
+execution or delivery is claimed. Disable after the approved test; if checkout is declined,
+disable without submitting a booking. SMS remains inactive.
 
 Hidden 7253414 is temporarily Stacie-only for the first proposed Zoom test, with 30m/$0.50 USD,
-Stripe ON_BOOKING and two-calendar-day refund settings rechecked. No booking submitted.
+Stripe ON_BOOKING and two-calendar-day refund settings rechecked. The user approved the specific Stacie test; checkout is handed to the user with phone/State
+required and SMS unchecked. No agent booking submission, payment or refund. Cal.com Support
+ticket 215476247361743 was submitted after specific user approval; response pending.
 The original hidden pool was Taj/James/Stacie; restore it after the controlled test sequence.
 Production host assignments and existing bookings were not changed. Unsaved Phone call/
 Organizer Address alternatives were rejected for incorrect meeting semantics and restored.
