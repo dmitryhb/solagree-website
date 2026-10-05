@@ -1,5 +1,10 @@
 # Initial Consult acceptance preparation — October 5, 2026
 
+Next controlled preparation: [isolated Stacie paid lifecycle event](initial-consult-payment-lifecycle-preparation-2026-10-06.md).
+Independent saved-setting review/QA PASS; $0.50 USD, Hidden/closed, all workflows OFF and
+original Stacie reminder scopes preserved. Exact abandon-scenario/recipient approval and user
+payment-step handoff are pending. No new booking or payment was performed.
+
 Latest actual test: [James Phone booking result](initial-consult-phone-booking-2026-10-05.md).
 User Confirm completed. Independent actual host/time/confirmed record/phone in booking PASS;
 manual Google/Office/ICS exports omit the phone location. On October 6 the user confirms the
