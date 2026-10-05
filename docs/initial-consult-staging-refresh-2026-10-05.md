@@ -1,5 +1,8 @@
 # Initial Consult staging refresh — October 5, 2026
 
+Later native test: [James Confirm completed / Zoom acceptance failed](initial-consult-james-booking-2026-10-05.md).
+The pending-Confirm notes below describe the state during staging refresh; they are now historical.
+
 HIR-246 → HIR-248 → HIR-249 → HIR-250; HIR-609 remains the publication dependency.
 This record supersedes earlier staging-access and deployed-copy snapshots, within the scope below.
 It is not launch acceptance. Production, public Cal.com method conversion and Done remain gated.
