@@ -31,16 +31,16 @@ Historical configuration evidence is not current saved state, delivery, calendar
 | --- | --- | --- | --- |
 | Active roster / pause | HIR-609 filters before event validation; Jessica profile retained; in develop | Oct 5 admin: Maximize availability; three medium-priority hosts, weights off; direct one-host assignments visible. Jessica Hidden, ended Sep 16 window; old direct URL blocked | Real booking host reconciliation; later approved release must retain Jessica pause |
 | First Available / Direct Choice | Selector resolves four visible paths and mounts one selected embed | Oct 5 public event titles/price; prior Sep 28 staging iframe paths matched | Real RR union/routing and direct booking host reconciliation |
-| Duration, price, payment mode | Site states 30 min / $60; provider owns checkout | Oct 5: all five $60 USD, Stripe Initial Consults, ON_BOOKING, Save disabled; hidden event $0.50; public duration 30m | Native Stripe reconciliation and controlled acceptance |
+| Duration, price, payment mode | Site states 30 min / $60; provider owns checkout | Oct 5: all five $60 USD, Stripe Initial Consults, ON_BOOKING, Save disabled; hidden event $0.50; public duration 30m | Existing $0.50 dashboard reconciliation below; controlled $60/direct-routing acceptance remains |
 | Rules / hours / timezones | Website delegates availability to Cal.com | Oct 5: five rules rechecked (Jessica has closed range); RR common/restriction schedule off; Taj Mon–Fri09–17 PT, James Mon–Fri09–17 ET, Stacie Mon–Thu18:30–21 and Sat12–14 ET | Confirm approved hours and intended Taj destination; actual notice/buffer/horizon boundaries, calendar conflicts, concurrency |
 | Phone exactly once, required for both methods | Native provider fields are inside cross-origin embed | Oct 5 First Available/Taj/Stacie/James: Phone still renders required attendeePhoneNumber + optionField; First Available/Stacie Zoom remove location input. Hidden editor has no conditional/mapping controls | Supported conditional/mapping/location correction; recheck all five forms. Failed Custom attendee location experiment is not repeated |
 | Required Name/Email/State, optional Notes/SMS | Website does not add a duplicate contact form | Sep 15 approved fields; Oct 5 public form recheck; SMS unchecked | Confirm provider validation, no attribution field, current forms and consent on all five |
 | Calendar / Zoom | No website-side meeting generation | Oct 5 all three destination/conflict settings and Zoom default rechecked; Taj Sep 28 paid test generated actual Zoom URL | Actual writes/conflict exclusion for all active hosts; generated Zoom and cleanup for Stacie/James; Taj calendar and Zoom deletion |
-| Existing two $0.50 tests | No fixture claims live-payment success | Sep 28 user paid twice on hidden event; confirmed Taj bookings; second Zoom passed | Stripe payment↔booking↔host↔amount/currency/receipt reconciliation; exact-one charge; actual refund state |
-| Decline / abandon / retry / duplicate protection | Website invokes native checkout, no custom payments | Sep 28 cancel checkout left Pending payment/Unconfirmed; redirect to admin's empty public profile; rejected in cleanup. Error collecting card is T1 rescheduled original, not independent decline evidence | Stripe/booking audit, slot-hold expiry and retry/concurrency acceptance; no usable unpaid confirmation; no duplicate charge/booking |
-| Confirmation / receipt / reminders | Site copy stays 30 min / $60 | Oct 5 450309/450313 active on six links with one attendee action, 24h/1h, event/date/end/timezone/organizer/LOCATION/MEETING_URL, hard-coded30m/$60. Oct 5 guest notifications enabled, including confirmation/cancel/change/payment pending; Stripe receipt setting last inspected Sep28 | Actual inbox delivery and one message each, matching host/timezone/Phone or Zoom; no broken Zoom links in Phone mail |
+| Existing two $0.50 tests | No fixture claims live-payment success | Oct 5 Stripe: two Succeeded $0.50 USD payments, one charge event and one sent receipt each; third intent Incomplete; current refund view empty | Inbox delivery, strict numeric-ID↔UID bridge if needed; no refund has been accepted; broad retry/concurrency/$60 acceptance remains |
+| Decline / abandon / retry / duplicate protection | Website invokes native checkout, no custom payments | Sep 28 cancel checkout left Pending payment/Unconfirmed; redirect to admin's empty public profile; rejected in cleanup. Error collecting card is T1 rescheduled original, not independent decline evidence; Oct 5 Stripe abandoned intent Incomplete, no payment method/charge/receipt | Slot-hold expiry and retry/concurrency acceptance; no usable unpaid confirmation; no duplicate charge/booking |
+| Confirmation / receipt / reminders | Site copy stays 30 min / $60 | Oct 5 450309/450313 active on six links with one attendee action, 24h/1h, event/date/end/timezone/organizer/LOCATION/MEETING_URL, hard-coded30m/$60. Oct 5 guest notifications enabled, including confirmation/cancel/change/payment pending; Stripe shows one sent receipt per historical paid test, each rendered at $0.50 | Actual inbox delivery and one message each, matching host/timezone/Phone or Zoom; no broken Zoom links in Phone mail |
 | Hidden test reminder accuracy | Not website controlled | Oct 5 active templates still hard-code $60 but hidden event is $0.50 | Before any new timed test: exclude hidden event from production templates and prepare isolated $0.50-specific reminder templates; do not send misleading $60 reminders |
-| Refund | Site copy now says 2 calendar days | Oct 5 all five + hidden event rechecked as If cancelled 2 calendar days before | Hosted threshold before/equal/after, DST; user performs actual refund; confirm Stripe refund object/status and email. Cal “refund on the way” text is insufficient |
+| Refund | Site copy now says 2 calendar days | Oct 5 all five + hidden event rechecked as If cancelled 2 calendar days before; Stripe paid tests remain Succeeded, full/pending/partial refund list empty | Hosted threshold before/equal/after, DST; user performs actual refund; confirm Stripe refund object/status and email. Cal “refund on the way” text is insufficient |
 | One manual reschedule | Site directs request to Solagree | Oct 5: guest cancellation and rescheduling enabled on all five; native preview shows Reschedule/Cancel; hidden event same. Past/cancelled rebooking off; RR same-host switch off | Hidden check: guest reschedule blocked while organizer change works, original/replacement UID ledger, payment retained, old slot released; then production configuration and second/late-request handling |
 | SMS | No requirement to enable SMS for email launch | Oct 5 all four SMS workflows show No active links; First Available switches off; prior zero credits not revalidated | Keep inactive; optional future sender/credits/predicate/mapping/consent acceptance. Not a blocker for email acceptance |
 | Desktop/mobile, keyboard, fallback/privacy | Existing selector, focus, embed retry/fallback and tracking tests; independent result below | Sep 28 staging smoke at 390/768/1440; no overflow, selection worked; legacy production form was still served | Actual current build iframe desktop/mobile/keyboard/screen-reader verification; provider empty/error behavior; authorized production release later |
@@ -49,7 +49,8 @@ Historical configuration evidence is not current saved state, delivery, calendar
 
 Chrome jill initially had no authenticated Cal.com or Stripe session. The user restored Cal.com
 admin access; hosted version is `6.9.10-hotfix2-h`. No credentials were extracted and no new
-OAuth/calendar permission was granted. Stripe reconciliation remains blocked on its login.
+OAuth/calendar permission was granted. Later on October 5 the user restored Stripe SOLAGREE access;
+the bounded historical-payment reconciliation below replaces the initial login blocker.
 
 Authenticated read-only checks confirmed five $60 USD ON_BOOKING settings with two-calendar-day
 refunds; hidden 7253414 is $0.50 with the same refund setting. All five keep two-hour new-booking
@@ -102,14 +103,64 @@ entry. Do not use these views as proof of a Stripe refund or receipt delivery.
 **Negative-payment evidence correction:** the original record labeled “Error collecting card”
 is the rescheduled original of the first paid test, with a prior Accepted-by-Stripe history entry.
 It is not an independent failed/declined card attempt and must not count as decline acceptance or
-a third charge. Payment-object totals, UID-to-payment lineage and exact-one charge still require
-Stripe reconciliation. The rejected checkout remains Pending payment in Cal.com, not Paid; its
+a third charge. The subsequent Stripe audit confirms two succeeded payment objects and one incomplete intent;
+strict numeric Cal.com ID-to-UID verification is bounded as documented below. The rejected checkout remains Pending payment in Cal.com, not Paid; its
 explicit rejection does not prove natural hold expiry or safe retry. No booking was changed.
 
 No upcoming booking is shown in the current administrator booking view. This is the visible
 view's result, not proof that every calendar or organization scope is empty. Recipient details,
 phone numbers, booking UIDs and conferencing secrets were read only inside provider views and
 are deliberately absent from this document.
+
+## Authenticated Stripe reconciliation — October 5, resumed
+
+The user restored the live SOLAGREE dashboard. The unfiltered All payment view has exactly three
+results (no further page): T1, T2 and abandoned A1. This resolves the access blocker. No payment,
+refund, receipt resend, note, metadata or settings mutation was performed.
+
+| Label | Current Stripe state | Cal.com correlation | Receipt / refund evidence |
+| --- | --- | --- | --- |
+| T1, first historical paid test | Succeeded, $0.50 USD; one latest charge and one charge-success event; cal.com identifier, test event and Taj username metadata | Metadata contains the original numeric booking ID; title still says “between Nameless”, matching the Cal.com rescheduled original. Host metadata is Taj. Cal.com replacement remains Canceled/Paid and links to that original | One Payment receipt marked sent to the controlled test inbox; rendered receipt is SOLAGREE / $0.50. Current status remains Succeeded, no refund activity shown |
+| T2, second historical paid test | Succeeded, $0.50 USD; one latest charge and one charge-success event; numeric booking ID present in metadata, with Taj title/username, test event and controlled attendee metadata | Cal.com record remains Canceled/Paid with the actual Zoom location and Stripe Accepted WEBHOOK history | One Payment receipt marked sent to the same controlled inbox; rendered receipt is SOLAGREE / $0.50. Current status remains Succeeded, no refund activity shown |
+| A1, abandoned checkout | Incomplete, $0.50 USD; payment method Missing/None; only intent-created activity/log; no latest charge or receipt section | Matching test-event/Taj/controlled-attendee metadata with its own numeric booking ID; Cal.com rejected record remains Pending payment, not Paid | No charge or receipt observed; not a declined-card test and not proof of natural slot-hold expiry |
+
+The current Refunded view explicitly covers `refunded`, `refund_pending` and `partially_refunded`
+and shows No results. Both paid details show success/start activity only, last updated September28.
+There is no current refund evidenced in this account for either test. This contradicts treating
+Cal.com's “refund on the way” banner as completed or pending Stripe-refund proof. The historical
+charge.succeeded event for T2 also contains captured/paid true, live mode true, amount50 USD cents,
+amount_refunded0 and refunded false, but that is an event snapshot at charge time, **not a current
+refund object**. Current dashboard views, not that snapshot, establish the current status above.
+
+Each paid record has one receipt send-history entry, with the same recipient as booking metadata.
+Rendered receipts match merchant/amount. Stripe marks T1 sent September28 09:52 and T2 11:10 in
+its displayed timezone; that display timezone was not independently verified and is not asserted
+as Amsterdam time. A Sent entry proves recorded sending, not mailbox delivery or duplicate-free
+inbox receipt. No Send receipt action was used.
+
+The two distinct successful intents and two charge events support no duplicate successful charge
+in the visible account dataset for these historical tests. T1's original and replacement are a
+booking lineage, not a third payment. This does not accept future double-click/retry/concurrency,
+all direct $60 event paths, decline handling or slot-release behavior. Numeric booking IDs are
+visible in Stripe metadata; Cal.com's drawer exposes UIDs, host/event/attendee/amount and history.
+The audit correlates those visible attributes and T1 lineage, but does not independently expose a
+strict numeric-ID↔UID bridge in Cal.com's UI. That limitation remains explicit; identifiers and
+receipt permalink tokens are retained only in provider views, not in this shareable packet.
+
+Independent provider QA (GPT-6.1-Sol, medium) repeated the Stripe inspection in its own browser
+session and confirmed All1–3of3, two Succeeded $0.50 USD, A1 Incomplete without payment method,
+one charge event and one sent receipt row per paid record, metadata references, and no results in
+the current full/pending/partial refund view. Its initial attempt could not claim the parent-owned
+tab, so that attempt supplied no verdict; the subsequent independent-tab check succeeded and
+its temporary tab was closed. No sends, financial actions, settings or Workbench commands were
+performed. Verdict: bounded historical dashboard reconciliation PASS; overall external acceptance
+remains NOT ACCEPTED. Strict numeric-ID↔UID and inbox-delivery limits remain unchanged.
+
+A bounded independent review of this financial documentation passed after two corrections:
+IDs are described as present in Stripe metadata rather than proven matching UIDs, and independent
+QA was explicitly pending until the separate-tab result arrived. Reusable memory: none.
+The available mail connector profile differs from the controlled test recipient; its mailbox was
+not searched as a substitute for that recipient's inbox. Actual receipt delivery remains external.
 
 ## Phone correction investigation — HIR-246
 
@@ -135,7 +186,8 @@ payment/lifecycle acceptance again, and remains a proposed scope decision rather
 
 ## Controlled test plan — prepared, not submitted
 
-First reconcile the existing tests in authenticated Stripe/Cal.com. Label them T1/T2 in shareable
+The existing tests now have the bounded dashboard reconciliation above. Before any new test,
+finish any required strict ID bridge and receipt inbox verification in Stripe/Cal.com. Label them T1/T2 in shareable
 evidence; retain booking/payment IDs and recipient details only in restricted provider/operations views.
 For each record compare date/time, host, event, amount $0.50 USD, successful PaymentIntent/charge,
 booking confirmation, receipt recipient/status, duplicate objects and refund timeline. Record whether
@@ -196,7 +248,8 @@ Sending this question to support needs a separate user instruction. No support m
 ## Launch gates and rollback
 
 1. Resolve phone-once defect, current provider configuration and guest/organizer reschedule behavior.
-2. Reconcile T1/T2; accept active-host calendar/Zoom, payment failures/retry/slot release and email delivery.
+2. Historical T1/T2 dashboard reconciliation is complete within the stated bounds; finish receipt
+   inbox/strict ID bridge and active-host calendar/Zoom, payment failures/retry/slot release and email delivery.
 3. Obtain the provider-boundary decision and prove Stripe refund handling, not just Cal copy.
 4. Source review/code QA passed as documented below; finish current integrated browser acceptance and maintain explicit gaps.
 5. User separately authorizes merge, production deployment and Done. HIR-609 is already in develop,
