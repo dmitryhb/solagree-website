@@ -3,6 +3,7 @@
 Scope: HIR-246 → HIR-248 → HIR-249 → HIR-250; HIR-609 is the consultant-publication dependency.
 This is a review/acceptance packet, **not a launch sign-off**. No merge, production deployment,
 Done, new payment, refund or outbound test submission was performed in this pass.
+Saved non-financial workflow isolation and hidden-event assignment changes are recorded below.
 
 ## Recovery and source of truth
 
@@ -26,6 +27,34 @@ Done, new payment, refund or outbound test submission was performed in this pass
   `/Users/dmitry/work/dai/agent-knowledge` for repository `solagree-website`, domain
   `initial-consult`, limit 5 returned no entries. No lesson was assumed from that result.
 
+## Saved configuration implementation — October 5, resumed
+
+PR #2 was merged by the user into `origin/develop` (`aa24ff8`). The existing `hir-249` worktree
+was rebased onto that develop before this supplement; unrelated files remain preserved.
+The refreshed Cal.com UI identifies itself as `6.9.11-h`, superseding the earlier version snapshot.
+
+- Production attendee-email reminders 450309 (24h) and 450313 (1h): removed only hidden test
+  7253414. Saved and reloaded; exactly five production links retained, future-event application
+  off, one email action each, existing 30-minute/$60 copy unchanged.
+- Created test reminders 473280 (24h) and 473288 (1h), saved/reloaded with **no active links**.
+  Subject starts `[TEST]`; body explicitly describes a 30-minute/$0.50 USD technical test and
+  says no consultation is requested. Native attendee/event/date/end/timezone/organizer/location/
+  meeting-URL tokens retained. Calendar attachment and auto-translation off; no SMS action.
+  These templates have not executed or sent anything. Activate only after recipient/scenario
+  approval and only for the hidden event; disable after the approved test.
+- Hidden 7253414 assignment changed from Taj/James/Stacie to **Stacie only**, medium priority,
+  Maximize availability, no fixed hosts/weights/automatic future members. Saved/reloaded.
+  Phone and Organizer default app labeled Zoom remain; 30m/$0.50 USD/ON_BOOKING/native
+  two-calendar-day refund rechecked. No booking submitted. Restore the original three-host
+  hidden pool after the controlled sequence; production assignments remain unchanged.
+- Independent provider QA reloaded all four workflows in its own authenticated tab: PASS for
+  persisted timing, scope, action count, price copy and retained tokens. Test exclusion was
+  independently visible by title, not a numeric-ID bridge. Delivery, token output and timer
+  execution remain unaccepted. A subsequent independent fresh-tab QA also confirmed Stacie-only assignment, 30m, original
+  attendee-phone/Zoom choices, $0.50 USD ON_BOOKING and two-calendar-day refund. PASS for
+  saved configuration; no booking, calendar write, Zoom generation, delivery or refund claim.
+  Header status was Hidden with its visibility switch off; this is not access control—direct URL remains bookable.
+
 ## Evidence matrix
 
 “Code” means repository behavior/fixtures. “Services” records the observation date and extent.
@@ -42,10 +71,10 @@ Historical configuration evidence is not current saved state, delivery, calendar
 | Calendar / Zoom | No website-side meeting generation | Oct 5 all three destination/conflict settings and Zoom default rechecked; Taj Sep 28 paid test generated actual Zoom URL | Actual writes/conflict exclusion for all active hosts; generated Zoom and cleanup for Stacie/James; Taj calendar and Zoom deletion |
 | Existing two $0.50 tests | No fixture claims live-payment success | Oct 5 Stripe: two Succeeded $0.50 USD payments, one charge event and one sent receipt each; third intent Incomplete; current refund view empty | Inbox delivery, strict numeric-ID↔UID bridge if needed; no refund has been accepted; broad retry/concurrency/$60 acceptance remains |
 | Decline / abandon / retry / duplicate protection | Website invokes native checkout, no custom payments | Sep 28 cancel checkout left Pending payment/Unconfirmed; redirect to admin's empty public profile; rejected in cleanup. Error collecting card is T1 rescheduled original, not independent decline evidence; Oct 5 Stripe abandoned intent Incomplete, no payment method/charge/receipt | Slot-hold expiry and retry/concurrency acceptance; no usable unpaid confirmation; no duplicate charge/booking |
-| Confirmation / receipt / reminders | Site copy stays 30 min / $60 | Oct 5 450309/450313 active on six links with one attendee action, 24h/1h, event/date/end/timezone/organizer/LOCATION/MEETING_URL, hard-coded30m/$60. Oct 5 guest notifications enabled, including confirmation/cancel/change/payment pending; Stripe shows one sent receipt per historical paid test, each rendered at $0.50 | Actual inbox delivery and one message each, matching host/timezone/Phone or Zoom; no broken Zoom links in Phone mail |
-| Hidden test reminder accuracy | Not website controlled | Oct 5 active templates still hard-code $60 but hidden event is $0.50 | Before any new timed test: exclude hidden event from production templates and prepare isolated $0.50-specific reminder templates; do not send misleading $60 reminders |
+| Confirmation / receipt / reminders | Site copy stays 30 min / $60 | Oct 5 resumed: 450309/450313 active on five production links, hidden test excluded with one attendee action, 24h/1h, event/date/end/timezone/organizer/LOCATION/MEETING_URL, hard-coded30m/$60. Oct 5 guest notifications enabled, including confirmation/cancel/change/payment pending; Stripe shows one sent receipt per historical paid test, each rendered at $0.50 | Actual inbox delivery and one message each, matching host/timezone/Phone or Zoom; no broken Zoom links in Phone mail |
+| Hidden test reminder accuracy | Not website controlled | Oct 5 resumed: hidden excluded from production templates; 473280/473288 saved with $0.50 copy and no active links; independent config QA PASS | Recipient/scenario approval, hidden-only activation, rendered content and actual 24h/1h delivery acceptance |
 | Refund | Site copy now says 2 calendar days | Oct 5 all five + hidden event rechecked as If cancelled 2 calendar days before; Stripe paid tests remain Succeeded, full/pending/partial refund list empty | Hosted threshold before/equal/after, DST; user performs actual refund; confirm Stripe refund object/status and email. Cal “refund on the way” text is insufficient |
-| One manual reschedule | Site directs request to Solagree | Oct 5: guest cancellation and rescheduling enabled on all five; native preview shows Reschedule/Cancel; hidden event same. Past/cancelled rebooking off; RR same-host switch off | Hidden check: guest reschedule blocked while organizer change works, original/replacement UID ledger, payment retained, old slot released; then production configuration and second/late-request handling |
+| One manual reschedule | Site directs request to Solagree | Oct 5: guest cancellation and rescheduling enabled on all five; native preview shows Reschedule/Cancel; hidden event same. Past/cancelled rebooking off; RR same-host switch off | Official hosted Help says Disable rescheduling blocks guests AND organizers; do not roll it out as an organizer-only solution. Obtain supported handling, then verify payment retention, slot release, UID lineage and second/late-request handling |
 | SMS | No requirement to enable SMS for email launch | Oct 5 all four SMS workflows show No active links; First Available switches off; prior zero credits not revalidated | Keep inactive; optional future sender/credits/predicate/mapping/consent acceptance. Not a blocker for email acceptance |
 | Desktop/mobile, keyboard, fallback/privacy | Existing selector, focus, embed retry/fallback and tracking tests; independent result below | Sep 28 staging smoke at 390/768/1440; no overflow, selection worked; legacy production form was still served | Actual current build iframe desktop/mobile/keyboard/screen-reader verification; provider empty/error behavior; authorized production release later |
 
@@ -74,7 +103,7 @@ Notes optional, State present, SMS unchecked. Taj, Stacie and James direct event
 Jessica's old direct URL says it stopped taking bookings on September16. This verifies rendering,
 not paid host assignment or validation.
 
-## Host integrations and notification configuration — October 5
+## Host integrations and notification configuration — earlier October 5 snapshot
 
 All three host profiles were inspected through administrator impersonation and returned to Jill
 before continuing. Stacie's destination is the Solagree Google calendar, also selected for conflicts.
@@ -89,10 +118,12 @@ must not be extrapolated to them.
 
 Organization guest notifications are enabled (Disable all booking emails off). Confirmation,
 cancellation, rescheduled, booking request, host reassignment, awaiting payment, reschedule
-request, location change and guest-added notices are checked. Both attendee email workflows
-450309/450313 list all five production events plus hidden 7253414, with one attendee action each.
+request, location change and guest-added notices are checked. At this earlier read-only snapshot, both attendee email workflows
+450309/450313 listed all five production events plus hidden 7253414, with one attendee action each.
+The resumed saved isolation above supersedes that scope: hidden excluded, five production links retained.
 All four SMS workflows (450318/450324/450327/450330) currently show No active links. No notification
-setting or workflow was saved, and no test message was sent.
+setting or workflow was saved during that earlier inspection. The later workflow saves are recorded
+above; no test message has been sent in either pass.
 
 ## Existing Cal.com booking reconciliation — October 5
 
@@ -180,7 +211,11 @@ The current hosted picker has attendee/organizer address, Custom attendee locati
 Attendee phone number and organizer Phone call, plus conferencing. It has no static custom
 organizer-text location. Repurposing organizer address for “we call you” could avoid the extra
 field but would classify a phone meeting as an address/in-person event and risks incorrect mail,
-calendar or map presentation. No address-as-phone change was saved or rolled out.
+calendar or map presentation. On the refreshed 6.9.11-h editor, an unsaved inspection of organizer Phone call exposed a
+required organizer telephone; Organizer Address exposed an address control and no Phone label.
+Both fail the intended consultant-calls-attendee semantics. Reload restored the original attendee
+phone/Zoom configuration with Save disabled; no address-as-phone change was saved or rolled out.
+The required system phone identifier remains fixed as attendeePhoneNumber with no conditional controls.
 
 Minimal scope-preserving next action is a provider correction/reuse mapping; the unresolved
 question should include the failed Custom attendee location evidence. An alternative is separate
@@ -203,7 +238,7 @@ $60 event types remain unchanged. No invalid Stripe test-card numbers are used i
 
 | Proposed scenario | Environment / amount / payee | Proposed recipients and user handoff | Evidence and cleanup |
 | --- | --- | --- | --- |
-| Guest-link vs organizer reschedule | Hidden 7253414; $0.50 USD to SOLAGREE Stripe only if a new paid booking is needed | Attendee: Jill's controlled inbox, exact address to be confirmed; host: explicitly selected Taj/Stacie/James. Approval required before submit; user pays | Disable guest rescheduling on hidden event; inspect confirmation/email links and old URL; organizer must retain change action. One change, payment retention, slot release, UID lineage; second request refused manually. Restore test config afterward |
+| Guest-link vs organizer reschedule | Hidden 7253414; $0.50 USD to SOLAGREE Stripe only if a new paid booking is needed | Attendee: Jill's controlled inbox, exact address to be confirmed; host: explicitly selected Taj/Stacie/James. Approval required before submit; user pays | Do not enable Disable rescheduling as a guest-only restriction: native Help says it blocks both roles. Obtain a supported organizer-only approach first, then inspect confirmation/email links and old URL. One change, payment retention, slot release, UID lineage; second request refused manually. Restore test config afterward |
 | Stacie calendar/conflict/Zoom | Hidden one-host scope matching Stacie settings; $0.50 USD to SOLAGREE | Exact controlled attendee inbox + Stacie host inbox approved before submit; user pays | Single booking/payment, Solagree destination entry, busy-time exclusion, valid Zoom meeting, confirmation/receipt; user handles financial cleanup |
 | James calendar/conflict/Zoom | Hidden one-host scope matching James settings; $0.50 USD to SOLAGREE | Exact controlled attendee inbox + James host inbox approved before submit; user pays | Same checks, owner-approved Inner State destination, selected conflict calendars; Zoom cleanup |
 | Email 24h and 1h, Phone/Zoom | Hidden event with price-correct isolated workflow templates; $0.50 USD to SOLAGREE if new booking required | Approved attendee + explicit host; no SMS; user pays | Scheduled event >24h ahead, receive both reminders at correct times/timezone; inspect Phone instructions vs Zoom URL, actual confirmation/receipt/cancel/change emails; requires timed follow-up separately requested by user |
@@ -212,42 +247,52 @@ $60 event types remain unchanged. No invalid Stripe test-card numbers are used i
 
 A $0.50 hidden test proves integration behavior only; it does not prove a $60 charge or every direct
 production event. Public $60 settings plus hidden results must be explicitly accepted as sufficient,
-or a separately approved $60 scenario remains. No request to perform a new payment has been issued yet:
-temporary reschedule/reminder isolation and recipient prerequisites have not been accepted.
+or a separately approved $60 scenario remains. The specific first Stacie Zoom test and exact attendee/host recipients have now been presented
+to the user for approval. Approval is pending; no form submission or payment has occurred.
+The unsubmitted public form is prepared for October 8, 00:30–01:00 Europe/Amsterdam
+(October 7, 18:30–19:00 America/New_York), more than 24 hours ahead of preparation. Zoom
+selected, contact fields empty, SMS unchecked. Revalidate availability before submission; the
+preview does not reserve a slot. Required phone and State must be supplied by the controlled
+attendee/user before checkout, not invented by the agent.
+The prepared hidden event currently has only Stacie; James will be scoped separately before his test.
 
 ## Prepared configuration changes and unsent provider question
 
-These are reviewable changes to perform before approved test submissions; they have not been
-saved because their lifecycle and send behavior need controlled acceptance.
+The reminder isolation and inactive test templates above are now saved. No test submission is
+authorized merely by their creation. Phone/Zoom output still needs actual confirmation/ICS/mail
+inspection. The proposed reschedule switch rollout is withdrawn following fresh independent
+provider investigation.
 
-- Hidden reschedule test: set `Disable rescheduling = true` only on 7253414. Retain cancellation,
-  required host reason, existing price/refund settings and no past/cancelled-link rebooking. Check
-  an existing valid customer link, confirmation email link and organizer action; accept only if
-  the guest cannot initiate a change and the organizer can make the single approved change.
-  Restore the hidden switch after the test, recording before/after. Then apply the accepted guest
-  restriction to all five production events. Hiding reschedule in website copy alone is insufficient.
-- Reminder isolation: remove only hidden 7253414 from production workflows 450309 and 450313;
-  preserve all five production bindings and current booked-customer behavior. Prepare two
-  separate hidden-only attendee workflows at 24h/1h using the same variables and `$0.50 USD`.
-  Keep them inactive until recipient/scenario approval. Reconfirm the hidden price and absence
-  of unrelated future bookings before activating; record scope and restore/disable afterward.
-- Organizer Phone instruction must state that the consultant calls the supplied number; Zoom
-  instruction must expose the actual meeting URL. Inspect rendered confirmation/ICS/reminder
-  content rather than accepting variable names as proof. Keep current approved recipient scope.
+[Official hosted Help](https://cal.com/help/event-types/disable-canceling-rescheduling) explicitly
+says Disable rescheduling prevents both guest and organizer changes, including dashboard/calendar.
+The [reschedule API](https://cal.com/docs/api-reference/v2/bookings/reschedule-a-booking) exposes
+conflict/window/limit exceptions, but no documented bypass of that flag. Its rescheduledBy field
+is not a policy override. The [request-reschedule endpoint](https://cal.com/docs/api-reference/v2/bookings/request-to-reschedule-a-booking)
+cancels the booking and emails a guest link; it is not a safe replacement preserving the agreed
+manual paid-booking lifecycle. Temporary event-wide re-enabling would reopen guest changes
+and has no demonstrated atomic organizer-only guarantee. No reschedule/cancellation flags or
+existing booking lifecycle were changed. Support clarification or an explicitly accepted product
+alternative remains necessary; hiding a website link alone cannot enforce the policy.
 
 Unsent Cal.com support question:
 
-> On hosted 6.9.10-hotfix2-h, our paid 30-minute event offers Attendee phone number and Zoom.
+> On hosted 6.9.11-h, our paid 30-minute event offers Attendee phone number and Zoom.
 > We require one phone number for both choices. With the required attendeePhoneNumber field,
 > Phone also requires a separate location optionField, so attendees enter the same number twice.
 > Custom attendee location was already tested on a hidden event and did not resolve this.
 > Is there a supported canonical reuse/mapping or conditional input setting that collects the
 > number once and preserves the native phone location, Zoom creation and native Stripe payment?
-> Please also confirm whether disabling guest rescheduling leaves the organizer able to change
-> a paid booking, and the precise two-calendar-day refund cutoff, including timezone, equality
+> Your Help says Disable rescheduling also blocks organizers. What supported method prevents
+> guest self-service while letting an organizer make one manual change to a paid booking without
+> cancellation, refund, a second payment or reopening guest access? Please also clarify the precise two-calendar-day refund cutoff, including timezone, equality
 > and DST. We have no hosted payment sandbox; we will not use live test-card numbers.
 
 Sending this question to support needs a separate user instruction. No support message was sent.
+
+Independent review of this configuration-documentation diff: PASS after correcting two stale
+snapshots/proposals and a support-question typo. Independent provider QA: PASS for saved
+workflow and hidden-event settings only. `git diff --check` passed. No source change in this
+supplement; previous source/fixture checks below were not rerun. Reusable memory: none.
 
 ## Launch gates and rollback
 

@@ -14,8 +14,9 @@ of Taj, Stacie and James, with Jessica paused and her profile retained.
   September 29. October 5 admin recheck confirms this setting on all five events and hidden test 7253414.
   The actual threshold and Stripe refunds still require acceptance.
   Do not promise exactly 48 elapsed hours, midnight, a specific timezone or equality/DST behavior.
-- One complimentary reschedule is requested from Solagree and processed by an operator. Guest-link
-  restrictions and organizer ability still require a controlled hidden-event check.
+- One complimentary reschedule is requested from Solagree and processed by an operator. Native Disable rescheduling
+  blocks both guests and organizers according to current hosted Help. Do not use it as an
+  organizer-only solution; supported handling and paid-booking lifecycle acceptance remain open.
 - Email is sufficient for launch. SMS is a separate optional channel, remains inactive, and does
   not block email acceptance. Preserve voluntary, unchecked consent on every event.
 - Cal.com Support reports no hosted sandbox for native paid bookings. The two separately approved
@@ -24,7 +25,8 @@ of Taj, Stacie and James, with Jessica paused and her profile retained.
   that can send mail, create calendar entries or generate conferencing links.
 - PR #1 policy copy is now in develop after an external merge (`9951295`) discovered during
   the later October 5 Stripe resumption. This agent performed no merge or production deployment.
-  The Stripe evidence supplement has a separate PR; merge, production deployment and Done
+  The user also merged Stripe evidence PR #2 (`aa24ff8`). The current configuration supplement
+  is prepared separately; merge, production deployment and Done
   require separate user instruction. The historical HIR-609 staging deployment is not production acceptance.
 
 Historical observations are dated evidence, not proof that today's saved configuration or delivery
@@ -32,6 +34,22 @@ is correct. The user restored Cal.com admin access on October 5 and current conf
 in the matrix. Stripe access was restored later the same day: the matrix now records two successful
 $0.50 payments, one incomplete checkout, one sent receipt per paid test and no current refund evidence.
 Inbox delivery and the broader payment/lifecycle matrix remain open.
+
+## Current saved test isolation — October 5, resumed
+
+Production reminders 450309/450313 now select exactly five production events; hidden 7253414
+was removed and future-event application stays off. Their 30-minute/$60 copy is unchanged.
+Test reminders 473280/473288 are saved for 24h/1h, use explicit $0.50 technical-test copy and
+native tokens, and have **no active booking links**. Independent configuration QA passed; no
+mail execution or delivery is claimed. Activate hidden-only after specific scenario/recipient
+approval, then disable after the approved test. SMS remains inactive.
+
+Hidden 7253414 is temporarily Stacie-only for the first proposed Zoom test, with 30m/$0.50 USD,
+Stripe ON_BOOKING and two-calendar-day refund settings rechecked. No booking submitted.
+The original hidden pool was Taj/James/Stacie; restore it after the controlled test sequence.
+Production host assignments and existing bookings were not changed. Unsaved Phone call/
+Organizer Address alternatives were rejected for incorrect meeting semantics and restored.
+Cal.com UI version for this resumed configuration pass is 6.9.11-h.
 
 ## Runtime event paths
 
@@ -186,7 +204,7 @@ particular DST/equality behavior without a controlled provider test.
 
 Cal.com Support confirmed that hosted Teams has no native one-reschedule counter or UID-chain
 tracker, and no separately configurable 2-day reschedule notice while new-booking notice stays
-at 2 hours. The supported manual procedure is:
+at 2 hours. The intended manual policy is (supported organizer-only enforcement remains unresolved):
 
 1. Direct the client to request a reschedule from Solagree rather than using a self-service link.
 2. An operator checks the original paid booking, appointment start, calendar-day policy window,
@@ -199,11 +217,12 @@ at 2 hours. The supported manual procedure is:
 4. For a late or second request, do not promise a complimentary change; route it to Solagree's
    cancellation/no-show decision and, when applicable, a new paid booking.
 
-To prevent unlimited guest self-rescheduling, Support recommended `Disable rescheduling` while
-organizers reschedule manually in the dashboard. Public Cal.com help has described this control
-differently, so verify both guest and organizer behavior on the hidden event before enabling it
-on production events. Until that check passes, the one-reschedule limit is an operational policy,
-not an enforced booking rule. The site's customer-facing copy should request contact with
+The earlier Support recommendation to enable `Disable rescheduling` while organizers change
+bookings in the dashboard is **withdrawn as an implementation proposal**. Current official Help
+explicitly says the control blocks both roles. No flag was changed in the resumed pass; obtain
+a supported organizer-only method or an explicitly accepted alternative before claiming
+enforcement. The one-reschedule limit remains an intended operational policy, not an enforced
+booking rule. The site's customer-facing copy should request contact with
 Solagree and state `2 calendar days` without an exact 48-hour promise.
 
 Email delivery still needs inspection in a controlled attendee inbox and the host inboxes.
