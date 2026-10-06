@@ -1,6 +1,9 @@
 # Initial Consult — unpaid expiry observation, October 6, 2026
 
 HIR-248/HIR-249/HIR-250; HIR-246 and HIR-609 dependencies retained.
+Later exact-case user attestation on October 6: the attendee received the R2 cancellation email.
+This accepts client-attested receipt only, not direct header/content/count inspection, the host's
+email, calendar removal or refund. It supersedes earlier pending attendee-delivery statements.
 Current manual-cleanup result, verified by **11:55:21 UTC / 13:55:21 Amsterdam** on October 6:
 user-performed final cancellation is visible as Canceled with Cancelled history. The exact old
 payment link now displays “This event is canceled” and “Paying for this event is no longer possible.”
@@ -233,7 +236,7 @@ successful payment; no Stripe Cancel or refund action is part of the proposed Ca
 | --- | --- | --- | --- |
 | Public form | Existing reviewed separate-method source retained | R2 one required phone/email; optional SMS unchecked; user final button | Actual server rejection of blank phone is not inferred |
 | Initial unpaid state | Native checkout delegated | Pending/Unconfirmed; no usable conference link; Incomplete/missing method; selected metadata association | Hold release observed without payment/reopening; no automatic cancellation observed after at least fifty minutes. Internal flag, future behavior and expired-link/collision/decline cases remain open |
-| Manual unpaid cleanup | Provider-owned cancellation/payment gating | User final Cancel → Canceled/Cancelled history; exact original link displays payment impossible; original Stripe Incomplete/missing method/one creation event; Hidden range restored Sep16–16/public closed | Actual cancellation-mail delivery/calendar removal and anonymous/server bypass/all link variants remain unaccepted; this is manual, not automatic cleanup |
+| Manual unpaid cleanup | Provider-owned cancellation/payment gating | User final Cancel → Canceled/Cancelled history; exact original link displays payment impossible; original Stripe Incomplete/missing method/one creation event; Hidden range restored Sep16–16/public closed; attendee cancellation-mail receipt client-attested | Host mail/header/content/count, calendar removal and anonymous/server bypass/all link variants remain unaccepted; this is manual, not automatic cleanup |
 | Native emails / SMS | No new sender implementation | Required-email native-SMS exclusion is provider-asserted; eight workflows OFF | R2 awaiting-payment email client-attested received / link not opened; content/count/header/host and automatic-cancellation notices remain uninspected; SMS absence is not inferred |
 | Other records / release | Existing source and HIR-609 retained | Independent post-cleanup native QA preserves Confirmed/Paid T3 and exact production/test/SMS scopes; R2 Hidden/closed/all eight workflows OFF | James Zoom, T3 reminders and separately authorized production activation remain open |
 
