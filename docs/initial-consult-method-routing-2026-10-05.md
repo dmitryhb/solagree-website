@@ -1,5 +1,10 @@
 # Initial Consult method routing — October 5 preparation
 
+Later October 6: an [execution runbook](initial-consult-release-runbook-2026-10-06.md) now lists
+the exact eight-path public configuration candidate, per-route form/host checks, preservation
+scopes and coordinated activation/rollback. This is preparation only; provider windows/runtime
+remain unchanged. Reviewed merge permission is now granted; production and Done remain separate.
+
 Later update: [full staging refresh](initial-consult-staging-refresh-2026-10-05.md) after the user's
 PR #6 merge. Staging now uses the reviewed build in mixed mode; separate-route preparation below
 does not establish its public activation or native lifecycle acceptance.

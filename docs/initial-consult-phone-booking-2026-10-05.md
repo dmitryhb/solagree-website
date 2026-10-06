@@ -4,6 +4,14 @@ HIR-246 → HIR-248 → HIR-249 → HIR-250; HIR-609 publication dependency reta
 This records an actual free Phone booking and a calendar export gap, not launch or paid acceptance.
 No attendee contacts, phone values, booking identifiers or meeting tokens are included.
 
+## Later October 6 read-only calendar recheck — 11:42:15 UTC
+
+Independent native QA selected Direct James, James host, Amsterdam October 6 at 21:00 in
+Troubleshooter. Matching Cal.com booking reason is Busy 21:00–21:30; it still does not assert
+Google presence or expose an exact destination bridge. A separate Google Calendar blocking reason
+does not prove J2's calendar write. Organizer calendar presence remains UNKNOWN, not a failed-write
+verdict. No impersonation, booking-time selection/hold, change or send; own research tab closed.
+
 ## Later October 6 native buffer evidence — 08:33:52 UTC
 
 Independent native Troubleshooter QA for actual Direct Choice James / Europe/Amsterdam October6
