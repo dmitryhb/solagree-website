@@ -14,7 +14,10 @@ approved starts were restored at the +31-minute check while the same booking and
 Pending / Incomplete. At least fifty elapsed minutes later, no automatic cancellation was observed.
 Checkout was never reopened by agents, no payment or manual cancellation occurred. This gives
 bounded behavior evidence, not a verified tenant flag; the repeated OFF/ON template remains
-unresolved. One narrow follow-up is drafted in the R2 packet, not sent.
+unresolved. The exact narrow follow-up in the R2 packet was explicitly approved and sent once
+to Milos in existing ticket 215476247361743; fresh UI by October 6 **10:30:36 UTC / 12:30:36 Amsterdam**
+showed the complete outbound article, Not seen yet, and empty composer with Send disabled.
+No reply or configuration change is inferred. This supersedes the historical unsent snapshots below.
 
 ## Current Stripe refund evidence — independent review, 08:11 UTC
 
