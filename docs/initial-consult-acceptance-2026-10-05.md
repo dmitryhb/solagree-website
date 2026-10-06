@@ -1,16 +1,22 @@
 # Initial Consult acceptance preparation — October 5, 2026
 
-Latest controlled lifecycle observation: [isolated Stacie abandon result](initial-consult-payment-lifecycle-preparation-2026-10-06.md).
-After exact approval, the hidden October 8–9 window and form were independently checked;
-the user opened/closed checkout without card/payment. Stripe now has one new Incomplete intent,
-zero received/no charge at creation and matching Stacie metadata; Cal shows Pending payment /
-Unconfirmed. At October 6 05:56:40 UTC, and root's later 05:59:31 UTC check, the approved
-slot remained absent with overlay OFF; independent follow-up at 06:20:58 UTC still found exclusion.
-Logged-in guest body awaits payment/no Zoom; its document title incorrectly says confirmed.
-Native payment-email receipt is now client-attested; recovery URL/content is uninspected. Exact email timing/count/host
-evidence, anonymous/server gating, expiry, decline and paid recovery remain open. The approved
-support question was sent to existing ticket 215476247361743; no answer yet. Original Stacie
-test reminders and records are preserved; no new charge is authorized.
+Latest controlled lifecycle result: [isolated Stacie abandon and same-record recovery](initial-consult-payment-lifecycle-preparation-2026-10-06.md).
+After the approved no-card abandonment, user-approved recovery was completed by user final Pay.
+The original intent succeeded for $0.50 USD to SOLAGREE with unchanged booking metadata and one
+charge; Stripe still has five records, now four Succeeded/one old Incomplete. Same Cal UID is
+Confirmed/Paid, actual Zoom link present, Accepted by Stripe / Source WEBHOOK. Rendered receipt
+PASS; Stripe says **No receipts sent**, so receipt delivery remains unverified. Confirmation and
+native calendar delivery for this recovery are not covered by earlier T3 attestations.
+
+Independent public QA found the slot/buffer absent at 06:20:58 UTC, enabled at 06:41:12 before
+Pay while the record remained Pending, then excluded again at 06:45:02 after Pay. Exact release
+TTL/cause remain unknown; reopening the original payment page may have contributed. The user
+reports no link in the received native payment email; root recovered the actual earlier checkout
+URL from Chrome history. This does not accept email-link recovery or expired-link invalidation.
+Historical unpaid guest body awaited payment/no Zoom, but document title incorrectly said confirmed;
+anonymous/server gating, deliberate decline and concurrency remain open. The approved support
+question was sent to existing ticket 215476247361743; no answer is included here. Original Stacie
+test reminders and records are preserved; no additional charge is authorized.
 
 Latest actual test: [James Phone booking result](initial-consult-phone-booking-2026-10-05.md).
 User Confirm completed. Independent actual host/time/confirmed record/phone in booking PASS;
@@ -30,9 +36,12 @@ records the restored access, current build and deployment verification. Producti
 native lifecycle acceptance stay open; earlier staging observations below are historical.
 
 Scope: HIR-246 → HIR-248 → HIR-249 → HIR-250; HIR-609 is the consultant-publication dependency.
-This is a review/acceptance packet, **not a launch sign-off**. No merge, production deployment,
-Done, new payment, refund or outbound test submission was performed **by the agent**.
-The user completed the separately approved third $0.50 test below; no additional charge is authorized.
+This is a review/acceptance packet, **not a launch sign-off**. The user's later **мержи сам**
+authorizes reviewed task PR merges; root merged PR #12 and #13 after independent checks.
+Production deployment and Done remain unauthorized. Financial actions were completed by the user,
+including the separately approved fourth $0.50 successful payment through same-record recovery.
+No further charge, refund or cancellation is authorized. Outbound test/support actions are limited
+to their specifically approved scenarios and recipients.
 Saved non-financial workflow isolation and hidden-event assignment changes are recorded below.
 
 ## Recovery and source of truth
@@ -356,7 +365,7 @@ Historical configuration evidence is not current saved state, delivery, calendar
 | Calendar / Zoom | No website-side meeting generation | Taj Sep28 and Stacie T3 paid tests generated Zoom URLs; T3 calendar addition client-attested. Free James Zoom-intended Confirm completed: correct host/time, actual Cal Video; fresh October 6 check still shows Zoom Default with expired/revoked permissions. Free James Phone correct phone Where; received invitation/calendar number now client-confirmed. Manual exports omit phone location; configuration does not prove native write pipeline | James/client reauthorizes Zoom, warning clears, then separately approved retest. Earlier free James Cal Video inbox/calendar attestation, direct destination/event-detail inspection and arbitrary busy conflicts remain open. Existing bookings remain intact |
 | Historical T1/T2 and new T3 $0.50 tests | No fixture claims live-payment success | Earlier Oct5: T1/T2 succeeded and A1Incomplete, no refunds. After userT3: All4records, three Succeeded$0.50 with one charge/receipt per test and A1Incomplete | T3 immediate delivery client-attested; historical inbox delivery/direct content evidence and strict numeric-ID↔UID bridge if needed; no refund has been accepted; broad retry/concurrency/$60 acceptance remains |
 | Decline / abandon / retry / duplicate protection | Website invokes native checkout, no custom payments | Sep 28 cancel checkout left Pending payment/Unconfirmed; redirect to admin's empty public profile; rejected in cleanup. Error collecting card is T1 rescheduled original, not independent decline evidence; Oct 5 Stripe abandoned intent Incomplete, no payment method/charge/receipt | Slot-hold expiry and retry/concurrency acceptance; no usable unpaid confirmation; no duplicate charge/booking |
-| October 6 isolated Stacie abandon | No custom payments or new source change; fixtures do not accept native lifecycle | User-approved no-card checkout: Stripe All5 (3 previous Succeeded, 2 Incomplete); new current Incomplete/no method, creation-event zero received/no charge; Cal Pending payment/Unconfirmed; slot still absent 06:20:58 UTC overlay OFF. Logged-in guest body awaits payment/no Zoom; native payment email client-attested | Natural expiry, hosted incorrect confirmed document title, anonymous/server gating/direct email details, strict numeric-ID bridge and separately approved paid recovery/decline/concurrency |
+| October 6 isolated Stacie abandon + recovery | No custom payments or new source change; fixtures do not accept native lifecycle | Same original intent recovered via observed history URL/user Pay: All5 now4Succeeded/1Incomplete, one $0.50 charge; same UID Confirmed/Paid/Zoom/Stripe WEBHOOK. Slot/buffer released by06:41:12 then re-excluded06:45:02. Rendered receipt PASS, No receipts sent | Exact release TTL/cause, expired-link invalidation, historical unpaid-title inconsistency, anonymous/server gating/direct delivery/host-calendar evidence, decline/concurrency/double-click |
 | Confirmation / receipt / reminders | Site copy stays 30 min / $60 | Earlier Oct5: 450309/450313 active on five production links; later method prep nine (original five + four closed Phone), fresh QA PASS. Hidden test excluded with one attendee action, 24h/1h, event/date/end/timezone/organizer/LOCATION/MEETING_URL, hard-coded30m/$60. Oct 5 guest notifications enabled, including confirmation/cancel/change/payment pending; Stripe shows one sent receipt per T1/T2/T3 paid test, each rendered at $0.50; client attests T3 immediate emails received | Direct message content/count/header timestamps; historical/other-host delivery; future 24h/1h reminders; matching host/timezone/Phone or Zoom and no broken Zoom links in Phone mail |
 | Hidden test reminder accuracy | Not website controlled | Oct 5 resumed: hidden excluded from production templates; 473280/473288 saved with $0.50 copy, now active only on hidden after specific Stacie approval; independent config QA PASS | T3 user checkout complete; actual reminder token rendering and 24h/1h dispatch/inbox delivery pending |
 | Refund | Site copy now says 2 calendar days | Oct 5 all five + hidden event rechecked as If cancelled 2 calendar days before; earlier pre-T3 full/pending/partial refund list empty; T3 remains Succeeded with no refund activity observed in its detail | Hosted threshold before/equal/after, DST; user performs actual refund; confirm Stripe refund object/status and email. Cal “refund on the way” text is insufficient |
@@ -600,7 +609,7 @@ supplement; previous source/fixture checks below were not rerun. Reusable memory
    inbox/strict ID bridge and active-host calendar/Zoom, payment failures/retry/slot release and email delivery.
 3. Obtain the provider-boundary decision and prove Stripe refund handling, not just Cal copy.
 4. Source review/code QA passed as documented below; finish current integrated browser acceptance and maintain explicit gaps.
-5. User separately authorizes merge, production deployment and Done. HIR-609 is already in develop,
+5. Reviewed task PR merges are authorized by the user's later instruction; production deployment and Done still need separate authorization. HIR-609 is already in develop,
    PR #1 policy copy is now in develop after an external merge; production release remains unverified. Verify generated output has exactly
    First Available/Taj/Stacie/James and no legacy primary request form at the booking route.
 6. Record approved production artifact and known-good rollback artifact. To disable paid booking,

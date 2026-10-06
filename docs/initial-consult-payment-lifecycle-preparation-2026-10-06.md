@@ -133,19 +133,65 @@ confirmed booking nor a completed export/native host-calendar write. The title i
 an open hosted-provider finding; website source cannot establish its correction.
 
 The user confirms receipt of a Cal.com email offering payment after abandonment. Mark native
-pending-email delivery **client-attested**. The actual recovery URL/link contents were not inspected.
+pending-email delivery **client-attested**. Later, the user reports there is no link in that email;
+its actual contents/headers remain uninspected. Do not claim email-link recovery.
 This demonstrates such an email can arrive with event workflows OFF; exact timing, headers, message count and host notice remain
 uninspected. The public fork's fifteen-minute default below is still not a verified hosted timer.
 The approved abandon scenario included possible native pending notices for the controlled recipients.
 
-Next prepared scenario: resume payment for this same pending Stacie booking through the received
-email's recovery link if present, $0.50 USD to SOLAGREE, and compare original intent/booking lineage before and after
-user final Pay. Exact paid-retry/recipient approval and recovery-link inspection are pending;
-no new booking, payment step, card, charge or retry submission is authorized by this preparation.
-It will not establish natural expiry if the record is paid before release. No cancellation/refund
-or cleanup notices are included; preserve original T3's timed reminders.
+The next same-record recovery scenario was subsequently approved: $0.50 USD to SOLAGREE,
+same controlled attendee/host and date, confirmation/calendar/receipt notices, with user final Pay.
+The actual result below supersedes the earlier pending-approval preparation. No new booking,
+cancellation/refund or cleanup notices were included; original T3's timed reminders are preserved.
 
-## Controlled test sequence — abandon approved, later actions pending
+## Same-record recovery — user paid October 6
+
+At the user's request, root used one focused Chrome jill history lookup and found the actual
+original Payment page visited at 05:53:21 UTC. Root reopened that observed page; no new booking
+was made. The page showed the same Stacie technical event, October 9 00:30–01:00 Amsterdam /
+October 8 22:30–23:00 UTC, $0.50, and a blank live Stripe card form. The native warning said the
+slot was no longer held, payment could still confirm the booking, and another attendee might
+confirm first. This is recovery from browser history, **not a tested email link**.
+
+Before payment, independent financial review still found five Stripe records (three Succeeded,
+two Incomplete), the same original Incomplete intent/no method and matching booking metadata;
+opening the page did not add a payment record. At **06:41:12 UTC**, independent QA with overlay
+OFF found the original UTC 22:30 slot and following 23:00 buffer interval enabled again, while
+the same Cal record remained Pending. Their absence at 06:20:58 and presence at 06:41:12 bounds
+the observed release. Exact TTL, cadence and cause remain unknown; opening the existing payment
+page may have contributed and is not excluded. This does not prove booking cleanup or expired-link
+invalidation; the original payment page remained usable.
+
+The user completed final Pay and reported **готово**. The observed return URL retained the
+original Cal UID and PaymentIntent, with succeeded redirect status. Fresh independent financial
+review around 06:45 UTC confirms **five records: four Succeeded and one old Incomplete**.
+The original recovery intent is now Succeeded, $0.50 USD, unchanged Stacie/numeric-booking metadata,
+with one distinct visible charge and no additional payment record. Rendered receipt: SOLAGREE®,
+$0.50 paid. Stripe receipt history explicitly says **No receipts sent**; receipt existence is
+confirmed, receipt email delivery is not. No Send receipt/resend was used.
+
+Independent Cal QA confirms the same UID **Confirmed + Paid**, same Stacie host and approved
+interval, actual Zoom Video/Join Zoom Video link, and History Accepted by Stripe, Source WEBHOOK.
+The history displays October 6 08:43:38; its UI timezone was not independently established.
+Root's fresh canonical booking page also exposes Zoom and Zoom locations in the manual calendar
+export links. The immediate payment-return view still showed conferencing-details-to-follow,
+so the fresh canonical view is the current result. No meeting Join or calendar export was used.
+Private UID/intent/charge/receipt/Zoom-link values remain only in provider views.
+
+At **06:45:02 UTC**, independent public QA with overlay OFF found the original paid slot and
+following buffer interval absent again; the adjacent UTC 23:30 slot remained available.
+This verifies re-exclusion after recovery, not arbitrary native host-calendar conflicts, concurrent
+checkout safety or Zoom join validity. Viewer overlay was restored ON and own research tabs closed.
+Direct confirmation/invitation receipt, actual host-calendar write and receipt delivery remain
+external acceptance steps for this recovery; previous T3 attestations do not cover it.
+
+Bounded same-record paid recovery, one observed successful charge, current slot release/re-exclusion,
+and actual Zoom generation PASS. Deliberate decline, double-click/concurrency, exact expiry policy,
+anonymous/server payment gating, real refund and manual reschedule boundaries remain open.
+No further payment, financial cleanup, cancellation, configuration change, send or production action
+was performed by the agent. This scenario is completed; it grants no additional charge authority.
+
+## Controlled test sequence — abandon and same-record recovery completed
 
 1. Revalidate the existing historical ledger and event configuration. Separately agree the exact
    controlled attendee/host recipients, date/time and possible native pending-payment notices.
@@ -169,16 +215,17 @@ did not accept Terms, submit, enter a card, charge or refund.
 
 | Scope | Code | Services | Required external action |
 | --- | --- | --- | --- |
-| Website/native checkout | Existing reviewed source invokes native Cal.com checkout; no custom payment engine | Incomplete intent/Pending Cal record; logged-in guest body awaits payment/no Zoom; native payment email client-attested. Document title incorrectly says confirmed | Hosted title correction; anonymous/server gating; direct email timing/count/host evidence |
-| Abandon/retry/duplicates | Fixtures do not prove native payment behavior | Three prior Succeeded $0.50 and two Incomplete; new current Incomplete/no method, creation-event amount_received 0 / latest_charge null. Selected slot still absent at 06:20:58 UTC | Natural release/expiry; separately approved decline/paid recovery/concurrency, one charge/receipt/booking and no usable unpaid confirmation |
+| Website/native checkout | Existing reviewed source invokes native Cal.com checkout; no custom payment engine | Unpaid guest body awaited payment/no Zoom; native payment email client-attested, user reports no email link. After user Pay, same UID Confirmed/Paid with actual Zoom | Historical unpaid-title inconsistency; anonymous/server gating; direct email timing/count/host-calendar evidence |
+| Abandon/retry/duplicates | Fixtures do not prove native payment behavior | Same original intent recovered successfully; five Stripe records now four Succeeded/one Incomplete; one charge and rendered $0.50 SOLAGREE receipt, No receipts sent. Slot/buffer available 06:41:12 before Pay, excluded again 06:45:02 after Pay | Exact release TTL/cause/link invalidation; deliberate decline/concurrency/double-click; receipt delivery, host-calendar write and Zoom join validity |
 | Refund/manual change | Reviewed policy copy uses two calendar days and one manual free request | Prepared fee/refund settings are not a Stripe refund or reschedule | Specific notice/scenario approval; user financial actions; actual retention/boundary evidence |
 | Launch/publication | HIR-609 roster and separate-method source preparation retained | Public events/active runtime unchanged | Independent full acceptance and separately authorized coordinated production release/Done |
 
 The approved first abandon case is October 9, 00:30–01:00 Europe/Amsterdam / October 8,
 22:30–23:00 UTC / October 8, 18:30–19:00 America/New_York. Fresh availability and the
 narrow window were checked after approval; only that slot was selected for the handoff.
-No card data or successful payment is included in this case. A successful retry's
-$0.50 SOLAGREE payment and any cleanup/change notices require separate approval/user action.
+No card data or successful payment was included in the first abandon case. Its separately approved
+$0.50 SOLAGREE recovery was later paid by the user as recorded above. Any further charge or
+cleanup/change notices require separate approval/user action.
 Private recipient/contact values are confined to the approval/provider views.
 
 ## Expiry diagnostic and sent support question
