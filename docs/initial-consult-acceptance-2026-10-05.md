@@ -1,5 +1,14 @@
 # Initial Consult acceptance preparation — October 5, 2026
 
+Later independent native QA, October6 **12:24:59 UTC / 14:24:59 Amsterdam**, Cal.com **6.9.12-h**:
+James Zoom remains Default with expired/revoked permissions. Official admin inspection exited to
+Jill; no provider writes or sends. T3 remains Confirmed/Paid/Stacie at its original UTC interval,
+Zoom present; exact production/test reminder scopes and inactive SMS preserved. No exposed run
+queue/delivery log was found. Reminders remain future/unverified; a bounded evidence-intake
+checklist is in the [provider clarification](initial-consult-provider-clarification-2026-10-06.md).
+Support's narrow cleanup question remains Seen without a later reply at root's current check.
+
+
 Later October 6 exact R2 attestation: the user received its cancellation email. Client-attested
 attendee receipt accepted; direct content/header/count, host mail and calendar removal remain
 unverified. A [policy boundary plan](initial-consult-policy-boundary-plan-2026-10-06.md) now prepares
