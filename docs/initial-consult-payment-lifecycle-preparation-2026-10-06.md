@@ -87,7 +87,8 @@ Summer Time display matches October 8, 22:30–23:00 UTC / October 9, 00:30–01
 Where says conferencing details will follow in a confirmation email; an actual confirmed
 Zoom meeting is not established. The visible history's booking-created entry is not payment
 acceptance. Rendered details did not expose the numeric ID, so matching title/host/time does
-not establish the strict ID bridge. Public guest confirmation/server gating was not inspected.
+not establish the strict ID bridge. Public guest confirmation/server gating had not yet been inspected
+at this initial observation; the later guest-page check below supersedes that part.
 
 At **05:56:40 UTC**, public approved-slot UTC 22:30 and following 23:00 slot were absent with
 Overlay my calendar OFF; adjacent 23:30 UTC / 01:30 Amsterdam remained available. QA restored
@@ -102,10 +103,47 @@ six minutes after intent creation, not proof of any particular expiry policy. A 
 DOM-derived availability record is retained locally as `abandon-slot-exclusion-055931.json`.
 Overlay ON was restored and the research tab closed.
 
-Bounded no-charge/pending-state evidence is accepted. Natural release, pending-email delivery,
-usable-unpaid-confirmation rejection, deliberate decline, paid retry/concurrency and financial
-cleanup remain external acceptance gates. All event workflows OFF is configuration evidence,
-not evidence that provider-level pending-payment notices cannot be sent.
+Bounded no-charge/pending-state evidence is accepted. The later pending-email attestation and
+guest-page check below supersede those initial pending gates in their stated scope. Natural
+release, anonymous/server payment gating, deliberate decline, paid retry/concurrency and financial
+cleanup remain external gates. Event workflows OFF does not suppress all provider-level notices.
+
+## Later October 6 follow-up: continued exclusion, guest page and native email
+
+Fresh independent Cal QA at **06:20:58 UTC**, 27 minutes 38 seconds after intent creation,
+still finds the matching Pending payment / Unconfirmed record and no expiry timer. With personal
+overlay OFF, approved UTC 22:30 and following 23:00 remain absent; UTC 23:30 / 00:00 / 00:30
+remain available (October 9 Amsterdam 01:30 / 02:00 / 02:30). Viewer settings were restored and
+the research tab closed. Continued exclusion is observed; indefinite holding and eventual expiry
+are not established. Root's subsequent fresh Stripe detail remains Incomplete / no payment method,
+with only the visible payment-created activity; no financial action was taken.
+
+Root opened the known Cal.com canonical booking route using the UID exposed by the matching
+admin record. Fresh independent guest-page QA confirms the **logged-in Jill view**: body heading
+**Your meeting is awaiting payment**, same Stacie technical event/$0.50/approved UTC interval,
+no Paid badge and no rendered Zoom/Cal Video link. Where says conferencing details will follow
+in a confirmation email. No visible Pay/Complete payment control was shown. Body pending-state
+messaging PASS is bounded to this view; anonymous access/server-side payment enforcement was
+not exercised. Private UID and contact values are excluded from evidence.
+
+Provider UI inconsistency: document title is **Your booking has been confirmed | Cal.com**
+despite the body's awaiting-payment state. Google/Office/Outlook/Other calendar-export controls,
+Cancel and Report booking remain visible. None were used. Their presence proves neither a paid
+confirmed booking nor a completed export/native host-calendar write. The title inconsistency is
+an open hosted-provider finding; website source cannot establish its correction.
+
+The user confirms receipt of a Cal.com email offering payment after abandonment. Mark native
+pending-email delivery **client-attested**. The actual recovery URL/link contents were not inspected.
+This demonstrates such an email can arrive with event workflows OFF; exact timing, headers, message count and host notice remain
+uninspected. The public fork's fifteen-minute default below is still not a verified hosted timer.
+The approved abandon scenario included possible native pending notices for the controlled recipients.
+
+Next prepared scenario: resume payment for this same pending Stacie booking through the received
+email's recovery link if present, $0.50 USD to SOLAGREE, and compare original intent/booking lineage before and after
+user final Pay. Exact paid-retry/recipient approval and recovery-link inspection are pending;
+no new booking, payment step, card, charge or retry submission is authorized by this preparation.
+It will not establish natural expiry if the record is paid before release. No cancellation/refund
+or cleanup notices are included; preserve original T3's timed reminders.
 
 ## Controlled test sequence — abandon approved, later actions pending
 
@@ -131,8 +169,8 @@ did not accept Terms, submit, enter a card, charge or refund.
 
 | Scope | Code | Services | Required external action |
 | --- | --- | --- | --- |
-| Website/native checkout | Existing reviewed source invokes native Cal.com checkout; no custom payment engine | Approved user abandonment created one matching Incomplete intent and Pending payment / Unconfirmed Cal record | Public guest/server gating and native pending-email delivery |
-| Abandon/retry/duplicates | Fixtures do not prove native payment behavior | Three prior Succeeded $0.50 and two Incomplete; new current Incomplete/no method, creation-event amount_received 0 / latest_charge null. Selected slot still absent at 05:56:40 UTC | Natural release/expiry; separately approved decline/retry/concurrency, one charge/receipt/booking and no usable unpaid confirmation |
+| Website/native checkout | Existing reviewed source invokes native Cal.com checkout; no custom payment engine | Incomplete intent/Pending Cal record; logged-in guest body awaits payment/no Zoom; native payment email client-attested. Document title incorrectly says confirmed | Hosted title correction; anonymous/server gating; direct email timing/count/host evidence |
+| Abandon/retry/duplicates | Fixtures do not prove native payment behavior | Three prior Succeeded $0.50 and two Incomplete; new current Incomplete/no method, creation-event amount_received 0 / latest_charge null. Selected slot still absent at 06:20:58 UTC | Natural release/expiry; separately approved decline/paid recovery/concurrency, one charge/receipt/booking and no usable unpaid confirmation |
 | Refund/manual change | Reviewed policy copy uses two calendar days and one manual free request | Prepared fee/refund settings are not a Stripe refund or reschedule | Specific notice/scenario approval; user financial actions; actual retention/boundary evidence |
 | Launch/publication | HIR-609 roster and separate-method source preparation retained | Public events/active runtime unchanged | Independent full acceptance and separately authorized coordinated production release/Done |
 
@@ -143,7 +181,7 @@ No card data or successful payment is included in this case. A successful retry'
 $0.50 SOLAGREE payment and any cleanup/change notices require separate approval/user action.
 Private recipient/contact values are confined to the approval/provider views.
 
-## Expiry diagnostic and unsent support question
+## Expiry diagnostic and sent support question
 
 No authoritative hosted 6.9.11-h contract for persisted unpaid-booking expiry was found.
 The [official five-minute reserve-slot default](https://cal.com/docs/api-reference/v2/slots/reserve-a-slot)
@@ -158,15 +196,26 @@ does not supply a deadline for the observed bare PaymentIntent without a confirm
 Session and merchant expiry handler. No five-minute, fifteen-minute or twenty-four-hour release
 promise is made, and the observation does not establish indefinite blocking.
 
-Prepared question for Cal.com support, **not sent**:
+After the user reviewed the four-part text and explicitly said **отправляй**, it was sent as a
+reply in existing Investigation ticket **215476247361743** (Intercom conversation 141707266).
+Root reopened the same conversation and confirmed the complete text persisted, **Not seen yet**.
+No support answer was present at the subsequent read. This supersedes the UNSENT snapshot in
+merged PR #12 / develop `0a0aad3`; it proves sending/persistence, not read status or provider acceptance.
+Local safe screenshot: `test-results/cal-support-2026-10-06/abandon-question-sent.png`.
+No contacts, private booking/payment IDs, secrets or attachments were sent.
 
-> On hosted Cal.com 6.9.11-h, an ON_BOOKING Stripe payment abandoned before entering a payment
-> method leaves a Pending payment / Unconfirmed booking blocking the slot and its buffer.
-> Does this persisted unpaid booking expire automatically? Please specify TTL, timer origin,
-> cleanup cadence/conditions, terminal booking/payment states and whether the PaymentIntent is
-> cancelled. Do native awaiting-payment reminders run independently of disabled event workflows?
-> If automatic release is unavailable, what supported action releases the slot and invalidates
-> the unpaid payment link, and which notifications does that action send?
+Sent text:
+
+> On hosted Cal.com 6.9.11-h, we tested an ON_BOOKING Stripe checkout and closed it before entering a payment method or paying.
+>
+> Stripe shows Incomplete / requires_payment_method. Cal.com retains a Pending payment / Unconfirmed booking. The slot and its buffer were still unavailable approximately six minutes later.
+>
+> Could you clarify:
+>
+> 1. Does this persisted unpaid booking expire automatically? What is the TTL, when does it start, and how frequently does cleanup run?
+> 2. After expiry, what happens to the booking and PaymentIntent? Is the slot released and the unpaid payment link invalidated?
+> 3. Can native awaiting-payment emails still be sent when all event workflows are disabled?
+> 4. If automatic release is unavailable, which supported action releases the slot and invalidates the payment link, and which attendee/host notifications does it send?
 
 See [main matrix](initial-consult-acceptance-2026-10-05.md) and
 [Phone result](initial-consult-phone-booking-2026-10-05.md) for existing bounded evidence.
