@@ -1,5 +1,13 @@
 # Initial Consult acceptance preparation — October 5, 2026
 
+New support correction read around **08:57 UTC**: Milos says required-email links do not send
+built-in SMS, custom smsConsent is not read, and the phone-only SMS switch does not apply here.
+This supersedes the earlier broad phone-number assertion and provider eligibility uncertainty;
+actual SMS delivery/absence is not inferred. Cleanup OFF/ON alternatives were repeated, so tenant
+flag remains unresolved. A separate closed [unpaid-expiry test preparation](initial-consult-unpaid-expiry-preparation-2026-10-06.md)
+requires exact scenario/recipient approval before any booking or native message; no payment planned.
+T3 remains intact; native reminder queue/log was not exposed and Cancel was not clicked.
+
 Fresh saved-state QA at **08:46:14 UTC** confirms all five original events retain 30 minutes,
 $60 USD, Stripe collect-on-booking and refund 2 calendar days. Four active routes retain two-hour
 notice, zero pre / fifteen-minute post buffer, fourteen-calendar-day horizon and Always14 unchecked.
@@ -25,8 +33,8 @@ Latest [provider clarification](initial-consult-provider-clarification-2026-10-0
 08:11 UTC Stripe review confirms the same successful full $0.50 refund, updated card destination
 type reversal and no second object evident. Browser mapping is resolved to profile jill. Bank/card
 credit remains unconfirmed. New Cal support reply asserts a 30-minute unpaid hold but leaves two
-cleanup-flag template branches unresolved. Native SMS eligibility/consent for Email-confirmation
-links needs clarification; the discovered SMS-off switch explicitly scopes phone-only/optional-email
+cleanup-flag template branches unresolved. At the earlier inspection native SMS eligibility/consent for Email-confirmation
+links was unresolved; the later correction above supersedes that gap; the discovered SMS-off switch explicitly scopes phone-only/optional-email
 links. The revised exact follow-up was sent once around 08:28 UTC after the user viewed and approved
 it; no reply included at the 08:31 check. No financial or settings action occurred.
 
@@ -442,7 +450,7 @@ Historical configuration evidence is not current saved state, delivery, calendar
 | Hidden test reminder accuracy | Not website controlled | Oct 5 resumed: hidden excluded from production templates; 473280/473288 saved with $0.50 copy, now active only on hidden after specific Stacie approval; independent config QA PASS | T3 user checkout complete; actual reminder token rendering and 24h/1h dispatch/inbox delivery pending |
 | Refund | Site copy now says 2 calendar days | Saved rule retained; October6 early Jill-admin cancellation of R1-R after separate approval/user final action: one full original-charge $0.50 USD refund, object status succeeded, no duplicate; one Refund sent row. T3 preserved | Customer threshold before/equal/after/DST, refund inbox/bank credit, actual native calendar/Zoom removal; current early admin result does not establish guest boundary enforcement |
 | One manual reschedule | Site directs request to Solagree | Saved Attendee only/Always and same-host/Always. October6 approved Jill-admin test: original Rescheduled → same-Stacie replacement Confirmed/Paid/new time; same $0.50 charge retained, no new charge/refund; old slot available/new excluded; full Zoom reference retained; guest self-reschedule absent; one controlled complimentary change recorded | Own-Stacie workflow, actual Zoom meeting-time update, notices/native calendar update, anonymous/old guest-URL enforcement and production allowance ledger/second/late requests |
-| SMS | No requirement to enable SMS for email launch | Oct 5 all four SMS workflows show No active links; First Available switches off; October6 native Email-confirmation mode/customsmsConsent optional unchecked; narrow phone-only/optional-email SMS switchOFF. Credits0 used does not establish no nativeSMS | Keep workflows inactive; native eligibility/consent/SMS-only control clarification sent, answer pending. No unwanted SMS proved; optional SMS feature is not required for email acceptance |
+| SMS | No requirement to enable SMS for email launch | Oct 5 all four SMS workflows show No active links; First Available switches off; October6 native Email-confirmation mode/customsmsConsent optional unchecked; narrow phone-only/optional-email SMS switchOFF. Credits0 used does not establish no nativeSMS | Keep workflows inactive; later provider answer says no native SMS for required-email links, custom checkbox not read and no setting change needed. Direct absence proof is not inferred; optional future SMS workflow consent mapping remains separate |
 | Desktop/mobile, keyboard, fallback/privacy | Reviewed separate-method implementation and focused source/browser QA PASS; fixture tests do not prove native paid lifecycle | Approved full staging refresh from d4f344e: independent direct and Home/About client navigation, four correct single embeds, Jessica absent, desktop 1728/mobile 390 with no overflow PASS. Runtime remains mixed. Production remains legacy | Coordinated separated-method activation and production release require separate authorization; remaining screen-reader/provider empty/error and native lifecycle checks stay open |
 
 ## Public read-only recheck — earlier October 5, before role-policy implementation
@@ -682,7 +690,7 @@ Done still require separate user instruction.
 | --- | --- | --- |
 | James Zoom | Intended Zoom test created Cal Video; last actual account check shows expired/revoked Zoom authorization | James/client reconnects the existing Zoom in Cal.com. Verify warning clears and intended account/default; then obtain approval for one exact free hidden Zoom retest and its recipients, user final Confirm |
 | T3 reminders | Existing Stacie paid test confirmed; immediate messages/calendar client-attested; test reminder workflows scoped solely to preserved original test | Observe the existing 24h reminder **October7 00:30 Amsterdam / October6 22:30 UTC** and 1h reminder **October7 23:30 Amsterdam / October7 21:30 UTC**. Inspect actual amount/time/host/Zoom instructions and delivery, without resend/new booking. No future-monitor automation was requested |
-| Native unpaid cleanup/SMS | Release/recovery observed; support asserts30-minute hold but left OFF/ON alternatives; native SMS eligibility is unspecified | Await the specifically approved support follow-up sent08:28 UTC. Keep standard emails enabled and settings unchanged. Native SMS absence is not inferred from inactive workflows or credits |
+| Native unpaid cleanup/SMS | Release/recovery observed; support repeated OFF/ON alternatives. Later correction says no built-in SMS for required-email links; custom checkbox not read | Obtain an unambiguous tenant cleanup answer or approve the separate no-card expiry case. Keep standard emails/settings unchanged; direct SMS absence is not inferred |
 | Remaining controlled lifecycle/policy QA | Same-record recovery, Jill-admin one manual change, early cancellation/full original refund passed within bounds | Separately approve exact cases/recipients before unpaid cancellation/link invalidation, decline/concurrency, guest cutoff/equality/DST, own-organizer workflow or other notification-generating tests. Any real payment/refund final action is performed by the user |
 | Calendar/detail gaps | Attendee calendar/phone client-attested for James Phone and FA1; Taj native UI asserts matching Google presence/buffer | Taj/FA1 and Stacie/T3 native UI assert matching Google presence; allthree post buffers isolated. James/J2 native Google presence remains unknown. Retain this separately from direct destination/event-ID/content and controlled external busy-event conflict proof; additional writes/blocks/bookings need a controlled scenario |
 | Coordinated release | Separate Phone/Zoom source and closed Phone counterparts reviewed; staging source/routing QA passed | Obtain explicit authorization for old-route Zoom conversion, opening four Phone routes and website runtime/release. Verify all8 routes, active Taj/Stacie/James and Jessica pause; production deployment is not implied by PR merge |

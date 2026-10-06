@@ -22,6 +22,29 @@ status. The earlier All-list check at 07:57 UTC remains five original records: t
 one Reversed and one old Incomplete, with no new free FA1 payment. See the
 [cancellation/refund result](initial-consult-cancellation-refund-2026-10-06.md).
 
+## Later support correction — read at approximately 08:57 UTC
+
+Milos replied to the approved three-point follow-up. These are **provider assertions**:
+
+- Merely collecting a phone number does not trigger built-in SMS. Awaiting-payment, confirmation,
+  reschedule and cancellation SMS apply to phone-only bookings with email left empty.
+- Our links require email, so those native SMS are not sent for them, whether custom `smsConsent`
+  is checked or not. Cal.com does not read that custom field for native sending. Workflow SMS
+  is separate and remains disabled. This explicitly corrects the earlier broad phone-number claim.
+- The phone-only SMS-disable switch applies only to optional-email links; nothing needs changing
+  for these required-email links. Standard confirmation/payment/cancellation emails are unaffected.
+
+This resolves the provider eligibility/control question for the inspected required-email setup;
+it is not direct inbox/phone-delivery proof. Any future SMS workflow must still honor the applicable
+per-event consent mapping. The existing T3 record's user-selected Yes is not changed or treated as
+an authorization to send SMS; prepared unchecked defaults do not imply its submitted value.
+
+The expiry answer **again includes both Flag OFF and Flag ON template alternatives**, even though
+one branch says “on your account.” Actual tenant flag/name/scope remains unresolved; do not choose
+one branch from the template. No new follow-up was sent. A closed, separate
+[unpaid-expiry preparation](initial-consult-unpaid-expiry-preparation-2026-10-06.md) is ready for
+exact scenario/recipient approval before any booking or native notice.
+
 ## Cal.com support answer — read at approximately 08:12 UTC
 
 Milos replied in existing ticket 215476247361743. The following are **provider assertions**,
@@ -176,9 +199,9 @@ and its attendee/host notifications still need scenario approval and user final 
 | --- | --- | --- | --- |
 | Refund | No website refund engine | Same original full $0.50 refund succeeded; updated snapshot says reversal; no second object evident | Bank/card credit and general boundary/concurrency cases |
 | Unpaid lifecycle | Website delegates native checkout | R1 observed release/recovery; provider asserts 30-minute hold and two cleanup branches | Actual tenant flag; exact timing; separately approved unpaid cancellation/expired-link and decline/collision tests |
-| Native SMS | Optional consent retained; inactive workflow associations separately verified | Email-confirmation mode and narrow phone-only SMS switch verified; email notifications enabled | Native SMS eligibility/consent predicate and SMS-only control clarification |
+| Native SMS | Optional consent retained; inactive workflow associations separately verified | Required-email mode; provider corrects earlier claim: no native SMS on these links, custom checkbox not read; no setting change needed | Direct delivery/absence proof not inferred; future workflow consent mapping remains separate |
 | Host scheduling | Existing reviewed routing source | Native UI asserts matching Taj/FA1 and Stacie/T3 Google presence; isolated15-minute Taj/Stacie/James post buffers; JamesJ2 Cal booking; FA1/JamesPhone attendee calendar/phone attested | JamesJ2 matching Google presence; direct Google destination/event bridges/content; controlled external conflicts, broader hosts/concurrency |
-| Launch | Existing reviewed method routes and policy copy | Controlled cases only; HIR-609 dependency retained | James Zoom reauthorization/retest, actual reminders, remaining lifecycle/policy QA and separately authorized release |
+| Launch | Existing reviewed method routes and policy copy | Controlled cases only; HIR-609 dependency retained | James Zoom reauthorization/retest, actual reminders, tenant cleanup ambiguity, remaining lifecycle/policy QA and separately authorized release |
 
 ## Approved support follow-up — sent approximately 08:28 UTC
 
