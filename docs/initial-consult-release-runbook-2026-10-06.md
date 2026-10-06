@@ -14,9 +14,15 @@ current production public runtime values and all four active mixed event setting
 Keep secrets, attendee data, booking/payment identifiers and private infrastructure paths outside
 repository evidence. A merge SHA alone does not identify a deployed artifact.
 
-Current acceptance dependencies: James Zoom reconnect and approved retest; existing T3 reminders
-(October 7 at 00:30 and 23:30 Amsterdam); unresolved native unpaid cleanup branch; calendar/conflict
-and remaining controlled lifecycle/policy cases. [Current acceptance](initial-consult-acceptance-2026-10-05.md)
+Owner exceptions October6: G1 cancellation/refund inbox and attendee calendar removal plus actual
+T3 24h/1h reminder inspection are SKIPPED; James Zoom repair/retest is DEFERRED despite the known
+expired/revoked warning and prior Cal Video fallback. These three points no longer block current
+preparation and are revisited on a matching client report. They are not service PASS or a repair.
+No settings, appointments or scheduled reminders are changed by this decision.
+
+Other recorded acceptance dependencies remain: unresolved native unpaid cleanup branch,
+calendar/conflict and remaining controlled lifecycle/policy cases.
+[Current acceptance](initial-consult-acceptance-2026-10-05.md)
 separates service proof, client attestation and exceptions. No new paid test is authorized.
 
 ## Exact public booking configuration candidate
@@ -107,7 +113,11 @@ guarantee is inferred. Each direct route has its sole matching host at medium pr
 ## Rollback and stop conditions
 
 Stop if a route points to the wrong host/method, duplicates phone inputs, omits required phone/email,
-offers a wrong amount, exposes Jessica, loses a reminder binding or James still lacks usable Zoom.
+offers a wrong amount, exposes Jessica or loses a reminder binding. James's existing unusable Zoom
+is the recorded owner-deferred exception, not a new preparation stop or a working-Zoom claim.
+Carry that known issue and the three exceptions into the release record. Production still requires
+a separate user release instruction; assess release stops against that instruction and its recorded
+exceptions. A new Zoom failure outside the recorded exception remains a stop condition.
 Use the agreed booking pause while restoring the recorded full website artifact/public configuration
 and original four mixed native snapshots, then close the four new Phone windows. A mode-only
 rollback leaves existing Zoom-only links without Phone; a website-only pause leaves old native links

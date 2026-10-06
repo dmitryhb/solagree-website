@@ -1,5 +1,11 @@
 # Initial Consult — provider clarification, October 6, 2026
 
+Later owner decision: actual T3 24h/1h reminder inspection is SKIPPED, James Zoom reconnect/retest
+is DEFERRED as a known unresolved integration issue. Revisit on a matching client report, without
+claiming delivery or repair. Existing booking/workflows remain intact; no monitor, send or provider
+change is created. The intake/account-holder handoff below is historical and no longer a current
+preparation gate. See [owner exceptions](initial-consult-acceptance-2026-10-05.md).
+
 ## Later native recheck — 12:24:59 UTC October 6
 
 Independent read-only QA on Cal.com **6.9.12-h** confirms James Zoom Video remains Default
@@ -15,7 +21,7 @@ This is preservation/configuration evidence, not scheduled-run or inbox delivery
 Root's current support check still finds the narrow R2 cleanup question Seen with no later reply.
 The connected Gmail account is not the controlled attendee mailbox; no attendee messages were read.
 
-### Pending reminder evidence intake
+### Historical reminder evidence intake — later skipped by owner
 
 | Reminder | Expected send UTC | Expected Amsterdam display | Actual outcome |
 | --- | --- | --- | --- |
@@ -252,7 +258,7 @@ and its attendee/host notifications still need scenario approval and user final 
 | Unpaid lifecycle | Website delegates native checkout | R1 observed release/recovery; provider asserts 30-minute hold and two cleanup branches | Actual tenant flag; exact timing; separately approved unpaid cancellation/expired-link and decline/collision tests |
 | Native SMS | Optional consent retained; inactive workflow associations separately verified | Required-email mode; provider corrects earlier claim: no native SMS on these links, custom checkbox not read; no setting change needed | Direct delivery/absence proof not inferred; future workflow consent mapping remains separate |
 | Host scheduling | Existing reviewed routing source | Native UI asserts matching Taj/FA1 and Stacie/T3 Google presence; isolated15-minute Taj/Stacie/James post buffers; JamesJ2 Cal booking; FA1/JamesPhone attendee calendar/phone attested | JamesJ2 matching Google presence; direct Google destination/event bridges/content; controlled external conflicts, broader hosts/concurrency |
-| Launch | Existing reviewed method routes and policy copy | Controlled cases only; HIR-609 dependency retained | James Zoom reauthorization/retest, actual reminders, tenant cleanup ambiguity, remaining lifecycle/policy QA and separately authorized release |
+| Launch | Existing reviewed method routes and policy copy | Controlled cases only; HIR-609 dependency retained | Owner-deferred known James Zoom issue/retest and skipped actual T3 reminders; tenant cleanup ambiguity, remaining lifecycle/policy QA and separately authorized release remain |
 
 ## Approved support follow-up — sent approximately 08:28 UTC
 
