@@ -1,6 +1,16 @@
 # Initial Consult acceptance preparation — October 5, 2026
 
-Next controlled preparation: [free First Available Phone test](initial-consult-first-available-preparation-2026-10-06.md).
+Latest [First Available Phone result](initial-consult-first-available-result-2026-10-06.md): user
+Confirm completed the separately approved free FA1 case. Independent actual QA confirms Taj,
+correct Amsterdam October8 01:00–01:30/UTC October7 23:00–23:30, supplied Phone/Florida, no video;
+payment/eight workflows OFF. Booked start excluded across test/production FA, direct Taj date
+disabled; next union start available through another host, so Taj buffer isolation is unproved.
+User confirms this case's attendee email/calendar/phone. Host-calendar/direct delivery evidence,
+paid round-robin/fairness/concurrency remain open. Stripe same five records/no new FA1 payment;
+R1 current UI label Reversed supersedes earlier Refunded, without fresh refund-updated/object or
+bank-credit acceptance. Further Stripe clarification uses the user's specified jillcw session.
+
+Earlier controlled preparation: [free First Available Phone test](initial-consult-first-available-preparation-2026-10-06.md).
 Independent saved-state/candidate QA PASS: hidden/payment OFF, Taj/Stacie/James, one required native
 phone, eight workflows OFF; October8 01:00–01:30 Amsterdam enabled. No booking/notice submitted.
 Exact recipient/scenario approval and user final Confirm remain required. Free preparation does not
@@ -9,8 +19,8 @@ accept actual assignment, calendar write, paid round-robin lifecycle or producti
 Latest controlled result: [early Stacie cancellation and full refund](initial-consult-cancellation-refund-2026-10-06.md).
 The separately approved user final Cancel event canceled R1-R. Independent Stripe review verifies
 one original-payment refund: $0.50 USD, status succeeded, exact original charge/intent association,
-no additional payment/duplicate refund visible. Ledger now five records: three Succeeded,
-one Refunded, one Incomplete. One Payment and one Refund receipt-send row are recorded; inbox
+no additional payment/duplicate refund visible. At the 07:19 UTC refund check, five records: three Succeeded,
+one Refunded, one Incomplete; later list-label Reversed is recorded in the FA1 result above. One Payment and one Refund receipt-send row are recorded; inbox
 delivery and bank/card credit remain unconfirmed. Canceled slot restored; current logged-in guest
 body canceled/no Zoom/active controls, but browser title still wrongly says confirmed. This early
 Jill-admin case does not establish guest cutoff/equality/DST, Zoom deletion or calendar removal.
@@ -385,6 +395,7 @@ Historical configuration evidence is not current saved state, delivery, calendar
 | First Available / Direct Choice | Selector resolves four visible paths and mounts one selected embed | Oct 5 public event titles/price; prior Sep 28 staging iframe paths matched | Real RR union/routing and direct booking host reconciliation |
 | Duration, price, payment mode | Site states 30 min / $60; provider owns checkout | Oct 5: all five $60 USD, Stripe Initial Consults, ON_BOOKING, Save disabled; hidden event $0.50; public duration 30m | Existing $0.50 dashboard reconciliation below; controlled $60/direct-routing acceptance remains |
 | Rules / hours / timezones | Website delegates availability to Cal.com | Oct 5: five rules rechecked (Jessica has closed range); RR common/restriction schedule off; Taj Mon–Fri09–17 PT, James Mon–Fri09–17 ET, Stacie Mon–Thu18:30–21 and Sat12–14 ET | Confirm approved hours and intended Taj destination; actual notice/buffer/horizon boundaries, calendar conflicts, concurrency |
+| Actual First Available Phone allocation | Existing independently reviewed source retained, no new source diff | October6 actualFA1 Confirmed/Taj/time/Phone/Florida; bookedstart excluded on test/productionFA and directTajdate disabled; attendee email/calendar/phone client-attested | Host-calendar/direct content, isolated buffer, broad external conflicts/fairness/concurrency and paid round-robin remain open; see FA1 result |
 | First Available / Direct Choice availability | Existing route mapping already independently checked | October6 07:32:31UTC native QA, Europe/Amsterdam/overlayOFF: First Available exactly matches enabled-slot union of Taj/Stacie/James on October8 (12) and October9 (18), no missing/extra UTC timestamps; no times selected/holds/bookings | Actual host allocation, external calendar conflicts, concurrency, other dates/timezones and separated-method activation remain open; see method-routing evidence |
 | Phone exactly once, required for both methods | Prepared separate mode/path validation/explicit method gate passed independent source QA; default remains mixed | Old four public mixed routes still duplicate Phone; isolated Phone-only/Zoom-only render and browser constraints PASS; four new closed Phone saved-field QA PASS. Free James Phone submitted after one required input; actual supplied number appears in Who/Where and confirmed admin record. October 6 invitation/calendar number client-confirmed; manual Google/Office/ICS still omit phone location | Authorized coordinated old-route Zoom conversion/new Phone opening/runtime deployment. Direct attachment/destination details, known manual export limitation, actual blank rejection and broader paid lifecycle remain open. Failed Custom attendee experiment not repeated |
 | Required Name/Email/State, optional Notes/SMS | Website does not add a duplicate contact form | Sep 15 approved fields; Oct 5 public form recheck; SMS unchecked | Confirm provider validation, no attribution field, current forms and consent on all five |
