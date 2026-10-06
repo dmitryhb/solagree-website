@@ -6,6 +6,11 @@ is created by this plan. New live scenarios need exact recipient/action approval
 final payments/refunds, final paid-booking cancellations that may trigger a refund, and any final
 form action that accepts Terms. T3 and its reminders are protected.
 
+Later separately authorized G1 was paid and canceled by the user in a signed-out attendee context.
+The [G1 result](initial-consult-guest-cancellation-2026-10-06.md) supersedes the historical
+not-authorized/not-booked preparation below for that exact case only. It does not accept equality,
+late refusal, DST, production release or another financial action.
+
 ## Accepted contract and provider assertion
 
 The reviewed website says one complimentary reschedule requested from Solagree up to **2 calendar
@@ -14,8 +19,9 @@ cancellation is non-refundable. The agent must not replace this approved wording
 promise. Cal.com owns the refund engine; there is no website refund calculation.
 
 Milos asserts the calculation uses UTC start minus two calendar days, equality qualifies, and local
-DST does not move that UTC cutoff. This is provider evidence, not observed guest refund enforcement.
-The successful early Jill-admin refund does not establish guest/equality/DST behavior. The provider
+DST does not move that UTC cutoff. Equality/DST remain provider assertions; later G1 accepts only
+the actually observed early attendee path. The earlier Jill-admin refund alone did not establish
+guest/equality/DST behavior. The provider
 also says the original organizer can change a paid booking without another charge, while Cal.com
 does not enforce a one-change cap. The completed R1 change accepted the Jill-admin path only.
 
@@ -86,7 +92,7 @@ native availability and recipient list before asking for each concrete live scen
 final payment/refund for the user. Intent creation, a refund message or receipt-send row alone is
 not successful-charge/refund settlement/inbox proof.
 
-## Concrete G1 preparation — not booked or authorized
+## Historical concrete G1 preparation — before later exact authorization
 
 A distinct proposed **genuine-attendee early cancellation** can reuse hidden Stacie event **7357581**,
 `initial-consults/test-stacie-payment-lifecycle-20261006`. Its technical title is
