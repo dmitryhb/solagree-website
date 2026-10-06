@@ -6,6 +6,12 @@ page and Stripe full refund by 13:17:07 UTC October 6. Independent post-cancella
 at 13:18:56 UTC;
 delivery, calendar removal and bank credit remain unconfirmed.
 
+Later owner decision October6: G1 cancellation/refund email receipt and attendee calendar removal
+are **SKIPPED**, with follow-up only if the client reports a matching problem. The previous
+attestation request is no longer a preparation gate; this is not PASS or delivery/removal proof.
+See the [current owner exceptions](initial-consult-acceptance-2026-10-05.md). Actual full Stripe
+refund remains accepted; bank credit and other boundary/server gaps are not waived by this decision.
+
 ## Guest cancellation result
 
 Following the user's final Cancel, the same signed-out public page says **This event is canceled**
@@ -20,8 +26,8 @@ the provider-asserted October6 23:30 UTC cutoff. No additional manual refund was
 
 This accepts the observed early attendee cancellation/refund path only. Equality, late refusal,
 DST, all server/old-link bypasses, actual meeting deletion, host calendar removal and bank credit
-remain open. A specific G1 attendee email/calendar attestation is requested separately; it is not
-inferred from R2 or T3. Protected T3 and reminder configuration remain subject to independent
+remain open. A specific G1 attendee email/calendar attestation was requested separately, then
+skipped by the owner; it is not inferred from R2 or T3. Protected T3 and reminder configuration remain subject to independent
 preservation verification below.
 
 Root subsequently opened a fresh public event page in the same signed-out browser by 13:19:57 UTC:
@@ -115,7 +121,7 @@ Cancel in the same signed-out context before cutoff. Verify actual original-char
 Canceled/slot release/old-link barrier and authorized notices; no manual refund fallback if absent.
 Ambiguous payment, lost guest role or passed cutoff stops this early case. T3 and reminders protected.
 This sequence has now reached the independently reconciled guest refund result above;
-delivery/calendar attestation is pending. Equality/DST and bank credit remain
+delivery/calendar attestation is later SKIPPED by owner decision. Equality/DST and bank credit remain
 unaccepted. Closing or restoring the event's saved Oct8–Oct9 range is not part of this case.
 
 ## Review and document QA
