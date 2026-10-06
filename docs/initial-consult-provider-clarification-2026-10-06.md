@@ -2,7 +2,9 @@
 
 Scope: HIR-246/HIR-248/HIR-249/HIR-250; HIR-609 remains the publication dependency.
 Read-only service evidence, provider assertions and remaining acceptance are distinguished below.
-No new booking, message, setting change, charge, refund or cancellation was performed.
+The investigation performed no new booking, setting change, charge, refund or cancellation.
+The separately approved revised support follow-up was sent once at approximately08:28 UTC,
+as recorded below; customer test messages were not submitted.
 
 ## Current Stripe refund evidence — independent review, 08:11 UTC
 
@@ -85,6 +87,31 @@ mapping is exposed. Arbitrary external busy-event conflicts remain untested. No 
 new holds, bookings, calendar edits or setting changes were needed. See the
 [actual FA1 result](initial-consult-first-available-result-2026-10-06.md).
 
+## Additional host diagnostics — independent QA, 08:33:52 UTC
+
+Using each actual Direct Choice event's native Troubleshooter and selected host:
+
+- **Stacie / T3:** Europe/Amsterdam October8 **00:30–01:00**, corresponding to October7
+  **22:30–23:00 UTC**. Why unavailable explicitly identifies a Cal.com booking masked Busy
+  and says it **also appears on Google Calendar**. Separate Booking buffer blocks
+  **01:00–01:15 Amsterdam / 23:00–23:15 UTC**. Matching-interval provider calendar-presence
+  evidence and isolated fifteen-minute post buffer are accepted within UI scope.
+- **James / J2 Phone:** Europe/Amsterdam October6 **21:00–21:30**, corresponding to
+  **19:00–19:30 UTC**. Why unavailable identifies the Cal.com booking masked Busy, but does
+  **not** say it also appears on Google Calendar. Separate Booking buffer explicitly blocks
+  **21:30–21:45 Amsterdam / 19:30–19:45 UTC**. The matching booking and isolated fifteen-minute
+  post buffer are accepted; actual J2 Google Calendar presence remains unknown. A separate
+  Google busy reason identifies another overlapping busy interval at candidate21:30. This is
+  bounded native-UI external-calendar conflict evidence, alongside the separate booking buffer;
+  it cannot establish J2's calendar write or a controlled external-calendar test.
+
+Neither surface exposes a booking-ID bridge, Google owner/destination/event-ID or phone mapping.
+These reads do not accept direct Google write/content or deliberately injected external conflict
+cases. Existing tests, reminders and appointments remained intact. No impersonation, settings,
+new slots/holds/bookings, calendar edits, sends, financial or OAuth actions were performed.
+Own diagnostic tab closed; reusable memory none. See the
+[James Phone result](initial-consult-phone-booking-2026-10-05.md).
+
 ## Acceptance matrix
 
 | Scope | Verified by code | Confirmed in services / client-attested | Requires external action or evidence |
@@ -92,17 +119,32 @@ new holds, bookings, calendar edits or setting changes were needed. See the
 | Refund | No website refund engine | Same original full $0.50 refund succeeded; updated snapshot says reversal; no second object evident | Bank/card credit and general boundary/concurrency cases |
 | Unpaid lifecycle | Website delegates native checkout | R1 observed release/recovery; provider asserts 30-minute hold and two cleanup branches | Actual tenant flag; exact timing; separately approved unpaid cancellation/expired-link and decline/collision tests |
 | Native SMS | Optional consent retained; inactive workflow associations separately verified | Email-confirmation mode and narrow phone-only SMS switch verified; email notifications enabled | Native SMS eligibility/consent predicate and SMS-only control clarification |
-| Taj scheduling | Existing reviewed routing source | Matching Cal/Google presence asserted in native UI; isolated 15-minute Taj buffer; FA1 attendee calendar/phone attested | Direct Google destination/event bridge, arbitrary external conflicts, broader hosts/concurrency |
+| Host scheduling | Existing reviewed routing source | Native UI asserts matching Taj/FA1 and Stacie/T3 Google presence; isolated15-minute Taj/Stacie/James post buffers; JamesJ2 Cal booking; FA1/JamesPhone attendee calendar/phone attested | JamesJ2 matching Google presence; direct Google destination/event bridges/content; controlled external conflicts, broader hosts/concurrency |
 | Launch | Existing reviewed method routes and policy copy | Controlled cases only; HIR-609 dependency retained | James Zoom reauthorization/retest, actual reminders, remaining lifecycle/policy QA and separately authorized release |
 
-## Exact support follow-up — prepared, not sent
+## Approved support follow-up — sent approximately 08:28 UTC
 
-> Thank you. Your reply contains both Flag OFF and Flag ON alternatives. Which expired-unpaid-booking cleanup flag actually applies to our SOLAGREE tenant, what is its name/scope, and does automatic cleanup change email/SMS recipients or templates?
->
-> For native awaiting-payment, confirmation and cancellation notifications on hosted 6.9.11-h, what exactly makes an attendee eligible for SMS? Our links use Email confirmation with required email, collect a required phone number, and include an optional custom checkbox identified as smsConsent, unchecked by default. Does the native sender enforce smsConsent=true, or does standard SMS apply exclusively to Phone confirmation / optional-email links?
->
-> Is there a supported SMS-only disable control for these native messages while keeping confirmation, payment and cancellation emails enabled? Does Organization General → Disable SMS notifications for phone-only booking links cover our Email-confirmation links and all those triggers?
+After viewing the revised exact wording, the user instructed **отправляем**. Root sent it once
+to Milos in the existing ticket; fresh UI showed the complete outbound article, Just now,
+cleared composer and disabled Send. At approximately 08:31 UTC it remained Not seen yet, with
+no new reply included. These UI states establish submission, not reading or an answer.
+This supersedes the prepared/UNSENT snapshot from PR #21. No customer test or settings action
+was performed. Exact message sent:
 
-This new outbound follow-up requires the user's explicit sending instruction. Existing approval
-covered the earlier support question only. Production deployment and Done remain unauthorized;
-reviewed task PR merging is covered by the user's later standing merge instruction.
+> Hi Milos,
+>
+> Thank you for the detailed explanation — it helps us understand the unpaid-booking flow and native notifications.
+>
+> Could you please clarify three points for our SOLAGREE account?
+>
+> 1. Expired unpaid bookings: Your reply includes both “Flag OFF” and “Flag ON” alternatives. Which applies to our account? After the 30-minute hold expires, does the booking remain Pending, or does automatic cleanup cancel it? If cleanup cancels it, does that trigger cancellation emails or SMS?
+>
+> 2. Native SMS and consent: Our booking links use Email confirmation with a required email address. We also collect a required phone number and have an optional custom checkbox named smsConsent, unchecked by default. For native awaiting-payment, confirmation and cancellation messages, does SMS require smsConsent=true, or can collecting a phone number alone trigger it?
+>
+> 3. Disabling SMS while keeping email: Is there a supported way to disable those native SMS messages while keeping confirmation, payment and cancellation emails enabled? We found “Disable SMS notifications for phone-only booking links,” but its description refers to links where email is optional. Does that setting also cover our links with required email?
+>
+> Thanks again for your help!
+
+Production deployment and Done remain unauthorized; reviewed task PR merging is covered by
+the user's later standing merge instruction. Another outbound question, test or cleanup needs
+its own applicable authorization.

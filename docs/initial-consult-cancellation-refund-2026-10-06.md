@@ -74,6 +74,17 @@ financial authorization does not attest those previous deliveries. Earlier T3 co
 attestation is not extended to R1. Private contacts, record/payment/refund IDs and meeting credentials
 are confined to provider views; shareable evidence uses aliases R1 and R1-R.
 
+## Later original-link inspection — approximately 08:32 UTC
+
+Independent review inspected the original R1 canonical link in the authenticated Jill context.
+It now says **Your event has been rescheduled**, with Rescheduled status. Its only visible action
+is **View booking**, pointing to the observed canceled R1-R canonical record. No Pay, Cancel,
+Reschedule or Join control appears. The browser title still incorrectly says **Your booking has
+been confirmed | Cal.com**. This verifies the old link's current authenticated UI behavior;
+it does not accept anonymous/server-side enforcement. The in-app browser was unavailable, so
+anonymous inspection was not exercised. No replacement-link activation, lifecycle action or
+notification was performed; own research tabs closed.
+
 ## Acceptance matrix
 
 | Scope | Verified by code | Confirmed in services | External action / remaining acceptance |

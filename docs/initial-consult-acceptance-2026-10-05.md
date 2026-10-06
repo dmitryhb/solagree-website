@@ -1,12 +1,20 @@
 # Initial Consult acceptance preparation — October 5, 2026
 
+Later read-only acceptance at **08:33:52 UTC**: native Troubleshooter confirms matching Stacie/T3
+Cal booking also on Google Calendar and an isolated fifteen-minute post buffer. James/J2 Phone
+Cal booking and fifteen-minute buffer are explicit; its actual Google presence remains unknown.
+Masked Busy titles/no booking-ID bridge limit direct owner/destination/content acceptance.
+These observations are recorded in the provider clarification below and supersede initial
+whole-date/unknown-buffer snapshots. Existing appointments and reminders were preserved.
+
 Latest [provider clarification](initial-consult-provider-clarification-2026-10-06.md): independent
 08:11 UTC Stripe review confirms the same successful full $0.50 refund, updated card destination
 type reversal and no second object evident. Browser mapping is resolved to profile jill. Bank/card
 credit remains unconfirmed. New Cal support reply asserts a 30-minute unpaid hold but leaves two
 cleanup-flag template branches unresolved. Native SMS eligibility/consent for Email-confirmation
 links needs clarification; the discovered SMS-off switch explicitly scopes phone-only/optional-email
-links. Exact follow-up is prepared and unsent; no new financial, send or settings action occurred.
+links. The revised exact follow-up was sent once around 08:28 UTC after the user viewed and approved
+it; no reply included at the 08:31 check. No financial or settings action occurred.
 
 Latest [First Available Phone result](initial-consult-first-available-result-2026-10-06.md): user
 Confirm completed the separately approved free FA1 case. Independent actual QA confirms Taj,
@@ -32,6 +40,9 @@ one Refunded, one Incomplete; later list-label Reversed is recorded in the FA1 r
 delivery and bank/card credit remain unconfirmed. Canceled slot restored; current logged-in guest
 body canceled/no Zoom/active controls, but browser title still wrongly says confirmed. This early
 Jill-admin case does not establish guest cutoff/equality/DST, Zoom deletion or calendar removal.
+Later08:32 UTC authenticated old R1 link shows Rescheduled and only View booking pointing to
+canceled R1-R, with no Pay/Cancel/Reschedule/Join. Its confirmed browser title remains incorrect;
+anonymous/server enforcement is untested because the in-app browser is unavailable.
 
 Earlier controlled change — before cancellation: [Stacie manual reschedule result](initial-consult-manual-reschedule-2026-10-06.md).
 User-approved Jill-admin change was submitted by the user: October 9 00:30–01:00 → 02:00–02:30
@@ -405,11 +416,11 @@ Historical configuration evidence is not current saved state, delivery, calendar
 | First Available / Direct Choice | Selector resolves four visible paths and mounts one selected embed | Oct 5 public event titles/price; prior Sep 28 staging iframe paths matched | Real RR union/routing and direct booking host reconciliation |
 | Duration, price, payment mode | Site states 30 min / $60; provider owns checkout | Oct 5: all five $60 USD, Stripe Initial Consults, ON_BOOKING, Save disabled; hidden event $0.50; public duration 30m | Existing $0.50 dashboard reconciliation below; controlled $60/direct-routing acceptance remains |
 | Rules / hours / timezones | Website delegates availability to Cal.com | Oct 5: five rules rechecked (Jessica has closed range); RR common/restriction schedule off; Taj Mon–Fri09–17 PT, James Mon–Fri09–17 ET, Stacie Mon–Thu18:30–21 and Sat12–14 ET | Confirm approved hours and intended Taj destination; actual notice/buffer/horizon boundaries, calendar conflicts, concurrency |
-| Actual First Available Phone allocation | Existing independently reviewed source retained, no new source diff | October6 actualFA1 Confirmed/Taj/time/Phone/Florida; bookedstart excluded on test/productionFA and directTajdate disabled; attendee email/calendar/phone client-attested | Host-calendar/direct content, isolated buffer, broad external conflicts/fairness/concurrency and paid round-robin remain open; see FA1 result |
-| First Available / Direct Choice availability | Existing route mapping already independently checked | October6 07:32:31UTC native QA, Europe/Amsterdam/overlayOFF: First Available exactly matches enabled-slot union of Taj/Stacie/James on October8 (12) and October9 (18), no missing/extra UTC timestamps; no times selected/holds/bookings | Actual host allocation, external calendar conflicts, concurrency, other dates/timezones and separated-method activation remain open; see method-routing evidence |
+| Actual First Available Phone allocation | Existing independently reviewed source retained, no new source diff | October6 actualFA1 Confirmed/Taj/time/Phone/Florida; bookedstart excluded on test/productionFA and directTajdate disabled; attendee email/calendar/phone client-attested; later08:17:37 native Troubleshooter explicitly asserts matching Google presence and isolates15-minute Taj buffer | Direct Google destination/FA1-ID bridge/content, broad external conflicts/fairness/concurrency and paid round-robin remain open; see FA1 result |
+| First Available / Direct Choice availability | Existing route mapping already independently checked | October6 07:32:31UTC native QA, Europe/Amsterdam/overlayOFF: First Available exactly matches enabled-slot union of Taj/Stacie/James on October8 (12) and October9 (18), no missing/extra UTC timestamps; no times selected/holds/bookings | Actual freeFA1 Taj allocation is accepted separately; broader hosts/paid allocation, external calendar conflicts, concurrency, other dates/timezones and separated-method activation remain open; see method-routing/FA1 evidence |
 | Phone exactly once, required for both methods | Prepared separate mode/path validation/explicit method gate passed independent source QA; default remains mixed | Old four public mixed routes still duplicate Phone; isolated Phone-only/Zoom-only render and browser constraints PASS; four new closed Phone saved-field QA PASS. Free James Phone submitted after one required input; actual supplied number appears in Who/Where and confirmed admin record. October 6 invitation/calendar number client-confirmed; manual Google/Office/ICS still omit phone location | Authorized coordinated old-route Zoom conversion/new Phone opening/runtime deployment. Direct attachment/destination details, known manual export limitation, actual blank rejection and broader paid lifecycle remain open. Failed Custom attendee experiment not repeated |
 | Required Name/Email/State, optional Notes/SMS | Website does not add a duplicate contact form | Sep 15 approved fields; Oct 5 public form recheck; SMS unchecked | Confirm provider validation, no attribution field, current forms and consent on all five |
-| Calendar / Zoom | No website-side meeting generation | Taj Sep28 and Stacie T3 paid tests generated Zoom URLs; T3 calendar addition client-attested. Free James Zoom-intended Confirm completed: correct host/time, actual Cal Video; fresh October 6 check still shows Zoom Default with expired/revoked permissions. Free James Phone correct phone Where; received invitation/calendar number now client-confirmed. Manual exports omit phone location; configuration does not prove native write pipeline | James/client reauthorizes Zoom, warning clears, then separately approved retest. Earlier free James Cal Video inbox/calendar attestation, direct destination/event-detail inspection and arbitrary busy conflicts remain open. Existing bookings remain intact |
+| Calendar / Zoom | No website-side meeting generation | Taj Sep28 and Stacie T3 paid tests generated Zoom URLs; T3 calendar addition client-attested; later native Troubleshooter asserts matching Stacie/T3 and Taj/FA1 Google presence, and isolates15-minute post buffers for allthree hosts. James/J2 matching nativeGoogle presence remains unknown. Free James Zoom-intended Confirm completed: correct host/time, actual Cal Video; fresh October 6 check still shows Zoom Default with expired/revoked permissions. Free James Phone correct phone Where; received invitation/calendar number now client-confirmed. Manual exports omit phone location; configuration does not prove native write pipeline | James/client reauthorizes Zoom, warning clears, then separately approved retest. Earlier free James Cal Video inbox/calendar attestation, direct destination/event-detail inspection and arbitrary busy conflicts remain open. Existing bookings remain intact |
 | Historical T1/T2 and new T3 $0.50 tests | No fixture claims live-payment success | Earlier Oct5: T1/T2 succeeded and A1Incomplete, no refunds. After userT3: All4records, three Succeeded$0.50 with one charge/receipt per test and A1Incomplete | T3 immediate delivery client-attested; historical inbox/direct content and strict numeric-ID↔UID bridge if needed; later separate R1 refund does not refund T1/T2/T3; broad retry/concurrency/$60 acceptance remains |
 | Decline / abandon / retry / duplicate protection | Website invokes native checkout, no custom payments | Sep 28 cancel checkout left Pending payment/Unconfirmed; redirect to admin's empty public profile; rejected in cleanup. Error collecting card is T1 rescheduled original, not independent decline evidence; Oct 5 Stripe abandoned intent Incomplete, no payment method/charge/receipt | Slot-hold expiry and retry/concurrency acceptance; no usable unpaid confirmation; no duplicate charge/booking |
 | October 6 isolated Stacie abandon + recovery | No custom payments or new source change; fixtures do not accept native lifecycle | Same original intent recovered via observed history URL/user Pay: at the October6 post-recovery check All5 were4Succeeded/1Incomplete, one $0.50 charge; same UID Confirmed/Paid/Zoom/Stripe WEBHOOK. Slot/buffer released by06:41:12 then re-excluded06:45:02. Rendered receipt and one sent-history row PASS; inbox delivery unverified | Exact release TTL/cause, expired-link invalidation, historical unpaid-title inconsistency, anonymous/server gating/direct delivery/host-calendar evidence, decline/concurrency/double-click |
@@ -417,7 +428,7 @@ Historical configuration evidence is not current saved state, delivery, calendar
 | Hidden test reminder accuracy | Not website controlled | Oct 5 resumed: hidden excluded from production templates; 473280/473288 saved with $0.50 copy, now active only on hidden after specific Stacie approval; independent config QA PASS | T3 user checkout complete; actual reminder token rendering and 24h/1h dispatch/inbox delivery pending |
 | Refund | Site copy now says 2 calendar days | Saved rule retained; October6 early Jill-admin cancellation of R1-R after separate approval/user final action: one full original-charge $0.50 USD refund, object status succeeded, no duplicate; one Refund sent row. T3 preserved | Customer threshold before/equal/after/DST, refund inbox/bank credit, actual native calendar/Zoom removal; current early admin result does not establish guest boundary enforcement |
 | One manual reschedule | Site directs request to Solagree | Saved Attendee only/Always and same-host/Always. October6 approved Jill-admin test: original Rescheduled → same-Stacie replacement Confirmed/Paid/new time; same $0.50 charge retained, no new charge/refund; old slot available/new excluded; full Zoom reference retained; guest self-reschedule absent; one controlled complimentary change recorded | Own-Stacie workflow, actual Zoom meeting-time update, notices/native calendar update, anonymous/old guest-URL enforcement and production allowance ledger/second/late requests |
-| SMS | No requirement to enable SMS for email launch | Oct 5 all four SMS workflows show No active links; First Available switches off; prior zero credits not revalidated | Keep inactive; optional future sender/credits/predicate/mapping/consent acceptance. Not a blocker for email acceptance |
+| SMS | No requirement to enable SMS for email launch | Oct 5 all four SMS workflows show No active links; First Available switches off; October6 native Email-confirmation mode/customsmsConsent optional unchecked; narrow phone-only/optional-email SMS switchOFF. Credits0 used does not establish no nativeSMS | Keep workflows inactive; native eligibility/consent/SMS-only control clarification sent, answer pending. No unwanted SMS proved; optional SMS feature is not required for email acceptance |
 | Desktop/mobile, keyboard, fallback/privacy | Reviewed separate-method implementation and focused source/browser QA PASS; fixture tests do not prove native paid lifecycle | Approved full staging refresh from d4f344e: independent direct and Home/About client navigation, four correct single embeds, Jessica absent, desktop 1728/mobile 390 with no overflow PASS. Runtime remains mixed. Production remains legacy | Coordinated separated-method activation and production release require separate authorization; remaining screen-reader/provider empty/error and native lifecycle checks stay open |
 
 ## Public read-only recheck — earlier October 5, before role-policy implementation
@@ -646,24 +657,34 @@ snapshots/proposals and a support-question typo. Independent provider QA: PASS f
 workflow and hidden-event settings only. `git diff --check` passed. No source change in this
 supplement; previous source/fixture checks below were not rerun. Reusable memory: none.
 
-## Launch gates and rollback
+## Current launch gates and controlled next actions — October 6
 
-1. Release the prepared separate-method solution only with explicit coordinated provider/website
-   authorization, then finish actual field/number acceptance; old mixed Phone still duplicates.
-   Saved guest-only role restriction and own-host picker access are
-   verified within the stated bounds; finish actual paid manual-reschedule lifecycle and old-link enforcement.
-2. Historical T1/T2 dashboard reconciliation is complete within the stated bounds; finish receipt
-   inbox/strict ID bridge and active-host calendar/Zoom, payment failures/retry/slot release and email delivery.
-3. Obtain the provider-boundary decision and prove Stripe refund handling, not just Cal copy.
-4. Source review/code QA passed as documented below; finish current integrated browser acceptance and maintain explicit gaps.
-5. Reviewed task PR merges are authorized by the user's later instruction; production deployment and Done still need separate authorization. HIR-609 is already in develop,
-   PR #1 policy copy is now in develop after an external merge; production release remains unverified. Verify generated output has exactly
-   First Available/Taj/Stacie/James and no legacy primary request form at the booking route.
-6. Record approved production artifact and known-good rollback artifact. To disable paid booking,
-   remove public CTA exposure/use the website unavailable state **and** pause Cal.com booking windows
-   for active direct/RR links; hiding alone does not stop old direct links. Preserve all existing
-   appointments and accounts. Disable future email workflow scope only after considering scheduled
-   appointments; never cancel bookings, remove Stripe, refund, or revoke host integrations as rollback.
+Implementation/source checks and reviewed task PRs are complete within their recorded scope.
+The prepared separate-method runtime remains unactivated: old public mixed links still duplicate
+Phone. HIR-609 is in develop and remains the consultant-publication dependency. Production and
+Done still require separate user instruction.
+
+| Gate | Current evidence | Next concrete action |
+| --- | --- | --- |
+| James Zoom | Intended Zoom test created Cal Video; last actual account check shows expired/revoked Zoom authorization | James/client reconnects the existing Zoom in Cal.com. Verify warning clears and intended account/default; then obtain approval for one exact free hidden Zoom retest and its recipients, user final Confirm |
+| T3 reminders | Existing Stacie paid test confirmed; immediate messages/calendar client-attested; test reminder workflows scoped solely to preserved original test | Observe the existing 24h reminder **October7 00:30 Amsterdam / October6 22:30 UTC** and 1h reminder **October7 23:30 Amsterdam / October7 21:30 UTC**. Inspect actual amount/time/host/Zoom instructions and delivery, without resend/new booking. No future-monitor automation was requested |
+| Native unpaid cleanup/SMS | Release/recovery observed; support asserts30-minute hold but left OFF/ON alternatives; native SMS eligibility is unspecified | Await the specifically approved support follow-up sent08:28 UTC. Keep standard emails enabled and settings unchanged. Native SMS absence is not inferred from inactive workflows or credits |
+| Remaining controlled lifecycle/policy QA | Same-record recovery, Jill-admin one manual change, early cancellation/full original refund passed within bounds | Separately approve exact cases/recipients before unpaid cancellation/link invalidation, decline/concurrency, guest cutoff/equality/DST, own-organizer workflow or other notification-generating tests. Any real payment/refund final action is performed by the user |
+| Calendar/detail gaps | Attendee calendar/phone client-attested for James Phone and FA1; Taj native UI asserts matching Google presence/buffer | Taj/FA1 and Stacie/T3 native UI assert matching Google presence; allthree post buffers isolated. James/J2 native Google presence remains unknown. Retain this separately from direct destination/event-ID/content and controlled external busy-event conflict proof; additional writes/blocks/bookings need a controlled scenario |
+| Coordinated release | Separate Phone/Zoom source and closed Phone counterparts reviewed; staging source/routing QA passed | Obtain explicit authorization for old-route Zoom conversion, opening four Phone routes and website runtime/release. Verify all8 routes, active Taj/Stacie/James and Jessica pause; production deployment is not implied by PR merge |
+
+The completed early Jill-admin refund does not accept guest cutoff boundaries or bank/card credit.
+The completed manual change does not accept the own-Stacie path, actual Zoom-time/calendar updates
+or production enforcement of one complimentary change. Paid First Available and actual $60 checkout
+are not inferred from free allocation and $0.50 tests. Known manual calendar exports omit Phone;
+client-confirmed delivered invitation results remain distinct.
+
+For a later separately authorized release, record the approved production artifact and known-good
+rollback artifact. If booking must be paused, remove public CTA exposure/use website unavailable
+state **and** pause active Cal.com booking windows; hiding does not block old direct links.
+Preserve existing appointments/accounts and scheduled test reminders. Never cancel/refund bookings,
+remove Stripe or revoke host integrations as a rollback shortcut. After actual T3 delivery inspection,
+any cleanup notification/cancellation retains its own authorization requirements.
 
 ## Client draft — not sent
 

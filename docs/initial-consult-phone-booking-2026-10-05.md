@@ -4,6 +4,19 @@ HIR-246 → HIR-248 → HIR-249 → HIR-250; HIR-609 publication dependency reta
 This records an actual free Phone booking and a calendar export gap, not launch or paid acceptance.
 No attendee contacts, phone values, booking identifiers or meeting tokens are included.
 
+## Later October 6 native buffer evidence — 08:33:52 UTC
+
+Independent native Troubleshooter QA for actual Direct Choice James / Europe/Amsterdam October6
+identifies a Cal.com booking masked Busy at **21:00–21:30** (19:00–19:30 UTC). A separate expanded
+Booking buffer explicitly blocks **21:30–21:45** (19:30–19:45 UTC), isolating the fifteen-minute
+post buffer. This supersedes the initial whole-date/unknown-cause buffer gap below.
+
+The matching Cal reason does not say the booking also appears on Google Calendar. A separate
+Google busy reason concerns another interval; it is not J2-write proof. Native host Google presence,
+exact booking-ID/owner/destination/content bridge and controlled arbitrary external conflicts remain
+unaccepted. No new booking, send, calendar/settings/OAuth/financial action was performed.
+See [provider clarification](initial-consult-provider-clarification-2026-10-06.md).
+
 ## October 6 client attestation and fresh Zoom check
 
 The user confirms that the Phone number is present in the received invitation and calendar
@@ -110,7 +123,7 @@ are not claimed. Actual blank-submit/server validation remains untested.
 | Host/time/one record | Native provider owns booking | Independent matching Confirmed James record and UTC interval PASS; invitation/calendar number present client-confirmed October 6 | Direct attendee/host inbox/header and exact calendar owner/destination inspection, arbitrary busy conflicts |
 | Phone calendar content | No website calendar export engine | Received invitation/calendar number client-confirmed. Manual Google/Office/ICS correct time but phone location absent | Direct attachment/destination details remain uninspected; reconcile known manual export limitation for release |
 | Free payment/SMS isolation | No payment/SMS engine added | Payments/all eight event workflows OFF; global SMS inactive; bounded Stripe All list unchanged | Free result does not cover paid lifecycle or directly prove stored SMS No/delivery absence |
-| Conflicts/buffers | Availability delegated to provider | Entire October 6 unavailable; cause not isolated | Controlled busy/conflict/adjacent-slot evidence; no additional bookings or cleanup are authorized |
+| Conflicts/buffers | Availability delegated to provider | Initial whole-date cause unknown; later native Troubleshooter isolates matching Cal booking and15-minute James post buffer | Controlled external busy/conflict evidence; actual J2 Google presence/ID bridge; no additional bookings or cleanup authorized |
 | James Zoom | Website does not create meetings | Earlier Zoom-intended booking uses Cal Video; fresh October 6 check still shows Zoom Default and expired/revoked permissions | James/client reconnects existing Zoom, confirm warning clears, then separately approved controlled retest |
 
 Existing Cal Video James and paid Stacie records/reminder bindings remain intact. No agent
