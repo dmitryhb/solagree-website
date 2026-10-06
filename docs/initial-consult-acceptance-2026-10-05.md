@@ -1,5 +1,18 @@
 # Initial Consult acceptance preparation — October 5, 2026
 
+Later R2 manual cleanup, verified by **11:55:21 UTC / 13:55:21 Amsterdam** October 6: user final
+Cancel is visible as Canceled/Cancelled history; exact old payment link explicitly says paying
+is no longer possible and renders no payment form. Original Stripe intent remains Incomplete /
+missing method / one creation event; no charge/refund shown. Hidden R2 window restored Sep16–16,
+Save disabled after reload, public route closed. This supersedes earlier R2 Pending/open-window
+and pending-cleanup-approval snapshots. Automatic cleanup/internal flag, actual cancellation-mail
+delivery and anonymous/server bypass are not inferred. Native admin now shows 6.9.12-h; no causal
+conclusion versus earlier 6.9.11-h. See the [R2 result](initial-consult-unpaid-expiry-result-2026-10-06.md).
+Independent native cleanup QA **11:56:12 UTC** confirms Canceled/closed event/unchanged six-row
+Stripe ledger and preservation of Confirmed/Paid T3, exact reminder scopes and inactive SMS.
+Old-link payment-blocking display is root-observed; independent inspection was unavailable because
+the root-owned tab was inaccessible and a bounded history lookup lacked the exact original match.
+
 Later preparation: the [coordinated release runbook](initial-consult-release-runbook-2026-10-06.md)
 contains exact public keys/eight paths, per-route acceptance and activation/rollback/preservation
 steps. No build/deployment or native setting changed. Independent read-only James calendar recheck
@@ -723,7 +736,7 @@ Done still require separate user instruction.
 | James Zoom | Intended Zoom test created Cal Video; last actual account check shows expired/revoked Zoom authorization | James/client reconnects the existing Zoom in Cal.com. Verify warning clears and intended account/default; then obtain approval for one exact free hidden Zoom retest and its recipients, user final Confirm |
 | T3 reminders | Existing Stacie paid test confirmed; immediate messages/calendar client-attested; test reminder workflows scoped solely to preserved original test | Observe the existing 24h reminder **October7 00:30 Amsterdam / October6 22:30 UTC** and 1h reminder **October7 23:30 Amsterdam / October7 21:30 UTC**. Inspect actual amount/time/host/Zoom instructions and delivery, without resend/new booking. No future-monitor automation was requested |
 | Native unpaid cleanup/SMS | Release/recovery observed; support repeated OFF/ON alternatives. Later correction says no built-in SMS for required-email links; custom checkbox not read | R2 released starts by +31 minutes but remained Pending after at least fifty minutes. Request one current branch/flag scope from Cal.com; no account changes or additional sends are implied. Keep standard emails unchanged; direct SMS absence is not inferred |
-| Remaining controlled lifecycle/policy QA | Same-record recovery, Jill-admin one manual change, early cancellation/full original refund passed within bounds | Separately approve exact cases/recipients before unpaid cancellation/link invalidation, decline/concurrency, guest cutoff/equality/DST, own-organizer workflow or other notification-generating tests. Any real payment/refund final action is performed by the user |
+| Remaining controlled lifecycle/policy QA | Same-record recovery, Jill-admin one manual change, early cancellation/full original refund passed within bounds; later manual R2 cancellation blocks the exact old payment-link display | Separately approve exact cases/recipients before additional cancellation/link-variant tests, decline/concurrency, guest cutoff/equality/DST, own-organizer workflow or other notification-generating tests. Any real payment/refund final action is performed by the user |
 | Calendar/detail gaps | Attendee calendar/phone client-attested for James Phone and FA1; Taj native UI asserts matching Google presence/buffer | Taj/FA1 and Stacie/T3 native UI assert matching Google presence; allthree post buffers isolated. James/J2 native Google presence remains unknown. Retain this separately from direct destination/event-ID/content and controlled external busy-event conflict proof; additional writes/blocks/bookings need a controlled scenario |
 | Coordinated release | Separate Phone/Zoom source and closed Phone counterparts reviewed; staging source/routing QA passed | Obtain explicit authorization for old-route Zoom conversion, opening four Phone routes and website runtime/release. Verify all8 routes, active Taj/Stacie/James and Jessica pause; production deployment is not implied by PR merge |
 

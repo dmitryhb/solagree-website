@@ -19,6 +19,12 @@ to Milos in existing ticket 215476247361743; fresh UI by October 6 **10:30:36 UT
 showed the complete outbound article, Not seen yet, and empty composer with Send disabled.
 No reply or configuration change is inferred. This supersedes the historical unsent snapshots below.
 
+Later user-performed R2 manual cancellation is visible by **11:55:21 UTC / 13:55:21 Amsterdam**:
+Canceled/Cancelled history and exact old payment link explicitly payment-unavailable/no form.
+Same Stripe intent remains Incomplete/missing method/one creation event. Hidden test range restored
+Sep16–16 and public route closed. See the R2 packet for scope and version/timezone limits;
+manual cleanup does not resolve the internal automatic-cleanup branch or prove mail/calendar removal.
+
 ## Current Stripe refund evidence — independent review, 08:11 UTC
 
 The user resolved the requested browser-session mapping to the exposed Chrome profile **jill**.
