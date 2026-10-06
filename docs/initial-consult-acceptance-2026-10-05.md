@@ -1,5 +1,11 @@
 # Initial Consult acceptance preparation — October 5, 2026
 
+Next controlled preparation: [free First Available Phone test](initial-consult-first-available-preparation-2026-10-06.md).
+Independent saved-state/candidate QA PASS: hidden/payment OFF, Taj/Stacie/James, one required native
+phone, eight workflows OFF; October8 01:00–01:30 Amsterdam enabled. No booking/notice submitted.
+Exact recipient/scenario approval and user final Confirm remain required. Free preparation does not
+accept actual assignment, calendar write, paid round-robin lifecycle or production activation.
+
 Latest controlled result: [early Stacie cancellation and full refund](initial-consult-cancellation-refund-2026-10-06.md).
 The separately approved user final Cancel event canceled R1-R. Independent Stripe review verifies
 one original-payment refund: $0.50 USD, status succeeded, exact original charge/intent association,
