@@ -12,7 +12,8 @@ Stacie T3 and free James Cal Video/Phone records remain intact. James Zoom still
 account-holder reauthorization; this Stacie preparation does not depend on that repair.
 
 Separate event **7357581**, path `initial-consults/test-stacie-payment-lifecycle-20261006`,
-is Hidden and closed on the historical September 16–16 window. No current slot is available.
+was initially Hidden and closed on the historical September 16–16 window. The authorized
+October 6 window opening below supersedes that initial closed-window state.
 It was duplicated from the existing hidden paid test without modifying that source event.
 Title: **TEST — Stacie payment lifecycle — no consultation**.
 It is a technical 30-minute / $0.50 USD test paid to SOLAGREE, with no consultation or live call.
@@ -36,13 +37,37 @@ payment-check event as their one active link. Production 450309/450313 retain ni
 each; all four global SMS workflows have no active links. New saved settings retain two-hour
 notice, zero pre / fifteen-minute post buffer, Attendee only / Always rescheduling restriction,
 Always same host, cancellation enabled and past/cancelled-link rebooking OFF. Reload Save disabled.
-Public October has no availability and explicitly reports booking ended September 16.
+The initial closed-window public check reported booking ended September 16.
 
 No actual Zoom creation, payment, pending notice, slot hold/release, retry, decline, refund or
 manual-change behavior is accepted by these saved configuration checks. Existing source QA
 is retained; no code changed or equivalent source checks repeated. Diff/local-link checks PASS.
 
-## Proposed controlled test sequence — not authorized for submission
+## October 6 authorized abandon preparation
+
+The user approved the exact abandon-without-payment scenario and controlled attendee/host
+recipients, including reuse of the previously supplied phone and State. Only event 7357581's
+fixed date range changed to October 8–9, 2026. Hidden is retained; it is not access control or
+an exact-slot restriction. Reload confirmed Save disabled. Fresh independent native QA PASS
+confirms the retained $0.50 USD ON_BOOKING / two-calendar-day refund settings and all eight
+workflows OFF. Independent artifact review PASS within its bounded scope.
+
+The approved public slot is October 9, 00:30–01:00 Europe/Amsterdam, bound to
+`2026-10-08T22:30:00.000Z`. Fresh public-form QA confirms one blank required universal phone,
+State selector and optional unchecked SMS. Required State is retained in saved configuration;
+server-side rejection of an omitted State was not tested. Root selected that same slot and
+filled only the approved contacts/phone/State; SMS remains unchecked and no guests were added.
+The prepared form is handed to the user at **Pay to book**. The agent did not accept Terms,
+click Pay to book, open payment, submit, enter card data or make a payment.
+
+The user must open the payment step and close it without entering a card or paying. Native
+pending notices for the approved recipients are within this scenario; SMS/reminders are OFF.
+No actual booking, intent, charge, receipt, hold expiry or slot release is yet accepted.
+Successful retry, financial cleanup and cancellation/change notices remain separately gated.
+Private contact values are confined to approved provider views; safe configuration artifacts
+are under the local payment-lifecycle-preparation evidence directory.
+
+## Controlled test sequence — abandon approved, later actions pending
 
 1. Revalidate the existing historical ledger and event configuration. Separately agree the exact
    controlled attendee/host recipients, date/time and possible native pending-payment notices.
@@ -59,20 +84,21 @@ is retained; no code changed or equivalent source checks repeated. Diff/local-li
    approval. The user performs financial cleanup. Preserve T3's separately approved future
    reminders until inspected; cancellation can trigger a real refund and is not a harmless cleanup.
 
-The prospective fee does not authorize a charge. No booking form data, payment step, Terms,
-submission, notification, card, charge or refund was entered/performed during preparation.
+The prospective fee does not authorize a charge. The initial isolated-event preparation
+entered no contacts or payment step. The later authorized form preparation above entered
+approved contacts only; payment step, Terms, submission, card, charge and refund remain untouched.
 
 | Scope | Code | Services | Required external action |
 | --- | --- | --- | --- |
-| Website/native checkout | Existing reviewed source invokes native Cal.com checkout; no custom payment engine | New hidden closed event uses $0.50/Stripe ON_BOOKING; independent preparation review/QA PASS | Exact controlled test approval, then narrow test window/actual form recheck and user opening payment step |
-| Abandon/retry/duplicates | Fixtures do not prove native payment behavior | Existing ledger has three Succeeded $0.50 and one Incomplete; new event has no approved submission | Hold/release, decline/retry/concurrency, one charge/receipt/booking and no usable unpaid confirmation |
+| Website/native checkout | Existing reviewed source invokes native Cal.com checkout; no custom payment engine | Hidden test window opened after exact abandon approval; $0.50/Stripe ON_BOOKING and actual form readiness independently checked | User opens payment step and abandons without card/payment |
+| Abandon/retry/duplicates | Fixtures do not prove native payment behavior | Existing ledger has three Succeeded $0.50 and one Incomplete; new test has only an approved prepared form | Actual abandon hold/release/no-charge evidence; separately approved decline/retry/concurrency, one charge/receipt/booking and no usable unpaid confirmation |
 | Refund/manual change | Reviewed policy copy uses two calendar days and one manual free request | Prepared fee/refund settings are not a Stripe refund or reschedule | Specific notice/scenario approval; user financial actions; actual retention/boundary evidence |
 | Launch/publication | HIR-609 roster and separate-method source preparation retained | Public events/active runtime unchanged | Independent full acceptance and separately authorized coordinated production release/Done |
 
-The planned first abandon case is October 9, 00:30–01:00 Europe/Amsterdam / October 8,
-22:30–23:00 UTC / October 8, 18:30–19:00 America/New_York, subject to fresh availability
-after the exact scenario/recipient approval. Only the narrow test window is opened afterward.
-No card data or successful payment is included in that proposed case. A successful retry's
+The approved first abandon case is October 9, 00:30–01:00 Europe/Amsterdam / October 8,
+22:30–23:00 UTC / October 8, 18:30–19:00 America/New_York. Fresh availability and the
+narrow window were checked after approval; only that slot was selected for the handoff.
+No card data or successful payment is included in this case. A successful retry's
 $0.50 SOLAGREE payment and any cleanup/change notices require separate approval/user action.
 Private recipient/contact values are confined to the approval/provider views.
 
