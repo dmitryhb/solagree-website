@@ -132,10 +132,14 @@ The new R2 test window remains open and Hidden; record cancellation, old-link ac
 its closed window remain separate controlled cleanup work. Preservation does not accept future
 reminder delivery, native expired-link behavior or an internal cleanup flag.
 
-## Narrow Cal.com follow-up — prepared, not sent
+## Narrow Cal.com follow-up — approved and sent
 
-Recipient: Milos in the existing approved Cal.com support conversation. This is a new message;
-exact user approval is required before sending. It contains no attendee contact, booking token,
+Recipient: Milos in the existing Cal.com support conversation (ticket 215476247361743).
+After viewing the exact draft, the user explicitly instructed sending it. The agent sent it once;
+by **10:30:36 UTC / 12:30:36 Amsterdam** on October 6, fresh UI showed the complete outbound article,
+Just now / Not seen yet, and an empty composer with Send disabled. This confirms submission,
+not that support has read or answered it. It supersedes this section's earlier unsent snapshot.
+It contains no attendee contact, booking token,
 payment identifier, card data or secret. No configuration change is requested.
 
 > Thank you for clarifying native SMS for required-email bookings.

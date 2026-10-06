@@ -1,5 +1,11 @@
 # Initial Consult acceptance preparation — October 5, 2026
 
+The user approved the exact narrow R2 cleanup question to Milos in existing Cal.com ticket
+215476247361743. Sent once and visibly verified by October 6 **12:30:36 Amsterdam / 10:30:36 UTC**:
+complete outbound article, Not seen yet, empty composer and Send disabled. Submission is confirmed;
+support reading/reply and the internal cleanup branch remain unresolved. No test, payment,
+cancellation or setting change accompanied this message. Exact text is in the R2 result below.
+
 Current R2 [unpaid-expiry observation](initial-consult-unpaid-expiry-result-2026-10-06.md): the user
 approved the exact no-card scenario and recipients, then completed the checkout-opening handoff.
 Independent baseline verifies Pending / Unconfirmed Stacie at the approved interval, no usable
