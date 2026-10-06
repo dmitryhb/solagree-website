@@ -188,8 +188,8 @@ watchEffect(() => {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Terms of Service (version {{ terms.current.version }})
-        </a><span v-else>Terms of Service</span>.
+          Partner Terms (version {{ terms.current.version }})
+        </a><span v-else>Partner Terms</span>.
       </FormCheckboxField>
 
       <p v-if="!terms?.available" class="form-field__hint" role="status">

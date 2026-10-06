@@ -323,3 +323,5 @@ bun run preview
 ```
 
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+
+The approved October 6, 2026 Partner Terms snapshot and publication/rollback rules are documented in [Partner Terms](docs/partner-terms.md). Its versioned directory must survive later deployments.
