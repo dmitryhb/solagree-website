@@ -1,5 +1,19 @@
 # Initial Consult acceptance preparation — October 5, 2026
 
+Fresh saved-state QA at **08:46:14 UTC** confirms all five original events retain 30 minutes,
+$60 USD, Stripe collect-on-booking and refund 2 calendar days. Four active routes retain two-hour
+notice, zero pre / fifteen-minute post buffer, fourteen-calendar-day horizon and Always14 unchecked.
+First Available has only Taj/James/Stacie, medium priorities and Maximize availability; original
+direct routes have sole matching hosts, medium priorities and **Load balancing**. Jessica remains
+Hidden with the closed September16 range. No settings changed. This accepts saved configuration,
+not actual $60 payment or refund boundaries; see provider clarification.
+
+Later displayed-timezone acceptance at **08:43 UTC**: hidden First Available Phone renders the
+same eleven enabled UTC starts across Amsterdam October8 and the corresponding New York/
+Los Angeles October7–8 partitions. Zero missing/extra UTC timestamps in the common day window;
+three starts roll over to the prior US day. This is native display/date-rollover acceptance, not
+DST or booking/refund behavior. See the provider clarification for exact timestamps.
+
 Later read-only acceptance at **08:33:52 UTC**: native Troubleshooter confirms matching Stacie/T3
 Cal booking also on Google Calendar and an isolated fifteen-minute post buffer. James/J2 Phone
 Cal booking and fifteen-minute buffer are explicit; its actual Google presence remains unknown.
@@ -412,12 +426,12 @@ Historical configuration evidence is not current saved state, delivery, calendar
 
 | Criterion | Verified by code | Confirmed in services | Required external action / acceptance |
 | --- | --- | --- | --- |
-| Active roster / pause | HIR-609 filters before event validation; Jessica profile retained; in develop | Oct 5 admin: Maximize availability; three medium-priority hosts, weights off; direct one-host assignments visible. Jessica Hidden, ended Sep 16 window; old direct URL blocked | Real booking host reconciliation; later approved release must retain Jessica pause |
+| Active roster / pause | HIR-609 filters before event validation; Jessica profile retained; in develop | October 6 fresh assignments: FA Taj/James/Stacie, medium priorities, Maximize availability; original direct routes sole matching host, medium, Load balancing; fixed/weights/future OFF. Jessica Hidden/closed Sep16 range; earlier old URL blocked | Real booking host reconciliation; later approved release must retain Jessica pause |
 | First Available / Direct Choice | Selector resolves four visible paths and mounts one selected embed | Oct 5 public event titles/price; prior Sep 28 staging iframe paths matched | Real RR union/routing and direct booking host reconciliation |
-| Duration, price, payment mode | Site states 30 min / $60; provider owns checkout | Oct 5: all five $60 USD, Stripe Initial Consults, ON_BOOKING, Save disabled; hidden event $0.50; public duration 30m | Existing $0.50 dashboard reconciliation below; controlled $60/direct-routing acceptance remains |
-| Rules / hours / timezones | Website delegates availability to Cal.com | Oct 5: five rules rechecked (Jessica has closed range); RR common/restriction schedule off; Taj Mon–Fri09–17 PT, James Mon–Fri09–17 ET, Stacie Mon–Thu18:30–21 and Sat12–14 ET | Confirm approved hours and intended Taj destination; actual notice/buffer/horizon boundaries, calendar conflicts, concurrency |
+| Duration, price, payment mode | Site states 30 min / $60; provider owns checkout | October 6, 08:46:14 UTC: five originals 30 min / $60 USD / Paid ON / Stripe (Initial Consults) / collect on booking / refund 2 calendar days / Save disabled; hidden paid tests separately $0.50 | Existing $0.50 dashboard reconciliation below; controlled $60/direct-routing acceptance remains |
+| Rules / hours / timezones | Website delegates availability to Cal.com | October 6 fresh four active limits: notice 2h / pre 0 / post 15 / horizon 14 calendar days / Always14 OFF; Jessica closed range. Earlier schedules: RR common/restriction OFF; Taj Mon–Fri09–17 PT, James Mon–Fri09–17 ET, Stacie Mon–Thu18:30–21 / Sat12–14 ET | Confirm approved hours and intended Taj destination; actual notice/buffer/horizon boundaries, calendar conflicts, concurrency |
 | Actual First Available Phone allocation | Existing independently reviewed source retained, no new source diff | October6 actualFA1 Confirmed/Taj/time/Phone/Florida; bookedstart excluded on test/productionFA and directTajdate disabled; attendee email/calendar/phone client-attested; later08:17:37 native Troubleshooter explicitly asserts matching Google presence and isolates15-minute Taj buffer | Direct Google destination/FA1-ID bridge/content, broad external conflicts/fairness/concurrency and paid round-robin remain open; see FA1 result |
-| First Available / Direct Choice availability | Existing route mapping already independently checked | October6 07:32:31UTC native QA, Europe/Amsterdam/overlayOFF: First Available exactly matches enabled-slot union of Taj/Stacie/James on October8 (12) and October9 (18), no missing/extra UTC timestamps; no times selected/holds/bookings | Actual freeFA1 Taj allocation is accepted separately; broader hosts/paid allocation, external calendar conflicts, concurrency, other dates/timezones and separated-method activation remain open; see method-routing/FA1 evidence |
+| First Available / Direct Choice availability | Existing route mapping already independently checked | October6 07:32:31UTC native QA, Europe/Amsterdam/overlayOFF: First Available exactly matches enabled-slot union of Taj/Stacie/James on October8 (12) and October9 (18), no missing/extra UTC timestamps; no times selected/holds/bookings | Actual freeFA1 Taj allocation and later11-start display/date-rollover equivalence across Amsterdam/NewYork/LosAngeles accepted separately; broader hosts/paid allocation, external calendar conflicts, concurrency, other dates/DST and separated-method activation remain open; see method-routing/FA1/provider evidence |
 | Phone exactly once, required for both methods | Prepared separate mode/path validation/explicit method gate passed independent source QA; default remains mixed | Old four public mixed routes still duplicate Phone; isolated Phone-only/Zoom-only render and browser constraints PASS; four new closed Phone saved-field QA PASS. Free James Phone submitted after one required input; actual supplied number appears in Who/Where and confirmed admin record. October 6 invitation/calendar number client-confirmed; manual Google/Office/ICS still omit phone location | Authorized coordinated old-route Zoom conversion/new Phone opening/runtime deployment. Direct attachment/destination details, known manual export limitation, actual blank rejection and broader paid lifecycle remain open. Failed Custom attendee experiment not repeated |
 | Required Name/Email/State, optional Notes/SMS | Website does not add a duplicate contact form | Sep 15 approved fields; Oct 5 public form recheck; SMS unchecked | Confirm provider validation, no attribution field, current forms and consent on all five |
 | Calendar / Zoom | No website-side meeting generation | Taj Sep28 and Stacie T3 paid tests generated Zoom URLs; T3 calendar addition client-attested; later native Troubleshooter asserts matching Stacie/T3 and Taj/FA1 Google presence, and isolates15-minute post buffers for allthree hosts. James/J2 matching nativeGoogle presence remains unknown. Free James Zoom-intended Confirm completed: correct host/time, actual Cal Video; fresh October 6 check still shows Zoom Default with expired/revoked permissions. Free James Phone correct phone Where; received invitation/calendar number now client-confirmed. Manual exports omit phone location; configuration does not prove native write pipeline | James/client reauthorizes Zoom, warning clears, then separately approved retest. Earlier free James Cal Video inbox/calendar attestation, direct destination/event-detail inspection and arbitrary busy conflicts remain open. Existing bookings remain intact |
@@ -689,9 +703,9 @@ any cleanup notification/cancellation retains its own authorization requirements
 ## Client draft — not sent
 
 > Initial Consults are 30 minutes and cost $60 USD, with Phone or Zoom and Taj, Stacie or James.
-> We have aligned the cancellation wording with Cal.com's native “2 calendar days before” refund
-> setting. This replaces the previous promise of exactly 48 elapsed hours. We are validating the
-> provider's precise cutoff, including timezone and daylight-saving edge cases, before launch.
+> We have updated the cancellation wording to “2 calendar days before” to match Cal.com's native
+> refund setting. We are validating the applicable cutoff, including timezone and daylight-saving
+> boundaries, and will confirm the final cutoff before launch.
 > One complimentary reschedule is requested through Solagree and handled manually. Email
 > confirmations and reminders are the launch channel; SMS remains optional and requires separate
 > consent. We will confirm launch readiness after the remaining payment, calendar and email checks.

@@ -112,6 +112,64 @@ new slots/holds/bookings, calendar edits, sends, financial or OAuth actions were
 Own diagnostic tab closed; reusable memory none. See the
 [James Phone result](initial-consult-phone-booking-2026-10-05.md).
 
+## Fresh original-event saved state — independent QA, 08:46:14 UTC
+
+All **five original** production event configurations retain **30 minutes**, Paid booking ON,
+Stripe (Initial Consults), **$60 USD**, Collect payment on booking and refund **If cancelled
+2 calendar days before**. The four active routes retain **two-hour notice**, **zero pre-buffer**,
+**fifteen-minute post-buffer**, horizon **fourteen calendar days**, with Always14 days available
+unchecked. These are saved controls, not actual $60 checkout or cutoff-boundary acceptance.
+The four prepared separate Phone counterparts are outside this fresh original-event audit;
+their earlier closed-window preparation remains separately documented.
+
+| Original route | Fresh assignment / distribution / pause |
+| --- | --- |
+| First Available | Taj, James and Stacie only; medium priorities; Maximize availability |
+| Direct Taj | Sole Taj; medium priority; Load balancing |
+| Direct Stacie | Sole Stacie; medium priority; Load balancing |
+| Direct James | Sole James; medium priority; Load balancing |
+| Jessica | Sole Jessica; Hidden; closed September16–16,2026 date range |
+
+Fixed hosts, weights and future-member inclusion remain OFF on the four active routes.
+The fresh direct-route distribution readback is **Load balancing**; do not extend historical
+Maximize-availability statements about First Available or prepared Phone counterparts to these
+original direct controls. Each direct route still has only its matching host.
+Save remained disabled, no edits/slots/holds/bookings, own tabs closed and parent tabs preserved.
+This fresh audit verifies the user-requested five-event refund-setting persistence and Jessica
+pause, separately from calendar, allocation, payment and policy behavior.
+
+## Displayed timezone/date rollover — independent review, approximately 08:43 UTC
+
+Hidden First Available Phone event7360837 was compared using rendered slot-button `data-time`
+UTC attributes and `aria-label` dates/times. The common window is **October7 22:00 UTC through
+October8 22:00 UTC**, corresponding to the Amsterdam October8 local day. Each zone presents
+exactly **eleven enabled starts** in that window, with **zero missing/extra UTC timestamps**.
+
+| Zone / local date | Rendered enabled starts in the common window |
+| --- | --- |
+| Europe/Amsterdam / October8 | 01:30, 02:00, 02:30, 16:30, 17:00, 19:00, 19:30, 20:00, 20:30, 21:00, 21:30 |
+| America/New_York / October7 | 19:30, 20:00, 20:30 |
+| America/New_York / October8 | 10:30, 11:00, 13:00, 13:30, 14:00, 14:30, 15:00, 15:30 |
+| America/Los_Angeles / October7 | 16:30, 17:00, 17:30 |
+| America/Los_Angeles / October8 | 07:30, 08:00, 10:00, 10:30, 11:00, 11:30, 12:00, 12:30 |
+
+Exact UTC set: October7 **23:30**; October8 **00:00, 00:30, 14:30, 15:00, 17:00, 17:30,
+18:00, 18:30, 19:00, 19:30**. Three early Amsterdam starts belong to October7 in the US;
+the remaining eight belong to October8. Whole US local-day lists each had thirteen starts,
+so comparing whole local days would wrongly include starts outside the common window.
+This accepts displayed timezone equivalence and day rollover only, not DST, refund boundaries,
+calendar writes, submissions or lifecycle behavior. Amsterdam and overlay ON restored, own
+research tab closed; no time selection, holds, form entry or saved provider change.
+
+## Account-holder handoff — prepared, not sent
+
+James/client needs to reconnect **James's existing Zoom account** through Cal.com → Settings →
+Conferencing → Zoom → Reinstall app, retaining Zoom as default and the existing account/scope.
+The account holder completes sign-in; no password or code should be shared in chat. Afterward,
+verify the expired/revoked warning clears and the intended Zoom account remains selected.
+Do not infer that an existing Cal Video booking converts to Zoom. A new exact free hidden retest
+and its attendee/host notifications still need scenario approval and user final Confirm.
+
 ## Acceptance matrix
 
 | Scope | Verified by code | Confirmed in services / client-attested | Requires external action or evidence |
