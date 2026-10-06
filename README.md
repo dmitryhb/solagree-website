@@ -94,6 +94,10 @@ provider configuration and must be run deliberately outside `npm test`.
 ## Portal API integration
 
 The attorney application and Solagree consult forms submit to the Solagree Portal API.
+
+Attorney and CDFA forms also read the portal's current approved Terms of Service from `GET /api/public/professional-terms` in the browser. Until the portal publishes an approved document URL and version, both application forms show that submissions are unavailable. The website submits the displayed version and URL with the checkbox so a changed document requires review again. Configure the website origin in the portal's public attorney/CDFA origin allowlists. The website is static, so this lookup depends on the live portal endpoint after deployment.
+
+If the portal reports that terms changed while a form was open, the form refreshes the terms link/version and clears the checkbox so the applicant must review the new version before retrying.
 The header login link points to the Solagree Portal web app.
 
 ```bash
@@ -319,3 +323,5 @@ bun run preview
 ```
 
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+
+The approved October 6, 2026 Partner Terms snapshot and publication/rollback rules are documented in [Partner Terms](docs/partner-terms.md). Its versioned directory must survive later deployments.

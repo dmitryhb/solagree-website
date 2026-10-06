@@ -30,4 +30,6 @@ export interface CdfaApplicationFormState {
   clientSource: CdfaClientSource
   consultationInterest: CdfaConsultationInterest
   termsAccepted: boolean
+  termsVersion: string
+  termsUrl: string
 }

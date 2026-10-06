@@ -3,6 +3,7 @@ import {
   getCdfaApplicationSubmissionErrorMessage,
   submitCdfaApplication
 } from '~/services/cdfa-application-api'
+import { refreshTermsAfterVersionConflict } from '~/utils/professional-terms'
 import { usePortalFormSubmissionOptions } from '~/composables/usePortalFormSubmissionOptions'
 import { focusPageDestination } from '~/utils/focus-destination'
 import { validateNativeForm } from '~/utils/native-form-validation'
@@ -19,7 +20,9 @@ export interface UseCdfaApplicationFormReturn {
   handleSubmit: () => Promise<void>
 }
 
-export const useCdfaApplicationForm = (): UseCdfaApplicationFormReturn => {
+export const useCdfaApplicationForm = (
+  options: { refreshTerms?: () => Promise<void> } = {}
+): UseCdfaApplicationFormReturn => {
   const portalSubmissionOptions = usePortalFormSubmissionOptions()
   const { trackEvent } = useGoogleAnalytics()
   const formEl = ref<HTMLFormElement | null>(null)
@@ -60,9 +63,14 @@ export const useCdfaApplicationForm = (): UseCdfaApplicationFormReturn => {
       return true
     },
     getFormState: () => form,
-    submit: (formState) => submitCdfaApplication(formState, {
-      ...portalSubmissionOptions
-    }),
+    submit: async (formState) => {
+      try {
+        return await submitCdfaApplication(formState, { ...portalSubmissionOptions })
+      } catch (error) {
+        await refreshTermsAfterVersionConflict(error, options.refreshTerms, () => { form.termsAccepted = false })
+        throw error
+      }
+    },
     onSuccess: async () => {
       trackEvent('partner_application_submitted', {
         partner_type: 'cdfa',

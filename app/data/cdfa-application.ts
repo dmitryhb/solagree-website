@@ -59,5 +59,7 @@ export const cdfaApplicationInitialState = {
   adrNetworks: '',
   clientSource: '',
   consultationInterest: '',
-  termsAccepted: false
+  termsAccepted: false,
+  termsVersion: '',
+  termsUrl: ''
 } as const

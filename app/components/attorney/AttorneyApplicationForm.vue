@@ -1,10 +1,13 @@
 <script setup lang="ts">
+import { watchEffect } from 'vue'
 import FormCheckboxField from '~/components/form/FormCheckboxField.vue'
+import { useProfessionalTerms } from '~/composables/useProfessionalTerms'
 import {
   attorneyMediationOptions,
   attorneyYesNoOptions
 } from '~/data/attorney-application'
 
+const { terms, refresh: refreshTerms } = useProfessionalTerms()
 const {
   currentYear,
   formEl,
@@ -18,7 +21,12 @@ const {
   removeLicenseNumber,
   updateLicenseNumber,
   handleSubmit
-} = useAttorneyApplicationForm()
+} = useAttorneyApplicationForm({ refreshTerms })
+watchEffect(() => {
+  form.termsVersion = terms.value?.current?.version ?? ''
+  form.termsUrl = terms.value?.current?.url ?? ''
+  form.termsAccepted = false
+})
 </script>
 
 <template>
@@ -194,21 +202,28 @@ const {
       <FormCheckboxField
         v-model="form.termsAccepted"
         name="termsAccepted"
+        :disabled="!terms?.available"
         required
       >
         I have read and agree to the
-        <NuxtLink
-          to="/legal/terms-of-service"
+        <a
+          v-if="terms?.current"
+          :href="terms.current.url"
           target="_blank"
           rel="noopener noreferrer"
         >
-          terms and conditions
-        </NuxtLink>.
+          Partner Terms (version {{ terms.current.version }})
+        </a><span v-else>Partner Terms</span>.
       </FormCheckboxField>
+
+      <p v-if="!terms?.available" class="form-field__hint" role="status">
+        Applications are temporarily unavailable until the approved terms are published.
+      </p>
 
       <SiteFormSubmit
         label="SEND"
         :submitting="submitting"
+        :disabled="!terms?.available"
       />
 
       <FormResultMessage
