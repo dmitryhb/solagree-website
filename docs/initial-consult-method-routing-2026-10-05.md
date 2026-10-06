@@ -15,6 +15,26 @@ Old conflicting September runbook snapshots were superseded by the current devel
 with original history preserved in `backup/hir-246-pre-method-routing`; the September acceptance
 record remains on the rebased branch. Other worktrees/uncommitted files were preserved.
 
+## October 6 — independent native availability union check
+
+Read-only provider QA completed at **07:32:31 UTC**, on the four existing public mixed routes
+in the Native configuration prepared table below. Visible route labels matched First Available, Taj Chiu, Stacie Sanders and
+James Traub. Each selected date used **Europe/Amsterdam**, with personal calendar overlay OFF
+for comparison and restored ON afterward. Only dates/timezone were inspected: no time selected,
+transient slot hold, contact entry, booking, notification, payment or provider save was performed.
+The four prepared closed Phone events were not changed or used.
+
+| Amsterdam date | Taj enabled starts | Stacie enabled starts | James enabled starts | First Available vs union |
+| --- | --- | --- | --- | --- |
+| October 8 | 01:00 (1) | 01:30, 02:00, 02:30 (3) | 16:30, 17:00, 19:00, 19:30, 20:00, 20:30, 21:00, 21:30 (8) | Exactly 12 starts; no missing/extra UTC timestamps |
+| October 9 | Date disabled (0) | 00:30, 01:00, 01:30, 02:00, 02:30 (5) | 15:00, 15:30, 16:00, 16:30, 17:00, 19:00, 19:30, 20:00, 20:30, 21:00, 21:30, 22:00, 22:30 (13) | Exactly 18 starts; no missing/extra UTC timestamps |
+
+Comparison used enabled rendered slot UTC timestamps, not just counts. Taj's disabled October 9
+is an observed state, not an inferred configuration defect. No actionable availability mismatch
+was found. This accepts the displayed two-date union only; actual round-robin host allocation,
+arbitrary native busy-calendar conflicts, concurrency, other dates/timezones and prepared
+separate-method public activation remain unaccepted. Research tab closed; no reusable memory.
+
 ## Native configuration prepared
 
 | Choice | Existing path planned for Zoom | New Phone event / path | Prepared host assignment |
