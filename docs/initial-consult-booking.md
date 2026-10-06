@@ -1,8 +1,14 @@
 # Initial Consult booking operations
 
+Controlled paid lifecycle preparation: [separate hidden Stacie event](initial-consult-payment-lifecycle-preparation-2026-10-06.md).
+Closed historical window and all workflows OFF; independent preparation review/QA PASS.
+Scenario/recipient approval precedes opening the test window; every actual payment is the user's action.
+
 Latest Phone result: [user-completed James Phone booking](initial-consult-phone-booking-2026-10-05.md).
-Independent actual host/time/phone in confirmed booking PASS; manual calendar exports omit the
-phone location. Delivered invitation contents and native calendar write remain open. The earlier
+Independent actual host/time/phone in confirmed booking PASS; October 6 received invitation/calendar
+number is client-confirmed. Manual exports omit phone location; direct attachment/host destination
+and write pipeline remain uninspected. Fresh James Zoom check still shows Default with
+expired/revoked permissions. The earlier
 [Phone preparation](initial-consult-phone-preparation-2026-10-05.md) is historical.
 
 Latest native acceptance: [James free booking / expired Zoom authorization](initial-consult-james-booking-2026-10-05.md).
