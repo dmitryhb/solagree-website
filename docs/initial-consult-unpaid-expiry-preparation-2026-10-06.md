@@ -1,7 +1,13 @@
 # Initial Consult — unpaid expiry preparation, October 6, 2026
 
 HIR-248/HIR-249/HIR-250, with HIR-246 and HIR-609 dependencies retained.
-Only isolated event preparation is authorized so far. No booking, PaymentIntent, card entry,
+
+This is the historical closed-preparation snapshot. Later exact user approval, window opening,
+user checkout handoff and actual observations are recorded in the
+[R2 result](initial-consult-unpaid-expiry-result-2026-10-06.md), which supersedes pending-approval
+statements here while preserving the preparation evidence and limits.
+
+At this snapshot, only isolated event preparation was authorized. No booking, PaymentIntent, card entry,
 charge, refund, cancellation or customer message has been created by this preparation.
 
 ## New isolated event

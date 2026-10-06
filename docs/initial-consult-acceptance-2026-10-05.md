@@ -1,11 +1,30 @@
 # Initial Consult acceptance preparation — October 5, 2026
 
+Current R2 [unpaid-expiry observation](initial-consult-unpaid-expiry-result-2026-10-06.md): the user
+approved the exact no-card scenario and recipients, then completed the checkout-opening handoff.
+Independent baseline verifies Pending / Unconfirmed Stacie at the approved interval, no usable
+conference link, and initial slot/subsequent-start exclusion. Independent Stripe baseline verifies
+one matching Incomplete $0.50 intent / missing method; no duplicate evident in the six-record list.
+At the planned +31-minute check (09:46:35–09:47:01 UTC), 18:00 and 18:30 Amsterdam returned while
+the same booking remained Pending and original intent remained Incomplete / missing method.
+Final observation starting **12:05:43 Amsterdam / 10:05:43 UTC** (at least fifty elapsed minutes)
+retains Pending / Booked-only history, released starts and original Incomplete / missing method.
+No checkout reopening, payment or manual cancellation occurred. T0 remains provisional; narrowed
+creation bracket uses the exact R2 Payment-page visit, without reopening it. Automatic cancellation
+was not observed in this window; an internal flag and exact TTL are not inferred.
+No guest/payment/checkout page was reopened by agents; no payment or manual cleanup is authorized.
+Independent final native QA at **10:08:11 UTC** confirms the same R2 result and preservation of
+Confirmed/Paid T3, exact production/test reminder scopes and inactive SMS workflows. R2 remains
+Hidden with October 10–10 open and eight workflows OFF; controlled cleanup is separately gated.
+This supersedes the earlier preparation’s pending-approval state only, retaining all outcome limits.
+
 New support correction read around **08:57 UTC**: Milos says required-email links do not send
 built-in SMS, custom smsConsent is not read, and the phone-only SMS switch does not apply here.
 This supersedes the earlier broad phone-number assertion and provider eligibility uncertainty;
 actual SMS delivery/absence is not inferred. Cleanup OFF/ON alternatives were repeated, so tenant
-flag remains unresolved. A separate closed [unpaid-expiry test preparation](initial-consult-unpaid-expiry-preparation-2026-10-06.md)
-requires exact scenario/recipient approval before any booking or native message; no payment planned.
+flag remains unresolved. The historical closed [unpaid-expiry test preparation](initial-consult-unpaid-expiry-preparation-2026-10-06.md)
+was followed by the specifically approved R2 result above; its former pending-approval statements
+are historical, and no payment was included.
 T3 remains intact; native reminder queue/log was not exposed and Cancel was not clicked.
 
 Fresh saved-state QA at **08:46:14 UTC** confirms all five original events retain 30 minutes,
@@ -690,7 +709,7 @@ Done still require separate user instruction.
 | --- | --- | --- |
 | James Zoom | Intended Zoom test created Cal Video; last actual account check shows expired/revoked Zoom authorization | James/client reconnects the existing Zoom in Cal.com. Verify warning clears and intended account/default; then obtain approval for one exact free hidden Zoom retest and its recipients, user final Confirm |
 | T3 reminders | Existing Stacie paid test confirmed; immediate messages/calendar client-attested; test reminder workflows scoped solely to preserved original test | Observe the existing 24h reminder **October7 00:30 Amsterdam / October6 22:30 UTC** and 1h reminder **October7 23:30 Amsterdam / October7 21:30 UTC**. Inspect actual amount/time/host/Zoom instructions and delivery, without resend/new booking. No future-monitor automation was requested |
-| Native unpaid cleanup/SMS | Release/recovery observed; support repeated OFF/ON alternatives. Later correction says no built-in SMS for required-email links; custom checkbox not read | Obtain an unambiguous tenant cleanup answer or approve the separate no-card expiry case. Keep standard emails/settings unchanged; direct SMS absence is not inferred |
+| Native unpaid cleanup/SMS | Release/recovery observed; support repeated OFF/ON alternatives. Later correction says no built-in SMS for required-email links; custom checkbox not read | R2 released starts by +31 minutes but remained Pending after at least fifty minutes. Request one current branch/flag scope from Cal.com; no account changes or additional sends are implied. Keep standard emails unchanged; direct SMS absence is not inferred |
 | Remaining controlled lifecycle/policy QA | Same-record recovery, Jill-admin one manual change, early cancellation/full original refund passed within bounds | Separately approve exact cases/recipients before unpaid cancellation/link invalidation, decline/concurrency, guest cutoff/equality/DST, own-organizer workflow or other notification-generating tests. Any real payment/refund final action is performed by the user |
 | Calendar/detail gaps | Attendee calendar/phone client-attested for James Phone and FA1; Taj native UI asserts matching Google presence/buffer | Taj/FA1 and Stacie/T3 native UI assert matching Google presence; allthree post buffers isolated. James/J2 native Google presence remains unknown. Retain this separately from direct destination/event-ID/content and controlled external busy-event conflict proof; additional writes/blocks/bookings need a controlled scenario |
 | Coordinated release | Separate Phone/Zoom source and closed Phone counterparts reviewed; staging source/routing QA passed | Obtain explicit authorization for old-route Zoom conversion, opening four Phone routes and website runtime/release. Verify all8 routes, active Taj/Stacie/James and Jessica pause; production deployment is not implied by PR merge |

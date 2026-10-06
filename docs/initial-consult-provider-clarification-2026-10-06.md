@@ -6,6 +6,16 @@ The investigation performed no new booking, setting change, charge, refund or ca
 The separately approved revised support follow-up was sent once at approximately08:28 UTC,
 as recorded below; customer test messages were not submitted.
 
+## Later controlled unpaid observation — R2
+
+The separately approved [R2 no-card result](initial-consult-unpaid-expiry-result-2026-10-06.md)
+is distinct from this read-only clarification record. The user completed its checkout handoff;
+approved starts were restored at the +31-minute check while the same booking and intent remained
+Pending / Incomplete. At least fifty elapsed minutes later, no automatic cancellation was observed.
+Checkout was never reopened by agents, no payment or manual cancellation occurred. This gives
+bounded behavior evidence, not a verified tenant flag; the repeated OFF/ON template remains
+unresolved. One narrow follow-up is drafted in the R2 packet, not sent.
+
 ## Current Stripe refund evidence — independent review, 08:11 UTC
 
 The user resolved the requested browser-session mapping to the exposed Chrome profile **jill**.
