@@ -1,9 +1,14 @@
 # Initial Consult paid lifecycle preparation and abandon observation — October 6, 2026
 
+Later [provider clarification](initial-consult-provider-clarification-2026-10-06.md) records the
+08:11 UTC successful updated refund object/card reversal and Cal support's 30-minute unpaid-hold
+assertion. Tenant cleanup-flag alternatives and native SMS eligibility remain unresolved; the
+new exact follow-up is prepared but unsent. Historical observations below remain dated evidence.
+
 Latest [early admin cancellation/full refund result](initial-consult-cancellation-refund-2026-10-06.md):
 R1-R is Canceled after separately approved user final action. Independent Stripe review verifies
-one full $0.50 USD original-charge refund, succeeded; ledger now three Succeeded/one Refunded/
-one Incomplete. Slot restored; logged-in guest canceled/no Zoom; exact customer cutoff, bank
+one full $0.50 USD original-charge refund, succeeded; the 07:19 UTC ledger showed three
+Succeeded/one Refunded/one Incomplete, later original-payment label Reversed. Slot restored; logged-in guest canceled/no Zoom; exact customer cutoff, bank
 credit, delivery and native calendar/meeting deletion remain unaccepted. This supersedes the
 active post-reschedule state below; no additional financial or notification action is authorized.
 
