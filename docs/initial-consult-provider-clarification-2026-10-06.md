@@ -1,5 +1,37 @@
 # Initial Consult — provider clarification, October 6, 2026
 
+## Later native recheck — 12:24:59 UTC October 6
+
+Independent read-only QA on Cal.com **6.9.12-h** confirms James Zoom Video remains Default
+with an expired/revoked permissions warning. The existing official administrator inspection was
+exited; Jill identity and absence of the impersonation banner were verified. No Reinstall/OAuth,
+settings, booking action or notice was submitted; research tabs were closed.
+
+Protected T3 remains Confirmed/Paid/Stacie, October7 **22:30–23:00 UTC**, with a Zoom link.
+Each controlled reminder retains only the original payment-check event; each production reminder
+retains the original five plus four Phone routes. Four SMS workflows have no active links.
+History shows Booked and Stripe Accepted; inspected workflow views expose no run queue/delivery log.
+This is preservation/configuration evidence, not scheduled-run or inbox delivery proof.
+Root's current support check still finds the narrow R2 cleanup question Seen with no later reply.
+The connected Gmail account is not the controlled attendee mailbox; no attendee messages were read.
+
+### Pending reminder evidence intake
+
+| Reminder | Expected send UTC | Expected Amsterdam display | Actual outcome |
+| --- | --- | --- | --- |
+| T3 24 hours | October6 22:30 | October7 00:30 | Future / unverified |
+| T3 1 hour | October7 21:30 | October7 23:30 | Future / unverified |
+
+After each expected time, identify the exact T3 reminder and verify its 30-minute interval,
+Stacie host, $0.50 controlled-test amount, timezone, usable Zoom instructions and lack of duplicate
+messages. Keep payment/meeting links, contacts and full headers in restricted evidence; record
+only redacted findings, receipt time with its timezone, and whether evidence is directly inspected
+or client-attested. A native booking history entry or saved workflow does not prove delivery.
+A follow-up check shortly after the expected time is an observation checkpoint, not a provider
+SLA: absence then does not prove permanent delivery failure. No speculative resend, new booking,
+cancellation, amount change or workflow toggle is authorized. T3 remains protected throughout.
+
+
 Scope: HIR-246/HIR-248/HIR-249/HIR-250; HIR-609 remains the publication dependency.
 Read-only service evidence, provider assertions and remaining acceptance are distinguished below.
 The investigation performed no new booking, setting change, charge, refund or cancellation.
