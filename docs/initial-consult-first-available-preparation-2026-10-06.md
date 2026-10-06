@@ -1,5 +1,10 @@
 # Initial Consult — First Available Phone test preparation, October 6, 2026
 
+Later [actual FA1 result](initial-consult-first-available-result-2026-10-06.md) supersedes the
+pending-approval/Confirm state below. Exact scenario approved; user Confirm completed; independent
+actual Taj allocation/time/Phone QA PASS. Attendee email/calendar/phone now client-attested.
+Broader paid routing, host-calendar write and isolated buffer evidence remain unaccepted.
+
 Scope: HIR-246/HIR-250; publication depends on HIR-609. This is isolated preparation,
 not a submitted booking, native allocation PASS or notification approval.
 
