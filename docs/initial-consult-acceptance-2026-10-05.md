@@ -1,5 +1,13 @@
 # Initial Consult acceptance preparation — October 5, 2026
 
+Latest controlled change: [Stacie manual reschedule result](initial-consult-manual-reschedule-2026-10-06.md).
+User-approved Jill-admin change was submitted by the user: October 9 00:30–01:00 → 02:00–02:30
+Amsterdam. Same Stacie replacement record Confirmed/Paid; original Rescheduled with linked lineage.
+Independent Stripe check retains original $0.50 intent/charge, five records unchanged, no new
+charge/refund activity. Old slot reopened, new excluded; full Zoom reference retained against
+pre-change evidence. Actual change email/calendar delivery, Zoom meeting-time update and own-Stacie
+workflow remain open; one complimentary change is recorded in the controlled-test ledger.
+
 Latest controlled lifecycle result: [isolated Stacie abandon and same-record recovery](initial-consult-payment-lifecycle-preparation-2026-10-06.md).
 After the approved no-card abandonment, user-approved recovery was completed by user final Pay.
 The original intent succeeded for $0.50 USD to SOLAGREE with unchanged booking metadata and one
@@ -371,7 +379,7 @@ Historical configuration evidence is not current saved state, delivery, calendar
 | Confirmation / receipt / reminders | Site copy stays 30 min / $60 | Earlier Oct5: 450309/450313 active on five production links; later method prep nine (original five + four closed Phone), fresh QA PASS. Hidden test excluded with one attendee action, 24h/1h, event/date/end/timezone/organizer/LOCATION/MEETING_URL, hard-coded30m/$60. Oct 5 guest notifications enabled, including confirmation/cancel/change/payment pending; Stripe shows one sent receipt per T1/T2/T3 paid test, each rendered at $0.50; client attests T3 immediate emails received | Direct message content/count/header timestamps; historical/other-host delivery; future 24h/1h reminders; matching host/timezone/Phone or Zoom and no broken Zoom links in Phone mail |
 | Hidden test reminder accuracy | Not website controlled | Oct 5 resumed: hidden excluded from production templates; 473280/473288 saved with $0.50 copy, now active only on hidden after specific Stacie approval; independent config QA PASS | T3 user checkout complete; actual reminder token rendering and 24h/1h dispatch/inbox delivery pending |
 | Refund | Site copy now says 2 calendar days | Oct 5 all five + hidden event rechecked as If cancelled 2 calendar days before; earlier pre-T3 full/pending/partial refund list empty; T3 remains Succeeded with no refund activity observed in its detail | Hosted threshold before/equal/after, DST; user performs actual refund; confirm Stripe refund object/status and email. Cal “refund on the way” text is insufficient |
-| One manual reschedule | Site directs request to Solagree | Later Oct5 all five + hidden saved Attendee only/Always and same-host/Always; cancellation available; hidden guest confirmation Cancel-only; Stacie own-host picker accessible | Paid change/retention, slot release, UID lineage/notices, old guest URL rejection and manual ledger/second/late-request handling remain untested |
+| One manual reschedule | Site directs request to Solagree | Saved Attendee only/Always and same-host/Always. October6 approved Jill-admin test: original Rescheduled → same-Stacie replacement Confirmed/Paid/new time; same $0.50 charge retained, no new charge/refund; old slot available/new excluded; full Zoom reference retained; guest self-reschedule absent; one controlled complimentary change recorded | Own-Stacie workflow, actual Zoom meeting-time update, notices/native calendar update, anonymous/old guest-URL enforcement and production allowance ledger/second/late requests |
 | SMS | No requirement to enable SMS for email launch | Oct 5 all four SMS workflows show No active links; First Available switches off; prior zero credits not revalidated | Keep inactive; optional future sender/credits/predicate/mapping/consent acceptance. Not a blocker for email acceptance |
 | Desktop/mobile, keyboard, fallback/privacy | Reviewed separate-method implementation and focused source/browser QA PASS; fixture tests do not prove native paid lifecycle | Approved full staging refresh from d4f344e: independent direct and Home/About client navigation, four correct single embeds, Jessica absent, desktop 1728/mobile 390 with no overflow PASS. Runtime remains mixed. Production remains legacy | Coordinated separated-method activation and production release require separate authorization; remaining screen-reader/provider empty/error and native lifecycle checks stay open |
 

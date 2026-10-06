@@ -1,5 +1,13 @@
 # Initial Consult paid lifecycle preparation and abandon observation — October 6, 2026
 
+Later approved [manual reschedule result](initial-consult-manual-reschedule-2026-10-06.md):
+R1 was moved by user final Reschedule through the Jill-admin path. Original record is Rescheduled;
+linked replacement R1-R is Confirmed/Paid at October 9 02:00–02:30 Amsterdam with Stacie.
+Independent Stripe review retains original $0.50 intent/charge and unchanged five-record ledger,
+without new charge/refund activity. This supersedes the post-recovery record state below;
+no further change/financial action is authorized. Own-Stacie path, delivery and actual Zoom-time
+update remain unaccepted.
+
 HIR-248, coordinated with HIR-246 → HIR-249 → HIR-250 and HIR-609 publication dependency.
 This records controlled preparation and one abandoned native checkout; full lifecycle acceptance remains open.
 No attendee contacts, phone values, booking/payment identifiers or secrets are recorded.
@@ -221,7 +229,7 @@ did not accept Terms, submit, enter a card, charge or refund.
 | --- | --- | --- | --- |
 | Website/native checkout | Existing reviewed source invokes native Cal.com checkout; no custom payment engine | Unpaid guest body awaited payment/no Zoom; native payment email client-attested, user reports no email link. After user Pay, same UID Confirmed/Paid with actual Zoom | Historical unpaid-title inconsistency; anonymous/server gating; direct email timing/count/host-calendar evidence |
 | Abandon/retry/duplicates | Fixtures do not prove native payment behavior | Same original intent recovered successfully; five Stripe records now four Succeeded/one Incomplete; one charge, rendered $0.50 SOLAGREE receipt and one sent-history row. Slot/buffer available 06:41:12 before Pay, excluded again 06:45:02 after Pay | Exact release TTL/cause/link invalidation; deliberate decline/concurrency/double-click; receipt inbox delivery, host-calendar write and Zoom join validity |
-| Refund/manual change | Reviewed policy copy uses two calendar days and one manual free request | Prepared fee/refund settings are not a Stripe refund or reschedule | Specific notice/scenario approval; user financial actions; actual retention/boundary evidence |
+| Refund/manual change | Reviewed policy copy uses two calendar days and one manual free request | Later approved Jill-admin reschedule retained original charge, linked same-host Paid replacement/new time and released old slot; one controlled change logged | Own-Stacie path, notices/calendar/Zoom-time evidence, production allowance ledger; real refund/boundary tests still need their own authorization/user financial action |
 | Launch/publication | HIR-609 roster and separate-method source preparation retained | Public events/active runtime unchanged | Independent full acceptance and separately authorized coordinated production release/Done |
 
 The approved first abandon case is October 9, 00:30–01:00 Europe/Amsterdam / October 8,
