@@ -167,8 +167,12 @@ original Cal UID and PaymentIntent, with succeeded redirect status. Fresh indepe
 review around 06:45 UTC confirms **five records: four Succeeded and one old Incomplete**.
 The original recovery intent is now Succeeded, $0.50 USD, unchanged Stacie/numeric-booking metadata,
 with one distinct visible charge and no additional payment record. Rendered receipt: SOLAGREE®,
-$0.50 paid. Stripe receipt history explicitly says **No receipts sent**; receipt existence is
-confirmed, receipt email delivery is not. No Send receipt/resend was used.
+$0.50 paid. The first review displayed **No receipts sent**. On a subsequent fresh root reload
+around 06:49 UTC, receipt history instead shows one Payment receipt row to the approved attendee,
+October 6 02:44 AM in the Stripe UI (timezone not independently established). This supersedes
+the earlier no-send snapshot; it proves recorded sending, not inbox delivery or an exact delay.
+No Send receipt/resend was used. Receipt existence and recorded sending are confirmed;
+receipt email delivery remains unverified.
 
 Independent Cal QA confirms the same UID **Confirmed + Paid**, same Stacie host and approved
 interval, actual Zoom Video/Join Zoom Video link, and History Accepted by Stripe, Source WEBHOOK.
@@ -216,7 +220,7 @@ did not accept Terms, submit, enter a card, charge or refund.
 | Scope | Code | Services | Required external action |
 | --- | --- | --- | --- |
 | Website/native checkout | Existing reviewed source invokes native Cal.com checkout; no custom payment engine | Unpaid guest body awaited payment/no Zoom; native payment email client-attested, user reports no email link. After user Pay, same UID Confirmed/Paid with actual Zoom | Historical unpaid-title inconsistency; anonymous/server gating; direct email timing/count/host-calendar evidence |
-| Abandon/retry/duplicates | Fixtures do not prove native payment behavior | Same original intent recovered successfully; five Stripe records now four Succeeded/one Incomplete; one charge and rendered $0.50 SOLAGREE receipt, No receipts sent. Slot/buffer available 06:41:12 before Pay, excluded again 06:45:02 after Pay | Exact release TTL/cause/link invalidation; deliberate decline/concurrency/double-click; receipt delivery, host-calendar write and Zoom join validity |
+| Abandon/retry/duplicates | Fixtures do not prove native payment behavior | Same original intent recovered successfully; five Stripe records now four Succeeded/one Incomplete; one charge, rendered $0.50 SOLAGREE receipt and one sent-history row. Slot/buffer available 06:41:12 before Pay, excluded again 06:45:02 after Pay | Exact release TTL/cause/link invalidation; deliberate decline/concurrency/double-click; receipt inbox delivery, host-calendar write and Zoom join validity |
 | Refund/manual change | Reviewed policy copy uses two calendar days and one manual free request | Prepared fee/refund settings are not a Stripe refund or reschedule | Specific notice/scenario approval; user financial actions; actual retention/boundary evidence |
 | Launch/publication | HIR-609 roster and separate-method source preparation retained | Public events/active runtime unchanged | Independent full acceptance and separately authorized coordinated production release/Done |
 
