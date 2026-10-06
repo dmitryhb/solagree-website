@@ -1,5 +1,12 @@
 # Initial Consult paid lifecycle preparation and abandon observation — October 6, 2026
 
+Latest [early admin cancellation/full refund result](initial-consult-cancellation-refund-2026-10-06.md):
+R1-R is Canceled after separately approved user final action. Independent Stripe review verifies
+one full $0.50 USD original-charge refund, succeeded; ledger now three Succeeded/one Refunded/
+one Incomplete. Slot restored; logged-in guest canceled/no Zoom; exact customer cutoff, bank
+credit, delivery and native calendar/meeting deletion remain unaccepted. This supersedes the
+active post-reschedule state below; no additional financial or notification action is authorized.
+
 Later approved [manual reschedule result](initial-consult-manual-reschedule-2026-10-06.md):
 R1 was moved by user final Reschedule through the Jill-admin path. Original record is Rescheduled;
 linked replacement R1-R is Confirmed/Paid at October 9 02:00–02:30 Amsterdam with Stacie.
@@ -173,7 +180,7 @@ invalidation; the original payment page remained usable.
 The user completed final Pay and reported **готово**. The observed return URL retained the
 original Cal UID and PaymentIntent, with succeeded redirect status. Fresh independent financial
 review around 06:45 UTC confirms **five records: four Succeeded and one old Incomplete**.
-The original recovery intent is now Succeeded, $0.50 USD, unchanged Stacie/numeric-booking metadata,
+At that post-recovery check, the original recovery intent was Succeeded, $0.50 USD, unchanged Stacie/numeric-booking metadata,
 with one distinct visible charge and no additional payment record. Rendered receipt: SOLAGREE®,
 $0.50 paid. The first review displayed **No receipts sent**. On a subsequent fresh root reload
 around 06:49 UTC, receipt history instead shows one Payment receipt row to the approved attendee,
@@ -199,7 +206,7 @@ external acceptance steps for this recovery; previous T3 attestations do not cov
 
 Bounded same-record paid recovery, one observed successful charge, current slot release/re-exclusion,
 and actual Zoom generation PASS. Deliberate decline, double-click/concurrency, exact expiry policy,
-anonymous/server payment gating, real refund and manual reschedule boundaries remain open.
+anonymous/server payment gating and customer-refund/manual-role boundaries remain open.
 No further payment, financial cleanup, cancellation, configuration change, send or production action
 was performed by the agent. This scenario is completed; it grants no additional charge authority.
 
@@ -228,8 +235,8 @@ did not accept Terms, submit, enter a card, charge or refund.
 | Scope | Code | Services | Required external action |
 | --- | --- | --- | --- |
 | Website/native checkout | Existing reviewed source invokes native Cal.com checkout; no custom payment engine | Unpaid guest body awaited payment/no Zoom; native payment email client-attested, user reports no email link. After user Pay, same UID Confirmed/Paid with actual Zoom | Historical unpaid-title inconsistency; anonymous/server gating; direct email timing/count/host-calendar evidence |
-| Abandon/retry/duplicates | Fixtures do not prove native payment behavior | Same original intent recovered successfully; five Stripe records now four Succeeded/one Incomplete; one charge, rendered $0.50 SOLAGREE receipt and one sent-history row. Slot/buffer available 06:41:12 before Pay, excluded again 06:45:02 after Pay | Exact release TTL/cause/link invalidation; deliberate decline/concurrency/double-click; receipt inbox delivery, host-calendar write and Zoom join validity |
-| Refund/manual change | Reviewed policy copy uses two calendar days and one manual free request | Later approved Jill-admin reschedule retained original charge, linked same-host Paid replacement/new time and released old slot; one controlled change logged | Own-Stacie path, notices/calendar/Zoom-time evidence, production allowance ledger; real refund/boundary tests still need their own authorization/user financial action |
+| Abandon/retry/duplicates | Fixtures do not prove native payment behavior | Same original intent recovered successfully; at the October6 post-recovery check five Stripe records were four Succeeded/one Incomplete; one charge, rendered $0.50 SOLAGREE receipt and one sent-history row. Slot/buffer available 06:41:12 before Pay, excluded again 06:45:02 after Pay | Exact release TTL/cause/link invalidation; deliberate decline/concurrency/double-click; receipt inbox delivery, host-calendar write and Zoom join validity |
+| Refund/manual change | Reviewed policy copy uses two calendar days and one manual free request | Approved Jill-admin reschedule retained original charge; later separately approved user cancellation produced one full $0.50 succeeded refund, Canceled replacement and restored slot; one controlled change logged | Own-Stacie/customer cutoff boundaries, notices/calendar/Zoom-time/deletion, bank credit, production allowance ledger; further actions need their own authorization/user financial action |
 | Launch/publication | HIR-609 roster and separate-method source preparation retained | Public events/active runtime unchanged | Independent full acceptance and separately authorized coordinated production release/Done |
 
 The approved first abandon case is October 9, 00:30–01:00 Europe/Amsterdam / October 8,

@@ -1,5 +1,10 @@
 # Initial Consult — one manual reschedule, October 6, 2026
 
+Later separately approved [early cancellation/refund](initial-consult-cancellation-refund-2026-10-06.md)
+supersedes the active replacement state described below: R1-R is now Canceled, with one verified
+full $0.50 original-charge refund and restored slot. The recorded one complimentary change
+remains historical evidence; cancellation is a separate user-approved action.
+
 Scope: HIR-249/HIR-250; controlled paid Stacie lifecycle record R1, hidden event 7357581.
 This accepts the tested **Jill-admin path** within the stated bounds. Stacie's own-organizer
 workflow, general concurrency safety and production launch are not accepted by this test.
