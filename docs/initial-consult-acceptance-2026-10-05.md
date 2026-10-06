@@ -1,5 +1,12 @@
 # Initial Consult acceptance preparation — October 5, 2026
 
+Later preparation: the [coordinated release runbook](initial-consult-release-runbook-2026-10-06.md)
+contains exact public keys/eight paths, per-route acceptance and activation/rollback/preservation
+steps. No build/deployment or native setting changed. Independent read-only James calendar recheck
+at **11:42:15 UTC / 13:42:15 Amsterdam** still finds matching Cal Busy without Google presence
+or destination bridge; unrelated Google blocking reason does not establish J2's write.
+The organizer-calendar gap remains UNKNOWN. No booking, hold, impersonation or send occurred.
+
 The user approved the exact narrow R2 cleanup question to Milos in existing Cal.com ticket
 215476247361743. Sent once and visibly verified by October 6 **12:30:36 Amsterdam / 10:30:36 UTC**:
 complete outbound article, Not seen yet, empty composer and Send disabled. Submission is confirmed;
