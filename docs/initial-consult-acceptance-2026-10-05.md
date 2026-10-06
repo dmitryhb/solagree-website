@@ -1,14 +1,22 @@
 # Initial Consult acceptance preparation — October 5, 2026
 
+Latest [provider clarification](initial-consult-provider-clarification-2026-10-06.md): independent
+08:11 UTC Stripe review confirms the same successful full $0.50 refund, updated card destination
+type reversal and no second object evident. Browser mapping is resolved to profile jill. Bank/card
+credit remains unconfirmed. New Cal support reply asserts a 30-minute unpaid hold but leaves two
+cleanup-flag template branches unresolved. Native SMS eligibility/consent for Email-confirmation
+links needs clarification; the discovered SMS-off switch explicitly scopes phone-only/optional-email
+links. Exact follow-up is prepared and unsent; no new financial, send or settings action occurred.
+
 Latest [First Available Phone result](initial-consult-first-available-result-2026-10-06.md): user
 Confirm completed the separately approved free FA1 case. Independent actual QA confirms Taj,
 correct Amsterdam October8 01:00–01:30/UTC October7 23:00–23:30, supplied Phone/Florida, no video;
-payment/eight workflows OFF. Booked start excluded across test/production FA, direct Taj date
-disabled; next union start available through another host, so Taj buffer isolation is unproved.
-User confirms this case's attendee email/calendar/phone. Host-calendar/direct delivery evidence,
-paid round-robin/fairness/concurrency remain open. Stripe same five records/no new FA1 payment;
-R1 current UI label Reversed supersedes earlier Refunded, without fresh refund-updated/object or
-bank-credit acceptance. Further Stripe clarification uses the user's specified jillcw session.
+payment/eight workflows OFF. Booked start excluded across test/production FA; next union start
+can be offered by another host. Later 08:17:37 UTC native Troubleshooter explicitly shows Taj's
+01:00–01:30 Cal booking also on Google Calendar and a separate 01:30–01:45 Booking buffer.
+Provider-UI presence/buffer accepted; direct Google destination/FA1 ID bridge remains uninspected.
+User confirms this case's attendee email/calendar/phone. Paid round-robin/fairness/concurrency
+remain open. Same five original Stripe records/no new FA1 payment; R1 current label Reversed.
 
 Earlier controlled preparation: [free First Available Phone test](initial-consult-first-available-preparation-2026-10-06.md).
 Independent saved-state/candidate QA PASS: hidden/payment OFF, Taj/Stacie/James, one required native
@@ -50,7 +58,9 @@ reports no link in the received native payment email; root recovered the actual 
 URL from Chrome history. This does not accept email-link recovery or expired-link invalidation.
 Historical unpaid guest body awaited payment/no Zoom, but document title incorrectly said confirmed;
 anonymous/server gating, deliberate decline and concurrency remain open. The approved support
-question was sent to existing ticket 215476247361743; no answer is included here. Original Stacie
+question was sent to existing ticket 215476247361743. The later answer and unresolved tenant
+flag/native SMS questions are recorded in the provider clarification above; exact TTL remains
+provider-asserted rather than independently measured. Original Stacie
 test reminders and records are preserved; no additional charge is authorized.
 
 Latest actual test: [James Phone booking result](initial-consult-phone-booking-2026-10-05.md).

@@ -1,0 +1,108 @@
+# Initial Consult — provider clarification, October 6, 2026
+
+Scope: HIR-246/HIR-248/HIR-249/HIR-250; HIR-609 remains the publication dependency.
+Read-only service evidence, provider assertions and remaining acceptance are distinguished below.
+No new booking, message, setting change, charge, refund or cancellation was performed.
+
+## Current Stripe refund evidence — independent review, 08:11 UTC
+
+The user resolved the requested browser-session mapping to the exposed Chrome profile **jill**.
+The original R1 payment currently displays **Reversed**, with **$0.50 paid / $0.50 refunded**.
+Fresh inspection of the visible `refund.updated` snapshot confirms the same refund object as
+`refund.created`: amount **50**, currency **usd**, status **succeeded**, exact original charge/
+PaymentIntent associations and `destination_details.card.type: reversal`. One refund request
+and one created/updated pair are visible; no second refund object is evident.
+The updated event displays October 6 03:19:12 AM, with an unverified UI timezone.
+
+This resolves the uninspected-updated-object blocker in the earlier FA1 snapshot. It supports
+one successful full refund/reversal; it does not prove bank/card credit or a PaymentIntent API
+status. The earlier All-list check at 07:57 UTC remains five original records: three Succeeded,
+one Reversed and one old Incomplete, with no new free FA1 payment. See the
+[cancellation/refund result](initial-consult-cancellation-refund-2026-10-06.md).
+
+## Cal.com support answer — read at approximately 08:12 UTC
+
+Milos replied in existing ticket 215476247361743. The following are **provider assertions**,
+not independently exercised timing, cleanup or late-payment acceptance:
+
+- Unpaid native ON_BOOKING slot hold is 30 minutes, including buffers, starting when the attendee
+  submits the booking form and the booking is created. The payment page shows a countdown.
+- The reply includes two unresolved template branches. **Flag OFF:** expired unpaid records
+  remain Unconfirmed/Pending until paid/canceled. **Flag ON:** cleanup runs every ten minutes
+  and cancels expired unpaid records within about ten minutes after the 30-minute hold.
+  The actual tenant flag, name and scope are not identified.
+- After expiry, availability is released while the Stripe intent remains Incomplete. The payment
+  link can still work until cancellation; payment can proceed if the slot is free. Support asserts
+  automatic refund if a later payment collides with another booking. Neither late collision nor
+  automatic collision refund was tested.
+- Awaiting-payment email is a standard native notification, separate from workflows, sent around
+  fifteen minutes after an unpaid booking unless already paid. Support says an SMS version may
+  also be sent when a phone number was collected; its consent predicate is not specified.
+- Supported manual unpaid cleanup is Bookings → Unconfirmed → Cancel: immediate release,
+  old link showing canceled, Stripe intent still Incomplete, no refund because unpaid. Support
+  says cancellation emails go to attendee/host/other hosts, and mentions SMS for attendees who
+  supplied a phone number. No unpaid cancellation/link-invalidation test was performed.
+
+Observed R1 exclusion at 27m38s and availability at 47m52s are consistent with a 30-minute hold,
+but do not independently establish its exact boundary or cause. R1 remained Pending before the
+user paid. This does not resolve which template branch applies. The received native payment email
+is client-attested; its recovery link is not, and actual checkout recovery used browser history.
+The already completed paid R1-R cancellation cannot substitute for an unpaid-cleanup test.
+
+## Native SMS scope — independent read-only investigation, 08:12–08:15 UTC
+
+Organization General exposes **Disable SMS notifications for phone-only booking links**, currently
+OFF. Its description explicitly scopes it to links requiring phone numbers with **email optional**
+for booking confirmations. Organization Guest notifications exposes email controls only: all booking
+emails remain enabled, including Awaiting payment and Cancellation. No setting was changed.
+
+Both free FA1 event7360837 and paid lifecycle event7357581 retain **Email confirmation selected**,
+required email and optional unchecked custom `smsConsent`. A Phone meeting location and a Phone
+confirmation channel are separate settings. Inactive SMS workflow associations establish only
+workflow isolation; they do not establish suppression of all native SMS paths. No unwanted SMS
+was proved by this investigation. Whether the native sender uses the custom consent checkbox for
+these Email-confirmation links remains unknown.
+
+Billing labels show Monthly credits 7,000; Credits used 0; Total remaining 7,000; Additional credits
+Current balance 0. No explicit period appears beside those counters. Zero use does not establish
+zero SMS: official documentation describes paths without deductions from these credits.
+See [messaging credits](https://cal.com/help/billing-and-usage/messaging-credits) and
+[Phone confirmation configuration](https://cal.com/help/event-types/create-phone-only-event-type).
+Keep email confirmations enabled; do not use email suppression as an SMS workaround.
+
+## Taj calendar and buffer — independent native QA, 08:17:37 UTC
+
+Cal.com's native Troubleshooter was reached through the actual Initial Consult — Taj Chiu event
+settings, with Taj selected and Europe/Amsterdam October 8. At **01:00**, Why unavailable explicitly
+identifies a **Cal.com booking** named Busy at **01:00–01:30** and says it **also appears on Google
+Calendar**. At **01:30**, the separate **Booking buffer** reason says **01:30–01:45** is blocked.
+This isolates the configured fifteen-minute post buffer in Taj's provider UI. The First Available
+union can still offer 01:30 through another eligible host.
+
+This is matching-interval provider evidence of calendar presence, not direct Google inspection:
+title is masked Busy and no FA1 booking-ID bridge, Google event ID, owner/destination or phone
+mapping is exposed. Arbitrary external busy-event conflicts remain untested. No impersonation,
+new holds, bookings, calendar edits or setting changes were needed. See the
+[actual FA1 result](initial-consult-first-available-result-2026-10-06.md).
+
+## Acceptance matrix
+
+| Scope | Verified by code | Confirmed in services / client-attested | Requires external action or evidence |
+| --- | --- | --- | --- |
+| Refund | No website refund engine | Same original full $0.50 refund succeeded; updated snapshot says reversal; no second object evident | Bank/card credit and general boundary/concurrency cases |
+| Unpaid lifecycle | Website delegates native checkout | R1 observed release/recovery; provider asserts 30-minute hold and two cleanup branches | Actual tenant flag; exact timing; separately approved unpaid cancellation/expired-link and decline/collision tests |
+| Native SMS | Optional consent retained; inactive workflow associations separately verified | Email-confirmation mode and narrow phone-only SMS switch verified; email notifications enabled | Native SMS eligibility/consent predicate and SMS-only control clarification |
+| Taj scheduling | Existing reviewed routing source | Matching Cal/Google presence asserted in native UI; isolated 15-minute Taj buffer; FA1 attendee calendar/phone attested | Direct Google destination/event bridge, arbitrary external conflicts, broader hosts/concurrency |
+| Launch | Existing reviewed method routes and policy copy | Controlled cases only; HIR-609 dependency retained | James Zoom reauthorization/retest, actual reminders, remaining lifecycle/policy QA and separately authorized release |
+
+## Exact support follow-up — prepared, not sent
+
+> Thank you. Your reply contains both Flag OFF and Flag ON alternatives. Which expired-unpaid-booking cleanup flag actually applies to our SOLAGREE tenant, what is its name/scope, and does automatic cleanup change email/SMS recipients or templates?
+>
+> For native awaiting-payment, confirmation and cancellation notifications on hosted 6.9.11-h, what exactly makes an attendee eligible for SMS? Our links use Email confirmation with required email, collect a required phone number, and include an optional custom checkbox identified as smsConsent, unchecked by default. Does the native sender enforce smsConsent=true, or does standard SMS apply exclusively to Phone confirmation / optional-email links?
+>
+> Is there a supported SMS-only disable control for these native messages while keeping confirmation, payment and cancellation emails enabled? Does Organization General → Disable SMS notifications for phone-only booking links cover our Email-confirmation links and all those triggers?
+
+This new outbound follow-up requires the user's explicit sending instruction. Existing approval
+covered the earlier support question only. Production deployment and Done remain unauthorized;
+reviewed task PR merging is covered by the user's later standing merge instruction.

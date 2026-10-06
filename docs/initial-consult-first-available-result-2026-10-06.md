@@ -34,8 +34,11 @@ This verifies booked-start exclusion across the tested routes after allocation t
 The following **UTC23:30** remains available in both First Available unions. Stacie was independently
 eligible at that start before this test, so another host can satisfy the union; this is not proof of
 a Taj15-minute buffer failure. Taj's disabled whole date cannot isolate an adjacent interval or its
-cause. Broad external busy-calendar conflicts, race/concurrency safety and allocation fairness are
-unaccepted. QA restored overlays ON, timezone unchanged, own research tab closed; other records intact.
+cause in that initial view. Later native Troubleshooter QA at **08:17:37 UTC** independently
+identifies Taj's **01:00–01:30 Amsterdam Cal.com booking**, says it also appears on Google Calendar,
+and explicitly isolates a **01:30–01:45 Booking buffer**. This accepts that fifteen-minute post
+buffer within provider-UI scope, while title Busy/no booking-ID bridge limits exact event mapping.
+Broad external busy-calendar conflicts, race/concurrency safety and allocation fairness are unaccepted. QA restored overlays ON, timezone unchanged, own research tab closed; other records intact.
 
 ## Phone calendar and delivery evidence
 
@@ -47,7 +50,9 @@ it does not prove the delivered invitation or native write pipeline has the same
 The user explicitly confirms for **this FA1 case**: confirmation email received by the controlled
 attendee, event present in the attendee calendar and phone present in the invitation/calendar record.
 This is client-attested and separate from native provider inspection. Actual attachment/header/count,
-exact phone field mapping and host Taj's destination-calendar write remain uninspected. Earlier T3,
+exact phone field mapping and direct host destination/event-ID inspection remain uninspected.
+Later Troubleshooter inspection asserts matching-interval Google Calendar presence; it does not
+expose a FA1 ID bridge or replace direct Google inspection. Earlier T3,
 R1/R1-R or James attestations are not extended to other cases.
 
 ## Financial safeguard and current refund label
@@ -56,11 +61,12 @@ Fresh independent Stripe SOLAGREE All review around **07:57 UTC** shows the same
 payment records, no new FA1 payment record. Current list labels: **three Succeeded, one Reversed,
 one old Incomplete**. Reversed belongs to the original R1 payment and supersedes its earlier
 Refunded UI label. It is not a PaymentIntent API-status claim or bank-credit confirmation.
-Before later browser-session steering, its detail showed $0.50 paid/$0.50 refunded, one refund
-request and a refund-updated event. That new event/current refund-object status was not inspected.
-The earlier07:19 succeeded refund-object evidence remains a dated observation, not a fresh recheck.
-Further Stripe clarification waits for the user's specified jillcw session mapping. No financial
-or receipt-send action was performed. This absence check does not accept a paid FA lifecycle.
+The initial updated-refund-object gap was resolved by fresh independent review at **08:11 UTC**
+in the user-mapped profile jill: same original refund object, amount50/usd/status succeeded,
+original charge/intent associations and card destination type **reversal**. One refund request
+and one created/updated pair are visible; no second object is evident. No financial or receipt
+action was performed. Bank/card credit and a paid FA lifecycle remain unaccepted. See the
+[provider clarification](initial-consult-provider-clarification-2026-10-06.md) for precise bounds.
 
 ## Acceptance matrix
 
@@ -68,9 +74,9 @@ or receipt-send action was performed. This absence check does not accept a paid 
 | --- | --- | --- | --- |
 | First Available allocation | Existing reviewed route/method source; no new source diff | One actual Confirmed Taj booking at approved UTC interval | Fairness/concurrency, broader hosts/dates, paid allocation lifecycle |
 | Phone/form | Existing separate-method gates retained | One required phone filled; phone/Florida propagated; no video; payment/eight workflows OFF | Broader validation and paid Phone lifecycle |
-| Availability | Cal.com owns scheduling | Booked start excluded from test/production FA; direct Taj date disabled | Isolated Taj buffer and arbitrary external calendar conflict evidence |
-| Email/calendar | Website does not send invitations or write native calendars | FA1 attendee email/calendar/phone client-attested | Direct invitation/header/count/host-calendar inspection; known manual export omission |
-| Financial safeguard | No custom payment engine | Same five records/no new FA1 payment, R1 current UI Reversed | Current refund-updated/object clarification in jillcw; bank credit; paid round-robin |
+| Availability | Cal.com owns scheduling | Booked start excluded from test/production FA; direct Taj date disabled; native Troubleshooter isolates 15-minute post buffer | Arbitrary external calendar conflicts |
+| Email/calendar | Website does not send invitations or write native calendars | FA1 attendee email/calendar/phone client-attested; native UI asserts matching Google presence | Direct invitation/header/count/Google destination/event bridge; known manual export omission |
+| Financial safeguard | No custom payment engine | Same five records/no new FA1 payment; R1 UI Reversed; updated refund object succeeded/reversal | Bank credit; paid round-robin |
 
 Private contacts, booking/payment/refund IDs and invitation links remain only in provider views/
 approval context. Shareable evidence uses FA1 and R1 aliases. See [preparation](initial-consult-first-available-preparation-2026-10-06.md),

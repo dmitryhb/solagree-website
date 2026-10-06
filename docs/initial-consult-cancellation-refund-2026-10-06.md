@@ -41,6 +41,13 @@ Receipt history shows one Payment and one Refund sent row to the approved attend
 sending is verified; inbox delivery and actual bank/card credit remain unconfirmed. No manual
 Stripe Refund, second refund, receipt send/resend or financial action was performed by the agent.
 
+Later independent review at **08:11 UTC** supersedes the old list label: original R1 now displays
+**Reversed**, $0.50 paid/$0.50 refunded. The visible `refund.updated` snapshot retains the same
+refund object, amount50/usd/status succeeded and original charge/intent associations;
+`destination_details.card.type` is **reversal**. One request and one created/updated pair are
+visible, with no second refund object evident. Bank/card credit remains unconfirmed. See the
+[provider clarification](initial-consult-provider-clarification-2026-10-06.md).
+
 ## Actual Cal.com result — independently verified
 
 Selected replacement R1-R is **Canceled**, with the controlled Jill actor and prepared reason.
