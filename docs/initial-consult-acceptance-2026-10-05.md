@@ -1,5 +1,13 @@
 # Initial Consult acceptance preparation — October 5, 2026
 
+Later controlled G1 preparation: existing Hidden Stacie paid-lifecycle event saved-policy preflight
+PASS at **12:44:22 UTC**; root public 01:30 Amsterdam start observed without selection/hold.
+The [policy plan](initial-consult-policy-boundary-plan-2026-10-06.md) proposes a distinct $0.50
+attendee-context early cancellation, October9 01:30–02:00 Amsterdam, with asserted cutoff
+October7 01:30 Amsterdam. Exact new financial/recipient approval is pending; no new booking,
+charge, cancellation, notice or saved setting was performed. T3 protected.
+
+
 Later independent native QA, October6 **12:24:59 UTC / 14:24:59 Amsterdam**, Cal.com **6.9.12-h**:
 James Zoom remains Default with expired/revoked permissions. Official admin inspection exited to
 Jill; no provider writes or sends. T3 remains Confirmed/Paid/Stacie at its original UTC interval,

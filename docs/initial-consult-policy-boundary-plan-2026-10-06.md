@@ -86,6 +86,59 @@ native availability and recipient list before asking for each concrete live scen
 final payment/refund for the user. Intent creation, a refund message or receipt-send row alone is
 not successful-charge/refund settlement/inbox proof.
 
+## Concrete G1 preparation — not booked or authorized
+
+A distinct proposed **genuine-attendee early cancellation** can reuse hidden Stacie event **7357581**,
+`initial-consults/test-stacie-payment-lifecycle-20261006`. Its technical title is
+“TEST — Stacie payment lifecycle — no consultation”; historical R1/R1-R remain canceled/refunded.
+No existing booking is reused, moved or canceled. No new event or saved setting was created/changed.
+
+Independent saved preflight **October6 12:44:22 UTC**, Cal.com **6.9.12-h**: Hidden/off, 30 minutes,
+sole Stacie/medium/Maximize, fixed/weights/future hosts OFF; Organizer's default app labelled Zoom;
+Stripe Initial Consults/$0.50 USD/collect on booking/refund2 calendar days; attendee-only/Always
+rescheduling disabled, same-host Always, cancellation allowed, reason mandatory for host only,
+past/cancelled rebooking OFF; all eight event workflows OFF. **Existing range Oct8–Oct9**, notice2h,
+pre0/post15, Always14 OFF, Save disabled. Actual default Zoom usability is not inferred from the label.
+Root separately reads Email confirmation, required name/email/phone/State, optional Notes/SMS;
+booking-form preview has one phone and unchecked optional SMS. This is saved/preview evidence,
+not an actual submitted consent value or successful validation.
+
+| Field | Proposed controlled G1 value |
+| --- | --- |
+| Start / end Amsterdam | October9 01:30–02:00 |
+| Start / end UTC | October8 23:30–October9 00:00 |
+| Start / end New York | October8 19:30–20:00 |
+| Provider-asserted cutoff UTC / Amsterdam | October6 23:30 / October7 01:30 |
+| Amount / payee | One new $0.50 USD payment to SOLAGREE |
+| Role | Attendee in a clean browser context without Cal.com admin/organizer login |
+| Notices | Exact controlled attendee/Stacie approval required for native pending-payment, confirmation, calendar, cancellation and refund-receipt messages; no additional guests |
+
+Python `datetime`/`zoneinfo` independently validates these conversions. Root's public availability
+read in Amsterdam/24h, with personal overlay OFF, rendered 01:30 enabled; no time was selected,
+no hold created, no form entered. Overlay restored ON. A screenshot records price/title/date/time.
+Availability must be freshly checked again after approval; the observed button is not a reservation.
+
+After explicit exact-scenario/recipient approval, the user completes Terms and one final payment.
+Reconcile the new UID/host/time with one successful original Stripe charge and one receipt before
+any cancellation. If payment is ambiguous, stop and reconcile rather than creating/paying another
+record. The user then opens the attendee confirmation/cancel link in the same clean context,
+without signing into Cal.com as Jill/organizer, and performs final cancellation **before C**.
+If the native form requests a manual organizer path, the genuine guest context cannot be established,
+or C has passed, stop this early case; do not substitute an admin/late/equality cancellation.
+
+The user performs any financial final action; no agent Cancel/Refund is authorized. A claimed native
+refund message is not enough: inspect the original charge, one full $0.50 refund and its status in
+Stripe. If automatic refund is absent, report it; do not manually create another refund. Verify
+Canceled/slot release, old-link barrier, and actual attendee/host/calendar/refund notices within
+the approval. User attestation of incognito/guest identity is recorded separately from directly
+observed role evidence; a root admin view cannot prove the guest role. Retain timestamp brackets
+with UTC clocks and authoritative native timestamps if exposed; do not relabel unlabelled times.
+
+This proposal does not authorize a charge, booking, notice, cancellation, refund, retry or cleanup.
+T3 and its reminders remain protected. Preserve the existing Oct8–Oct9 range and unrelated records;
+any later closure/cleanup is separately scoped. It tests early guest cancellation only, not equality,
+late refusal, DST, a new $60 payment or all anonymous/server bypass variants.
+
 ## Staff handling of the one complimentary change
 
 Use the original consultant's authorized organizer account and an approved request channel.
