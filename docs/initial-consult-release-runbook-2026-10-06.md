@@ -1,5 +1,29 @@
 # Initial Consult — coordinated release preparation, October 6, 2026
 
+## October 7 staging release status
+
+[Website PR #36](https://github.com/dmitryhb/solagree-website/pull/36)
+merged as `17aa8585df6d6939d233fe0dbc96db0a67d70d2b`. The complete
+81-route, 304-file **mixed-mode** staging artifact from `bde526c` was
+uploaded during a maintenance hold and then opened after the compatible Portal
+release became healthy. Its live manifest SHA-256 is
+`00a6ae8d229e13db750af3ce3e148f99e514f576e7876caacf55fd61df364d4e`;
+the live approved Partner Terms HTML matches SHA-256
+`18106cc9759517a1124af211605cac10ba8bdbbeceda41d9acbada8df94c7939`.
+The full upload retained hidden server configuration and remote-only files
+after a private full-webroot backup.
+
+Authenticated staging checks returned HTTP 200 with generated HTML and
+`noindex` for dynamic co-branded/webinar routes, while the webinar catalogue
+remained indexable. BasicAuth returned 401 without credentials; the temporary
+QA credential was removed and the original credential file restored. Jessica
+remains unpublished and GA is disabled in the staging artifact. The four
+existing mixed Cal.com event paths remain in use. Native Phone events and the
+eight-route separate-mode conversion below were **not** activated. No
+production Website or Cal.com setting changed. The remaining instructions
+and eight-route sheet below apply to a separately approved native conversion
+window; they do not describe the currently deployed staging mode.
+
 HIR-246 → HIR-248 → HIR-249 → HIR-250; HIR-609 publication dependency retained.
 Prepared instructions only: no build, upload, public event conversion or booking submitted here.
 The user has authorized reviewed merges, not production activation or Done. Actual service gaps
