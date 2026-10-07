@@ -140,9 +140,18 @@ export const verifyCoBrandedNoindexNginxConfig = () => {
     ['scripts/deploy-production.sh', productionScript],
     ['scripts/deploy-staging.sh', stagingScript]
   ]) {
-    if (!script.includes('X-Robots-Tag')) {
-      failures.push(`${scriptName} must verify the X-Robots-Tag noindex header after deployment.`)
+    if (!script.includes('scripts/verify-deployed-routes.mjs')) {
+      failures.push(`${scriptName} must call the shared post-deployment route verifier.`)
     }
+  }
+
+  const routeVerifier = readRepoFile('scripts/verify-deployed-routes.mjs')
+  const routeContract = readRepoFile('scripts/lib/route-http-contract.mjs')
+  if (!routeVerifier.includes('./lib/route-http-contract.mjs')
+    || !routeContract.includes('X-Robots-Tag')
+    || !routeContract.includes('noindex')
+    || !routeContract.includes('/webinars/__webinar-route-check__')) {
+    failures.push('The shared route verifier must check dynamic noindex and webinar catalogue responses.')
   }
 
   if (!productionScript.includes('co-branded-noindex.conf')) {

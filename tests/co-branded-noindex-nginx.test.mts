@@ -231,11 +231,16 @@ test('deployment scripts verify the noindex header after upload', () => {
     ['scripts/deploy-production.sh', production],
     ['scripts/deploy-staging.sh', staging]
   ] as const) {
-    assert.ok(script.includes('X-Robots-Tag'), `${name} must assert the X-Robots-Tag header`)
-    assert.ok(script.includes('noindex, nofollow'), `${name} must assert the full noindex, nofollow value`)
-    assert.ok(script.includes('/webinars/__webinar-route-check__'), `${name} must probe a webinar detail URL`)
-    assert.ok(script.includes('WEBINAR_CATALOG_STATUS'), `${name} must check the indexable webinar catalogue`)
+    assert.ok(script.includes('scripts/verify-deployed-routes.mjs'), `${name} must call the shared route verifier`)
   }
+
+  const verifier = readRepoFile('scripts/verify-deployed-routes.mjs')
+  const contract = readRepoFile('scripts/lib/route-http-contract.mjs')
+  assert.ok(verifier.includes('./lib/route-http-contract.mjs'), 'the route verifier must use the shared HTTP contract')
+  assert.ok(contract.includes('X-Robots-Tag'), 'the shared contract must check X-Robots-Tag')
+  assert.ok(contract.includes('noindex'), 'the shared contract must check dynamic noindex')
+  assert.ok(contract.includes('/webinars/__webinar-route-check__'), 'the shared contract must probe webinar details')
+  assert.ok(contract.includes("'/webinars'"), 'the shared contract must check the indexable catalogue')
 
   assert.ok(
     production.includes('co-branded-noindex.conf'),
