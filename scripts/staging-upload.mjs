@@ -7,7 +7,11 @@ import { join } from 'node:path'
 const root = fileURLToPath(new URL('..', import.meta.url))
 const artifact = join(root, '.output/public')
 const protectedPath = path => path.split('/').some(part => part.startsWith('.'))
-const immutablePath = path => path.startsWith('legal/')
+// These current Nuxt routes are mutable application output, including their payloads.
+// Keep Partner Terms versions and unclassified standalone legal history immutable.
+const generatedLegalPath = path => path === 'legal/index.html'
+  || /^legal\/(?:terms-of-service|privacy-policy|accessibility)\/(?:index\.html|_payload\.json)$/.test(path)
+const immutablePath = path => path.startsWith('legal/') && !generatedLegalPath(path)
 
 function verifyMeetingModes(manifest) {
   const modes = new Set()
@@ -16,7 +20,10 @@ function verifyMeetingModes(manifest) {
     const assignments = [...html.matchAll(/window\.__NUXT__\.config\s*=\s*([^]*?)<\/script>/g)]
     // Standalone legal documents have no Nuxt runtime. Application shells must have exactly one.
     const applicationShell = /id\s*=\s*["']__nuxt["']|window\.__NUXT__|\/_nuxt\//.test(html)
-    if (immutablePath(path) && !applicationShell && assignments.length === 0) continue
+    if (path.startsWith('legal/') && !applicationShell && assignments.length === 0) {
+      // Nuxt's /legal index is a static redirect, while the three generated pages need runtime.
+      if (path === 'legal/index.html' || immutablePath(path)) continue
+    }
     if (assignments.length !== 1) throw new Error(`generated HTML ${path} must have exactly one Nuxt runtime config`)
     const values = [...assignments[0][1].matchAll(/(?:"meetingMethodMode"|meetingMethodMode):"([^"]+)"/g)]
     if (values.length !== 1 || !['mixed', 'separate'].includes(values[0][1])) {

@@ -3,8 +3,11 @@
 `scripts/deploy-staging.sh` uploads the complete verified `.output/public` artifact to the fixed
 `qa_solagree@solagree.qamachine.com:/home/qa_solagree/public_html` destination. It never deletes
 remote files, changes nginx, or replaces hidden server configuration such as `.htaccess` and
-`.well-known`. Existing `legal/**` files must match incoming bytes when paths overlap; published
-Terms/history cannot be replaced. Old assets and unrelated remote content remain available.
+`.well-known`. Existing `legal/partner-terms/**` versions and unclassified standalone legal history
+must match incoming bytes when paths overlap. Generated `index.html` and `_payload.json` files under
+`legal/{terms-of-service,privacy-policy,accessibility}/`, plus the `legal/index.html` redirect, update with the complete
+application artifact under backup and hash verification. Other legal paths need explicit
+classification before overlapping bytes can change. Old assets and unrelated remote content remain available.
 
 ## Inventory and provenance
 
@@ -16,7 +19,7 @@ still checked. Without those paired pins the manifest must match the current HEA
 
 Run `npm run deploy:staging -- --skip-build --dry-run`. This now performs a **read-only SSH target
 inventory** and rsync preview. It requires remote Python 3 and rejects symlinks, non-regular entries,
-unsafe target paths, path type conflicts, or changed existing legal bytes. Set
+unsafe target paths, path type conflicts, or changed existing immutable legal bytes. Set
 `STAGING_TARGET_INVENTORY_FILE` to save the hash/path inventory in a local private file for review.
 No file bodies or BasicAuth credentials are logged.
 
@@ -39,8 +42,9 @@ are never overwritten. A mismatch stops before upload. No backup is created in d
 Delivery uses `rsync -az --delay-updates --exclude='.*'` without deletion. It is not an atomic
 site switch: keep the maintenance window until verification completes. Afterwards every uploaded
 artifact file including the release manifest must match its local SHA-256, all prior remote-only
-files and directories must still exist, and hidden configuration and prior legal bytes must be
-unchanged. Then the shared authenticated HTTP body/status/noindex/catalogue checks run.
+files and directories must still exist, and hidden configuration and prior immutable legal bytes
+must be unchanged. Generated legal pages must match the new artifact. Then the shared authenticated
+HTTP body/status/noindex/catalogue checks run.
 
 The reviewed nginx noindex snippet requires its own inspected server configuration operation and
 `nginx -t`; this static uploader deliberately provides no nginx installation path. Missing live

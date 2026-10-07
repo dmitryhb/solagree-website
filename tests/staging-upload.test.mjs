@@ -49,7 +49,7 @@ test('full local upload retains BasicAuth, hidden directories, historical Terms 
   } finally { fixture.cleanup() }
 })
 
-for (const scenario of ['missing-pin', 'stale-pin', 'backup-drift', 'no-hold', 'terms-conflict', 'symlink', 'file-directory-conflict', 'target-override']) {
+for (const scenario of ['missing-pin', 'stale-pin', 'backup-drift', 'no-hold', 'terms-conflict', 'partner-terms-conflict', 'partner-terms-metadata-conflict', 'symlink', 'file-directory-conflict', 'target-override']) {
   test(`unsafe ${scenario} refuses before backup or rsync`, () => {
     const fixture = releaseFixture('staging')
     try {
@@ -58,10 +58,12 @@ for (const scenario of ['missing-pin', 'stale-pin', 'backup-drift', 'no-hold', '
       if (scenario === 'stale-pin') writeFileSync(join(fixture.target, 'new.txt'), 'external write')
       if (scenario === 'backup-drift') env.TEST_TARGET_DRIFT = 'true'
       if (scenario === 'no-hold') env.STAGING_TARGET_QUIESCED = ''
-      if (scenario === 'terms-conflict') {
-        for (const folder of [fixture.target, fixture.output]) mkdirSync(join(folder, 'legal/old'), { recursive: true })
-        writeFileSync(join(fixture.target, 'legal/old/index.html'), 'published')
-        writeFileSync(join(fixture.output, 'legal/old/index.html'), 'changed')
+      if (scenario === 'terms-conflict' || scenario.startsWith('partner-terms-')) {
+        const document = scenario.startsWith('partner-terms-') ? 'legal/partner-terms/2026-10-06' : 'legal/old'
+        for (const folder of [fixture.target, fixture.output]) mkdirSync(join(folder, document), { recursive: true })
+        const file = scenario === 'partner-terms-metadata-conflict' ? 'manifest.json' : 'index.html'
+        writeFileSync(join(fixture.target, document, file), 'published')
+        writeFileSync(join(fixture.output, document, file), 'changed')
         updateManifest(fixture)
         env.STAGING_EXPECTED_TARGET_SHA256 = pin(fixture)
       }
@@ -75,6 +77,43 @@ for (const scenario of ['missing-pin', 'stale-pin', 'backup-drift', 'no-hold', '
     } finally { fixture.cleanup() }
   })
 }
+
+test('generated legal HTML, payloads and index redirect update while immutable partner Terms and remote history survive', () => {
+  const fixture = releaseFixture('staging')
+  try {
+    const appHtml = readFileSync(join(fixture.output, 'index.html'))
+    for (const route of ['terms-of-service', 'privacy-policy', 'accessibility']) {
+      for (const folder of [fixture.target, fixture.output]) mkdirSync(join(folder, 'legal', route), { recursive: true })
+      writeFileSync(join(fixture.target, 'legal', route, 'index.html'), 'old app runtime')
+      writeFileSync(join(fixture.target, 'legal', route, '_payload.json'), '{"old":true}')
+      writeFileSync(join(fixture.output, 'legal', route, 'index.html'), appHtml)
+      writeFileSync(join(fixture.output, 'legal', route, '_payload.json'), '{"new":true}')
+    }
+    writeFileSync(join(fixture.target, 'legal/index.html'), 'old index redirect')
+    const redirect = '<html><head><meta http-equiv="refresh" content="0; url=/legal/privacy-policy"></head></html>'
+    writeFileSync(join(fixture.output, 'legal/index.html'), redirect)
+    const termsPath = 'legal/partner-terms/2026-10-06'
+    for (const folder of [fixture.target, fixture.output]) {
+      mkdirSync(join(folder, termsPath), { recursive: true })
+      writeFileSync(join(folder, termsPath, 'index.html'), 'unchanged approved Partner Terms')
+      writeFileSync(join(folder, termsPath, 'manifest.json'), '{"approved":"2026-10-06"}')
+    }
+    mkdirSync(join(fixture.target, 'legal/history'), { recursive: true })
+    writeFileSync(join(fixture.target, 'legal/history/old.pdf'), 'remote historical document')
+    updateManifest(fixture)
+    const result = run(fixture, { STAGING_EXPECTED_TARGET_SHA256: pin(fixture) })
+    assert.equal(result.status, 0, result.stderr)
+    for (const route of ['terms-of-service', 'privacy-policy', 'accessibility']) {
+      assert.deepEqual(readFileSync(join(fixture.target, 'legal', route, 'index.html')), appHtml)
+      assert.equal(readFileSync(join(fixture.target, 'legal', route, '_payload.json'), 'utf8'), '{"new":true}')
+    }
+    assert.equal(readFileSync(join(fixture.target, 'legal/index.html'), 'utf8'), redirect)
+    assert.equal(readFileSync(join(fixture.target, termsPath, 'index.html'), 'utf8'), 'unchanged approved Partner Terms')
+    assert.equal(readFileSync(join(fixture.target, 'legal/history/old.pdf'), 'utf8'), 'remote historical document')
+    const backup = join(`${fixture.target}-backups`, readdirSync(`${fixture.target}-backups`)[0])
+    assert.equal(readFileSync(join(backup, 'public/legal/privacy-policy/index.html'), 'utf8'), 'old app runtime')
+  } finally { fixture.cleanup() }
+})
 
 test('dry-run inventories the target and writes no backup or uploaded files', () => {
   const fixture = releaseFixture('staging')
