@@ -5,7 +5,7 @@ import { join } from 'node:path'
 import { artifactFiles, releasePolicy } from '../../scripts/lib/release-artifact.mjs'
 
 const root = new URL('../..', import.meta.url).pathname
-export function releaseFixture(environment = 'production') {
+export function releaseFixture(environment = 'production', measurementId = '') {
   const directory = mkdtempSync(join(tmpdir(), 'solagree-release-'))
   cpSync(join(root, 'scripts'), join(directory, 'scripts'), { recursive: true })
   cpSync(join(root, 'config'), join(directory, 'config'), { recursive: true })
@@ -14,8 +14,9 @@ export function releaseFixture(environment = 'production') {
   const log = join(directory, 'calls.log')
   mkdirSync(join(output, 'webinars'), { recursive: true })
   mkdirSync(bin)
-  const policy = releasePolicy(environment, { NUXT_PUBLIC_GA_MEASUREMENT_ID: 'G-TCGL2PDNNY' })
-  const shell = `<!DOCTYPE html><html><head></head><body><div id="__nuxt"></div><script>window.__NUXT__={config:${JSON.stringify(policy)}};</script></body></html>`
+  const policy = releasePolicy(environment, { NUXT_PUBLIC_GA_MEASUREMENT_ID: measurementId })
+  const runtime = { public: { siteUrl: policy.siteOrigin, portalUrl: policy.portalUrl, portalApiBaseUrl: policy.portalApiOrigin, gaMeasurementId: policy.ga.measurementId, deploymentEnvironment: environment } }
+  const shell = `<!DOCTYPE html><html><head></head><body><div id="__nuxt"></div><script>window.__NUXT__={};window.__NUXT__.config=${JSON.stringify(runtime)};</script></body></html>`
   writeFileSync(join(output, 'index.html'), shell)
   writeFileSync(join(output, '200.html'), shell)
   writeFileSync(join(output, 'webinars/index.html'), shell)
@@ -36,7 +37,7 @@ export function releaseFixture(environment = 'production') {
   const env = {
     ...process.env, PATH: `${bin}:${process.env.PATH}`, TEST_DEPLOY_LOG: log,
     NUXT_PUBLIC_SITE_URL: policy.siteOrigin, NUXT_PUBLIC_PORTAL_URL: policy.portalUrl,
-    NUXT_PUBLIC_PORTAL_API_BASE_URL: policy.portalApiOrigin, NUXT_PUBLIC_GA_MEASUREMENT_ID: 'G-TCGL2PDNNY',
+    NUXT_PUBLIC_PORTAL_API_BASE_URL: policy.portalApiOrigin, NUXT_PUBLIC_GA_MEASUREMENT_ID: measurementId,
     NUXT_PUBLIC_DEPLOYMENT_ENVIRONMENT: environment, STAGING_BASIC_AUTH_USER: '', STAGING_BASIC_AUTH_PASSWORD: ''
   }
   return {

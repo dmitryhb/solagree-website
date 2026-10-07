@@ -63,7 +63,7 @@ test('production rejects staging artifact before rsync', () => {
     assert.equal(result.log, '')
   } finally { fixture.cleanup() }
 })
-for (const value of ['https://solagree.qamachine.com', 'https://www.solagree.com/path', 'https://secret:password@www.solagree.com', 'https://www.solagree.com?secret=xyz']) {
+for (const value of ['', 'https://solagree.qamachine.com', 'https://www.solagree.com/path', 'https://secret:password@www.solagree.com', 'https://www.solagree.com?secret=xyz']) {
   test('production rejects URL override without exposing its contents', () => {
     const fixture = releaseFixture()
     try {
@@ -85,3 +85,37 @@ test('postgenerate manifest records the artifact identity and hashes', () => {
     assert.deepEqual(JSON.parse(readFileSync(join(fixture.output, 'release-manifest.json'), 'utf8')), fixture.manifest)
   } finally { fixture.cleanup() }
 })
+
+for (const [field, value] of [
+  ['siteUrl', 'https://solagree.qamachine.com'],
+  ['portalUrl', 'https://solagree-portal.qamachine.com'],
+  ['portalApiBaseUrl', 'https://solagree-portal.qamachine.com'],
+  ['gaMeasurementId', 'G-UNEXPECTED'],
+  ['deploymentEnvironment', 'staging']
+]) {
+  test(`manifest creation rejects incorrect generated runtime ${field}`, () => {
+    const fixture = releaseFixture()
+    try {
+      const path = join(fixture.output, '200.html')
+      const content = readFileSync(path, 'utf8').replace(new RegExp(`"${field}":"[^"]*"`), `"${field}":"${value}"`)
+      writeFileSync(path, content)
+      const result = spawnSync(process.execPath, ['scripts/write-release-manifest.mjs'], { cwd: fixture.directory, env: fixture.env, encoding: 'utf8' })
+      assert.equal(result.status, 1)
+      assert.match(result.stderr, new RegExp(field))
+    } finally { fixture.cleanup() }
+  })
+}
+
+for (const environment of ['staging', 'production']) {
+  test(`${environment} explicitly selected GA policy passes skip-build without sending analytics`, () => {
+    const fixture = releaseFixture(environment, 'G-LOCALTEST')
+    try {
+      const result = fixture.deploy()
+      assert.equal(result.status, 0, result.stderr)
+      assert.match(result.log, /rsync/)
+      const disabled = fixture.deploy(environment, undefined, { NUXT_PUBLIC_GA_MEASUREMENT_ID: '' })
+      assert.equal(disabled.status, 1)
+      assert.match(disabled.stderr, /ga policy/)
+    } finally { fixture.cleanup() }
+  })
+}

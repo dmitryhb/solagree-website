@@ -15,7 +15,8 @@ The script will:
    - `NUXT_PUBLIC_SITE_URL=https://www.solagree.com`
    - `NUXT_PUBLIC_PORTAL_URL=https://portal.solagree.com`
    - `NUXT_PUBLIC_PORTAL_API_BASE_URL=https://portal.solagree.com`
-   - `NUXT_PUBLIC_GA_MEASUREMENT_ID=G-TCGL2PDNNY`
+   - `NUXT_PUBLIC_DEPLOYMENT_ENVIRONMENT=production`
+   - `NUXT_PUBLIC_GA_MEASUREMENT_ID` is disabled by default; explicitly select `G-TCGL2PDNNY` to enable production analytics
 2. `rsync -avz --delete` `.output/public/` to `/home/solagree/public_html/` (via `sudo -n rsync` over SSH as `ubuntu`)
 3. Re-`chown solagree:solagree`
 4. Install `config/nginx/legacy-redirects.conf` to `/etc/nginx/snippets/solagree-legacy-redirects.conf` and `config/nginx/co-branded-noindex.conf` to `/etc/nginx/snippets/solagree-co-branded-noindex.conf`, ensure both are included in the `www.solagree.com` server block, run `nginx -t`, and reload nginx
@@ -147,3 +148,29 @@ through stdin rather than command arguments or logs. The production verifier
 retains the pre-DNS `--resolve` and self-signed-certificate options. These
 post-upload checks remain separate from the mandatory pre-upload artifact gate.
 Neither fixture tests nor a skipped route check prove live server acceptance.
+
+## Deployment analytics (HIR-619)
+
+`NUXT_PUBLIC_DEPLOYMENT_ENVIRONMENT` is `dev`, `staging` or `production`;
+missing means `dev`. Nuxt's `NODE_ENV=production` during static generation does
+not select an analytics property. Both deploy scripts explicitly choose their
+deployment environment. A missing, empty or whitespace-only
+`NUXT_PUBLIC_GA_MEASUREMENT_ID` disables gtag scripts, GA events and the default
+quiz/qualifier analytics policy in every environment. An explicitly selected
+GA4 ID enables analytics without changing event names. To enable the approved
+production property, run:
+
+```bash
+NUXT_PUBLIC_GA_MEASUREMENT_ID=G-TCGL2PDNNY npm run deploy:production
+```
+
+Staging should normally use the disabled default or an explicitly chosen
+staging property. The manifest records the exact GA policy. The manifest writer
+checks the serialized Nuxt fallback runtime values; verification rejects output
+whose recorded policy differs from the current deployment invocation. Reusing
+an enabled artifact with `--skip-build` requires the same explicit ID.
+
+Focused evidence: `tests/deployment-analytics.test.mts` covers the nine
+environment/ID combinations. The disabled staging browser test runs with all
+external requests blocked and verifies that even a host-supplied gtag receives
+no events. Neither test sends analytics to a real property.

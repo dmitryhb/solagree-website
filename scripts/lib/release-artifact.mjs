@@ -1,3 +1,4 @@
+import { deploymentAnalytics } from '../../config/deployment-analytics.mjs'
 import { createHash } from 'node:crypto'
 import { execFileSync } from 'node:child_process'
 import { readFileSync, readdirSync, lstatSync } from 'node:fs'
@@ -36,9 +37,8 @@ export function releasePolicy(environment, env = process.env) {
     if (actual !== target[field]) throw new Error(`${field} does not match the ${environment} deployment destination`)
     return [field, actual]
   }))
-  const measurementId = (env.NUXT_PUBLIC_GA_MEASUREMENT_ID ?? '').trim()
-  if (measurementId && !/^G-[A-Z0-9]+$/.test(measurementId)) throw new Error('ga.measurementId must be a GA4 measurement ID or empty')
-  return { environment, ...values, ga: { enabled: Boolean(measurementId), measurementId } }
+  const { ga } = deploymentAnalytics({ ...env, NUXT_PUBLIC_DEPLOYMENT_ENVIRONMENT: environment })
+  return { environment, ...values, ga }
 }
 
 export function sourceCommit(root) {
