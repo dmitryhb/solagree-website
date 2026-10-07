@@ -17,11 +17,12 @@
     "verify:co-branded-noindex-nginx": "node scripts/verify-nginx-co-branded-noindex.mjs",
     "test": "npm run test:vitest && npm run test:node",
     "test:vitest": "vitest run",
-    "test:node": "node --experimental-strip-types --test tests/*.test.mts",
+    "test:node": "node --experimental-strip-types --test tests/*.test.mts tests/*.test.mjs",
     "test:co-branded-page-variants": "node --experimental-strip-types --test tests/co-branded-page-variant.test.mts",
     "test:co-branded-route": "vitest run tests/co-branded-route.component.test.ts",
     "test:co-branded-page-config": "vitest run tests/co-branded-page-config.test.ts",
     "test:co-branded-noindex-nginx": "node --experimental-strip-types --test tests/co-branded-noindex-nginx.test.mts",
+    "test:deploy-staging": "node --test tests/deploy-staging.test.mjs",
     "test:error-page-content": "vitest run tests/error-page-content.component.test.ts",
     "test:portal-submission-services": "vitest run tests/portal-submission-services.test.ts",
     "test:blog-content": "vitest run tests/blog-content.test.ts",
@@ -35,8 +36,10 @@
     "test:case-qualifier-e2e": "playwright test -c playwright.case-qualifier.config.ts",
     "test:resource-content-validation": "node --experimental-strip-types --test tests/resource-content-validation.test.mts",
     "test:resources-navigation": "vitest run tests/resources-navigation.component.test.ts",
+    "test:phone-validation-e2e": "playwright test -c playwright.phone-validation.config.ts",
     "prebuild": "npm run validate:resource-content",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "postgenerate": "node scripts/write-release-manifest.mjs"
   },
   "dependencies": {
     "@calcom/embed-snippet": "^1.3.3",

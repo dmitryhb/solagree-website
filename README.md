@@ -203,6 +203,25 @@ https://solagree-portal.qamachine.com/api/attorney-applications
 https://solagree-portal.qamachine.com/api/consult-requests
 ```
 
+If staging is protected with HTTP Basic authentication, pass both credentials to
+the deployment process. They are used only for staging probes and are never
+printed:
+
+```bash
+STAGING_BASIC_AUTH_USER='…' STAGING_BASIC_AUTH_PASSWORD='…' npm run deploy:staging
+```
+
+Leave both variables unset for a public staging site. The script rejects a
+partially configured pair before it builds or uploads. Before upload, it also
+detects a protected host and fails if credentials are absent or rejected. After
+upload every dynamic probe and `/webinars` must return HTTP 200. Dynamic probes
+must also return `X-Robots-Tag: noindex, nofollow`; `/webinars` must not.
+
+For staging nginx, use the canonical
+[`config/nginx/co-branded-noindex.conf`](config/nginx/co-branded-noindex.conf)
+in the website server block before the SPA fallback. Do not copy the locations
+into deployment runbooks.
+
 ## Admin intake pages
 
 Direct-share intake form pages are served under:
@@ -252,8 +271,8 @@ location / {
 }
 ```
 
-`npm run deploy:staging` checks this after upload by requesting a `/go/...`
-route and fails if nginx still returns `404`. Use `--skip-route-check` only when
+`npm run deploy:staging` checks this after upload by requesting dynamic routes
+and requiring HTTP 200 with noindex. Use `--skip-route-check` only when
 the server fallback is being changed separately.
 
 ### Co-branded routes are non-indexable
@@ -266,8 +285,9 @@ every `/go/*` and `/cdfa/go/*` URL is treated as non-indexable:
 
 - nginx sends `X-Robots-Tag: noindex, nofollow` on the initial HTTP response for
   `/go/*` and `/cdfa/go/*` (production installs `config/nginx/co-branded-noindex.conf`
-  automatically; the staging server block needs the same location blocks —
-  `npm run deploy:staging` fails the route check until they are added).
+  automatically; staging must include the complete canonical snippet directly
+  in its server block, including its server-scoped header configuration —
+  copying only the location blocks is insufficient).
 - The rendered app applies `noindex, nofollow` meta after hydration as a
   second layer, including the embed routes.
 - `robots.txt` deliberately has no `Disallow` rules for these paths: crawlers

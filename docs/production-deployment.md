@@ -15,7 +15,8 @@ The script will:
    - `NUXT_PUBLIC_SITE_URL=https://www.solagree.com`
    - `NUXT_PUBLIC_PORTAL_URL=https://portal.solagree.com`
    - `NUXT_PUBLIC_PORTAL_API_BASE_URL=https://portal.solagree.com`
-   - `NUXT_PUBLIC_GA_MEASUREMENT_ID=G-TCGL2PDNNY`
+   - `NUXT_PUBLIC_DEPLOYMENT_ENVIRONMENT=production`
+   - `NUXT_PUBLIC_GA_MEASUREMENT_ID` is disabled by default; explicitly select `G-TCGL2PDNNY` to enable production analytics
 2. `rsync -avz --delete` `.output/public/` to `/home/solagree/public_html/` (via `sudo -n rsync` over SSH as `ubuntu`)
 3. Re-`chown solagree:solagree`
 4. Install `config/nginx/legacy-redirects.conf` to `/etc/nginx/snippets/solagree-legacy-redirects.conf` and `config/nginx/co-branded-noindex.conf` to `/etc/nginx/snippets/solagree-co-branded-noindex.conf`, ensure both are included in the `www.solagree.com` server block, run `nginx -t`, and reload nginx
@@ -63,10 +64,18 @@ location / {
 }
 ```
 
-Note: nginx `add_header` directives on a `location` block replace inherited
-`server`-level `add_header` directives for that location. If security headers
-are later added at the `server` level, repeat them inside the co-branded
-`location` blocks from the snippet.
+The noindex snippet sets a marker in each normalized dynamic location and adds
+its `X-Robots-Tag` header at `server` scope. Nginx normalizes escaped path
+characters before choosing a location, so this covers canonical paths and
+aliases such as `/%67o/example`, `/cdfa/%67o/example`, and
+`/web%69nars/example`. Dynamic misses enter the snippet's named fallback,
+which serves `/200.html` without restarting server rewrite processing or
+clearing the marker. Keeping the output header at server scope keeps inherited
+BasicAuth and security headers intact. The exact `/webinars` catalogue and its
+`/webinars/` canonical redirect do not enter a dynamic location and remain
+indexable. The snippet initializes the marker unconditionally, so ordinary
+pages plus direct, encoded, and duplicate-slash aliases of `/200.html` emit no
+robots header and no uninitialized-variable warning.
 
 ## Dynamic URLs cannot return a true HTTP 404
 
@@ -96,8 +105,9 @@ static HTML and no runtime server that knows the valid slug set, so:
 
 The `/webinars` catalogue is a generated, indexable landing page. The nginx
 snippet serves it from `/webinars/index.html`, redirects `/webinars/` to the
-canonical path, and applies noindex only to event detail paths. Event detail
-metadata updates in the browser and is intentionally excluded from indexing.
+canonical path, and applies noindex only to event detail paths, including
+paths with query strings. Event detail metadata updates in the browser and is
+intentionally excluded from indexing.
 
 ## Pre-DNS testing
 
@@ -109,3 +119,67 @@ metadata updates in the browser and is intentionally excluded from indexing.
 Browser will warn on the self-signed cert; accept once for the smoke test.
 
 See `portal/docs/production-deployment.md` for the full environment + DNS cutover checklist.
+
+## Artifact gate (HIR-617)
+
+Both scripts validate the staging or production destination before generation
+and before any upload, including with `--skip-build` and `--dry-run`. Public
+site and Portal overrides must be HTTPS origins matching the named target;
+paths, query strings, credentials and destinations belonging to another
+environment are rejected. Trailing slashes are accepted and normalized.
+
+`npm run generate` under the deployment script writes
+`.output/public/release-manifest.json` with the source commit, deployment
+environment, site origin, Portal URL/API origin, GA policy and SHA-256 hashes
+for every generated file. Reusing output requires a manifest matching the
+current commit and target policy, and an unchanged complete artifact. A build
+from another commit or environment must be regenerated through the target
+script. The sitemap origin is checked against that same target even when
+building is skipped. Normal local generation does not create a deployable
+manifest unless an explicit staging/production environment is supplied.
+
+The manifest is an accidental-mismatch and integrity guard for locally built
+artifacts; it is not a signature or remote build attestation. Deploys still
+replace the active directory with rsync; atomic promotion belongs to HIR-624.
+
+## Shared HTTP acceptance (HIR-618)
+
+Both scripts run `scripts/verify-deployed-routes.mjs` after upload. Each dynamic
+probe must return HTTP 200, `Content-Type: text/html`, an `X-Robots-Tag` carrying
+both noindex and nofollow, and a body exactly matching the uploaded `200.html`.
+The `/webinars` catalogue must return HTTP 200, its generated catalogue HTML,
+and no noindex/none header. Redirects are not followed. Connection errors,
+auth pages, proxy error bodies, and every 4xx/5xx response fail the check.
+Responses are decoded for compression before comparing with the artifact.
+
+Staging probes retain BasicAuth, passing the configured credentials to curl
+through stdin rather than command arguments or logs. The production verifier
+retains the pre-DNS `--resolve` and self-signed-certificate options. These
+post-upload checks remain separate from the mandatory pre-upload artifact gate.
+Neither fixture tests nor a skipped route check prove live server acceptance.
+
+## Deployment analytics (HIR-619)
+
+`NUXT_PUBLIC_DEPLOYMENT_ENVIRONMENT` is `dev`, `staging` or `production`;
+missing means `dev`. Nuxt's `NODE_ENV=production` during static generation does
+not select an analytics property. Both deploy scripts explicitly choose their
+deployment environment. A missing, empty or whitespace-only
+`NUXT_PUBLIC_GA_MEASUREMENT_ID` disables gtag scripts, GA events and the default
+quiz/qualifier analytics policy in every environment. An explicitly selected
+GA4 ID enables analytics without changing event names. To enable the approved
+production property, run:
+
+```bash
+NUXT_PUBLIC_GA_MEASUREMENT_ID=G-TCGL2PDNNY npm run deploy:production
+```
+
+Staging should normally use the disabled default or an explicitly chosen
+staging property. The manifest records the exact GA policy. The manifest writer
+checks the serialized Nuxt fallback runtime values; verification rejects output
+whose recorded policy differs from the current deployment invocation. Reusing
+an enabled artifact with `--skip-build` requires the same explicit ID.
+
+Focused evidence: `tests/deployment-analytics.test.mts` covers the nine
+environment/ID combinations. The disabled staging browser test runs with all
+external requests blocked and verifies that even a host-supplied gtag receives
+no events. Neither test sends analytics to a real property.

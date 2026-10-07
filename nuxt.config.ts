@@ -1,12 +1,13 @@
+import { deploymentAnalytics } from './config/deployment-analytics.mjs'
+
 const DEV_PORTAL_API_BASE_URL = 'http://solagree-portal.local:3004'
-const PRODUCTION_GA_MEASUREMENT_ID = 'G-TCGL2PDNNY'
 const isProduction = process.env.NODE_ENV === 'production'
 const portalApiBaseUrl = process.env.NUXT_PUBLIC_PORTAL_API_BASE_URL?.trim()
   || (isProduction ? '' : DEV_PORTAL_API_BASE_URL)
 const portalUrl = process.env.NUXT_PUBLIC_PORTAL_URL?.trim()
   || portalApiBaseUrl
-const gaMeasurementId = process.env.NUXT_PUBLIC_GA_MEASUREMENT_ID?.trim()
-  || (isProduction ? PRODUCTION_GA_MEASUREMENT_ID : '')
+const { environment: deploymentEnvironment, ga } = deploymentAnalytics()
+const gaMeasurementId = ga.measurementId
 const ignoredSourcemapWarningPlugins = new Set([
   'nuxt:module-preload-polyfill',
   '@tailwindcss/vite:generate:build'
@@ -121,6 +122,7 @@ gtag('config', '${gaMeasurementId}', { send_page_view: false });
       portalUrl,
       portalApiBaseUrl,
       gaMeasurementId,
+      deploymentEnvironment,
       initialConsultBooking: {
         meetingMethodMode: process.env.NUXT_PUBLIC_CALCOM_INITIAL_CONSULT_MEETING_METHOD_MODE ?? 'mixed',
         unpublishedConsultants: process.env.NUXT_PUBLIC_CALCOM_INITIAL_CONSULT_UNPUBLISHED_CONSULTANTS ?? 'jessica',
@@ -143,7 +145,7 @@ gtag('config', '${gaMeasurementId}', { send_page_view: false });
           showExplainer: true
         },
         analytics: {
-          enabled: true,
+          enabled: ga.enabled,
           namespace: 'solagree.quiz',
           trackingId: gaMeasurementId || undefined
         },
@@ -165,7 +167,7 @@ gtag('config', '${gaMeasurementId}', { send_page_view: false });
           headingLevel: 1
         },
         analytics: {
-          enabled: true,
+          enabled: ga.enabled,
           namespace: 'solagree.case_qualifier',
           trackingId: gaMeasurementId || undefined
         },
