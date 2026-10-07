@@ -1,6 +1,8 @@
 import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { join } from 'node:path'
+import { createHash } from 'node:crypto'
+import { execFileSync } from 'node:child_process'
 import { manifestName, releasePolicy, sourceCommit, verifyManifest } from './lib/release-artifact.mjs'
 
 try {
@@ -14,7 +16,21 @@ try {
     try { manifest = JSON.parse(readFileSync(join(directory, manifestName), 'utf8')) } catch {
       throw new Error('release-manifest.json is missing or invalid; generate an artifact for the target environment')
     }
-    verifyManifest(manifest, expected, sourceCommit(root), directory)
+    let commit = sourceCommit(root)
+    if (expected.environment === 'staging' && process.env.STAGING_ARTIFACT_COMMIT) {
+      commit = process.env.STAGING_ARTIFACT_COMMIT
+      if (!/^[a-f0-9]{40}$/.test(commit)) throw new Error('STAGING_ARTIFACT_COMMIT must be a full commit SHA')
+      const hash = createHash('sha256').update(readFileSync(join(directory, manifestName))).digest('hex')
+      if (!/^[a-f0-9]{64}$/.test(process.env.STAGING_ARTIFACT_MANIFEST_SHA256 ?? '') || hash !== process.env.STAGING_ARTIFACT_MANIFEST_SHA256) {
+        throw new Error('explicit staging artifact requires its exact manifest SHA-256')
+      }
+      try { execFileSync('git', ['-C', root, 'merge-base', '--is-ancestor', commit, 'HEAD'], { stdio: 'ignore' }) } catch {
+        throw new Error('explicit staging artifact commit must be an ancestor of the current source commit')
+      }
+    } else if (process.env.STAGING_ARTIFACT_MANIFEST_SHA256 && expected.environment === 'staging') {
+      throw new Error('STAGING_ARTIFACT_COMMIT is required with a manifest SHA-256')
+    }
+    verifyManifest(manifest, expected, commit, directory)
     console.log(`Release artifact verified for ${expected.environment} at commit ${manifest.commit}`)
   }
 } catch (error) {

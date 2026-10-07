@@ -5,9 +5,6 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 OUTPUT_DIR="$ROOT_DIR/.output/public/"
 
-SSH_USER="${SSH_USER:-qa_solagree}"
-SSH_HOST="${SSH_HOST:-solagree.qamachine.com}"
-REMOTE_PATH="${REMOTE_PATH:-/home/qa_solagree/public_html/}"
 STAGING_SITE_URL="${NUXT_PUBLIC_SITE_URL-https://solagree.qamachine.com}"
 STAGING_PORTAL_URL="${NUXT_PUBLIC_PORTAL_URL-https://solagree-portal.qamachine.com/}"
 STAGING_PORTAL_API_BASE_URL="${NUXT_PUBLIC_PORTAL_API_BASE_URL-https://solagree-portal.qamachine.com/}"
@@ -141,17 +138,11 @@ MESSAGE
   fi
 fi
 
-RSYNC_ARGS=(
-  -avz
-  --delete
-)
-
 if [ "$DRY_RUN" = true ]; then
-  RSYNC_ARGS+=(--dry-run)
+  node "$ROOT_DIR/scripts/staging-upload.mjs" --dry-run
+else
+  node "$ROOT_DIR/scripts/staging-upload.mjs"
 fi
-
-echo "Deploying $OUTPUT_DIR to ${SSH_USER}@${SSH_HOST}:${REMOTE_PATH}"
-rsync "${RSYNC_ARGS[@]}" "$OUTPUT_DIR" "${SSH_USER}@${SSH_HOST}:${REMOTE_PATH}"
 
 if [ "$DRY_RUN" = false ] && [ "$SKIP_ROUTE_CHECK" = false ]; then
   node "$ROOT_DIR/scripts/verify-deployed-routes.mjs" \
