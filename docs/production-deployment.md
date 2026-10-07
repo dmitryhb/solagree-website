@@ -109,3 +109,25 @@ metadata updates in the browser and is intentionally excluded from indexing.
 Browser will warn on the self-signed cert; accept once for the smoke test.
 
 See `portal/docs/production-deployment.md` for the full environment + DNS cutover checklist.
+
+## Artifact gate (HIR-617)
+
+Both scripts validate the staging or production destination before generation
+and before any upload, including with `--skip-build` and `--dry-run`. Public
+site and Portal overrides must be HTTPS origins matching the named target;
+paths, query strings, credentials and destinations belonging to another
+environment are rejected. Trailing slashes are accepted and normalized.
+
+`npm run generate` under the deployment script writes
+`.output/public/release-manifest.json` with the source commit, deployment
+environment, site origin, Portal URL/API origin, GA policy and SHA-256 hashes
+for every generated file. Reusing output requires a manifest matching the
+current commit and target policy, and an unchanged complete artifact. A build
+from another commit or environment must be regenerated through the target
+script. The sitemap origin is checked against that same target even when
+building is skipped. Normal local generation does not create a deployable
+manifest unless an explicit staging/production environment is supplied.
+
+The manifest is an accidental-mismatch and integrity guard for locally built
+artifacts; it is not a signature or remote build attestation. Deploys still
+replace the active directory with rsync; atomic promotion belongs to HIR-624.

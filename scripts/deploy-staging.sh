@@ -80,6 +80,14 @@ curl_staging() {
   curl -sS "${CURL_AUTH_ARGS[@]}" "$@"
 }
 
+# Resolve and validate destination even when reusing an existing build.
+export NUXT_PUBLIC_DEPLOYMENT_ENVIRONMENT="staging"
+export NUXT_PUBLIC_SITE_URL="$STAGING_SITE_URL"
+export NUXT_PUBLIC_PORTAL_URL="$STAGING_PORTAL_URL"
+export NUXT_PUBLIC_PORTAL_API_BASE_URL="$STAGING_PORTAL_API_BASE_URL"
+export NUXT_PUBLIC_GA_MEASUREMENT_ID="${NUXT_PUBLIC_GA_MEASUREMENT_ID:-G-TCGL2PDNNY}"
+node "$ROOT_DIR/scripts/verify-release-artifact.mjs" --policy-only
+
 if [ "$SKIP_BUILD" = false ]; then
   echo "Generating static output..."
   export NUXT_PUBLIC_SITE_URL="$STAGING_SITE_URL"
@@ -103,6 +111,7 @@ if [ ! -d "$OUTPUT_DIR" ]; then
 fi
 
 # Fail the deployment before rsync when the static sitemap is missing or invalid.
+node "$ROOT_DIR/scripts/verify-release-artifact.mjs"
 node "$ROOT_DIR/scripts/verify-sitemap.mjs"
 
 # Detect a protected staging host before replacing the current static output.

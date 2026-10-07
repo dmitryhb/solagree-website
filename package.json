@@ -37,7 +37,8 @@
     "test:resource-content-validation": "node --experimental-strip-types --test tests/resource-content-validation.test.mts",
     "test:resources-navigation": "vitest run tests/resources-navigation.component.test.ts",
     "prebuild": "npm run validate:resource-content",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "postgenerate": "node scripts/write-release-manifest.mjs"
   },
   "dependencies": {
     "@calcom/embed-snippet": "^1.3.3",

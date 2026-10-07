@@ -50,6 +50,14 @@ for arg in "$@"; do
   esac
 done
 
+# Resolve and validate destination even when reusing an existing build.
+export NUXT_PUBLIC_DEPLOYMENT_ENVIRONMENT="production"
+export NUXT_PUBLIC_SITE_URL="$PRODUCTION_SITE_URL"
+export NUXT_PUBLIC_PORTAL_URL="$PRODUCTION_PORTAL_URL"
+export NUXT_PUBLIC_PORTAL_API_BASE_URL="$PRODUCTION_PORTAL_API_BASE_URL"
+export NUXT_PUBLIC_GA_MEASUREMENT_ID="$PRODUCTION_GA_MEASUREMENT_ID"
+node "$ROOT_DIR/scripts/verify-release-artifact.mjs" --policy-only
+
 if [ "$SKIP_BUILD" = false ]; then
   echo "Generating static output for production..."
   export NUXT_PUBLIC_SITE_URL="$PRODUCTION_SITE_URL"
@@ -75,6 +83,7 @@ if [ ! -d "$OUTPUT_DIR" ]; then
 fi
 
 # Fail the deployment before rsync when the static sitemap is missing or invalid.
+node "$ROOT_DIR/scripts/verify-release-artifact.mjs"
 node "$ROOT_DIR/scripts/verify-sitemap.mjs"
 
 RSYNC_ARGS=(
