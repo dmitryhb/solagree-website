@@ -1,89 +1,52 @@
 import assert from 'node:assert/strict'
-import { chmodSync, existsSync, mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
-import { tmpdir } from 'node:os'
-import { join } from 'node:path'
-import { spawnSync } from 'node:child_process'
 import test from 'node:test'
+import { releaseFixture } from './fixtures/release-deploy.mjs'
 
-const repoRoot = new URL('..', import.meta.url).pathname
 const testPassword = 'staging-test-password'
 
-const writeExecutable = (path, contents) => {
-  writeFileSync(path, contents)
-  chmodSync(path, 0o755)
-}
-
-const runDeployment = ({ mode, credentials } = {}) => {
-  const fixtureRoot = mkdtempSync(join(tmpdir(), 'solagree-deploy-staging-'))
-  const binDir = join(fixtureRoot, 'bin')
-  const outputDir = join(repoRoot, '.output', 'public')
-  const logPath = join(fixtureRoot, 'calls.log')
-  mkdirSync(binDir)
-  const outputAlreadyExists = existsSync(outputDir)
-  if (!outputAlreadyExists) mkdirSync(outputDir, { recursive: true })
-
-  writeExecutable(join(binDir, 'node'), '#!/usr/bin/env bash\nexit 0\n')
-  writeExecutable(join(binDir, 'rsync'), `#!${process.execPath}
-import { appendFileSync } from 'node:fs'
-appendFileSync(process.env.TEST_DEPLOY_LOG, 'rsync\\n')
-`)
-  writeExecutable(join(binDir, 'curl'), `#!${process.execPath}
+const runDeployment = ({ mode, credentials, environment = 'staging' } = {}) => {
+  const fixture = releaseFixture(environment)
+  fixture.executable('curl', `#!${process.execPath}
 import { appendFileSync, readFileSync, writeFileSync } from 'node:fs'
-
+import { join } from 'node:path'
 const args = process.argv.slice(2)
 const url = args.find(argument => argument.startsWith('https://'))
 const headerIndex = args.indexOf('-D')
-const headerPath = headerIndex === -1 ? undefined : args[headerIndex + 1]
+const bodyIndex = args.indexOf('-o')
 const authConfigIndex = args.indexOf('--config')
-const auth = authConfigIndex === -1 ? '' : readFileSync(args[authConfigIndex + 1], 'utf8')
+const authPath = authConfigIndex === -1 ? '' : args[authConfigIndex + 1]
+const auth = authPath === '-' ? readFileSync(0, 'utf8') : authPath ? readFileSync(authPath, 'utf8') : ''
 const mode = process.env.TEST_CURL_MODE
 const isDynamic = /\\/(go|cdfa\\/go|webinars)\\//.test(url)
 const isCatalogue = url.endsWith('/webinars')
-
 appendFileSync(process.env.TEST_DEPLOY_LOG, 'curl auth=' + (auth ? 'provided' : 'none') + ' url=' + url + '\\n')
-
-if (mode === 'transport-failure') {
-  process.stdout.write('000')
-  process.exit(7)
-}
-
+if (mode === 'transport-failure') { process.stdout.write('000'); process.exit(7) }
+if (url.endsWith('/about/')) { process.stdout.write('301 https://www.solagree.com/about-us'); process.exit(0) }
 let status = '200'
-let headers = ''
 if (mode === 'protected-success' && auth !== 'user = "test-user:${testPassword}"\\n') status = '401'
 if (mode === 'public-success' && auth) status = '500'
 if (mode === 'invalid-credentials' && url.endsWith('/')) status = '401'
 if (mode === 'status-failure' && isDynamic) status = '500'
-if (isDynamic && mode !== 'header-failure') headers = 'X-Robots-Tag: noindex, nofollow\\n'
+if (/^\\d+$/.test(mode) && isDynamic) status = mode
+let headers = 'HTTP/1.1 ' + status + '\\nContent-Type: text/html; charset=utf-8\\n'
+if (isDynamic && mode !== 'header-failure') headers += 'X-Robots-Tag: noindex, nofollow\\n'
 if (isCatalogue) {
-  headers = mode === 'catalogue-noindex' ? 'X-Robots-Tag: noindex, nofollow\\n' : ''
+  if (mode === 'catalogue-noindex') headers += 'X-Robots-Tag: noindex, nofollow\\n'
   if (mode === 'catalogue-status-failure') status = '500'
 }
-if (headerPath && headerPath !== '-w') writeFileSync(headerPath, headers)
+if (headerIndex !== -1) writeFileSync(args[headerIndex + 1], headers)
+if (bodyIndex !== -1 && args[bodyIndex + 1] !== '/dev/null') {
+  const body = mode === 'wrong-body' ? '<html>proxy page</html>' : readFileSync(join(process.cwd(), '.output/public', isCatalogue ? 'webinars/index.html' : '200.html'))
+  writeFileSync(args[bodyIndex + 1], body)
+}
 process.stdout.write(status)
 `)
-
-  const result = spawnSync('bash', ['scripts/deploy-staging.sh', '--skip-build'], {
-    cwd: repoRoot,
-    encoding: 'utf8',
-    env: {
-      ...process.env,
-      PATH: `${binDir}:${process.env.PATH}`,
-      NUXT_PUBLIC_SITE_URL: 'https://staging.example.test',
-      STAGING_BASIC_AUTH_USER: '',
-      STAGING_BASIC_AUTH_PASSWORD: '',
+  try {
+    return fixture.deploy(environment, ['--skip-build'], {
       TEST_CURL_MODE: mode,
-      TEST_DEPLOY_LOG: logPath,
-      ...(credentials ? {
-        STAGING_BASIC_AUTH_USER: credentials.user,
-        STAGING_BASIC_AUTH_PASSWORD: credentials.password
-      } : {})
-    }
-  })
-
-  const log = existsSync(logPath) ? readFileSync(logPath, 'utf8') : ''
-  rmSync(fixtureRoot, { force: true, recursive: true })
-  if (!outputAlreadyExists) rmSync(outputDir, { force: true, recursive: true })
-  return { ...result, log }
+      ...(credentials ? { STAGING_BASIC_AUTH_USER: credentials.user, STAGING_BASIC_AUTH_PASSWORD: credentials.password } : {})
+    })
+  } finally { fixture.cleanup() }
 }
 
 test('staging deployment accepts authorized protected route checks without logging credentials', () => {
@@ -161,6 +124,18 @@ for (const mode of ['catalogue-noindex', 'catalogue-status-failure']) {
     const result = runDeployment({ mode })
 
     assert.equal(result.status, 1)
-    assert.match(result.stderr, /catalogue check failed/)
+    assert.match(result.stderr, /catalogue check failed|webinars returned HTTP 500/)
   })
+}
+
+for (const environment of ['staging', 'production']) {
+  for (const mode of ['public-success', '301', '401', '404', '500', '503', 'wrong-body']) {
+    test(`${environment} deploy script uses the shared HTTP contract for ${mode}`, () => {
+      const result = runDeployment({ environment, mode })
+      assert.equal(result.status, mode === 'public-success' ? 0 : 1, result.stderr)
+      assert.match(result.log, /rsync/)
+      if (/^\d+$/.test(mode)) assert.match(result.stderr, new RegExp(`HTTP ${mode}; expected`))
+      if (mode === 'wrong-body') assert.match(result.stderr, /body does not match/)
+    })
+  }
 }

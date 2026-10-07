@@ -154,60 +154,7 @@ echo "Deploying $OUTPUT_DIR to ${SSH_USER}@${SSH_HOST}:${REMOTE_PATH}"
 rsync "${RSYNC_ARGS[@]}" "$OUTPUT_DIR" "${SSH_USER}@${SSH_HOST}:${REMOTE_PATH}"
 
 if [ "$DRY_RUN" = false ] && [ "$SKIP_ROUTE_CHECK" = false ]; then
-  ROUTE_CHECK_PATHS=(
-    "/go/__co-branded-route-check__"
-    "/cdfa/go/__co-branded-route-check__"
-    "/webinars/__webinar-route-check__"
-  )
+  node "$ROOT_DIR/scripts/verify-deployed-routes.mjs" \
+    --site-url "$STAGING_SITE_URL" --staging-auth
 
-  for route_check_path in "${ROUTE_CHECK_PATHS[@]}"; do
-    ROUTE_CHECK_URL="${STAGING_SITE_URL%/}${route_check_path}"
-    ROUTE_CHECK_HEADER_FILE="$(mktemp)"
-    ROUTE_CHECK_STATUS="$(curl_staging -o /dev/null \
-      -D "$ROUTE_CHECK_HEADER_FILE" \
-      -w "%{http_code}" "$ROUTE_CHECK_URL" || true)"
-
-    if [ "$ROUTE_CHECK_STATUS" != "200" ]; then
-      rm -f "$ROUTE_CHECK_HEADER_FILE"
-      cat >&2 <<MESSAGE
-Staging route check failed: $ROUTE_CHECK_URL returned HTTP $ROUTE_CHECK_STATUS; expected an authorized HTTP 200 response.
-
-The generated static website must route dynamic Nuxt paths such as /go/:slug,
-/cdfa/go/:slug, and /webinars/:id to /200.html. For the required fallback and
-noindex locations, use the canonical config/nginx/co-branded-noindex.conf
-configuration in the staging nginx server block before the SPA fallback.
-MESSAGE
-      exit 1
-    fi
-
-    if ! grep -iq '^x-robots-tag:.*noindex, nofollow' "$ROUTE_CHECK_HEADER_FILE"; then
-      rm -f "$ROUTE_CHECK_HEADER_FILE"
-      cat >&2 <<MESSAGE
-Staging noindex check failed: $ROUTE_CHECK_URL responded without an
-X-Robots-Tag: noindex, nofollow header.
-
-Dynamic routes are client-only behind the static /200.html fallback, so the
-initial HTTP response must carry the noindex signal as a response header. Add
-the canonical config/nginx/co-branded-noindex.conf configuration to the staging
-nginx server block before the SPA fallback, then reload nginx and rerun this
-deployment.
-MESSAGE
-      exit 1
-    fi
-
-    rm -f "$ROUTE_CHECK_HEADER_FILE"
-    echo "Route check passed: $ROUTE_CHECK_URL returned authorized HTTP 200 with X-Robots-Tag noindex"
-  done
-
-  WEBINAR_CATALOG_HEADER_FILE="$(mktemp)"
-  WEBINAR_CATALOG_STATUS="$(curl_staging -o /dev/null \
-    -D "$WEBINAR_CATALOG_HEADER_FILE" \
-    -w "%{http_code}" "${STAGING_SITE_URL%/}/webinars" || true)"
-  if [ "$WEBINAR_CATALOG_STATUS" != "200" ] \
-    || grep -iq '^x-robots-tag:.*noindex' "$WEBINAR_CATALOG_HEADER_FILE"; then
-    rm -f "$WEBINAR_CATALOG_HEADER_FILE"
-    echo "Staging webinar catalogue check failed: /webinars must return HTTP 200 without noindex." >&2
-    exit 1
-  fi
-  rm -f "$WEBINAR_CATALOG_HEADER_FILE"
 fi
