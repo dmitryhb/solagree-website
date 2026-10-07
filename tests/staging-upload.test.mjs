@@ -103,8 +103,10 @@ test('preservation failure retains the verified backup and reports a traffic hol
 test('separate Phone/Zoom artifact refuses without explicit native activation approval', () => {
   const fixture = releaseFixture('staging')
   try {
-    const path = join(fixture.output, '200.html')
-    writeFileSync(path, readFileSync(path, 'utf8').replace('"meetingMethodMode":"mixed"', '"meetingMethodMode":"separate"'))
+    for (const name of ['index.html', '200.html', 'webinars/index.html']) {
+      const path = join(fixture.output, name)
+      writeFileSync(path, readFileSync(path, 'utf8').replace('"meetingMethodMode":"mixed"', '"meetingMethodMode":"separate"'))
+    }
     updateManifest(fixture)
     const refused = run(fixture, {}, true)
     assert.equal(refused.status, 1)
@@ -114,6 +116,30 @@ test('separate Phone/Zoom artifact refuses without explicit native activation ap
     assert.equal(approved.status, 0, approved.stderr)
   } finally { fixture.cleanup() }
 })
+
+for (const scenario of ['index-separate', 'webinars-separate', 'missing-runtime', 'missing-application-shell', 'missing-mode', 'duplicate-runtime', 'invalid-mode', 'inconsistent-with-approval']) {
+  test(`generated HTML ${scenario} refuses before SSH, backup or rsync even with a valid file manifest`, () => {
+    const fixture = releaseFixture('staging')
+    try {
+      const path = join(fixture.output, scenario === 'webinars-separate' ? 'webinars/index.html' : 'index.html')
+      let html = readFileSync(path, 'utf8')
+      if (scenario.includes('separate') || scenario === 'inconsistent-with-approval') html = html.replace('"meetingMethodMode":"mixed"', '"meetingMethodMode":"separate"')
+      if (scenario === 'missing-runtime') html = html.replace(/<script>[^]*?<\/script>/, '')
+      if (scenario === 'missing-application-shell') html = '<!doctype html><html><body>unexpected static page</body></html>'
+      if (scenario === 'missing-mode') html = html.replace('"meetingMethodMode":"mixed"', '"otherField":"mixed"')
+      if (scenario === 'duplicate-runtime') html = html.replace('</body>', '<script>window.__NUXT__.config={"meetingMethodMode":"mixed"};</script></body>')
+      if (scenario === 'invalid-mode') html = html.replace('"meetingMethodMode":"mixed"', '"meetingMethodMode":"unexpected"')
+      writeFileSync(path, html)
+      updateManifest(fixture)
+      const result = run(fixture, scenario === 'inconsistent-with-approval' ? { STAGING_NATIVE_ACTIVATION_APPROVED: 'true' } : {})
+      assert.equal(result.status, 1)
+      assert.match(result.stderr, /generated HTML.*(?:runtime config|meetingMethodMode)/)
+      assert.equal(result.log, '')
+      assert.equal(existsSync(`${fixture.target}-backups`), false)
+      assert.deepEqual(readdirSync(fixture.target), [])
+    } finally { fixture.cleanup() }
+  })
+}
 
 test('pinned archived artifact is accepted across a later commit, only with its exact manifest checksum', () => {
   const fixture = releaseFixture('staging')

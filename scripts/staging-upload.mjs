@@ -9,6 +9,27 @@ const artifact = join(root, '.output/public')
 const protectedPath = path => path.split('/').some(part => part.startsWith('.'))
 const immutablePath = path => path.startsWith('legal/')
 
+function verifyMeetingModes(manifest) {
+  const modes = new Set()
+  for (const path of Object.keys(manifest.files).filter(path => path.endsWith('.html'))) {
+    const html = readFileSync(join(artifact, path), 'utf8')
+    const assignments = [...html.matchAll(/window\.__NUXT__\.config\s*=\s*([^]*?)<\/script>/g)]
+    // Standalone legal documents have no Nuxt runtime. Application shells must have exactly one.
+    const applicationShell = /id\s*=\s*["']__nuxt["']|window\.__NUXT__|\/_nuxt\//.test(html)
+    if (immutablePath(path) && !applicationShell && assignments.length === 0) continue
+    if (assignments.length !== 1) throw new Error(`generated HTML ${path} must have exactly one Nuxt runtime config`)
+    const values = [...assignments[0][1].matchAll(/(?:"meetingMethodMode"|meetingMethodMode):"([^"]+)"/g)]
+    if (values.length !== 1 || !['mixed', 'separate'].includes(values[0][1])) {
+      throw new Error(`generated HTML ${path} is missing an unambiguous Initial Consult meetingMethodMode`)
+    }
+    modes.add(values[0][1])
+  }
+  if (modes.size !== 1) throw new Error('generated HTML has inconsistent Initial Consult meetingMethodMode values')
+  if (modes.has('separate') && process.env.STAGING_NATIVE_ACTIVATION_APPROVED !== 'true') {
+    throw new Error('staging artifact must retain mixed Initial Consult mode; separate mode requires explicit native activation approval')
+  }
+}
+
 try {
   execFileSync(process.execPath, [join(root, 'scripts/verify-release-artifact.mjs')], { stdio: 'inherit' })
   const dryRun = process.argv.includes('--dry-run')
@@ -21,11 +42,7 @@ try {
     throw new Error('staging destination must be the reviewed qa_solagree staging webroot')
   }
   const manifest = JSON.parse(readFileSync(join(artifact, 'release-manifest.json'), 'utf8'))
-  const fallback = readFileSync(join(artifact, '200.html'), 'utf8').split('window.__NUXT__.config=')[1]?.split('</script>')[0] ?? ''
-  const mode = fallback.match(/(?:"meetingMethodMode"|meetingMethodMode):"([^"]+)"/)?.[1]
-  if (mode !== 'mixed' && !(mode === 'separate' && process.env.STAGING_NATIVE_ACTIVATION_APPROVED === 'true')) {
-    throw new Error('staging artifact must retain mixed Initial Consult mode; separate mode requires explicit native activation approval')
-  }
+  verifyMeetingModes(manifest)
   // Server configuration never belongs to the static artifact upload.
   for (const path of Object.keys(manifest.files)) {
     if (!protectedPath(path) && /\.(?:conf|ini|php)$/i.test(path)) throw new Error('artifact contains server configuration or executable files')
@@ -57,6 +74,7 @@ try {
   }
   const args = ['-az', '--delay-updates', '--exclude=.*']
   execFileSync(process.execPath, [join(root, 'scripts/verify-release-artifact.mjs')], { stdio: 'inherit' })
+  verifyMeetingModes(manifest)
   if (dryRun) args.push('--dry-run')
   args.push(`${artifact}/`, `${target.user}@${target.host}:${target.root}/`)
   execFileSync('rsync', args, { stdio: 'inherit' })
