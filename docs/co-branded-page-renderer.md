@@ -14,3 +14,12 @@ The route `pageType` is the authoritative discriminator. `resolveCoBrandedPageCo
 - Partner-provided text uses Vue interpolation and attribute bindings, which escape it as text.
 
 No runtime template compiler, `v-html`, or delegated DOM listeners are used by the co-branded renderer.
+
+## Responsive layout
+
+The hero uses two columns above the 1100px compact-desktop boundary. At and below that
+boundary, the copy and photo stack so the desktop heading and description never
+paint over the photo. This applies to attorney and CDFA routes in both public
+page and embed mode; the renderer must not introduce horizontal document
+overflow at any responsive width. Mobile track cards use a zero-minimum grid
+column and wrap their headings so card content cannot widen the page.
