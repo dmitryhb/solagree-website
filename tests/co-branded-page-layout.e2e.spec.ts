@@ -53,7 +53,7 @@ const installDeterministicPortalFixture = async (page: Page): Promise<void> => {
       return
     }
 
-    if (requestUrl.origin === localOrigin) {
+    if (requestUrl.origin === localOrigin || ['https://fonts.googleapis.com', 'https://fonts.gstatic.com'].includes(requestUrl.origin)) {
       await route.continue()
       return
     }
@@ -63,7 +63,7 @@ const installDeterministicPortalFixture = async (page: Page): Promise<void> => {
 }
 
 const waitForRenderedAssets = async (page: Page): Promise<void> => {
-  await page.locator('.co-branded-page').evaluate(async renderer => {
+  const loadedFonts = await page.locator('.co-branded-page').evaluate(async renderer => {
     await document.fonts.ready
 
     await Promise.all(
@@ -77,7 +77,11 @@ const waitForRenderedAssets = async (page: Page): Promise<void> => {
     )
 
     await new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve())))
+
+    return [...document.fonts].filter(font => font.status === 'loaded').map(font => font.family.replaceAll('"', ''))
   })
+
+  expect(loadedFonts).toEqual(expect.arrayContaining(['Lora', 'Open Sans', 'DM Sans', 'Poppins']))
 }
 
 const getHeroGeometry = async (page: Page) => page.locator('.co-branded-page__hero').evaluate(hero => {
