@@ -38,6 +38,7 @@
   --co-branded-page-hero-grid-half-width: calc(22.5rem + 21.375rem + var(--co-branded-page-hero-gap-half));
 
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: clamp(2.25rem, 5vw, 4rem);
   width: min(calc(100% - 2rem), 1257px);
   margin-inline: auto;
@@ -93,6 +94,7 @@
 .co-branded-page--embed .co-branded-page__brand-row {
   width: 100%;
   justify-content: center;
+  margin-inline: 0;
   padding: clamp(1rem, 2.5vw, 1.5rem);
   background: var(--color-page);
 }
@@ -607,6 +609,7 @@
 
 .co-branded-page__tracks {
   display: grid;
+  min-width: 0;
   gap: 0;
   padding-block: clamp(5rem, 5.45vw, 7rem) clamp(4.5rem, 4.45vw, 5.75rem);
 }
@@ -653,6 +656,7 @@
 
 .co-branded-page__tracks-grid {
   display: grid;
+  min-width: 0;
   grid-template-columns: repeat(2, minmax(0, 420px));
   justify-content: center;
   gap: 24px;
@@ -666,6 +670,7 @@
 
 .co-branded-page__track-card {
   display: flex;
+  min-width: 0;
   min-height: clamp(37rem, 34.4vw, 44rem);
   flex-direction: column;
   padding: clamp(2rem, 2.25vw, 2.875rem) clamp(2rem, 2.25vw, 2.875rem) clamp(2.75rem, 2.65vw, 3.375rem);
@@ -1231,7 +1236,17 @@
   opacity: 0.7;
 }
 
-@include bp.below(bp.$bp-tablet) {
+@include bp.below(bp.$bp-compact) {
+  // The desktop hero keeps each heading line unbroken. Stack the media before
+  // either column becomes narrow enough for that copy to paint over the photo.
+  .co-branded-page__hero {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .co-branded-page__hero-image {
+    justify-self: center;
+  }
+
   .co-branded-page__how-steps {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 3rem 2rem;
@@ -1323,7 +1338,9 @@
   }
 
   .co-branded-page__tracks-grid {
+    width: 100%;
     max-width: 640px;
+    grid-template-columns: minmax(0, 1fr);
     margin-inline: auto;
   }
 
@@ -1427,6 +1444,10 @@
 
   .co-branded-page__track-card {
     padding: 28px 24px;
+  }
+
+  .co-branded-page__track-card h3 {
+    white-space: normal;
   }
 
   .co-branded-page__track-description {
