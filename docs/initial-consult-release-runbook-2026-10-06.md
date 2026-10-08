@@ -1,5 +1,14 @@
 # Initial Consult — coordinated release preparation, October 6, 2026
 
+## October 8 authorized staging refresh
+
+Website PR #38 merged as `7f008f9f0309060a3c5e80eda0dd98d3c92e765f`. The owner-approved full mixed artifact `61052a5` (81 routes/304 files) is now uploaded on staging; manifest SHA-256 `4f95613725a6f8e4942adab7208374d4a9f7366949f82f984ab6b387e14ec60d`, archive SHA-256 `76ec28b12c17c6ae2cf6478b7702e429ab5a679c9d11320e12cf38e49de8d025`. A Website-only maintenance hold protected the full-webroot backup `/home/qa_solagree/website-backups/1791458648397-7ff455347534`. Every uploaded artifact file was verified; hidden configuration, remote-only files and immutable Terms/history were retained. The shared authenticated HTTP verifier passed dynamic HTML/noindex and the indexable webinar catalogue.
+
+Portal product bundle/schema were unchanged; Portal documentation PR #10 merged as `0ca1252`. Mixed routing, Jessica OFF, GA OFF and the existing G1/T3 skips/James Zoom deferral remain. Stripe sandbox, provider sends, Phone/Zoom conversion and production activation were not included in this approval. The October 7 section below is historical.
+
+
+Post-upload independent browser acceptance passed on real staging at 390/1440px: four consultants/Jessica OFF, mixed paths, $60/30 minutes, policy, keyboard/focus and Home → About → Consult client navigation. All four partner public/embed surfaces passed 48 responsive viewport cases with production fonts; these geometry checks used intercepted synthetic partner data and do not accept live partner records/provider behavior. Analytics requests, submissions and page errors were zero. Sanitized evidence: `/Users/dmitry/work/solagree/release-artifacts/2026-10-08/website-staging-browser-evidence.json` and ten screenshots alongside it. Original vhost and BasicAuth were restored byte-for-byte after smoke; unauthenticated traffic and the removed temporary user both return 401. The Website maintenance hold is removed; existing authenticated access is restored. Portal current bundle and active existing email timer were unchanged, with public health and DB health HTTP 200. No new worker, Stripe event subscription, payment/refund, provider send or production activation occurred.
+
 ## October 7 staging release status
 
 [Website PR #36](https://github.com/dmitryhb/solagree-website/pull/36)
