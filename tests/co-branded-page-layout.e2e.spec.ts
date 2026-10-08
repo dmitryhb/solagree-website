@@ -172,10 +172,10 @@ const saveFullPageScreenshot = async (
   expect(screenshot.readUInt32BE(16)).toBe(width * 2)
 }
 
-test('co-branded public and embed heroes remain readable at responsive boundaries', async ({ page }, testInfo) => {
-  await installDeterministicPortalFixture(page)
+for (const routeCase of routeCases) {
+  test(`${routeCase.name} remains readable at responsive boundaries`, async ({ page }, testInfo) => {
+    await installDeterministicPortalFixture(page)
 
-  for (const routeCase of routeCases) {
     for (const width of viewportWidths) {
       await page.setViewportSize({ width, height: 1024 })
       await page.goto(routeCase.path, { waitUntil: 'domcontentloaded' })
@@ -192,5 +192,5 @@ test('co-branded public and embed heroes remain readable at responsive boundarie
       await expectNoRenderedHorizontalOverflow(page)
       await saveFullPageScreenshot(page, testInfo, routeCase.name, width)
     }
-  }
-})
+  })
+}
