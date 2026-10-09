@@ -1,4 +1,4 @@
-import { SubmissionError } from '#shared/utils/submission-error.js'
+import { SubmissionError } from '#shared/utils/submission-error'
 import {
   getPortalSubmissionErrorMessage,
   parsePortalRequestIdSuccess,

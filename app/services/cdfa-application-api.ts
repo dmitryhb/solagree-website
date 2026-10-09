@@ -1,4 +1,4 @@
-import { SubmissionError } from '#shared/utils/submission-error.js'
+import { SubmissionError } from '#shared/utils/submission-error'
 import {
   CDFA_CERTIFICATION_STATUS_VALUES,
   CDFA_CLIENT_EXPERIENCE_VALUES,

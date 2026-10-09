@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { sanitizeReferralCode } from '../app/utils/referral'
 import { getPortalSubmissionErrorMessage } from '../app/services/portal-api'
-import { SubmissionError } from '../shared/utils/submission-error.js'
+import { SubmissionError } from '../shared/utils/submission-error.ts'
 import { createCoBrandedConsultRequestPayload } from '../shared/co-branded-consult-request'
 
 describe('optional referral and safe error copy', () => {

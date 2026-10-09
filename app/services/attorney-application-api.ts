@@ -1,4 +1,4 @@
-import { SubmissionError } from '#shared/utils/submission-error.js'
+import { SubmissionError } from '#shared/utils/submission-error'
 import {
   ATTORNEY_MEDIATION_EXPERIENCE_VALUES,
   ATTORNEY_YES_NO_ANSWERS

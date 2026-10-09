@@ -1,4 +1,4 @@
-import { SubmissionError } from './utils/submission-error.js'
+import { SubmissionError } from './utils/submission-error.ts'
 import type { CoBrandedPageType } from './co-branded-page-variant.ts'
 import type { ConsultRequestSubmissionPayload } from './types/consult-request.ts'
 

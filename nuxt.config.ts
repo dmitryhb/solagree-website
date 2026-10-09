@@ -30,6 +30,11 @@ const shouldSuppressSourcemapWarningMessage = (message: string): boolean => {
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
+  typescript: {
+    // Shared modules also run directly in Node's TypeScript tests.
+    tsConfig: { compilerOptions: { allowImportingTsExtensions: true } },
+    sharedTsConfig: { compilerOptions: { allowImportingTsExtensions: true } }
+  },
   devtools: { enabled: true },
   app: {
     head: {

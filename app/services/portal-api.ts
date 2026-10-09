@@ -1,4 +1,4 @@
-import { SubmissionError } from '#shared/utils/submission-error.js'
+import { SubmissionError } from '#shared/utils/submission-error'
 
 const DEFAULT_PORTAL_SUBMISSION_ERROR_MESSAGE = 'We could not submit your request. Please try again.'
 const PORTAL_API_CONFIG_ERROR_MESSAGE = 'Portal API base URL is not configured. Set NUXT_PUBLIC_PORTAL_API_BASE_URL to an absolute URL before using portal integrations.'
