@@ -39,9 +39,13 @@ const consumeAccessToken = (): string | null | undefined => {
   return parameters.get('access_token') || null
 }
 
+let accessRequest = 0
 const resolveFragmentAccess = async (): Promise<void> => {
   const token = consumeAccessToken()
   if (token === undefined) return
+  const request = ++accessRequest
+  recordingSrc.value = ''
+  accessRecoveryMessage.value = ''
   if (token === null) {
     accessRecoveryMessage.value = 'We could not verify this access link. Submit the form below to request a new one.'
     return
@@ -53,16 +57,28 @@ const resolveFragmentAccess = async (): Promise<void> => {
       portalApiBaseUrl: config.public.portalApiBaseUrl,
       fetcher: websitePortalFetcher
     })
-    if (id.value === webinarId) await unlockRecording(access.accessPath)
+    if (id.value === webinarId && request === accessRequest) await unlockRecording(access.accessPath)
   } catch (error: unknown) {
-    if (id.value !== webinarId) return
+    if (id.value !== webinarId || request !== accessRequest) return
     accessRecoveryMessage.value = getPortalErrorStatusCode(error) === 410
       ? 'This access link has expired. Submit the form below to request another viewing link.'
       : 'We could not verify this access link. Submit the form below to request a new one.'
   }
 }
 
-onMounted(() => { void resolveFragmentAccess() })
+// Hash-only email navigation reuses this page rather than mounting it again.
+const handleHashChange = (): void => { void resolveFragmentAccess() }
+watch(() => route.fullPath, () => {
+  if (import.meta.client) handleHashChange()
+}, { flush: 'post' })
+onMounted(() => {
+  window.addEventListener('hashchange', handleHashChange)
+  handleHashChange()
+})
+onBeforeUnmount(() => {
+  accessRequest++
+  window.removeEventListener('hashchange', handleHashChange)
+})
 useSolagreeSeo({
   title: () => webinar.value?.title || 'Webinar',
   description: () => webinar.value?.description || 'Join a Solagree webinar.',

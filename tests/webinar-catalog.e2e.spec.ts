@@ -121,6 +121,15 @@ test('emailed fragments resolve once, remove themselves, and recover safely', as
     ...Object.values(sessionStorage)
   ].join('|'))).resolves.not.toContain('fixture')
 
+  // Opening another email link while already here is a hash-only navigation.
+  await page.goto('/webinars/public-recorded#access_token=expired')
+  await expect(page.locator('iframe')).toHaveCount(0)
+  await expect(page.getByText('This access link has expired. Submit the form below to request another viewing link.')).toBeVisible()
+  await expect(page).toHaveURL(/\/webinars\/public-recorded$/)
+  await page.goto('/webinars/public-recorded#access_token=fixture')
+  await expect(page.locator('iframe')).toHaveAttribute('src', /\/public-recorded\/recording\?token=fixture$/)
+  await expect(page).toHaveURL(/\/webinars\/public-recorded$/)
+
   await page.getByRole('link', { name: 'All webinars & events' }).click()
   await page.getByRole('link', { name: 'A second guide' }).click()
   await expect(page.locator('iframe')).toHaveCount(0)
