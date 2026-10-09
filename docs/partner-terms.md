@@ -20,3 +20,7 @@ Attorney and CDFA applications read the Portal's current policy at runtime and s
 Implementation checks on the fresh October 6 candidate: 357 existing Vitest checks plus 2 approved-document checks, 41 Node checks, full lint/typecheck, the prescribed `pnpm build` entrypoint (including resource validation), and static generation of 81 routes passed. The first generation attempt used shared checkout dependencies and failed on Nuxt cache path resolution; checkout-local `npm ci` resolved that environmental failure.
 
 The companion Portal runbook `docs/professional-terms.md` owns migrations, configuration, acceptance audit, browser scenarios and rollback. The release URL is a prepared hosting target; this branch has not deployed it. Keep Portal activation unset until the published bytes and both application flows have been checked. Scheduling preferences remain outside HIR-266.
+
+## Runtime loading and recovery — HIR-657
+
+The forms distinguish loading, approved/ready, explicitly unavailable, and retryable error states. Network failures offer Retry; they do not claim the approved policy is unpublished. A published document must identify `solagree-partner-terms`, supply a nonempty version, and use an HTTPS URL before a link or consent control becomes available. Refreshing resets the prior acknowledgment. Terms lookups have a 15-second timeout.

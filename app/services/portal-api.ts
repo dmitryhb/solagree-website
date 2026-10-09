@@ -1,3 +1,5 @@
+import { SubmissionError } from '#shared/utils/submission-error.js'
+
 const DEFAULT_PORTAL_SUBMISSION_ERROR_MESSAGE = 'We could not submit your request. Please try again.'
 const PORTAL_API_CONFIG_ERROR_MESSAGE = 'Portal API base URL is not configured. Set NUXT_PUBLIC_PORTAL_API_BASE_URL to an absolute URL before using portal integrations.'
 
@@ -157,30 +159,18 @@ export const getPortalSubmissionErrorMessage = (
     return fallbackMessage
   }
 
-  if (
-    typeof error === 'object'
-    && error !== null
-    && 'data' in error
-    && typeof error.data === 'object'
-    && error.data !== null
-    && 'message' in error.data
-    && typeof error.data.message === 'string'
-  ) {
-    return error.data.message
+  if (typeof error === 'object' && error !== null) {
+    // Proxy/server errors may carry HTML or transport diagnostics. Keep them out of form copy.
+    const status = getPortalErrorStatusCode(error)
+    if ('data' in error && typeof error.data === 'object' && error.data !== null
+      && 'message' in error.data && isNonEmptyString(error.data.message) && !/[<>]/.test(error.data.message)) {
+      return error.data.message.trim()
+    }
+    if ((status === null || status < 500) && 'statusMessage' in error && isNonEmptyString(error.statusMessage)
+      && !/[<>]/.test(error.statusMessage)) return error.statusMessage.trim()
   }
 
-  if (
-    typeof error === 'object'
-    && error !== null
-    && 'statusMessage' in error
-    && typeof error.statusMessage === 'string'
-  ) {
-    return error.statusMessage
-  }
-
-  if (error instanceof Error) {
-    return error.message
-  }
+  if (error instanceof SubmissionError && isNonEmptyString(error.message)) return error.message
 
   return fallbackMessage
 }
@@ -189,7 +179,7 @@ export const getPortalSubmissionErrorMessage = (
  * Guard for required string fields on portal responses.
  */
 export const isNonEmptyString = (value: unknown): value is string => {
-  return typeof value === 'string' && value.length > 0
+  return typeof value === 'string' && value.trim().length > 0
 }
 
 /**
@@ -282,19 +272,19 @@ export const submitToPortal = async <TPayload, TSuccess>(
   )
 
   if (typeof response !== 'object' || response === null) {
-    throw new Error(fallbackMessage)
+    throw new SubmissionError(fallbackMessage)
   }
 
   const responseObject = response as Record<string, unknown>
 
   if (responseObject.error) {
-    throw new Error(isNonEmptyString(responseObject.message) ? responseObject.message : fallbackMessage)
+    throw new SubmissionError(isNonEmptyString(responseObject.message) ? responseObject.message : fallbackMessage)
   }
 
   const success = options.parseSuccess(responseObject)
 
   if (success === null || success === undefined) {
-    throw new Error(fallbackMessage)
+    throw new SubmissionError(fallbackMessage)
   }
 
   return success

@@ -1,3 +1,4 @@
+import { SubmissionError } from '#shared/utils/submission-error.js'
 import {
   CDFA_CERTIFICATION_STATUS_VALUES,
   CDFA_CLIENT_EXPERIENCE_VALUES,
@@ -54,7 +55,7 @@ export const createCdfaApplicationSubmissionPayload = (
     || !isCdfaConsultationInterestValue(form.consultationInterest)
     || form.specializations.length === 0
   ) {
-    throw new Error('Please complete all required fields.')
+    throw new SubmissionError('Please complete all required fields.')
   }
 
   return {

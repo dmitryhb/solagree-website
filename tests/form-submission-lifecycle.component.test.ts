@@ -82,6 +82,23 @@ const createSubmission = (overrides: Partial<Parameters<typeof useApplicationSub
 }
 
 describe('useApplicationSubmission lifecycle (HIR-370)', () => {
+  it('keeps an accepted submission successful when its presentation callback fails', async () => {
+    const log = vi.spyOn(console, 'error').mockImplementation(() => {})
+    const submit = vi.fn(async () => ({}))
+    const submission = createSubmission({ submit, errorTitle: '', onSuccess: () => { throw new Error('navigation failed') } })
+    await submission.handleSubmit()
+    expect(submission.submissionResult.value?.kind).toBe('success')
+    await submission.handleSubmit()
+    expect(submit).toHaveBeenCalledTimes(1)
+    log.mockRestore()
+  })
+
+  it('uses a readable default for an empty error title', async () => {
+    const submission = createSubmission({ errorTitle: ' ', submit: async () => { throw new Error() } })
+    await submission.handleSubmit()
+    expect(submission.submissionResult.value?.title).toBe('Submission failed')
+  })
+
   it('ignores a second submission while the first request is in flight', async () => {
     let resolveSubmission: (value: unknown) => void = () => {}
     const submit = vi.fn(() => new Promise<unknown>((resolve) => {

@@ -18,6 +18,7 @@ import type {
 } from '~/types/consult-request'
 import { getStoredConsultQuizAnswers } from '~/utils/consult-quiz-answers'
 import { focusPageDestination } from '~/utils/focus-destination'
+import { sanitizeReferralCode } from '~/utils/referral'
 import { validateNativeForm } from '~/utils/native-form-validation'
 
 const props = defineProps<{
@@ -39,15 +40,7 @@ const contactMethodOptions = computed(() => consultPreferredContactMethodOptions
   disabled: option.value === 'text' && !form.smsOptIn
 })))
 
-const referralCode = computed(() => {
-  const refValue = route.query.ref
-
-  if (Array.isArray(refValue)) {
-    return refValue.find((value) => typeof value === 'string' && value.trim()) ?? null
-  }
-
-  return typeof refValue === 'string' ? refValue.trim() || null : null
-})
+const referralCode = computed(() => sanitizeReferralCode(route.query.ref))
 
 const thankYouPath = computed(() => ({
   path: props.content.thankYouPath,
@@ -194,7 +187,7 @@ const {
 
       <FormResultMessage
         v-if="submissionResult"
-        kind="error"
+        :kind="submissionResult.kind"
         :title="submissionResult.title"
         :message="submissionResult.message"
       />

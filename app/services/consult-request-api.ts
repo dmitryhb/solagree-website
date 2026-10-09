@@ -1,3 +1,4 @@
+import { SubmissionError } from '#shared/utils/submission-error.js'
 import {
   getPortalSubmissionErrorMessage,
   parsePortalRequestIdSuccess,
@@ -82,11 +83,11 @@ export const createConsultRequestSubmissionPayload = (
   const bestTimeOfDay = form.bestTimeOfDay.trim()
 
   if (!isConsultPreferredContactMethod(preferredContactMethod) || !isConsultBestTimeOfDay(bestTimeOfDay)) {
-    throw new Error('Please complete all required fields.')
+    throw new SubmissionError('Please complete all required fields.')
   }
 
   if (preferredContactMethod === 'text' && !form.smsOptIn) {
-    throw new Error('SMS opt-in is required when preferred contact method is text.')
+    throw new SubmissionError('SMS opt-in is required when preferred contact method is text.')
   }
 
   return {
