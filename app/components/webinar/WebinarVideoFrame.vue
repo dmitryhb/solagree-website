@@ -27,7 +27,7 @@ withDefaults(defineProps<WebinarVideoFrameProps>(), {
       height="720"
       frameborder="0"
       allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
-      referrerpolicy="strict-origin-when-cross-origin"
+      referrerpolicy="no-referrer"
       allowfullscreen
     />
     <img

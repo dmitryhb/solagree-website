@@ -7,12 +7,20 @@ interface CapturedPageView {
   renderedTitle: string
 }
 
+interface CapturedAnalyticsCall {
+  type: string
+  name: string
+  pageLocation?: string
+  pagePath?: string
+}
+
 interface BrowserRouter {
   push: (path: string) => Promise<{ type?: number } | undefined>
 }
 
 type AnalyticsCaptureWindow = typeof window & {
   __hir607PageViews?: CapturedPageView[]
+  __hir607AnalyticsCalls?: CapturedAnalyticsCall[]
   __hir607Router?: BrowserRouter
 }
 
@@ -29,6 +37,14 @@ const clearPageViews = async (page: Page): Promise<void> => {
     const captureWindow = window as AnalyticsCaptureWindow
 
     captureWindow.__hir607PageViews?.splice(0)
+  })
+}
+
+const captureAnalyticsCalls = async (page: Page): Promise<CapturedAnalyticsCall[]> => {
+  return page.evaluate(() => {
+    const captureWindow = window as AnalyticsCaptureWindow
+
+    return captureWindow.__hir607AnalyticsCalls ?? []
   })
 }
 
@@ -72,12 +88,24 @@ test.beforeEach(async ({ page }) => {
   })
   await page.addInitScript(() => {
     const pageViews: CapturedPageView[] = []
+    const analyticsCalls: CapturedAnalyticsCall[] = []
     const dataLayer: unknown[] = []
     const push = dataLayer.push.bind(dataLayer)
 
     dataLayer.push = (...entries: unknown[]): number => {
       for (const entry of entries) {
         const [eventType, eventName, params] = Array.from(entry as ArrayLike<unknown>)
+
+        if (typeof params === 'object' && params !== null) {
+          const pageView = params as Record<string, unknown>
+
+          analyticsCalls.push({
+            type: String(eventType),
+            name: String(eventName),
+            pageLocation: typeof pageView.page_location === 'string' ? pageView.page_location : undefined,
+            pagePath: typeof pageView.page_path === 'string' ? pageView.page_path : undefined
+          })
+        }
 
         if (eventType === 'event' && eventName === 'page_view' && typeof params === 'object' && params !== null) {
           const pageView = params as Record<string, unknown>
@@ -99,6 +127,7 @@ test.beforeEach(async ({ page }) => {
     }
 
     captureWindow.__hir607PageViews = pageViews
+    captureWindow.__hir607AnalyticsCalls = analyticsCalls
     captureWindow.dataLayer = dataLayer
     Object.defineProperty(captureWindow, '__hir607Router', {
       configurable: true,
@@ -149,7 +178,7 @@ test('records a query-only SPA navigation after the title settles', async ({ pag
   await expectPageView(page, '/faq?section=professional-partners', 'Frequently Asked Questions | Solagree')
 })
 
-test('records a hash-only SPA navigation after the title settles', async ({ page }) => {
+test('omits hash fragments from a SPA page view after the title settles', async ({ page }) => {
   await page.goto('/', { waitUntil: 'domcontentloaded' })
   await expectPageView(page, '/', 'Virtual Flat-Fee Divorce Without Court | Solagree')
   await clearPageViews(page)
@@ -157,7 +186,26 @@ test('records a hash-only SPA navigation after the title settles', async ({ page
   await navigateWithRouter(page, '/#how-it-works')
 
   await expect(page).toHaveURL('/#how-it-works')
-  await expectPageView(page, '/#how-it-works', 'Virtual Flat-Fee Divorce Without Court | Solagree')
+  await expectPageView(page, '/', 'Virtual Flat-Fee Divorce Without Court | Solagree')
+})
+
+test('never sends an emailed access token to analytics', async ({ page }) => {
+  const token = 'opaque-test-access-token'
+
+  await page.goto(`/webinars/public-recorded?source=hir259#access_token=${token}`, { waitUntil: 'domcontentloaded' })
+  await expect.poll(() => capturePageViews(page)).toHaveLength(1)
+
+  const [pageView] = await capturePageViews(page)
+
+  expect(pageView.pageLocation).toBe('http://127.0.0.1:3197/webinars/public-recorded?source=hir259')
+  expect(pageView.pagePath).toBe('/webinars/public-recorded?source=hir259')
+  expect(`${pageView.pageLocation}\n${pageView.pagePath}`).not.toContain(token)
+
+  const analyticsCalls = await captureAnalyticsCalls(page)
+
+  expect(analyticsCalls.find(call => call.type === 'config')?.pageLocation)
+    .toBe('http://127.0.0.1:3197/webinars/public-recorded?source=hir259')
+  expect(JSON.stringify(analyticsCalls)).not.toContain(token)
 })
 
 test('skips cancelled routes and keeps only the final settled rapid navigation', async ({ page }) => {
