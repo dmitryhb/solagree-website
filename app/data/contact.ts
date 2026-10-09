@@ -26,8 +26,8 @@ export const directContactItems: DirectContactItem[] = [
   {
     title: 'Open Hours',
     detail: 'Monday-Friday: 9:00 AM - 6:00 PM (Eastern)',
-    actionLabel: 'Call Us',
-    href: 'tel:+18001234567',
+    actionLabel: 'Contact us',
+    href: '#contact-form',
     iconSrc: '/images/binding-commitment.webp'
   }
 ]
