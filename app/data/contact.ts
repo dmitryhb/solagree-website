@@ -1,9 +1,11 @@
 import type { ContactPerson, DirectContactItem } from '~/types/contact'
 
+export const contactEmail = 'support@solagree.com'
+
 export const contactPerson: ContactPerson = {
   name: 'Courtney Lutz-McLellan',
   role: 'Co-Founder & CDFA®',
-  email: 'support@solagree.com',
+  email: contactEmail,
   phone: '',
   imageSrc: '/images/lutz-mclellan.jpg'
 }
@@ -18,9 +20,9 @@ export const directContactItems: DirectContactItem[] = [
   },
   {
     title: 'Email',
-    detail: 'support@solagree.com',
+    detail: contactEmail,
     actionLabel: 'Email Us',
-    href: 'mailto:support@solagree.com',
+    href: `mailto:${contactEmail}`,
     iconSrc: '/images/flatfree-pricing.webp'
   },
   {
