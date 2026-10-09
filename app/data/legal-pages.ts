@@ -1,4 +1,5 @@
 import type { LegalContentBlock, LegalListItem, LegalNavItem, LegalPageContent, LegalSlug } from '~/types/legal'
+import { contactEmail } from '~/data/contact'
 
 export const legalNavItems: LegalNavItem[] = [
   {
@@ -59,7 +60,7 @@ const termsOfServiceBlocks: LegalPageContent['blocks'] = [
   textBlock('Professional partners must additionally meet the credentialing and licensing requirements specified in their separate Partner Agreement with Solagree.'),
   headingBlock('4. Accounts and Portal Access'),
   textBlock('Access to the Portal requires creation of a user account. You agree to provide accurate, current, and complete information at registration and to update that information as necessary. You are responsible for maintaining the confidentiality of your account credentials and for all activity that occurs under your account.'),
-  textBlock('You must notify Solagree immediately at contact@solagree.com if you suspect unauthorized access to your account. Solagree is not liable for losses resulting from unauthorized account use where you have failed to maintain reasonable credential security.'),
+  textBlock(`You must notify Solagree immediately at ${contactEmail} if you suspect unauthorized access to your account. Solagree is not liable for losses resulting from unauthorized account use where you have failed to maintain reasonable credential security.`),
   headingBlock('5. Fees and Payment'),
   textBlock('Solagree charges flat fees for its programs as published on the Site at the time of enrollment. Fees are per person unless otherwise stated. By enrolling, both parties agree to the applicable fee structure.'),
   textBlock('Fees are due as specified in your enrollment agreement. Solagree reserves the right to suspend access to the Portal and Services if fees are not paid when due. Refund eligibility is governed by the Refund Policy provided at enrollment. All fees are stated in U.S. dollars.'),
@@ -108,7 +109,7 @@ const termsOfServiceBlocks: LegalPageContent['blocks'] = [
   headingBlock('15. Contact'),
   textBlock('For questions about these Terms, contact:'),
   textBlock('Solagree, LLC'),
-  textBlock('Email: contact@solagree.com'),
+  textBlock(`Email: ${contactEmail}`),
   textBlock('Website: www.solagree.com')
 ]
 
@@ -169,7 +170,7 @@ const accessibilityBlocks: LegalPageContent['blocks'] = [
   textBlock('For individuals who require accommodations to participate in the Solagree process itself (mediation, arbitration, or financial evaluation sessions), please notify us at the time of enrollment. We will work with the assigned professionals to make reasonable accommodations.'),
   headingBlock('Feedback and Contact'),
   textBlock('We welcome feedback on the accessibility of our digital properties. If you experience an accessibility barrier, find a feature that is not working as expected, or have suggestions for improvement, please contact us:'),
-  textBlock('Email: contact@solagree.com'),
+  textBlock(`Email: ${contactEmail}`),
   textBlock('Website: www.solagree.com/contact'),
   textBlock('We aim to respond to accessibility-related inquiries within five (5) business days.'),
   headingBlock('Third-Party Content'),
