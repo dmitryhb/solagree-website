@@ -96,6 +96,12 @@ const modalDialog = useModalDialog({
   onRequestClose: handleClose
 })
 
+onMounted(() => {
+  if (props.open) {
+    void modalDialog.activate()
+  }
+})
+
 watch(
   () => form.phone.trim(),
   (phone) => {

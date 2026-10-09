@@ -1,5 +1,5 @@
 import { DOMWrapper, flushPromises, mount } from '@vue/test-utils'
-import { computed, nextTick, reactive, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import CoBrandedConsultModal from '../app/components/co-branded/CoBrandedConsultModal.vue'
 import FormResultMessage from '../app/components/FormResultMessage.vue'
@@ -23,6 +23,7 @@ const submitConsultMock = vi.mocked(submitCoBrandedConsultRequest)
 Object.assign(globalThis, {
   computed,
   nextTick,
+  onMounted,
   reactive,
   ref,
   useApplicationSubmission,
@@ -65,13 +66,13 @@ const createOpener = () => {
   return opener
 }
 
-const mountModal = () => mount(CoBrandedConsultModal, {
+const mountModal = (open = false, pageType: 'standard' | 'cdfa' = 'standard') => mount(CoBrandedConsultModal, {
   attachTo: document.body,
   props: {
-    open: false,
+    open,
     companyName: 'Rivera Mediation',
     partnerSlug: 'rivera-mediation',
-    pageType: 'standard' as const
+    pageType
   },
   global: {
     components: {
@@ -109,6 +110,34 @@ afterEach(() => {
 })
 
 describe('CoBrandedConsultModal focus behavior (HIR-369 regression)', () => {
+  it.each(['standard', 'cdfa'] as const)('focuses and traps the initially open %s dialog after mount', async (pageType) => {
+    document.body.style.overflow = 'auto'
+    const backgroundLink = document.createElement('a')
+    backgroundLink.href = '#main'
+    backgroundLink.textContent = 'Skip to main'
+    document.body.appendChild(backgroundLink)
+    const wrapper = mountModal(true, pageType)
+    await flushPromises()
+
+    expect(document.activeElement).toBe(query('#co-branded-first-name').element)
+    expect(document.body.style.overflow).toBe('hidden')
+    const closeButton = query('.co-branded-consult-modal__close')
+    const submitButton = query('.co-branded-consult-modal__submit')
+    closeButton.element.focus()
+    await closeButton.trigger('keydown', { key: 'Tab', shiftKey: true })
+    expect(document.activeElement).toBe(submitButton.element)
+    await submitButton.trigger('keydown', { key: 'Tab' })
+    expect(document.activeElement).toBe(closeButton.element)
+    expect(document.activeElement).not.toBe(backgroundLink)
+
+    await closeButton.trigger('keydown', { key: 'Escape' })
+    expect(wrapper.emitted('close')).toHaveLength(1)
+    await wrapper.setProps({ open: false })
+    await flushPromises()
+    expect(document.body.style.overflow).toBe('auto')
+    wrapper.unmount()
+  })
+
   it('locks scroll and focuses the first field when opened', async () => {
     const opener = createOpener()
     const wrapper = mountModal()
