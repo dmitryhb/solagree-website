@@ -29,7 +29,8 @@ Object.assign(globalThis, {
   useGoogleAnalytics,
   useRuntimeConfig: () => ({
     public: {
-      portalApiBaseUrl: 'https://portal.solagree.test'
+      portalApiBaseUrl: 'https://portal.solagree.test',
+      gaMeasurementId: 'G-TEST'
     }
   }),
   useSourceUrl,
@@ -98,9 +99,11 @@ const fillValidForm = async () => {
 
 beforeEach(() => {
   submitConsultMock.mockReset()
+  window.gtag = vi.fn()
 })
 
 afterEach(() => {
+  delete window.gtag
   document.body.style.overflow = ''
   document.body.innerHTML = ''
 })
@@ -223,8 +226,43 @@ describe('CoBrandedConsultModal focus behavior (HIR-369 regression)', () => {
     const successHeading = query('#co-branded-consult-modal-title')
 
     expect(successHeading.text()).toContain('Thank you. We received your request.')
+    expect(query('.co-branded-consult-modal__state').text()).toContain('Your consultation request for Rivera Mediation has been recorded.')
+    expect(query('.co-branded-consult-modal__state').text()).not.toContain('notified')
+    expect(window.gtag).toHaveBeenCalledWith('event', 'consultation_requested', expect.objectContaining({ request_purpose: 'attorney_firm_request' }))
+    expect(window.gtag).not.toHaveBeenCalledWith('event', 'consultation_booked', expect.anything())
     expect(document.activeElement).toBe(successHeading.element)
 
+    wrapper.unmount()
+  })
+})
+
+
+describe('co-branded request destinations (HIR-276)', () => {
+  it('names the selected attorney firm and requires spouse conflict information', async () => {
+    const wrapper = mountModal()
+    await openModal(wrapper)
+    expect(query('#co-branded-consult-modal-title').text()).toBe('Request a Consultation with Rivera Mediation')
+    expect(query('#co-branded-spouse-first-name').attributes('required')).toBeDefined()
+    expect(query('#co-branded-spouse-last-name').attributes('required')).toBeDefined()
+    expect(query('#co-branded-conflict-explanation').text()).not.toBe('')
+    wrapper.unmount()
+  })
+
+  it('keeps CDFA request copy neutral and omits attorney conflict fields', async () => {
+    submitConsultMock.mockResolvedValueOnce({} as Awaited<ReturnType<typeof submitCoBrandedConsultRequest>>)
+    const wrapper = mountModal()
+    await wrapper.setProps({ pageType: 'cdfa' })
+    await openModal(wrapper)
+    expect(query('#co-branded-consult-modal-title').text()).toBe('Request a Consultation')
+    expect(document.querySelector('#co-branded-spouse-first-name')).toBeNull()
+    await setValue('#co-branded-first-name', 'Avery')
+    await setValue('#co-branded-last-name', 'Quinn')
+    await setValue('#co-branded-email', 'avery@example.com')
+    await query('form').trigger('submit')
+    await flushPromises()
+    expect(query('.co-branded-consult-modal__state').text()).toContain('Your request has been recorded.')
+    expect(query('.co-branded-consult-modal__state').text()).not.toContain('notified')
+    expect(window.gtag).toHaveBeenCalledWith('event', 'consultation_requested', expect.objectContaining({ request_purpose: 'cdfa_destination_unconfirmed' }))
     wrapper.unmount()
   })
 })
