@@ -35,7 +35,7 @@ export default defineNuxtConfig({
     tsConfig: { compilerOptions: { allowImportingTsExtensions: true } },
     sharedTsConfig: { compilerOptions: { allowImportingTsExtensions: true } }
   },
-  devtools: { enabled: true },
+  devtools: { enabled: process.env.NODE_ENV !== 'production' },
   app: {
     head: {
       meta: [{ name: 'theme-color', content: '#ffffff' }],

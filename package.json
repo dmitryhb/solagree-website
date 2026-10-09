@@ -38,7 +38,7 @@
     "test:resources-navigation": "vitest run tests/resources-navigation.component.test.ts",
     "test:phone-validation-e2e": "playwright test -c playwright.phone-validation.config.ts",
     "prebuild": "npm run validate:resource-content",
-    "postinstall": "nuxt prepare",
+    "postinstall": "node scripts/patch-devtools-simple-git.mjs && nuxt prepare",
     "postgenerate": "node scripts/write-release-manifest.mjs"
   },
   "dependencies": {
@@ -64,5 +64,10 @@
   },
   "engines": {
     "node": "^22.22.3 || ^24.15.0 || >=26.0.0"
+  },
+  "overrides": {
+    "@nuxt/devtools": "3.4.2",
+    "simple-git": "4.0.2",
+    "@simple-git/argv-parser": "2.0.1"
   }
 }
