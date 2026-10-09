@@ -6,7 +6,7 @@ The website is deployed as static Nuxt output (`npm run generate`) to the produc
 
 ```bash
 cd website
-npm run deploy:production
+NUXT_PUBLIC_GA_MEASUREMENT_ID=G-TCGL2PDNNY npm run deploy:production -- --i-confirm-production-deploy
 ```
 
 The script will:
@@ -16,19 +16,20 @@ The script will:
    - `NUXT_PUBLIC_PORTAL_URL=https://portal.solagree.com`
    - `NUXT_PUBLIC_PORTAL_API_BASE_URL=https://portal.solagree.com`
    - `NUXT_PUBLIC_DEPLOYMENT_ENVIRONMENT=production`
-   - `NUXT_PUBLIC_GA_MEASUREMENT_ID` is disabled by default; explicitly select `G-TCGL2PDNNY` to enable production analytics
-2. `rsync -avz --delete` `.output/public/` to `/home/solagree/public_html/` (via `sudo -n rsync` over SSH as `ubuntu`)
+   - `NUXT_PUBLIC_GA_MEASUREMENT_ID` must be selected explicitly, or `ANALYTICS_DISABLED=true` must acknowledge disabled analytics
+2. `rsync -avz --delete` `.output/public/` to `/home/solagree/public_html/` (via `sudo -n rsync` over SSH as `ubuntu`), protecting historical Partner Terms and ACME files from deletion and excluding the release manifest and hidden files except `.well-known`. Previously published root `release-manifest.json` and `.htaccess` are deleted.
 3. Re-`chown solagree:solagree`
-4. Install `config/nginx/legacy-redirects.conf` to `/etc/nginx/snippets/solagree-legacy-redirects.conf` and `config/nginx/co-branded-noindex.conf` to `/etc/nginx/snippets/solagree-co-branded-noindex.conf`, ensure both are included in the `www.solagree.com` server block, run `nginx -t`, and reload nginx
+4. Install `config/nginx/legacy-redirects.conf` to `/etc/nginx/snippets/solagree-legacy-redirects.conf` and `config/nginx/co-branded-noindex.conf` to `/etc/nginx/snippets/solagree-co-branded-noindex.conf`, ensure both are included in the `www.solagree.com` server block, run `nginx -t`, and reload nginx. Snapshot the site config and both snippets once before changes; restore their originals on installation, validation or reload failure
 5. Probe dynamic `/go/*`, `/cdfa/go/*`, and `/webinars/*` URLs (against the server IP via `--resolve`, since DNS isn't pointed yet) to ensure the nginx SPA fallback is intact and the responses carry `X-Robots-Tag: noindex, nofollow`; confirm `/webinars` remains indexable
 
 Flags:
 
+- `--i-confirm-production-deploy` — required acknowledgement, including dry runs; alternatively set `DEPLOY_CONFIRM_PRODUCTION=yes`
 - `--dry-run` — skip the rsync write
 - `--skip-build` — reuse existing `.output/public/`
 - `--skip-route-check` — don't probe dynamic routes or the webinar catalogue after upload
 
-Overridable env vars: `SSH_USER`, `SSH_HOST`, `REMOTE_PATH`, `REMOTE_OWNER`, `ROUTE_CHECK_HOST`, `ROUTE_CHECK_RESOLVE_IP`, `NUXT_PUBLIC_GA_MEASUREMENT_ID`.
+Overridable env vars: `SSH_USER`, `SSH_HOST`, `REMOTE_PATH`, `REMOTE_OWNER`, `ROUTE_CHECK_HOST`, `ROUTE_CHECK_RESOLVE_IP`, `NUXT_PUBLIC_GA_MEASUREMENT_ID`, `ANALYTICS_DISABLED`, `NUXT_PUBLIC_CALCOM_INITIAL_CONSULT_MEETING_METHOD_MODE`, `PRODUCTION_NATIVE_ACTIVATION_APPROVED`.
 
 ## nginx
 
@@ -41,7 +42,7 @@ Overridable env vars: `SSH_USER`, `SSH_HOST`, `REMOTE_PATH`, `REMOTE_OWNER`, `RO
 - `X-Robots-Tag: noindex, nofollow` response headers for `/go/*`, `/cdfa/go/*`, and `/webinars/*` via `/etc/nginx/snippets/solagree-co-branded-noindex.conf`; exact `/webinars` stays indexable
 - `https://solagree.com` → 301 to `https://www.solagree.com`
 - `_nuxt/*` immutable cache headers
-- TLS via `/etc/nginx/snippets/solagree-ssl.conf` (currently the self-signed cert at `/etc/ssl/solagree/`; flip to Let's Encrypt on DNS cutover)
+- TLS via the production Let's Encrypt certificate configuration (confirmed read-only on 2026-10-09); route probes require a valid trusted certificate and matching hostname
 
 After syncing static files, the production deploy script uses one SSH session to
 re-apply ownership, install `config/nginx/legacy-redirects.conf` to
@@ -118,7 +119,7 @@ intentionally excluded from indexing.
 15.204.253.205  www.solagree.com solagree.com
 ```
 
-Browser will warn on the self-signed cert; accept once for the smoke test.
+The hostname must match the valid production certificate. Route probes use `--resolve` to pin the server IP while retaining TLS verification.
 
 See `portal/docs/production-deployment.md` for the full environment + DNS cutover checklist.
 
@@ -156,7 +157,7 @@ Responses are decoded for compression before comparing with the artifact.
 
 Staging probes retain BasicAuth, passing the configured credentials to curl
 through stdin rather than command arguments or logs. The production verifier
-retains the pre-DNS `--resolve` and self-signed-certificate options. These
+retains the pre-DNS `--resolve` option and verifies the server certificate. These
 post-upload checks remain separate from the mandatory pre-upload artifact gate.
 Neither fixture tests nor a skipped route check prove live server acceptance.
 
@@ -172,7 +173,7 @@ GA4 ID enables analytics without changing event names. To enable the approved
 production property, run:
 
 ```bash
-NUXT_PUBLIC_GA_MEASUREMENT_ID=G-TCGL2PDNNY npm run deploy:production
+NUXT_PUBLIC_GA_MEASUREMENT_ID=G-TCGL2PDNNY npm run deploy:production -- --i-confirm-production-deploy
 ```
 
 Staging should normally use the disabled default or an explicitly chosen
@@ -195,3 +196,43 @@ Use `solagree-static-routes.conf` in place of the generic `location /` block. Re
 The maps enforce frame ancestors on ordinary pages, preserving public quiz and co-branded embeds. All non-production hosts receive HTTP noindex, including 401/404 responses; the app also emits noindex outside production. Legacy webinar view pages stay available but are absent from the sitemap and emit noindex. `/c/...` redirects retain query strings.
 
 Full CSP is report-only. Before production, check Vimeo, Cal.com, and GA on staging with browser CSP diagnostics or the operator's reviewed report collection endpoint. Confirm the actual staging Portal origin and add it to `connect-src` if different. Run `nginx -t` before reload and retain a single recoverable backup. HSTS now assumes the verified Let's Encrypt certificate and HTTPS readiness of subdomains. No production configuration was changed by this task.
+
+## Production safeguards (HIR-656)
+
+A production invocation without an explicit GA4 ID must set `ANALYTICS_DISABLED=true`;
+setting both this flag and a non-empty ID is rejected. This guard makes the deployer's
+choice explicit without changing HIR-619's application or manifest analytics policy.
+For a deliberately disabled production dry run:
+
+```bash
+ANALYTICS_DISABLED=true npm run deploy:production -- --i-confirm-production-deploy --dry-run
+```
+
+Initial Consult mode is exported as `mixed` by default. `separate` requires both
+`NUXT_PUBLIC_CALCOM_INITIAL_CONSULT_MEETING_METHOD_MODE=separate` and
+`PRODUCTION_NATIVE_ACTIVATION_APPROVED=true` after native activation has been reviewed.
+Phone event overrides (`NUXT_PUBLIC_CALCOM_INITIAL_CONSULT_*_PHONE_EVENT_PATH`) must
+be empty or a Cal.com `team/event` path. Every generated application HTML runtime
+must contain the selected mode and exact phone paths, including with `--skip-build`.
+The shared checker keeps staging's existing activation rules intact.
+
+The nginx installer backs up the site config and both managed snippets in a unique,
+private `/etc/nginx/.solagree-deploy.*` directory before any replacements. On failure,
+it restores existing files and removes newly created snippets, validates the originals,
+reloads them, and exits nonzero. If recovery fails, it retains the backup and reports
+its path for manual recovery. Successful installation or recovery removes the temporary
+snapshot. This restores nginx configuration only; static output still uses in-place
+rsync. Atomic artifact promotion and content rollback remain HIR-624.
+
+The Partner Terms rsync protect rule preserves versions missing from the artifact;
+it does not make source files immutable against deliberate replacement at the same URL.
+Do not modify published Terms versions; publish a new version directory instead.
+The release manifest remains local for verification and never belongs in the webroot.
+Other hidden server files are retained; root `.htaccess` is explicitly removed because
+this website uses nginx. Existing ACME challenge files remain protected.
+
+After the first separately authorized production deployment, confirm
+`/legal/partner-terms/2026-10-06/` still serves its approved document and
+`/release-manifest.json` and `/.htaccess` return HTTP 404. File exclusion/removal is
+covered by local fixtures; HTTP 404 additionally requires the strict static routing
+policy from HIR-658, since the older generic SPA fallback responds 200 to missing files.
