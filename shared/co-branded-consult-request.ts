@@ -25,8 +25,9 @@ export interface CoBrandedConsultRequestPayloadOptions {
 
 /**
  * Builds the compact co-branded request payload from the stable page variant.
- * Both variants create an Initial Consult; only the Attorney (`standard`) page
- * may transmit internal conflict-check spouse names.
+ * The legacy consultType field remains 'initial' for API compatibility. The page
+ * discriminator identifies a firm request, not a booked SOL consultation. Only
+ * Attorney (`standard`) requests transmit required conflict-check spouse names.
  */
 export const createCoBrandedConsultRequestPayload = (
   form: CoBrandedConsultRequestFormValues,

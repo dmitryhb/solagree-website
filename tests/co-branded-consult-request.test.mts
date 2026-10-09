@@ -20,7 +20,7 @@ const createForm = (
   ...overrides
 })
 
-test('builds the Attorney page payload as an Initial Consult with structured spouse names', () => {
+test('builds the Attorney firm request with a stable discriminator and required spouse names', () => {
   const payload = createCoBrandedConsultRequestPayload(createForm(), {
     pageType: 'standard',
     referralCode: ' rivera-mediation ',

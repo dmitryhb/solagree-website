@@ -106,14 +106,20 @@ describe('normalizeCoBrandedPageConfig', () => {
       PORTAL_BASE_URL
     )
 
-    expect(config.ctaUrl).toBe('/book-an-attorney-consult?ref=partner')
+    expect(config.ctaUrl).toBe('/go/partner?consult=1')
   })
 
-  it('keeps approved site CTA URLs', () => {
+  it('replaces legacy booking CTAs and keeps only the selected partner request route', () => {
     expect(normalizeCoBrandedCtaUrl('https://www.solagree.com/book-a-solagree-consult?x=1', 'partner', 'cdfa'))
-      .toBe('https://www.solagree.com/book-a-solagree-consult?x=1')
+      .toBe('/cdfa/go/partner?consult=1')
     expect(normalizeCoBrandedCtaUrl('/book-an-attorney-consult', 'partner', 'standard'))
-      .toBe('/book-an-attorney-consult')
+      .toBe('/go/partner?consult=1')
+    expect(normalizeCoBrandedCtaUrl('https://www.solagree.com/go/partner?consult=1', 'partner', 'standard'))
+      .toBe('https://www.solagree.com/go/partner?consult=1')
+    expect(normalizeCoBrandedCtaUrl('//evil.example/go/partner?consult=1', 'partner', 'standard'))
+      .toBe('/go/partner?consult=1')
+    expect(normalizeCoBrandedCtaUrl('/go/another-partner?consult=1', 'partner', 'standard'))
+      .toBe('/go/partner?consult=1')
   })
 })
 

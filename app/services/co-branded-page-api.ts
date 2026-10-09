@@ -9,7 +9,6 @@ const CO_BRANDED_PAGE_ENDPOINT_PREFIX_BY_TYPE = {
   standard: '/api/public/co-branded-pages',
   cdfa: '/api/public/cdfa-co-branded-pages'
 } as const satisfies Record<CoBrandedPageType, string>
-const APPROVED_CO_BRANDED_CTA_PATHS = ['/book-a-solagree-consult', '/book-an-attorney-consult']
 const APPROVED_CO_BRANDED_CTA_HOSTS = ['solagree.com', 'www.solagree.com']
 const APPROVED_CO_BRANDED_URL_PROTOCOLS = ['http:', 'https:']
 
@@ -46,15 +45,8 @@ const normalizeOptionalString = (value: unknown): string | null => {
 }
 
 const getDefaultCtaUrl = (slug: string, pageType: CoBrandedPageType): string => {
-  const ctaPath = pageType === 'standard' ? '/book-an-attorney-consult' : '/book-a-solagree-consult'
-
-  return `${ctaPath}?ref=${encodeURIComponent(slug)}`
-}
-
-const isApprovedCtaPath = (pathname: string): boolean => {
-  return APPROVED_CO_BRANDED_CTA_PATHS.some((approvedPath) => {
-    return pathname === approvedPath || pathname.startsWith(`${approvedPath}/`)
-  })
+  const pagePath = pageType === 'standard' ? '/go' : '/cdfa/go'
+  return `${pagePath}/${encodeURIComponent(slug)}?consult=1`
 }
 
 const isApprovedCtaHost = (hostname: string): boolean => {
@@ -64,8 +56,8 @@ const isApprovedCtaHost = (hostname: string): boolean => {
 }
 
 /**
- * Allows only approved site-relative paths and approved Solagree http(s) hosts
- * before a partner-provided CTA URL reaches the HTML template.
+ * Keeps CTAs on this partner's request form. Legacy booking destinations cannot
+ * bypass the co-branded request discriminator when opened in another tab.
  */
 export const normalizeCoBrandedCtaUrl = (
   value: unknown,
@@ -74,27 +66,14 @@ export const normalizeCoBrandedCtaUrl = (
 ): string => {
   const ctaUrl = normalizeOptionalString(value)
   const fallbackUrl = getDefaultCtaUrl(fallbackSlug, pageType)
-
-  if (!ctaUrl) {
-    return fallbackUrl
-  }
-
+  if (!ctaUrl) return fallbackUrl
   try {
-    if (ctaUrl.startsWith('/')) {
-      const parsedRelativeUrl = new URL(ctaUrl, 'https://www.solagree.com')
-
-      return isApprovedCtaPath(parsedRelativeUrl.pathname)
-        ? `${parsedRelativeUrl.pathname}${parsedRelativeUrl.search}${parsedRelativeUrl.hash}`
-        : fallbackUrl
-    }
-
-    const parsedAbsoluteUrl = new URL(ctaUrl)
-
-    return APPROVED_CO_BRANDED_URL_PROTOCOLS.includes(parsedAbsoluteUrl.protocol)
-      && isApprovedCtaHost(parsedAbsoluteUrl.hostname)
-      && isApprovedCtaPath(parsedAbsoluteUrl.pathname)
-      ? parsedAbsoluteUrl.toString()
-      : fallbackUrl
+    const relative = ctaUrl.startsWith('/') && !ctaUrl.startsWith('//')
+    const parsed = new URL(ctaUrl, 'https://www.solagree.com')
+    const expectedPath = fallbackUrl.split('?')[0]
+    if (!APPROVED_CO_BRANDED_URL_PROTOCOLS.includes(parsed.protocol)
+      || !isApprovedCtaHost(parsed.hostname) || parsed.pathname !== expectedPath) return fallbackUrl
+    return relative ? fallbackUrl : `${parsed.origin}${fallbackUrl}`
   } catch {
     return fallbackUrl
   }

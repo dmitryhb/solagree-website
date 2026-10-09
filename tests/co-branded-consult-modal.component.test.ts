@@ -1,5 +1,5 @@
 import { DOMWrapper, flushPromises, mount } from '@vue/test-utils'
-import { computed, nextTick, reactive, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import CoBrandedConsultModal from '../app/components/co-branded/CoBrandedConsultModal.vue'
 import FormResultMessage from '../app/components/FormResultMessage.vue'
@@ -23,13 +23,15 @@ const submitConsultMock = vi.mocked(submitCoBrandedConsultRequest)
 Object.assign(globalThis, {
   computed,
   nextTick,
+  onMounted,
   reactive,
   ref,
   useApplicationSubmission,
   useGoogleAnalytics,
   useRuntimeConfig: () => ({
     public: {
-      portalApiBaseUrl: 'https://portal.solagree.test'
+      portalApiBaseUrl: 'https://portal.solagree.test',
+      gaMeasurementId: 'G-TEST'
     }
   }),
   useSourceUrl,
@@ -64,13 +66,13 @@ const createOpener = () => {
   return opener
 }
 
-const mountModal = () => mount(CoBrandedConsultModal, {
+const mountModal = (open = false, pageType: 'standard' | 'cdfa' = 'standard') => mount(CoBrandedConsultModal, {
   attachTo: document.body,
   props: {
-    open: false,
+    open,
     companyName: 'Rivera Mediation',
     partnerSlug: 'rivera-mediation',
-    pageType: 'standard' as const
+    pageType
   },
   global: {
     components: {
@@ -98,14 +100,44 @@ const fillValidForm = async () => {
 
 beforeEach(() => {
   submitConsultMock.mockReset()
+  window.gtag = vi.fn()
 })
 
 afterEach(() => {
+  delete window.gtag
   document.body.style.overflow = ''
   document.body.innerHTML = ''
 })
 
 describe('CoBrandedConsultModal focus behavior (HIR-369 regression)', () => {
+  it.each(['standard', 'cdfa'] as const)('focuses and traps the initially open %s dialog after mount', async (pageType) => {
+    document.body.style.overflow = 'auto'
+    const backgroundLink = document.createElement('a')
+    backgroundLink.href = '#main'
+    backgroundLink.textContent = 'Skip to main'
+    document.body.appendChild(backgroundLink)
+    const wrapper = mountModal(true, pageType)
+    await flushPromises()
+
+    expect(document.activeElement).toBe(query('#co-branded-first-name').element)
+    expect(document.body.style.overflow).toBe('hidden')
+    const closeButton = query('.co-branded-consult-modal__close')
+    const submitButton = query('.co-branded-consult-modal__submit')
+    closeButton.element.focus()
+    await closeButton.trigger('keydown', { key: 'Tab', shiftKey: true })
+    expect(document.activeElement).toBe(submitButton.element)
+    await submitButton.trigger('keydown', { key: 'Tab' })
+    expect(document.activeElement).toBe(closeButton.element)
+    expect(document.activeElement).not.toBe(backgroundLink)
+
+    await closeButton.trigger('keydown', { key: 'Escape' })
+    expect(wrapper.emitted('close')).toHaveLength(1)
+    await wrapper.setProps({ open: false })
+    await flushPromises()
+    expect(document.body.style.overflow).toBe('auto')
+    wrapper.unmount()
+  })
+
   it('locks scroll and focuses the first field when opened', async () => {
     const opener = createOpener()
     const wrapper = mountModal()
@@ -223,8 +255,43 @@ describe('CoBrandedConsultModal focus behavior (HIR-369 regression)', () => {
     const successHeading = query('#co-branded-consult-modal-title')
 
     expect(successHeading.text()).toContain('Thank you. We received your request.')
+    expect(query('.co-branded-consult-modal__state').text()).toContain('Your consultation request for Rivera Mediation has been recorded.')
+    expect(query('.co-branded-consult-modal__state').text()).not.toContain('notified')
+    expect(window.gtag).toHaveBeenCalledWith('event', 'consultation_requested', expect.objectContaining({ request_purpose: 'attorney_firm_request' }))
+    expect(window.gtag).not.toHaveBeenCalledWith('event', 'consultation_booked', expect.anything())
     expect(document.activeElement).toBe(successHeading.element)
 
+    wrapper.unmount()
+  })
+})
+
+
+describe('co-branded request destinations (HIR-276)', () => {
+  it('names the selected attorney firm and requires spouse conflict information', async () => {
+    const wrapper = mountModal()
+    await openModal(wrapper)
+    expect(query('#co-branded-consult-modal-title').text()).toBe('Request a Consultation with Rivera Mediation')
+    expect(query('#co-branded-spouse-first-name').attributes('required')).toBeDefined()
+    expect(query('#co-branded-spouse-last-name').attributes('required')).toBeDefined()
+    expect(query('#co-branded-conflict-explanation').text()).not.toBe('')
+    wrapper.unmount()
+  })
+
+  it('keeps CDFA request copy neutral and omits attorney conflict fields', async () => {
+    submitConsultMock.mockResolvedValueOnce({} as Awaited<ReturnType<typeof submitCoBrandedConsultRequest>>)
+    const wrapper = mountModal()
+    await wrapper.setProps({ pageType: 'cdfa' })
+    await openModal(wrapper)
+    expect(query('#co-branded-consult-modal-title').text()).toBe('Request a Consultation')
+    expect(document.querySelector('#co-branded-spouse-first-name')).toBeNull()
+    await setValue('#co-branded-first-name', 'Avery')
+    await setValue('#co-branded-last-name', 'Quinn')
+    await setValue('#co-branded-email', 'avery@example.com')
+    await query('form').trigger('submit')
+    await flushPromises()
+    expect(query('.co-branded-consult-modal__state').text()).toContain('Your request has been recorded.')
+    expect(query('.co-branded-consult-modal__state').text()).not.toContain('notified')
+    expect(window.gtag).toHaveBeenCalledWith('event', 'consultation_requested', expect.objectContaining({ request_purpose: 'cdfa_destination_unconfirmed' }))
     wrapper.unmount()
   })
 })

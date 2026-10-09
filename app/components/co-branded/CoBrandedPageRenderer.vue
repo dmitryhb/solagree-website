@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import type { CoBrandedPagePublicConfig } from '#shared/types/co-branded-page'
 import CoBrandedConsultLink from '~/components/co-branded/CoBrandedConsultLink.vue'
 import CoBrandedConsultModal from '~/components/co-branded/CoBrandedConsultModal.vue'
@@ -11,9 +11,13 @@ import type { CoBrandedPageRenderMode } from '~/types/co-branded-page'
 const props = defineProps<{
   config: CoBrandedPagePublicConfig
   mode: CoBrandedPageRenderMode
+  openConsultOnLoad?: boolean
 }>()
 
-const isConsultModalOpen = ref(false)
+const isConsultModalOpen = ref(props.openConsultOnLoad ?? false)
+watch(() => props.openConsultOnLoad, (open) => {
+  if (open) isConsultModalOpen.value = true
+})
 const content = computed(() => resolveCoBrandedPageContent(props.config.pageType))
 const isEmbed = computed(() => props.mode === 'embed')
 const currentYear = new Date().getFullYear()

@@ -130,6 +130,7 @@ useSolagreeSeo({
       v-if="verifiedCoBrandedPage"
       :config="verifiedCoBrandedPage"
       :mode="mode"
+      :open-consult-on-load="route.query.consult === '1'"
     />
 
     <div

@@ -36,14 +36,16 @@ vi.mock('~/components/co-branded/CoBrandedPageRenderer.vue', async () => {
       name: 'CoBrandedPageRenderer',
       props: {
         config: { type: Object, required: true },
-        mode: { type: String, required: true }
+        mode: { type: String, required: true },
+        openConsultOnLoad: { type: Boolean, default: false }
       },
-      setup(props: { config: CoBrandedPagePublicConfig, mode: string }) {
+      setup(props: { config: CoBrandedPagePublicConfig, mode: string, openConsultOnLoad: boolean }) {
         return () => h(
           'div',
           {
             class: 'co-branded-page-renderer-stub',
             'data-mode': props.mode,
+            'data-consult-open': String(props.openConsultOnLoad),
             'data-company-name': props.config.companyName
           },
           props.config.companyName
@@ -56,6 +58,7 @@ vi.mock('~/components/co-branded/CoBrandedPageRenderer.vue', async () => {
 const fetchConfigMock = vi.mocked(fetchCoBrandedPageConfig)
 
 const routeState = reactive({ slug: 'rivera-mediation' })
+const routeQuery = reactive({ consult: '' })
 const showErrorCalls: unknown[] = []
 const seoMetaCalls: Array<Record<string, unknown>> = []
 const headEntries: Array<() => { link?: Array<{ rel?: string, href?: string }> }> = []
@@ -174,7 +177,7 @@ Object.assign(globalThis, {
   useHead: (entry: () => { link?: Array<{ rel?: string, href?: string }> }) => {
     headEntries.push(entry)
   },
-  useRoute: () => ({ params: routeState }),
+  useRoute: () => ({ params: routeState, query: routeQuery }),
   useRuntimeConfig: () => ({
     public: {
       portalApiBaseUrl: 'https://portal.solagree.test',
@@ -279,6 +282,7 @@ const routeVariants = [
 
 beforeEach(() => {
   routeState.slug = 'rivera-mediation'
+  routeQuery.consult = ''
   asyncDataRecords.clear()
   showErrorCalls.length = 0
   seoMetaCalls.length = 0
@@ -287,6 +291,15 @@ beforeEach(() => {
 })
 
 describe('Co-branded route runtime', () => {
+  it.each(routeVariants)('opens the selected request form on direct CTA entry ($label)', async ({ page, pageType }) => {
+    routeQuery.consult = '1'
+    fetchConfigMock.mockImplementation(async () => createPortalConfig(pageType))
+    const { routeErrors, wrapper } = mountRoute(page)
+    await settleAsyncData()
+    expect(routeErrors).toHaveLength(0)
+    expect(wrapper.get('.co-branded-page-renderer-stub').attributes('data-consult-open')).toBe('true')
+  })
+
   it.each(routeVariants)('renders the partner page after the client configuration loads ($label)', async ({ page, mode, pageType }) => {
     fetchConfigMock.mockImplementation(async () => createPortalConfig(pageType))
 

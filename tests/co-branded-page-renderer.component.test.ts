@@ -34,7 +34,7 @@ const createConfig = (pageType: 'standard' | 'cdfa' = 'standard'): CoBrandedPage
   phoneNumber: '415-555-1234',
   emailAddress: 'jamie@rivera.test',
   logoUrl: 'https://portal.solagree.test/uploads/rivera-logo.png',
-  ctaUrl: '/book-an-attorney-consult?ref=qa-fixture'
+  ctaUrl: '/go/qa-fixture?consult=1'
 })
 
 const mountRenderer = (
@@ -61,7 +61,7 @@ describe('CoBrandedPageRenderer', () => {
 
     for (const link of consultationLinks) {
       expect(link.text()).toContain('Request a Consultation')
-      expect(link.attributes('href')).toBe('/book-an-attorney-consult?ref=qa-fixture')
+      expect(link.attributes('href')).toBe('/go/qa-fixture?consult=1')
     }
   })
 
@@ -149,4 +149,14 @@ describe('CoBrandedPageRenderer', () => {
     expect(details[1]!.element.open).toBe(true)
     expect(details[1]!.get('summary').element.tagName).toBe('SUMMARY')
   })
+})
+
+
+it('opens the selected partner modal when the canonical CTA is opened directly', () => {
+  const wrapper = mount(CoBrandedPageRenderer, {
+    props: { config: createConfig(), mode: 'page', openConsultOnLoad: true },
+    global: { stubs: { CoBrandedConsultModal: ConsultModalStub } }
+  })
+  expect(wrapper.findComponent(ConsultModalStub).props('open')).toBe(true)
+  expect(wrapper.findComponent(ConsultModalStub).props('partnerSlug')).toBe('qa-fixture')
 })

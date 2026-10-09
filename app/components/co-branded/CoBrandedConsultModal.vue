@@ -61,8 +61,8 @@ const {
     sourceUrl
   }),
   onSuccess: async () => {
-    trackEvent('consultation_booked', {
-      consult_type: 'initial',
+    trackEvent('consultation_requested', {
+      request_purpose: props.pageType === 'standard' ? 'attorney_firm_request' : 'cdfa_destination_unconfirmed',
       co_branded_page_type: props.pageType,
       referral_code: props.partnerSlug,
       source: 'co_branded_consult_modal'
@@ -94,6 +94,12 @@ const modalDialog = useModalDialog({
   getContainer: () => panelEl.value,
   getInitialFocusTarget: () => formEl.value?.querySelector<HTMLInputElement>('#co-branded-first-name') ?? null,
   onRequestClose: handleClose
+})
+
+onMounted(() => {
+  if (props.open) {
+    void modalDialog.activate()
+  }
 })
 
 watch(
@@ -168,7 +174,7 @@ watch(
             Thank you. We received your request.
           </h2>
           <p>
-            Solagree and {{ companyName }} have been notified. Someone will follow up with next steps.
+            {{ isAttorneyVariant ? `Your consultation request for ${companyName} has been recorded.` : 'Your request has been recorded.' }}
           </p>
           <button
             class="co-branded-consult-modal__submit"
@@ -191,7 +197,7 @@ watch(
               {{ companyName }}
             </p>
             <h2 id="co-branded-consult-modal-title">
-              Request a Solagree Initial Consult
+              {{ isAttorneyVariant ? `Request a Consultation with ${companyName}` : 'Request a Consultation' }}
             </h2>
           </div>
 
