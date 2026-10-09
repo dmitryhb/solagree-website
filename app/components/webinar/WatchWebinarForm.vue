@@ -174,7 +174,7 @@ const {
       <FormResultMessage
         v-if="submissionResult"
         class="watch-webinar-form__status"
-        kind="error"
+        :kind="submissionResult.kind"
         :message="submissionResult.message"
       />
     </form>

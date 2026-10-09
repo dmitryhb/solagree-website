@@ -32,14 +32,6 @@ export const consultBestTimeOfDayOptions = [
   { label: 'Anytime', value: 'anytime' }
 ] as const satisfies readonly SelectOption<ConsultBestTimeOfDay>[]
 
-export const initialConsultRequestContent = {
-  consultType: 'initial',
-  eyebrow: '30-45 minutes. • $60',
-  title: 'Book a Solagree Initial Consult',
-  description: 'Talk with our team about your unique situation and learn if Solagree is right for you. We\'ll explain the process, answer your questions, and give you a personalized price range.',
-  thankYouPath: '/book-a-solagree-consult/thank-you'
-} as const satisfies ConsultRequestPageContent
-
 export const attorneyConsultRequestContent = {
   consultType: 'attorney',
   eyebrow: '30-45 mins • $250',

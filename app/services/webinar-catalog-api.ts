@@ -30,7 +30,12 @@ const parseWebinar = (value: unknown): WebinarCatalogItem => {
 export const getPublicWebinars = async (baseUrl: string, fetcher: PortalGetFetcher): Promise<WebinarCatalogItem[]> => {
   const response = await fetcher<{ webinars?: unknown }>(`${normalizePortalApiBaseUrl(baseUrl)}${publicEndpoint}`)
   if (!response || !Array.isArray(response.webinars)) throw new Error(failureMessage)
-  return response.webinars.map(parseWebinar)
+  return response.webinars.flatMap(value => {
+    try { return [parseWebinar(value)] } catch {
+      console.warn('Skipping an invalid public webinar catalog item.')
+      return []
+    }
+  })
 }
 
 /** Fetches public detail; Portal owns access checks and 404 responses. */

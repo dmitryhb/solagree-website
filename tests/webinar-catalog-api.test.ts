@@ -13,6 +13,13 @@ const post = (response: unknown): PortalFetcher<WebinarFormState> => async <T>()
 const form = { firstName: 'Avery', lastName: 'Quinn', businessEmail: 'avery@example.com', companyName: '', state: 'NY' }
 
 describe('public webinar catalogue boundary', () => {
+  it('keeps valid entries when a catalog item is invalid', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    expect(await getPublicWebinars('https://portal.example.com', get({ webinars: [webinar, { bad: true }] }))).toEqual([webinar])
+    expect(warn).toHaveBeenCalledOnce()
+    warn.mockRestore()
+  })
+
   it('keeps provider URLs out of its public UI model', async () => {
     const result = await getPublicWebinars('https://portal.example.com', get({ webinars: [{ ...webinar, recordingUrl: 'private' }] }))
     expect(result).toEqual([webinar])

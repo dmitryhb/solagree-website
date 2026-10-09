@@ -6,9 +6,11 @@ interface WebinarVideoFrameProps {
   videoTitle?: string
   imageSrc?: string
   imageAlt?: string
+  referrerPolicy?: HTMLIFrameElement['referrerPolicy']
 }
 
 withDefaults(defineProps<WebinarVideoFrameProps>(), {
+  referrerPolicy: 'strict-origin-when-cross-origin',
   videoSrc: solagreeVimeoVideos.about.src,
   videoTitle: solagreeVimeoVideos.about.title,
   imageSrc: '/images/video-placeholder.webp',
@@ -27,7 +29,7 @@ withDefaults(defineProps<WebinarVideoFrameProps>(), {
       height="720"
       frameborder="0"
       allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
-      referrerpolicy="no-referrer"
+      :referrerpolicy="referrerPolicy"
       allowfullscreen
     />
     <img

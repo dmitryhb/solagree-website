@@ -314,7 +314,7 @@ watch(
           <FormResultMessage
             v-if="submissionResult"
             class="co-branded-consult-modal__error"
-            kind="error"
+            :kind="submissionResult.kind"
             :message="submissionResult.message"
           />
 

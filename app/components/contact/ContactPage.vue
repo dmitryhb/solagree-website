@@ -23,7 +23,11 @@ import { contactPerson, directContactItems } from '~/data/contact'
           <ContactPersonCard :person="contactPerson" />
         </div>
 
-        <ContactForm v-appear="{ delay: 100, variant: 'scale' }" />
+        <ContactForm
+          v-appear="{ delay: 100, variant: 'scale' }"
+          id="contact-form"
+          tabindex="-1"
+        />
       </div>
 
       <section

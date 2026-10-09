@@ -9,7 +9,6 @@ const exactLegacyRedirects: Record<string, string> = {
   '/be-a-part-of-the-future-with-us-for-lawyers-mediators-and-cdfa-professionals': '/attorneys',
   '/category': '/faq',
   '/comments/feed': '/faq',
-  '/contact': '/contact',
   '/disclaimer': '/legal/terms-of-service',
   '/feed': '/faq',
   '/frequently-asked-questions': '/faq',
@@ -19,8 +18,8 @@ const exactLegacyRedirects: Record<string, string> = {
   '/the-solagree-method-vs-traditional-divorce': '/#how-it-works',
   '/the-solagree-process': '/#how-it-works',
   '/webinars-and-events': '/webinar',
-  '/wilmington-divorce-family-law-office': '/contact',
-  '/wilmington-divorce-mediation': '/contact'
+  '/wilmington-divorce-family-law-office': '/contact/',
+  '/wilmington-divorce-mediation': '/contact/'
 }
 
 const prefixLegacyRedirects: Array<readonly [string, string]> = [

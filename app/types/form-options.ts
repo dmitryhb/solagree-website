@@ -7,13 +7,11 @@ export interface SelectOption<TValue extends string = string> {
 }
 
 /**
- * User-facing submission failure shown below a form. Successful submissions
- * never produce an inline result — their `onSuccess` hook either navigates to
- * a destination page or swaps in the form's own success view — so `success`
- * is not a representable variant.
+ * User-facing submission result. Success is a fallback when the accepted
+ * request's navigation or presentation hook fails.
  */
 export interface ApplicationResult {
-  kind: 'error'
+  kind: 'error' | 'success'
   title: string
   message: string
 }

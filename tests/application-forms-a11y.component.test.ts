@@ -116,7 +116,7 @@ vi.mock('~/composables/useCdfaApplicationForm', async () => {
 
 vi.mock('~/composables/useProfessionalTerms', async () => {
   const { ref } = await import('vue')
-  return { useProfessionalTerms: () => ({ terms: ref({ available: false, current: null }), refresh: async () => {} }) }
+  return { useProfessionalTerms: () => ({ terms: ref({ available: false, current: null }), status: ref('unavailable'), refresh: async () => {} }) }
 })
 
 Object.assign(globalThis, {
