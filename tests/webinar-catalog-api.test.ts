@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest'
-import { formatWebinarDate, getPublicWebinar, getPublicWebinars, requestWebinarAccess } from '../app/services/webinar-catalog-api'
+import { describe, expect, it, vi } from 'vitest'
+import { formatWebinarDate, getPublicWebinar, getPublicWebinars, requestWebinarAccess, resolveWebinarAccess } from '../app/services/webinar-catalog-api'
 import type { PortalGetFetcher, PortalFetcher } from '../app/services/portal-api'
 import type { WebinarFormState } from '../app/types/webinar'
 
@@ -36,8 +36,20 @@ describe('public webinar catalogue boundary', () => {
   it('allows only the requested event Portal access route', async () => {
     const response = { ok: true, accessPath: '/api/public/webinars/event-1/recording?token=opaque', expiresAt: '2026-11-01T18:15:00Z' }
     await expect(requestWebinarAccess('event-1', form, { portalApiBaseUrl: 'https://portal.example.com', fetcher: post(response) })).resolves.toEqual(response)
-    for (const accessPath of ['https://evil.example/recording', '//evil.example/recording', '/api/public/webinars/other/recording?token=x']) {
+    for (const accessPath of ['https://evil.example/recording', '//evil.example/recording', 'https://portal.invalid/api/public/webinars/event-1/recording?token=x', '/api/public/webinars/other/recording?token=x', '/api/public/webinars/event-1/recording?token=']) {
       await expect(requestWebinarAccess('event-1', form, { portalApiBaseUrl: 'https://portal.example.com', fetcher: post({ ...response, accessPath }) })).rejects.toThrow()
     }
+  })
+
+  it('resolves only a fragment capability into the requested event recording route', async () => {
+    const response = { ok: true, accessPath: '/api/public/webinars/event-1/recording?token=opaque', expiresAt: '2026-11-01T18:15:00Z' }
+    const fetcher = vi.fn(post(response))
+    await expect(resolveWebinarAccess('event-1', 'opaque', { portalApiBaseUrl: 'https://portal.example.com', fetcher })).resolves.toEqual(response)
+    expect(fetcher).toHaveBeenCalledWith('https://portal.example.com/api/public/webinars/event-1/access/resolve', {
+      method: 'POST', body: { token: 'opaque' }
+    })
+    await expect(resolveWebinarAccess('event-1', 'opaque', {
+      portalApiBaseUrl: 'https://portal.example.com', fetcher: post({ ...response, accessPath: '/api/public/webinars/other/recording?token=opaque' })
+    })).rejects.toThrow()
   })
 })

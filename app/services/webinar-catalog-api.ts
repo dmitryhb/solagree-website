@@ -53,14 +53,38 @@ export const requestWebinarAccess = async (
   endpoint: `${publicEndpoint}/${encodeURIComponent(id)}/access`,
   payload: form,
   fallbackMessage: 'We could not open this recording. Please try again.',
-  parseSuccess: (response) => {
-    const value = response as Partial<WebinarAccessResponse>
-    const expected = `${publicEndpoint}/${encodeURIComponent(id)}/recording?`
-    if (value.ok !== true || typeof value.accessPath !== 'string' || !value.accessPath.startsWith(expected)
-      || typeof value.expiresAt !== 'string' || !Number.isFinite(Date.parse(value.expiresAt))) return null
-    return { ok: true, accessPath: value.accessPath, expiresAt: value.expiresAt }
-  }
+  parseSuccess: (response) => parseWebinarAccessResponse(id, response)
 })
+
+/** Resolves an emailed fragment token into the same checked recording route used by the lead form. */
+export const resolveWebinarAccess = async (
+  id: string,
+  token: string,
+  options: PortalSubmitOptions<{ token: string }>
+): Promise<WebinarAccessResponse> => submitToPortal({
+  ...options,
+  endpoint: `${publicEndpoint}/${encodeURIComponent(id)}/access/resolve`,
+  payload: { token },
+  fallbackMessage: 'We could not verify this access link. Please request a new one.',
+  parseSuccess: (response) => parseWebinarAccessResponse(id, response)
+})
+
+/** Validates an opaque recording capability without accepting another event or an absolute URL. */
+const parseWebinarAccessResponse = (id: string, response: object): WebinarAccessResponse | null => {
+  const value = response as Partial<WebinarAccessResponse>
+  const expectedPath = `${publicEndpoint}/${encodeURIComponent(id)}/recording`
+  if (value.ok !== true || typeof value.accessPath !== 'string' || typeof value.expiresAt !== 'string'
+    || !value.accessPath.startsWith(`${expectedPath}?`) || !Number.isFinite(Date.parse(value.expiresAt))) return null
+
+  try {
+    const accessUrl = new URL(value.accessPath, 'https://portal.invalid')
+    if (accessUrl.origin !== 'https://portal.invalid' || accessUrl.pathname !== expectedPath || !accessUrl.searchParams.get('token')) return null
+  } catch {
+    return null
+  }
+
+  return { ok: true, accessPath: value.accessPath, expiresAt: value.expiresAt }
+}
 
 /** Formats event time in its announced timezone so viewers receive an unambiguous date. */
 export const formatWebinarDate = (item: WebinarCatalogItem): string => item.startsAt

@@ -52,7 +52,10 @@ export default defineNuxtConfig({
 window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
-gtag('config', '${gaMeasurementId}', { send_page_view: false });
+gtag('config', '${gaMeasurementId}', {
+  send_page_view: false,
+  page_location: window.location.origin + window.location.pathname + window.location.search
+});
 `
             }
           ]
