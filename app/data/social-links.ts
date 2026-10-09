@@ -1,4 +1,4 @@
-import type { SocialLink, SocialLinkIcon, SocialLinkOverrides } from '~/types/links'
+import type { SocialLink, SocialLinkIcon } from '~/types/links'
 
 export const solagreeSocialLinks = [
   {
@@ -29,14 +29,3 @@ export const solagreeSocialLinksByIcon = solagreeSocialLinks.reduce<Record<Socia
   },
   {} as Record<SocialLinkIcon, SocialLink>
 )
-
-/**
- * Creates the configured Solagree social link list with optional per-icon overrides.
- */
-export const createSolagreeSocialLinks = (overrides: SocialLinkOverrides = {}) => {
-  return solagreeSocialLinks.map(link => ({
-    ...link,
-    ...overrides[link.icon],
-    icon: link.icon
-  }))
-}
