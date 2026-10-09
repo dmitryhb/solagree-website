@@ -35,7 +35,8 @@ Overridable env vars: `SSH_USER`, `SSH_HOST`, `REMOTE_PATH`, `REMOTE_OWNER`, `RO
 `/etc/nginx/sites-available/solagree-website` defines:
 
 - HTTP→HTTPS redirect (with `/.well-known/acme-challenge/` carve-out for future certbot)
-- `https://www.solagree.com` root → `/home/solagree/public_html`, with SPA fallback `try_files $uri $uri/ /200.html;` so dynamic Nuxt paths (`/go/:slug`, `/cdfa/go/:slug`, `/webinars/:id`) work after a static deploy
+- `https://www.solagree.com` root → `/home/solagree/public_html`, with SPA fallback `try_files $uri $uri/ =404;
+    error_page 404 /404.html;` so dynamic Nuxt paths (`/go/:slug`, `/cdfa/go/:slug`, `/webinars/:id`) work after a static deploy
 - legacy pre-Nuxt URLs → 301 redirects via `/etc/nginx/snippets/solagree-legacy-redirects.conf`
 - `X-Robots-Tag: noindex, nofollow` response headers for `/go/*`, `/cdfa/go/*`, and `/webinars/*` via `/etc/nginx/snippets/solagree-co-branded-noindex.conf`; exact `/webinars` stays indexable
 - `https://solagree.com` → 301 to `https://www.solagree.com`
@@ -60,7 +61,8 @@ include /etc/nginx/snippets/solagree-legacy-redirects.conf;
 include /etc/nginx/snippets/solagree-co-branded-noindex.conf;
 
 location / {
-    try_files $uri $uri/ /200.html;
+    try_files $uri $uri/ =404;
+    error_page 404 /404.html;
 }
 ```
 
@@ -183,3 +185,13 @@ Focused evidence: `tests/deployment-analytics.test.mts` covers the nine
 environment/ID combinations. The disabled staging browser test runs with all
 external requests blocked and verifies that even a host-supplied gtag receives
 no events. Neither test sends analytics to a real property.
+
+## Website HTTP policy — HIR-658
+
+Read-only inspection on 2026-10-09 confirmed the production site already includes a shared security snippet (also used by Portal), but HSTS is commented out and generic routes use the SPA fallback. Keep the Portal snippet intact. Install the Website policy from `config/nginx/solagree-security-headers.conf` as `/etc/nginx/snippets/solagree-website-security-headers.conf`, and replace only the Website server's old security include. Install `solagree-security-maps.conf` once at HTTP scope (for example `/etc/nginx/conf.d/solagree-website-maps.conf`). Include the Website headers again in every location declaring `add_header`, including hashed assets and HTML cache locations; nginx otherwise drops inherited headers.
+
+Use `solagree-static-routes.conf` in place of the generic `location /` block. Retain dedicated dynamic-family fallback locations from the existing noindex/intake configuration. Ordinary unknown paths now return 404 and serve `/404.html`; `/meet`, `/go`, `/cdfa/go`, and `/webinars` detail routes continue to serve their SPA shell. The shared cache map supplies `Cache-Control: no-cache` for HTML, including extensionless routes and named dynamic fallbacks. Re-include the Website security snippet in those locations and retain their `X-Robots-Tag` signal. Hashed `_nuxt` assets retain immutable caching.
+
+The maps enforce frame ancestors on ordinary pages, preserving public quiz and co-branded embeds. All non-production hosts receive HTTP noindex, including 401/404 responses; the app also emits noindex outside production. Legacy webinar view pages stay available but are absent from the sitemap and emit noindex. `/c/...` redirects retain query strings.
+
+Full CSP is report-only. Before production, check Vimeo, Cal.com, and GA on staging with browser CSP diagnostics or the operator's reviewed report collection endpoint. Confirm the actual staging Portal origin and add it to `connect-src` if different. Run `nginx -t` before reload and retain a single recoverable backup. HSTS now assumes the verified Let's Encrypt certificate and HTTPS readiness of subdomains. No production configuration was changed by this task.

@@ -5,6 +5,7 @@ import { solagreeVimeoVideos } from '~/data/video-embeds'
 const cdfaWebinarImage = '/images/for-professionals.webp'
 
 useSolagreeSeo({
+  noIndex: true,
   title: 'Watch the CDFA Partner Webinar',
   description:
     'Watch Solagree’s CDFA and advisor partnership webinar and learn how professionals can help couples resolve divorce more efficiently.',

@@ -66,7 +66,7 @@ test('retains explicit server-only and regex redirect ownership', () => {
   assert.match(nginxConfig, /location = \/site-map \{ return 301 "\/sitemap\.xml"; \}/)
   assert.match(nginxConfig, /location = \/site-map\/ \{ return 301 "\/sitemap\.xml"; \}/)
 
-  assert.match(nginxConfig, /location ~ \^\/c\/\(\.\*\)\$ \{ return 301 "\/meet\/\$1"; \}/)
+  assert.match(nginxConfig, /location ~ \^\/c\/\(\.\*\)\$ \{ return 301 "\/meet\/\$1\$is_args\$args"; \}/)
   const clientRedirectPage = readFileSync(resolve(process.cwd(), 'app/pages/c/[slug]/index.vue'), 'utf8')
   assert.match(clientRedirectPage, /path: `\/meet\/\$\{encodeURIComponent\(slug\.value\)\}`/)
 })
