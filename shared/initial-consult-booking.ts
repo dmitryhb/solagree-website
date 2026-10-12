@@ -105,7 +105,7 @@ export const normalizeInitialConsultEventPath = (value: unknown): string | null 
 export const resolveInitialConsultBookingEvents = (
   config: InitialConsultBookingRuntimeConfig
 ): InitialConsultBookingEvent[] => {
-  const unpublishedValue = config.unpublishedConsultants ?? 'jessica'
+  const unpublishedValue = config.unpublishedConsultants ?? 'jessica,james'
   if (typeof unpublishedValue !== 'string') return []
 
   const unpublished = unpublishedValue.split(',').map(id => id.trim()).filter(Boolean)
