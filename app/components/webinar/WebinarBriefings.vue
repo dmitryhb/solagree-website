@@ -49,7 +49,7 @@ const briefings = [
             <h2>Join an upcoming live session</h2>
             <p>Contact the Solagree team to ask about upcoming briefings and Q&amp;A sessions.</p>
           </div>
-          <NuxtLink to="/contact#contact-form" class="briefings__action">Contact us</NuxtLink>
+          <NuxtLink to="/contact" class="briefings__action">Contact us</NuxtLink>
         </article>
       </div>
     </div>
