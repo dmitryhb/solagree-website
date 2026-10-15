@@ -18,8 +18,11 @@ test('catalogue recovers from failure and safely handles an empty response', asy
   await expect(page.getByRole('alert')).toContainText('Webinars are temporarily unavailable')
   available = true
   await page.getByRole('button', { name: 'Try again' }).click()
-  await expect(page.getByText('New webinars will be announced here soon.')).toBeVisible()
-  await expect(page.locator('article')).toHaveCount(0)
+  await expect(page.getByRole('alert')).toHaveCount(0)
+  await expect(page.locator('.briefings__card')).toHaveCount(3)
+  await expect(page.getByRole('link', { name: 'Register to watch: Add flat-fee cases without adding staff' })).toHaveAttribute('href', '/webinar')
+  await expect(page.getByRole('link', { name: 'Register to watch: Lead the financial intake' })).toHaveAttribute('href', '/webinar/cdfa')
+  await expect(page.locator('.briefings').getByRole('link', { name: 'Contact us', exact: true })).toHaveAttribute('href', '/contact#contact-form')
 })
 
 test('catalogue states, mobile layout, branded gate and legacy routes', async ({ page, context }) => {
@@ -43,7 +46,8 @@ test('catalogue states, mobile layout, branded gate and legacy routes', async ({
   })
   await page.setViewportSize({ width: 1440, height: 1000 })
   await page.goto('/webinars')
-  await expect(page.locator('article')).toHaveCount(4)
+  await expect(page.locator('.webinar-catalog__card')).toHaveCount(4)
+  await expect(page.locator('.briefings__card')).toHaveCount(3)
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'index, follow')
   await expect(page.getByRole('link', { name: 'Register on Zoom' })).toHaveAttribute('href', /\/public-live\/register$/)
   await expect(page.getByText('Recording coming soon')).toBeVisible()
