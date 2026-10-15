@@ -22,7 +22,7 @@ test('catalogue recovers from failure and safely handles an empty response', asy
   await expect(page.locator('.briefings__card')).toHaveCount(3)
   await expect(page.getByRole('link', { name: 'Register to watch: Add flat-fee cases without adding staff' })).toHaveAttribute('href', '/webinar')
   await expect(page.getByRole('link', { name: 'Register to watch: Lead the financial intake' })).toHaveAttribute('href', '/webinar/cdfa')
-  await expect(page.locator('.briefings').getByRole('link', { name: 'Contact us', exact: true })).toHaveAttribute('href', '/contact#contact-form')
+  await expect(page.locator('.briefings').getByRole('link', { name: 'Contact us', exact: true })).toHaveAttribute('href', '/contact')
 })
 
 test('catalogue states, mobile layout, branded gate and legacy routes', async ({ page, context }) => {
