@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import WebinarBriefings from '~/components/webinar/WebinarBriefings.vue'
 import { formatWebinarDate, getPublicWebinars, getWebinarLiveRegistrationUrl } from '~/services/webinar-catalog-api'
 import { websitePortalFetcher } from '~/services/portal-api'
 
@@ -11,19 +12,19 @@ useSolagreeSeo({ title: 'Webinars & Events', description: 'Explore live events a
 
 <template>
   <main>
-    <section class="section-shell webinar-catalog">
-      <h1 class="editorial-display">Webinars &amp; Events</h1>
-      <p>Learn about a more structured approach to divorce with the Solagree team.</p>
+    <WebinarBriefings />
+    <section v-if="status === 'pending' || status === 'idle' || error || webinars?.length" class="section-shell webinar-catalog" aria-label="Additional webinars and events">
+      <h2 class="editorial-display">More webinars &amp; events</h2>
       <p v-if="status === 'pending' || status === 'idle'" role="status">Loading webinars…</p>
       <div v-else-if="error" role="alert">
         <p>Webinars are temporarily unavailable.</p>
         <button class="sol-button sol-button--primary" type="button" @click="refresh()">Try again</button>
       </div>
-      <p v-else-if="!webinars?.length">New webinars will be announced here soon.</p>
+
       <div v-else class="webinar-catalog__grid">
         <article v-for="webinar in webinars" :key="webinar.id" class="webinar-catalog__card">
           <p>{{ webinar.format === 'on_demand' ? 'On-Demand' : 'Live Webinar' }}</p>
-          <h2><NuxtLink :to="`/webinars/${encodeURIComponent(webinar.id)}`">{{ webinar.title }}</NuxtLink></h2>
+          <h3><NuxtLink :to="`/webinars/${encodeURIComponent(webinar.id)}`">{{ webinar.title }}</NuxtLink></h3>
           <p>{{ webinar.description }}</p>
           <p>Hosted by {{ webinar.host }}</p>
           <p><time v-if="webinar.startsAt" :datetime="webinar.startsAt">{{ formatWebinarDate(webinar) }}</time><span v-else>Watch on demand</span></p>
@@ -32,10 +33,7 @@ useSolagreeSeo({ title: 'Webinars & Events', description: 'Explore live events a
           <NuxtLink v-else :to="`/webinars/${encodeURIComponent(webinar.id)}`" class="sol-button sol-button--primary">Watch webinar</NuxtLink>
         </article>
       </div>
-      <nav class="webinar-catalog__legacy" aria-label="Partner introduction webinars">
-        <NuxtLink to="/webinar">Attorney partner introduction</NuxtLink>
-        <NuxtLink to="/webinar/cdfa">CDFA partner introduction</NuxtLink>
-      </nav>
+
     </section>
     <SiteFooter />
   </main>
@@ -46,7 +44,7 @@ useSolagreeSeo({ title: 'Webinars & Events', description: 'Explore live events a
 .webinar-catalog > p { margin-block: 1.5rem; }
 .webinar-catalog__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr)); gap: 1.5rem; margin-block: 2rem; }
 .webinar-catalog__card { border: 1px solid #d5ddd6; border-radius: 1rem; padding: 1.5rem; overflow-wrap: anywhere; }
-.webinar-catalog__card h2 { font-size: 1.6rem; margin-block: 1rem; }
+.webinar-catalog__card h3 { font-size: 1.6rem; margin-block: 1rem; }
 .webinar-catalog__card p { margin-block: 1rem; white-space: pre-line; }
-.webinar-catalog__legacy { display: flex; flex-wrap: wrap; gap: 1.5rem; margin-top: 3rem; text-decoration: underline; }
+
 </style>
