@@ -9,7 +9,7 @@ import {
   cdfaConsultationInterestOptions
 } from '~/data/cdfa-application'
 
-const { terms, refresh: refreshTerms } = useProfessionalTerms()
+const { terms, status: termsStatus, refresh: refreshTerms } = useProfessionalTerms()
 const {
   formEl,
   form,
@@ -192,9 +192,16 @@ watchEffect(() => {
         </a><span v-else>Partner Terms</span>.
       </FormCheckboxField>
 
-      <p v-if="!terms?.available" class="form-field__hint" role="status">
+      <p v-if="termsStatus === 'unavailable'" class="form-field__hint" role="status">
         Applications are temporarily unavailable until the approved terms are published.
       </p>
+      <p v-else-if="termsStatus === 'loading'" class="form-field__hint" role="status">
+        Loading approved terms…
+      </p>
+      <div v-else-if="termsStatus === 'error'" role="alert">
+        <p>We could not load the approved terms. Please try again.</p>
+        <button type="button" @click="refreshTerms">Retry</button>
+      </div>
 
       <SiteFormSubmit
         label="SEND"
@@ -204,7 +211,7 @@ watchEffect(() => {
 
       <FormResultMessage
         v-if="submissionResult"
-        kind="error"
+        :kind="submissionResult.kind"
         :title="submissionResult.title"
         :message="submissionResult.message"
       />

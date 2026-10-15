@@ -22,14 +22,8 @@ export const CO_BRANDED_PAGE_TEMPLATE_ID_BY_TYPE = {
  * other variant's template.
  */
 export const resolveCoBrandedPageTemplateId = (
-  templateId: unknown,
+  _templateId: unknown,
   pageType: CoBrandedPageType
 ): CoBrandedPageTemplateId => {
-  const defaultTemplateId = CO_BRANDED_PAGE_TEMPLATE_ID_BY_TYPE[pageType]
-
-  if (templateId === defaultTemplateId) {
-    return defaultTemplateId
-  }
-
-  return defaultTemplateId
+  return CO_BRANDED_PAGE_TEMPLATE_ID_BY_TYPE[pageType]
 }

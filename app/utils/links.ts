@@ -13,12 +13,3 @@ export const getLinkTarget = (link: AppLink) => {
 export const isExternalHref = (target: string) => {
   return /^https?:\/\//.test(target)
 }
-
-/**
- * Determines whether a link should be treated as external for rendering.
- */
-export const isExternalLink = (link: AppLink) => {
-  const target = getLinkTarget(link)
-
-  return Boolean(link.href || target.startsWith('mailto:') || target.startsWith('tel:') || isExternalHref(target))
-}

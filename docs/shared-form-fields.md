@@ -16,3 +16,7 @@ The neutral class contract lives in `_form-controls.scss`. Shared controls must 
 `validateNativeForm` centralizes the repeated `checkValidity()` and `reportValidity()` sequence. Attorney and CDFA composables add their own checkbox and license rules after native validation and keep the first invalid control focus behavior.
 
 `usePortalFormSubmissionOptions` centralizes the portal base URL and website fetch adapter. The seven form components and composables still call their existing submission service, build the same payload, send to the same destination, and retain their own success, error, analytics, busy, and reset behavior.
+
+Optional referral attribution uses Portal normalization (trim, lowercase, whitespace to hyphens) and drops codes outside the accepted 2–80-character alphanumeric/underscore/hyphen shape. A malformed campaign query cannot block a consult request. Co-branded requests validate trimmed spouse names before submission.
+
+Submission services expose checked application messages and nonempty Portal validation messages; network diagnostics and proxy HTML use readable fallback copy. If a request was accepted but its success callback fails, the result confirms receipt and prevents another submit until the form is explicitly reset. Analytics event names remain unchanged by owner decision in HIR-657. Invalid catalog entries are skipped individually; webinar detail remains strict.

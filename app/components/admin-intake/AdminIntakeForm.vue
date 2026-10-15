@@ -191,7 +191,7 @@ const {
 
       <FormResultMessage
         v-if="submissionResult"
-        kind="error"
+        :kind="submissionResult.kind"
         :title="submissionResult.title"
         :message="submissionResult.message"
       />

@@ -130,7 +130,7 @@ const {
     <FormResultMessage
       v-if="submissionResult"
       class="contact-form__status"
-      kind="error"
+      :kind="submissionResult.kind"
       :message="submissionResult.message"
     />
   </form>

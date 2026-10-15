@@ -61,7 +61,7 @@ export const useSolagreeSeo = (input: SolagreeSeoInput) => {
     return rawTitle.includes(SITE_NAME) ? rawTitle : `${rawTitle} | ${SITE_NAME}`
   })
   const description = computed(() => toValue(input.description))
-  const robots = computed(() => toValue(input.noIndex) ? 'noindex, nofollow' : 'index, follow')
+  const robots = computed(() => (runtimeConfig.public.deploymentEnvironment !== 'production' || toValue(input.noIndex)) ? 'noindex, nofollow' : 'index, follow')
 
   useHead(() => ({
     htmlAttrs: {

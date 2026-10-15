@@ -8,6 +8,13 @@ import { manifestName, releasePolicy, sourceCommit, verifyManifest } from './lib
 try {
   const root = fileURLToPath(new URL('..', import.meta.url))
   const expected = releasePolicy(process.env.NUXT_PUBLIC_DEPLOYMENT_ENVIRONMENT)
+  // Production deployment must explicitly choose enabled or disabled analytics.
+  // Use HIR-619's normalized policy, including Unicode/whitespace-only empty IDs.
+  if (process.argv.includes('--require-explicit-analytics')) {
+    const disabled = process.env.ANALYTICS_DISABLED === 'true'
+    if (!expected.ga.enabled && !disabled) throw new Error('Production analytics requires NUXT_PUBLIC_GA_MEASUREMENT_ID or ANALYTICS_DISABLED=true')
+    if (expected.ga.enabled && disabled) throw new Error('ANALYTICS_DISABLED=true conflicts with a selected GA measurement ID')
+  }
   if (process.argv.includes('--policy-only')) {
     console.log(`Deployment policy verified for ${expected.environment}`)
   } else {

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { QuizResultViewModel } from '~/data/quiz-types'
-import { appendReferralToHref } from '~/utils/referral'
+import { appendReferralToHref, sanitizeReferralCode } from '~/utils/referral'
 
 const props = defineProps<{
   result: QuizResultViewModel
@@ -13,15 +13,7 @@ const emit = defineEmits<{
 
 const route = useRoute()
 
-const referralCode = computed(() => {
-  const refValue = route.query.ref
-
-  if (Array.isArray(refValue)) {
-    return refValue.find((value) => typeof value === 'string' && value.trim()) ?? null
-  }
-
-  return typeof refValue === 'string' ? refValue.trim() || null : null
-})
+const referralCode = computed(() => sanitizeReferralCode(route.query.ref))
 
 const primaryCta = computed(() => ({
   ...props.result.primaryCta,

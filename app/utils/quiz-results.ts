@@ -117,10 +117,3 @@ export const getQuizDeferredPolicyIds = (_: Readonly<QuizAnswerMap>): readonly Q
     .filter(policy => !policy.blocksOutcome)
     .map(policy => policy.id)
 }
-
-/**
- * Checks whether an evaluation is blocked by an unresolved open policy.
- */
-export const isQuizResultBlockedByOpenPolicy = (evaluation: QuizEvaluation): boolean => {
-  return evaluation.kind === 'open-policy'
-}

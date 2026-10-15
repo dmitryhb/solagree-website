@@ -13,7 +13,7 @@ interface UseApplicationSubmissionOptions<TForm, TResponse> {
   onSuccess: (response: TResponse) => Promise<void> | void
   /**
    * Heading rendered above the error message. Message-only forms pass an
-   * empty string. Defaults to 'Submission failed'.
+   * empty string, which uses the default. Defaults to 'Submission failed'.
    */
   errorTitle?: string
   getErrorMessage: (error: unknown) => string
@@ -42,12 +42,15 @@ export const useApplicationSubmission = <TForm, TResponse>(
   const submitting = ref(false)
   const submissionResult = ref<ApplicationResult | null>(null)
 
+  let acceptedWithDisplayFailure = false
+
   const resetSubmissionResult = () => {
+    acceptedWithDisplayFailure = false
     submissionResult.value = null
   }
 
   const handleSubmit = async () => {
-    if (submitting.value) {
+    if (submitting.value || acceptedWithDisplayFailure) {
       return
     }
 
@@ -64,7 +67,17 @@ export const useApplicationSubmission = <TForm, TResponse>(
 
       const response = await options.submit(options.getFormState())
 
-      await options.onSuccess(response)
+      try {
+        await options.onSuccess(response)
+      } catch {
+        console.error('The request was accepted, but its success view could not be displayed.')
+        acceptedWithDisplayFailure = true
+        submissionResult.value = {
+          kind: 'success',
+          title: 'Request received',
+          message: 'Your request was received. You do not need to submit it again.'
+        }
+      }
     } catch (error) {
       if (isPortalApiConfigurationError(error)) {
         console.error(error)
@@ -72,7 +85,7 @@ export const useApplicationSubmission = <TForm, TResponse>(
 
       submissionResult.value = {
         kind: 'error',
-        title: options.errorTitle ?? 'Submission failed',
+        title: options.errorTitle?.trim() || 'Submission failed',
         message: options.getErrorMessage(error)
       }
     } finally {

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import BlogMedia from '~/components/blog/BlogMedia.vue'
+import { contactEmail } from '~/data/contact'
 import { formatArticleDate } from '~/utils/article-formatting'
 import type { ExternalNewsItem } from '#shared/types/resource-content'
 
@@ -136,7 +137,7 @@ const getExternalLabel = (item: ExternalNewsItem): string => item.category === '
             Press Inquiries
           </h2>
           <p>
-            For media inquiries, contact <a href="mailto:pr@solagree.com">pr@solagree.com</a>.
+            For media inquiries, contact <a :href="`mailto:${contactEmail}`">{{ contactEmail }}</a>.
           </p>
         </section>
       </div>

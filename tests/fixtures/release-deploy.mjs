@@ -16,7 +16,7 @@ export function releaseFixture(environment = 'production', measurementId = '') {
   mkdirSync(join(output, 'webinars'), { recursive: true })
   mkdirSync(bin)
   const policy = releasePolicy(environment, { NUXT_PUBLIC_GA_MEASUREMENT_ID: measurementId })
-  const runtime = { public: { siteUrl: policy.siteOrigin, portalUrl: policy.portalUrl, portalApiBaseUrl: policy.portalApiOrigin, gaMeasurementId: policy.ga.measurementId, deploymentEnvironment: environment, initialConsultBooking: { meetingMethodMode: 'mixed' } } }
+  const runtime = { public: { siteUrl: policy.siteOrigin, portalUrl: policy.portalUrl, portalApiBaseUrl: policy.portalApiOrigin, gaMeasurementId: policy.ga.measurementId, deploymentEnvironment: environment, initialConsultBooking: { meetingMethodMode: 'mixed', firstAvailablePhoneEventPath: '', tajPhoneEventPath: '', staciePhoneEventPath: '', jessicaPhoneEventPath: '', jamesPhoneEventPath: '' } } }
   const shell = `<!DOCTYPE html><html><head></head><body><div id="__nuxt"></div><script>window.__NUXT__={};window.__NUXT__.config=${JSON.stringify(runtime)};</script></body></html>`
   writeFileSync(join(output, 'index.html'), shell)
   writeFileSync(join(output, '200.html'), shell)
@@ -72,7 +72,10 @@ if (!process.argv.includes('--dry-run')) {
     ...process.env, PATH: `${bin}:${process.env.PATH}`, TEST_DEPLOY_LOG: log,
     NUXT_PUBLIC_SITE_URL: policy.siteOrigin, NUXT_PUBLIC_PORTAL_URL: policy.portalUrl,
     NUXT_PUBLIC_PORTAL_API_BASE_URL: policy.portalApiOrigin, NUXT_PUBLIC_GA_MEASUREMENT_ID: measurementId,
-    NUXT_PUBLIC_DEPLOYMENT_ENVIRONMENT: environment, STAGING_BASIC_AUTH_USER: '', STAGING_BASIC_AUTH_PASSWORD: '',
+    NUXT_PUBLIC_DEPLOYMENT_ENVIRONMENT: environment, DEPLOY_CONFIRM_PRODUCTION: 'yes', ANALYTICS_DISABLED: measurementId ? '' : 'true',
+    NUXT_PUBLIC_CALCOM_INITIAL_CONSULT_MEETING_METHOD_MODE: 'mixed', PRODUCTION_NATIVE_ACTIVATION_APPROVED: '',
+    ...Object.fromEntries(['FIRST_AVAILABLE', 'TAJ', 'STACIE', 'JESSICA', 'JAMES'].map(name => [`NUXT_PUBLIC_CALCOM_INITIAL_CONSULT_${name}_PHONE_EVENT_PATH`, ''])),
+    STAGING_BASIC_AUTH_USER: '', STAGING_BASIC_AUTH_PASSWORD: '',
     TEST_TARGET_ROOT: target, STAGING_EXPECTED_TARGET_SHA256: targetFingerprint, STAGING_TARGET_QUIESCED: 'true'
   }
   return {

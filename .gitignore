@@ -25,3 +25,13 @@ logs
 
 # HIR-368 visual regression evidence (not committed)
 .qa-screenshots/
+
+# Local review and browser artifacts
+output/
+outputs/
+artifacts/
+tmp/
+test-results/
+playwright-report/
+.codex/
+.codex-artifacts/

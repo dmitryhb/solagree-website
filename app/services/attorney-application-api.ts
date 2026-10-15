@@ -1,3 +1,4 @@
+import { SubmissionError } from '#shared/utils/submission-error'
 import {
   ATTORNEY_MEDIATION_EXPERIENCE_VALUES,
   ATTORNEY_YES_NO_ANSWERS
@@ -52,7 +53,7 @@ export const createAttorneyApplicationSubmissionPayload = (
     || !isAttorneyYesNoAnswer(form.neutralInterest)
     || !isAttorneyYesNoAnswer(form.consultationInterest)
   ) {
-    throw new Error('Please complete all required fields.')
+    throw new SubmissionError('Please complete all required fields.')
   }
 
   return {

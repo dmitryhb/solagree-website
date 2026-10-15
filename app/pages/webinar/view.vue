@@ -3,6 +3,7 @@ import WebinarViewPage from '~/components/webinar/WebinarViewPage.vue'
 import { solagreeVimeoVideos } from '~/data/video-embeds'
 
 useSolagreeSeo({
+  noIndex: true,
   title: 'Watch the Attorney Partner Webinar',
   description:
     'Watch Solagree’s attorney partnership webinar and learn how professionals can help couples resolve divorce more efficiently.',

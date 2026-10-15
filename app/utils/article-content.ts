@@ -27,7 +27,7 @@ const isCalloutVariant = (value: string): value is ArticleCalloutVariant =>
 const stripCalloutQuote = (line: string): string => line.replace(/^>\s?/, '')
 
 const isSafeHref = (href: string): boolean => {
-  if ((href.startsWith('/') && !href.startsWith('//')) || href.startsWith('#')) {
+  if ((href.startsWith('/') && !/^\/[\\/]/.test(href)) || href.startsWith('#')) {
     return true
   }
 
@@ -42,7 +42,7 @@ const isSafeHref = (href: string): boolean => {
 
 /** Repository images render from site-relative paths or absolute http(s) URLs; every other scheme stays text. */
 const isSafeImageSrc = (src: string): boolean => {
-  if (src.startsWith('/') && !src.startsWith('//')) {
+  if (src.startsWith('/') && !/^\/[\\/]/.test(src)) {
     return true
   }
 

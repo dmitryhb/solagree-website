@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { solagreeCaseQualifierCopy } from '~/data/case-qualifier'
 import type { CaseQualifierHostDisplayOptions, CaseQualifierResultViewModel } from '~/data/case-qualifier-types'
-import { appendReferralToHref } from '~/utils/referral'
+import { appendReferralToHref, sanitizeReferralCode } from '~/utils/referral'
 
 const props = defineProps<{
   score: number
@@ -15,15 +15,7 @@ const emit = defineEmits<{
 }>()
 
 const route = useRoute()
-const referralCode = computed(() => {
-  const refValue = route.query.ref
-
-  if (Array.isArray(refValue)) {
-    return refValue.find(value => typeof value === 'string' && value.trim()) ?? null
-  }
-
-  return typeof refValue === 'string' ? refValue.trim() || null : null
-})
+const referralCode = computed(() => sanitizeReferralCode(route.query.ref))
 const primaryCta = computed(() => {
   if (!props.result) {
     return null

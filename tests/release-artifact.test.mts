@@ -113,7 +113,7 @@ for (const environment of ['staging', 'production']) {
       const result = fixture.deploy()
       assert.equal(result.status, 0, result.stderr)
       assert.match(result.log, /rsync/)
-      const disabled = fixture.deploy(environment, undefined, { NUXT_PUBLIC_GA_MEASUREMENT_ID: '' })
+      const disabled = fixture.deploy(environment, undefined, { NUXT_PUBLIC_GA_MEASUREMENT_ID: '', ANALYTICS_DISABLED: 'true' })
       assert.equal(disabled.status, 1)
       assert.match(disabled.stderr, /ga policy/)
     } finally { fixture.cleanup() }

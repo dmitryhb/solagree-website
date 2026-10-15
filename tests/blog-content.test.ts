@@ -299,3 +299,12 @@ Take our quick quiz to see whether the process fits your situation.
     expect(wrapper.findAll('img')).toHaveLength(1)
   })
 })
+
+// Backslashes can turn a site-relative path into an external URL in browser parsing.
+it('rejects backslash protocol-relative article links and images', () => {
+  const rendered = JSON.stringify(parseArticleBody(String.raw`[external](/\evil.example/path)
+
+![external](/\evil.example/image.png)`))
+  expect(rendered).not.toContain('"href":')
+  expect(rendered).not.toContain('"src":')
+})

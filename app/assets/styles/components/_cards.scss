@@ -24,13 +24,11 @@
 
 .surface-card--dark .eyebrow,
 .surface-card--dark .prose-copy,
-.surface-card--dark .section-title,
-.surface-card--dark .value-block__title {
+.surface-card--dark .section-title {
   color: var(--color-white);
 }
 
-.surface-card--dark .prose-copy,
-.surface-card--dark .value-block__body {
+.surface-card--dark .prose-copy {
   color: rgba(255, 255, 255, 0.74);
 }
 

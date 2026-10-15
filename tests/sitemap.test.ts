@@ -10,6 +10,7 @@ const SITE_URL = 'https://www.solagree.com'
 
 const NON_INDEXABLE_PATH_PATTERNS: Array<readonly [string, RegExp]> = [
   ['co-branded dynamic routes', /^\/(go|cdfa\/go|c|co-branded|cdfa\/co-branded)\//],
+  ['legacy webinar recordings', /^\/webinar\/(cdfa\/)?view(\/|$)/],
   ['embed hosts', /\/embed$/],
   ['internal review tooling', /^\/review(\/|$)/],
   ['admin intake', /^\/admin(\/|$)/],
@@ -85,8 +86,6 @@ describe('Sitemap route list', () => {
       '/quiz',
       '/webinar',
       '/webinar/cdfa',
-      '/webinar/view',
-      '/webinar/cdfa/view',
       '/attorneys',
       '/cdfa',
       '/attorney-application',

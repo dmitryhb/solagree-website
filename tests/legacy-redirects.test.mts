@@ -22,8 +22,8 @@ const exactParityCases = [
   ['/the-solagree-method-vs-traditional-divorce', '/#how-it-works'],
   ['/the-solagree-process', '/#how-it-works'],
   ['/webinars-and-events', '/webinar'],
-  ['/wilmington-divorce-family-law-office', '/contact'],
-  ['/wilmington-divorce-mediation', '/contact']
+  ['/wilmington-divorce-family-law-office', '/contact/'],
+  ['/wilmington-divorce-mediation', '/contact/']
 ] as const
 
 test('keeps client and HTTP redirects aligned for exact legacy paths', () => {
@@ -35,10 +35,21 @@ test('keeps client and HTTP redirects aligned for exact legacy paths', () => {
   }
 })
 
-test('normalizes contact trailing slash without a canonical URL loop', () => {
+test('leaves canonical contact paths to static directory handling', () => {
   assert.equal(findLegacyRedirectTarget('/contact'), undefined)
-  assert.equal(findLegacyRedirectTarget('/contact/'), '/contact')
-  assert.match(nginxConfig, /location = \/contact\/ \{ return 301 "\/contact"; \}/)
+  assert.equal(findLegacyRedirectTarget('/contact/'), undefined)
+  assert.doesNotMatch(nginxConfig, /location = \/contact\/? \{/)
+})
+
+test('rejects HTTP redirect targets that normalize to their own source', () => {
+  const normalize = (path: string) => path.split(/[?#]/, 1)[0]?.replace(/\/+$/, '') || '/'
+  const redirects = nginxConfig.matchAll(/location = (\S+) \{ return 301 "([^"]+)"; \}/g)
+  for (const [, source, target] of redirects) {
+    assert.notEqual(normalize(source!), normalize(target!), `${source} -> ${target}`)
+    const destination = target!.split(/[?#]/, 1)[0] || '/'
+    assert.equal(findLegacyRedirectTarget(destination), undefined, destination)
+    assert.equal(findLegacyRedirectTarget(`${destination.replace(/\/+$/, '')}/`), undefined, destination)
+  }
 })
 
 test('redirects category, author, and tag slugs in both layers', () => {
@@ -55,7 +66,7 @@ test('retains explicit server-only and regex redirect ownership', () => {
   assert.match(nginxConfig, /location = \/site-map \{ return 301 "\/sitemap\.xml"; \}/)
   assert.match(nginxConfig, /location = \/site-map\/ \{ return 301 "\/sitemap\.xml"; \}/)
 
-  assert.match(nginxConfig, /location ~ \^\/c\/\(\.\*\)\$ \{ return 301 "\/meet\/\$1"; \}/)
+  assert.match(nginxConfig, /location ~ \^\/c\/\(\.\*\)\$ \{ return 301 "\/meet\/\$1\$is_args\$args"; \}/)
   const clientRedirectPage = readFileSync(resolve(process.cwd(), 'app/pages/c/[slug]/index.vue'), 'utf8')
   assert.match(clientRedirectPage, /path: `\/meet\/\$\{encodeURIComponent\(slug\.value\)\}`/)
 })

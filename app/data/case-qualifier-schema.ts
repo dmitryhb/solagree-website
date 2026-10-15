@@ -102,7 +102,3 @@ const solagreeCaseQualifierCriteria = solagreeCaseQualifierCriterionGroups.reduc
 export const solagreeCaseQualifierCriterionIds = solagreeCaseQualifierCriteria.map(
   criterion => criterion.id
 ) as readonly CaseQualifierCriterionId[]
-
-export const solagreeCaseQualifierCriterionMap = Object.fromEntries(
-  solagreeCaseQualifierCriteria.map(criterion => [criterion.id, criterion])
-) as Record<CaseQualifierCriterionId, CaseQualifierCriterionDefinition>
