@@ -107,7 +107,7 @@ useHead({ meta: [{ name: 'referrer', content: 'no-referrer' }] })
         <p v-if="webinar.state === 'recording_coming_soon'" role="status">Recording coming soon</p>
         <a v-else-if="webinar.state === 'upcoming' || webinar.state === 'live'" :href="getWebinarLiveRegistrationUrl(config.public.portalApiBaseUrl, webinar.id)" class="sol-button sol-button--primary">Register on Zoom</a>
         <div v-else-if="recordingSrc" ref="recordingRegion" tabindex="-1" aria-label="Webinar recording">
-          <WebinarVideoFrame :video-src="recordingSrc" :video-title="webinar.title" />
+          <WebinarVideoFrame referrer-policy="no-referrer" :video-src="recordingSrc" :video-title="webinar.title" />
           <p>If the player does not load, <button type="button" class="recording-fallback" @click="openRecording">open the recording in a new tab</button>.</p>
         </div>
         <template v-else>
