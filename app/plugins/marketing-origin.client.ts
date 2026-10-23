@@ -11,12 +11,13 @@ export default defineNuxtPlugin(() => {
   journeyId.value = null
   let queue: Promise<unknown> = Promise.resolve()
   const capture = () => {
+    // Snapshot the observed entry before prior network calls finish or navigation changes it.
+    const route = router.currentRoute.value
+    const code = typeof route.query.ref === 'string' ? route.query.ref : route.path.match(/^\/co-branded\/([^/]+)/)?.[1] ?? null
+    const entrySurface = route.path.startsWith('/co-branded/') ? 'co_branded'
+      : route.path.startsWith('/book-a-solagree-consult') ? 'booking'
+        : route.path.includes('quiz') ? 'quiz' : 'website'
     const operation = queue.catch(() => {}).then(async () => {
-      const route = router.currentRoute.value
-      const code = typeof route.query.ref === 'string' ? route.query.ref : route.path.match(/^\/co-branded\/([^/]+)/)?.[1] ?? null
-      const entrySurface = route.path.startsWith('/co-branded/') ? 'co_branded'
-        : route.path.startsWith('/book-a-solagree-consult') ? 'booking'
-          : route.path.includes('quiz') ? 'quiz' : 'website'
       const response = await $fetch<{ context: { journeyId: string, proof: string }, expiresAt: string }>(
         `${normalizePortalApiBaseUrl(config.public.portalApiBaseUrl)}/api/marketing-origin/capture`, {
           method: 'POST', body: { context: remembered?.context ?? null, referralCode: code, entrySurface }
