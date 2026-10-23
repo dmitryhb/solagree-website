@@ -1,14 +1,20 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import {
-  createCalComBookingEmbedController,
-  serializeCalBookingContext,
-  type CalComEmbedClient,
-  type CalComEmbedListener,
-  type CalComEmbedNamespace,
-  type CalComEmbedUiOptions
+import { createJiti } from 'jiti'
+import type {
+  CalComEmbedClient,
+  CalComEmbedListener,
+  CalComEmbedNamespace,
+  CalComEmbedUiOptions
 } from '../app/utils/calcom-booking-embed.ts'
 import { resolveInitialConsultBookingEvents } from '../shared/initial-consult-booking.ts'
+
+// Keep production Nuxt aliases intact; only this plain Node test needs alias resolution.
+const jiti = createJiti(import.meta.url, {
+  alias: { '#shared': new URL('../shared', import.meta.url).pathname }
+})
+const { createCalComBookingEmbedController, serializeCalBookingContext }
+  = await jiti.import<typeof import('../app/utils/calcom-booking-embed')>('../app/utils/calcom-booking-embed.ts')
 
 const events = resolveInitialConsultBookingEvents({
   unpublishedConsultants: '',

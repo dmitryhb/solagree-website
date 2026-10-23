@@ -2,7 +2,7 @@ import type {
   InitialConsultBookingEvent,
   InitialConsultBookingTrackingContext
 } from '#shared/initial-consult-booking'
-import { getInitialConsultBookingTrackingContext } from '../../shared/initial-consult-booking.ts'
+import { getInitialConsultBookingTrackingContext } from '#shared/initial-consult-booking'
 
 export const initialConsultCalOrigin = 'https://solagree.cal.com'
 export const initialConsultCalEmbedScriptUrl = `${initialConsultCalOrigin}/embed.js`
