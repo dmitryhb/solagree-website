@@ -139,7 +139,7 @@ export const resolveInitialConsultBookingEvents = (
   const meetingMethodMode = resolveInitialConsultMeetingMethodMode(config)
   if (!meetingMethodMode) return []
 
-  const unpublishedValue = config.unpublishedConsultants ?? 'jessica'
+  const unpublishedValue = config.unpublishedConsultants ?? 'jessica,james'
   if (typeof unpublishedValue !== 'string') return []
 
   const unpublished = unpublishedValue.split(',').map(id => id.trim()).filter(Boolean)

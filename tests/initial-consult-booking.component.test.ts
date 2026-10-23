@@ -297,6 +297,7 @@ describe('InitialConsultBookingPage', () => {
   it('gates separate calendars on explicit method selection and remounts on method or consultant changes', async () => {
     const separateEvents = resolveInitialConsultBookingEvents({
       meetingMethodMode: 'separate',
+      unpublishedConsultants: 'jessica',
       firstAvailableEventPath: 'initial-consults/initial-consult',
       tajEventPath: 'initial-consults/initial-consult-taj',
       stacieEventPath: 'initial-consults/initial-consult-stacie',

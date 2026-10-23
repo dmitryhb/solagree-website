@@ -273,9 +273,11 @@ Use the current matrix for per-criterion status and controlled test preparation.
 
 ## Temporarily unpublishing consultants
 
-The website setting `NUXT_PUBLIC_CALCOM_INITIAL_CONSULT_UNPUBLISHED_CONSULTANTS` accepts comma-separated consultant ids: `taj`, `stacie`, `james`, `jessica`. It defaults to `jessica`. An explicitly empty value publishes everyone. Profiles and event paths are retained for restoration; unpublished event paths are not required. Invalid ids or unpublishing the entire team disable the booking UI.
+The website setting `NUXT_PUBLIC_CALCOM_INITIAL_CONSULT_UNPUBLISHED_CONSULTANTS` accepts comma-separated consultant ids: `taj`, `stacie`, `james`, `jessica`. It defaults to `jessica,james`. An explicitly empty value publishes everyone. Profiles and event paths are retained for restoration; unpublished event paths are not required. Invalid ids or unpublishing the entire team disable the booking UI. Staging and production deployment scripts export this default before building, overriding stale local `.env` values unless the operator explicitly supplies the setting in the deployment environment.
 
 Rebuild and deploy the static website after changing this setting. This is an environment setting, not a Portal admin draft control.
+
+October 12, 2026 (HIR-665): the client is not moving forward with James Traub and will remove him from Cal.com and Zoom. Website defaults unpublish both James and Jessica, leaving First Available, Taj and Stacie. This records website visibility only; the client owns Cal.com/Zoom removal and any existing appointments. HIR-674 staging composition retains the existing mixed Phone Call or Zoom routing.
 
 Website visibility does not change Cal.com assignment. Before completing a pause, separately exclude the consultant from the First Available round-robin event and disable their direct event's booking availability. Verify that an old direct URL cannot accept new bookings; hiding a Cal.com link alone may not prevent direct-link bookings. Preserve existing appointments and the member account. Restore Cal.com availability and host assignment before removing the id from the website setting and redeploying.
 

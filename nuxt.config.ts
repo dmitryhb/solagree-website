@@ -133,7 +133,7 @@ gtag('config', '${gaMeasurementId}', {
       deploymentEnvironment,
       initialConsultBooking: {
         meetingMethodMode: process.env.NUXT_PUBLIC_CALCOM_INITIAL_CONSULT_MEETING_METHOD_MODE ?? 'mixed',
-        unpublishedConsultants: process.env.NUXT_PUBLIC_CALCOM_INITIAL_CONSULT_UNPUBLISHED_CONSULTANTS ?? 'jessica',
+        unpublishedConsultants: process.env.NUXT_PUBLIC_CALCOM_INITIAL_CONSULT_UNPUBLISHED_CONSULTANTS ?? 'jessica,james',
         firstAvailableEventPath: process.env.NUXT_PUBLIC_CALCOM_INITIAL_CONSULT_FIRST_AVAILABLE_EVENT_PATH?.trim() || '',
         tajEventPath: process.env.NUXT_PUBLIC_CALCOM_INITIAL_CONSULT_TAJ_EVENT_PATH?.trim() || '',
         stacieEventPath: process.env.NUXT_PUBLIC_CALCOM_INITIAL_CONSULT_STACIE_EVENT_PATH?.trim() || '',
