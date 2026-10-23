@@ -150,8 +150,11 @@ replace the active directory with rsync; atomic promotion belongs to HIR-624.
 Both scripts run `scripts/verify-deployed-routes.mjs` after upload. Each dynamic
 probe must return HTTP 200, `Content-Type: text/html`, an `X-Robots-Tag` carrying
 both noindex and nofollow, and a body exactly matching the uploaded `200.html`.
-The `/webinars` catalogue must return HTTP 200, its generated catalogue HTML,
-and no noindex/none header. Redirects are not followed. Connection errors,
+The `/webinars` catalogue must return HTTP 200 and its generated catalogue HTML.
+The validated `release-manifest.json` environment selects its header policy:
+production rejects noindex/none; staging requires both noindex and nofollow,
+preserving the staging server-wide search exclusion even without BasicAuth.
+Redirects are not followed. Connection errors,
 auth pages, proxy error bodies, and every 4xx/5xx response fail the check.
 Responses are decoded for compression before comparing with the artifact.
 

@@ -31,7 +31,13 @@ if (/^\\d+$/.test(mode) && isDynamic) status = mode
 let headers = 'HTTP/1.1 ' + status + '\\nContent-Type: text/html; charset=utf-8\\n'
 if (isDynamic && mode !== 'header-failure') headers += 'X-Robots-Tag: noindex, nofollow\\n'
 if (isCatalogue) {
-  if (mode === 'catalogue-noindex') headers += 'X-Robots-Tag: noindex, nofollow\\n'
+  const staging = process.env.NUXT_PUBLIC_DEPLOYMENT_ENVIRONMENT === 'staging'
+  const robots = mode === 'catalogue-none' ? 'none'
+    : mode === 'catalogue-missing-noindex' ? 'nofollow'
+    : mode === 'catalogue-missing-nofollow' ? 'noindex'
+    : mode === 'catalogue-missing-robots' ? ''
+    : staging || mode === 'catalogue-noindex' ? 'noindex, nofollow' : ''
+  if (robots) headers += 'X-Robots-Tag: ' + robots + '\\n'
   if (mode === 'catalogue-status-failure') status = '500'
 }
 if (headerIndex !== -1) writeFileSync(args[headerIndex + 1], headers)
@@ -119,12 +125,24 @@ test('staging deployment rejects partial credentials before requests or upload',
   assert.equal(result.log, '')
 })
 
-for (const mode of ['catalogue-noindex', 'catalogue-status-failure']) {
+test('staging deployment accepts the global noindex, nofollow catalogue header', () => {
+  const result = runDeployment({ mode: 'catalogue-noindex' })
+  assert.equal(result.status, 0, result.stderr)
+})
+
+for (const mode of ['catalogue-missing-robots', 'catalogue-missing-noindex', 'catalogue-missing-nofollow', 'catalogue-none', 'catalogue-status-failure']) {
   test(`staging deployment rejects ${mode}`, () => {
     const result = runDeployment({ mode })
-
     assert.equal(result.status, 1)
-    assert.match(result.stderr, /catalogue check failed|webinars returned HTTP 500/)
+    assert.match(result.stderr, /without an X-Robots-Tag: noindex, nofollow header|webinars returned HTTP 500/)
+  })
+}
+
+for (const mode of ['catalogue-noindex', 'catalogue-none']) {
+  test(`production deployment rejects ${mode}`, () => {
+    const result = runDeployment({ environment: 'production', mode })
+    assert.equal(result.status, 1)
+    assert.match(result.stderr, /webinars must remain indexable/)
   })
 }
 

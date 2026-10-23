@@ -3,21 +3,24 @@ import { mkdtempSync, readFileSync, rmSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 
-export function verifyResponse({ status, headers, body, expectedBody, noindex, route }) {
+export function verifyResponse({ status, headers, body, expectedBody, noindex, route, environment }) {
   if (status !== '200') throw new Error(`${route} returned HTTP ${status}; expected an authorized HTTP 200 response`)
   // curl can include proxy CONNECT or informational headers: use only the final response block.
   const finalHeaders = headers.trim().split(/\r?\n\r?\n/).at(-1) ?? ''
   const values = name => [...finalHeaders.matchAll(new RegExp(`^${name}:([^\\r\\n]*)`, 'gim'))].map(match => match[1].trim()).join(',')
   if (!/^text\/html(?:\s*;|$)/i.test(values('content-type'))) throw new Error(`${route} did not return HTML`)
   const robots = values('x-robots-tag').toLowerCase().split(/[\s,]+/)
-  if (noindex && (!robots.includes('noindex') || !robots.includes('nofollow'))) {
+  const requiresNoindex = noindex || environment === 'staging'
+  if (requiresNoindex && (!robots.includes('noindex') || !robots.includes('nofollow'))) {
     throw new Error(`${route} responded without an X-Robots-Tag: noindex, nofollow header`)
   }
-  if (!noindex && (robots.includes('noindex') || robots.includes('none'))) throw new Error('webinar catalogue check failed: /webinars must remain indexable')
+  if (!requiresNoindex && (robots.includes('noindex') || robots.includes('none'))) throw new Error('webinar catalogue check failed: /webinars must remain indexable')
   if (!body.equals(expectedBody)) throw new Error(`${route} body does not match the generated ${noindex ? 'HTML fallback' : 'webinar catalogue'}`)
 }
 
 export async function checkRoutes({ baseUrl, artifactDirectory, resolve, insecure = false, env = process.env }) {
+  const { environment } = JSON.parse(readFileSync(join(artifactDirectory, 'release-manifest.json'), 'utf8'))
+  if (!['staging', 'production'].includes(environment)) throw new Error('Release manifest environment must be staging or production')
   const username = env.STAGING_BASIC_AUTH_USER ?? ''
   const password = env.STAGING_BASIC_AUTH_PASSWORD ?? ''
   if (Boolean(username) !== Boolean(password)) throw new Error('STAGING_BASIC_AUTH_USER and STAGING_BASIC_AUTH_PASSWORD must be set together')
@@ -51,8 +54,8 @@ export async function checkRoutes({ baseUrl, artifactDirectory, resolve, insecur
         child.stdin.end(authConfig)
       })
       if (result.code !== 0) throw new Error(`${route} connection error; route verification failed`)
-      verifyResponse({ status: result.status, headers: readFileSync(headerPath, 'utf8'), body: readFileSync(bodyPath), expectedBody: readFileSync(join(artifactDirectory, file)), noindex, route })
-      console.log(`Route check passed: ${route} returned HTTP 200 with the generated HTML${noindex ? ' and noindex' : ' and is indexable'}`)
+      verifyResponse({ status: result.status, headers: readFileSync(headerPath, 'utf8'), body: readFileSync(bodyPath), expectedBody: readFileSync(join(artifactDirectory, file)), noindex, route, environment })
+      console.log(`Route check passed: ${route} returned HTTP 200 with the generated HTML${noindex || environment === 'staging' ? ' and noindex, nofollow' : ' and is indexable'}`)
     }
   } finally { rmSync(directory, { recursive: true, force: true }) }
 }
