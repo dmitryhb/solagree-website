@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import WebinarVideoFrame from '~/components/webinar/WebinarVideoFrame.vue'
 import { howItWorksPhases } from '~/data/how-it-works-phases'
+import { militaryPricingPlans, pricingPlans } from '~/data/pricing-plans'
 import type { FamilyLandingPage } from '~/data/family-landing-pages'
 
 const props = defineProps<{ page: FamilyLandingPage }>()
@@ -93,6 +94,7 @@ useSolagreeSeo({
 
     <PricingSection
       class="family-page__pricing"
+      :plans="page.theme === 'military' ? militaryPricingPlans : pricingPlans"
       :show-note="false"
       :animate-cards="false"
       heading-id="family-pricing-title"

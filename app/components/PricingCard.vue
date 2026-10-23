@@ -25,16 +25,22 @@ defineProps<{
         </span>
       </div>
 
-      <p
-        v-if="plan.eyebrow"
-        class="pricing-card__eyebrow"
-      >
-        {{ plan.eyebrow }}
-      </p>
-
-      <div class="pricing-card__price">
-        <span class="pricing-card__amount">{{ plan.price }}</span>
-        <span class="pricing-card__cadence">{{ plan.cadence }}</span>
+      <div class="pricing-card__pricing">
+        <p v-if="plan.eyebrow" class="pricing-card__eyebrow">
+          {{ plan.eyebrow }}
+        </p>
+        <div class="pricing-card__price">
+          <span v-if="plan.regularPrice" class="pricing-card__regular-price">
+            <span class="sr-only">Regular price: </span>
+            <s>{{ plan.regularPrice }}</s>
+            <span class="sr-only"> {{ plan.cadence }}. </span>
+          </span>
+          <span class="pricing-card__current-price">
+            <span v-if="plan.regularPrice" class="sr-only">Military price: </span>
+            <span class="pricing-card__amount">{{ plan.price }}</span>
+            <span class="pricing-card__cadence">{{ plan.cadence }}</span>
+          </span>
+        </div>
       </div>
 
       <p class="pricing-card__description">
