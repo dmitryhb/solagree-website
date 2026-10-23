@@ -1,0 +1,11 @@
+# Marketing origin handoff (HIR-676)
+
+The client plugin captures first-valid origin through the Portal `/api/marketing-origin/capture` endpoint on initial entry and route changes. It stores opaque UUID plus browser-only proof in `localStorage`, validates with the server before setting the booking handoff UUID, and keeps this independent of quiz answers. Same-site full links, quiz CTAs and direct returns therefore preserve context without adding proof or participant data to URLs.
+
+Only ordinary consult/co-branded and contact/webinar submission endpoints receive the typed origin/retry envelope. Other professional application and admin-intake endpoints keep their existing contracts. New inquiries clear the active context only after a successful persisted request. Failed response retries keep identity/proof in `sessionStorage`; refresh retains exact retry, closing the tab forfeits that tab's pending retry identity. No matching by email is allowed.
+
+The booking selector waits for server-validated journey context, then passes the opaque `journey_id` to its embed config. Provider-specific metadata serialization and canonical booking verification belong to HIR-677, which must verify a real authenticated provider response before recording booking conversion. The proof never enters provider context or analytics. No page/quiz capture creates a lead, referral, booking or activation.
+
+Portal migration and full request/admin contract: `docs/marketing-origin.md` in the Portal repository, migration `20261023145000_marketing_origin.sql`. Deploy the migrated Portal API before this website version. Existing Portal CORS website origins must include the website/embed host. When capture is unavailable, forms surface their existing safe submission error; booking options remain unavailable until valid context is obtained. Attribution is never guessed from URL account IDs or email.
+
+Verification: origin lifecycle unit tests plus existing quiz, consult modal, Portal service and booking component suites. Local HTTP checks in Portal exercise real PostgreSQL transactions, concurrent retries, A-origin/B-firm preservation and admin corrections with provider delivery disabled. A live provider round trip remains unverified and unauthorized in this package.

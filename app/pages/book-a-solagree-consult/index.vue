@@ -21,7 +21,11 @@ const { trackEvent } = useGoogleAnalytics()
 const bookingEvents = computed(() => resolveInitialConsultBookingEvents(runtimeConfig.public.initialConsultBooking))
 const meetingMethodMode = computed(() => resolveInitialConsultMeetingMethodMode(runtimeConfig.public.initialConsultBooking))
 const selectedId = ref<InitialConsultSelectionId>('first-available')
-const trackingContext = computed(() => getInitialConsultBookingTrackingContext(route.query))
+const journeyId = useState<string | null>('marketing-journey-id', () => null)
+const trackingContext = computed(() => ({
+  ...getInitialConsultBookingTrackingContext(route.query),
+  ...(journeyId.value ? { journey_id: journeyId.value } : {})
+}))
 const selectedEvent = computed(() => resolveInitialConsultBookingEvent(bookingEvents.value, selectedId.value))
 
 /** Changes the provider event and records only the non-identifying selector choice. */
@@ -42,7 +46,7 @@ watch(bookingEvents, (events) => {
 
 <template>
   <InitialConsultBookingPage
-    v-if="selectedEvent && meetingMethodMode"
+    v-if="selectedEvent && meetingMethodMode && journeyId"
     :events="bookingEvents"
     :selected-event="selectedEvent"
     :tracking-context="trackingContext"
