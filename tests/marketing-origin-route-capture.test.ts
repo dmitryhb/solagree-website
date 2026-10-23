@@ -7,7 +7,11 @@ vi.mock('../app/services/marketing-origin', () => ({
 
 afterEach(() => { vi.unstubAllGlobals(); localStorage.clear() })
 
-it('preserves a partner entry when navigation outruns an earlier capture request', async () => {
+it.each([
+  '/go/partner-a', '/go/partner-a/embed',
+  '/cdfa/go/partner-a', '/cdfa/go/partner-a/embed',
+  '/co-branded/partner-a'
+])('preserves partner entry %s when navigation outruns an earlier capture request', async (partnerPath) => {
   let release!: () => void
   const initialRequest = new Promise<void>(resolve => { release = resolve })
   let onNavigation!: (_to: unknown, _from: unknown, failure?: unknown) => void
@@ -31,7 +35,7 @@ it('preserves a partner entry when navigation outruns an earlier capture request
   const { default: plugin } = await import('../app/plugins/marketing-origin.client')
   plugin()
   await vi.waitFor(() => { expect(observed).toHaveLength(1) })
-  router.currentRoute.value = { path: '/co-branded/partner-a', query: {} }
+  router.currentRoute.value = { path: partnerPath, query: {} }
   onNavigation(null, null)
   router.currentRoute.value = { path: '/book-a-solagree-consult', query: {} }
   onNavigation(null, null)

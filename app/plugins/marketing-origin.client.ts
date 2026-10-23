@@ -13,8 +13,9 @@ export default defineNuxtPlugin(() => {
   const capture = () => {
     // Snapshot the observed entry before prior network calls finish or navigation changes it.
     const route = router.currentRoute.value
-    const code = typeof route.query.ref === 'string' ? route.query.ref : route.path.match(/^\/co-branded\/([^/]+)/)?.[1] ?? null
-    const entrySurface = route.path.startsWith('/co-branded/') ? 'co_branded'
+    const coBrandedSlug = route.path.match(/^\/(?:(?:cdfa\/)?go|co-branded)\/([^/]+)(?:\/embed)?\/?$/)?.[1] ?? null
+    const code = typeof route.query.ref === 'string' ? route.query.ref : coBrandedSlug
+    const entrySurface = coBrandedSlug ? 'co_branded'
       : route.path.startsWith('/book-a-solagree-consult') ? 'booking'
         : route.path.includes('quiz') ? 'quiz' : 'website'
     const operation = queue.catch(() => {}).then(async () => {
