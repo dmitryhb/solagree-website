@@ -72,7 +72,7 @@ test('keeps the Solagree booking sidebar beside the Cal.com embed on desktop', a
     .toBeGreaterThanOrEqual(32)
 })
 
-test('requires a method choice, supports radio keyboard navigation and switches all eight native paths', async ({ page }) => {
+test('requires a method choice, supports radio keyboard navigation and switches every published native path', async ({ page }) => {
   await page.route(/https:\/\/.*\.cal\.com\//, route => route.abort())
   await page.goto('/?mode=separate', { waitUntil: 'domcontentloaded' })
   const embed = page.locator('.calcom-booking-embed__frame')
