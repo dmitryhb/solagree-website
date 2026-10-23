@@ -40,7 +40,7 @@ export interface InitialConsultBookingEvent {
 
 /** Safe marketing context accepted from the website URL by the Cal.com embed. */
 export type InitialConsultBookingTrackingContext = Partial<Record<
-  'ref' | 'source' | 'utm_source' | 'utm_medium' | 'utm_campaign' | 'utm_term' | 'utm_content',
+  'journey_id' | 'ref' | 'source' | 'utm_source' | 'utm_medium' | 'utm_campaign' | 'utm_term' | 'utm_content',
   string
 >>
 

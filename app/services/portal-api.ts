@@ -1,3 +1,4 @@
+import { prepareWebsiteMarketingSubmission } from './marketing-origin'
 const DEFAULT_PORTAL_SUBMISSION_ERROR_MESSAGE = 'We could not submit your request. Please try again.'
 const PORTAL_API_CONFIG_ERROR_MESSAGE = 'Portal API base URL is not configured. Set NUXT_PUBLIC_PORTAL_API_BASE_URL to an absolute URL before using portal integrations.'
 
@@ -44,10 +45,11 @@ export const websitePortalFetcher = async <TResponse>(
   request: string,
   options?: PortalFetchOptions<unknown>
 ): Promise<TResponse> => {
-  const response: unknown = options
-    ? await $fetch(request, options as PortalFetchOptions<Record<string, unknown>>)
-    : await $fetch(request)
-
+  if (!options) return await $fetch(request) as TResponse
+  const endpoint = new URL(request).pathname
+  const prepared = await prepareWebsiteMarketingSubmission(endpoint, options.body)
+  const response: unknown = await $fetch(request, { ...options, body: prepared.body as Record<string, unknown> })
+  if (response && typeof response === 'object' && 'ok' in response && response.ok === true) prepared.complete()
   return response as TResponse
 }
 

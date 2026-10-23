@@ -70,7 +70,7 @@ const retryEmbed = (): void => {
 }
 
 watch(
-  () => props.event,
+  () => [props.event, props.trackingContext],
   () => {
     void nextTick(mountEmbed)
   },
