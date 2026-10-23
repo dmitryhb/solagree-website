@@ -2,6 +2,7 @@ import assert from 'node:assert/strict'
 import test from 'node:test'
 import {
   createCalComBookingEmbedController,
+  serializeCalBookingContext,
   type CalComEmbedClient,
   type CalComEmbedListener,
   type CalComEmbedNamespace,
@@ -125,4 +126,18 @@ test('remounts consultant and method routes and ignores callbacks from replaced 
   cal.listeners.get(currentMount.namespace)?.find(listener => listener.action === 'linkReady')?.callback()
   assert.equal(readyCount, 1)
   assert.equal(failureCount, 0)
+})
+
+
+test('serializes only opaque UUID metadata and approved tracking; proof and arbitrary fields stay local', () => {
+  const context = {
+    journey_id: '7923c6cd-8c69-44d8-8a14-cf4422f067ee',
+    ref: 'partner-01', proof: 'private-browser-proof', email: 'private@example.test', accountId: 'forged',
+    'metadata[journey_id]': 'forged'
+  }
+  assert.deepEqual(serializeCalBookingContext(context), {
+    ref: 'partner-01', 'metadata[journey_id]': context.journey_id
+  })
+  assert.deepEqual(serializeCalBookingContext({ ref: 'partner-01', journey_id: ['ambiguous'] } as never), { ref: 'partner-01' })
+  assert.deepEqual(serializeCalBookingContext({ journey_id: 'invalid' } as never), {})
 })

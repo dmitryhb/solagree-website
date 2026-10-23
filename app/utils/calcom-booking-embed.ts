@@ -2,9 +2,24 @@ import type {
   InitialConsultBookingEvent,
   InitialConsultBookingTrackingContext
 } from '#shared/initial-consult-booking'
+import { getInitialConsultBookingTrackingContext } from '../../shared/initial-consult-booking.ts'
 
 export const initialConsultCalOrigin = 'https://solagree.cal.com'
 export const initialConsultCalEmbedScriptUrl = `${initialConsultCalOrigin}/embed.js`
+
+/** Serializes the opaque journey through Cal's flat query metadata convention.
+ * Browser proof, account identity, PII and arbitrary config keys never cross this boundary.
+ * API readback remains disabled for credit until controlled provider acceptance succeeds.
+ */
+export const serializeCalBookingContext = (context: InitialConsultBookingTrackingContext): Record<string, string> => {
+  const config = getInitialConsultBookingTrackingContext(context)
+  const journeyId = (context as InitialConsultBookingTrackingContext & { journey_id?: unknown }).journey_id
+  return {
+    ...config,
+    ...(typeof journeyId === 'string' && /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(journeyId)
+      ? { 'metadata[journey_id]': journeyId.toLowerCase() } : {})
+  }
+}
 
 /** Cal.com listener registration used by the inline booking embed. */
 export interface CalComEmbedListener {
@@ -16,7 +31,7 @@ export interface CalComEmbedListener {
 export interface CalComEmbedInlineOptions {
   calLink: string
   elementOrSelector: HTMLElement
-  config: InitialConsultBookingTrackingContext
+  config: Record<string, string>
 }
 
 /** Cal.com UI options that defer static event details to the Solagree sidebar. */
@@ -121,7 +136,7 @@ export const createCalComBookingEmbedController = (
     namespacedClient('inline', {
       calLink: event.eventPath,
       elementOrSelector: host,
-      config: trackingContext
+      config: serializeCalBookingContext(trackingContext)
     })
 
     return mountId
