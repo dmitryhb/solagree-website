@@ -173,15 +173,35 @@
 }
 
 .pricing-card__eyebrow {
-  margin: -22px 0 -22px;
+  margin: 0 0 8px;
   font-size: 12px;
 }
 
 .pricing-card__price {
   display: flex;
   flex-wrap: wrap;
-  align-items: flex-end;
+  align-items: baseline;
   gap: 8px;
+}
+
+.pricing-card__regular-price {
+  color: inherit;
+  font-family: var(--font-display);
+  font-size: 28px;
+  line-height: 1.18;
+  white-space: nowrap;
+
+  s {
+    text-decoration-thickness: 1px;
+    text-decoration-color: currentColor;
+  }
+}
+
+.pricing-card__current-price {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  white-space: nowrap;
 }
 
 .pricing-card__amount {
@@ -192,7 +212,6 @@
 }
 
 .pricing-card__cadence {
-  padding-bottom: 10px;
   font-family: var(--font-nav);
   font-size: 13px;
   line-height: 1;
@@ -344,10 +363,6 @@
     flex-direction: column;
     min-height: 0;
     gap: 0.75rem;
-  }
-
-  .pricing-card__eyebrow {
-    margin: -10px 0 -20px;
   }
 
   .pricing-card__amount {

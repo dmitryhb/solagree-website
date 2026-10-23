@@ -77,7 +77,7 @@ export const militaryLandingPage: FamilyLandingPage = {
   },
   "pricingIntro": [
     "Most servicemember cases without children fit Core Financial. If you have children, Solagree Core Parenting + Financial typically applies.",
-    "Military families receive a 10% discount on Solagree Core pricing."
+    "Military families receive at least 10% off Solagree Core pricing. The combined track includes an additional $1 reduction per person."
   ],
   "faqTitle": "Military Divorce FAQs",
   "faqIntro": "Military life brings its own set of questions to divorce. Here are the ones we hear most.",

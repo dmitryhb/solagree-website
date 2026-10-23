@@ -3,7 +3,7 @@ import type { PricingPlan } from '~/types/pricing'
 export const pricingPlans: PricingPlan[] = [
   {
     name: 'Parenting Track',
-    price: '$2,995',
+    price: '$3,500',
     cadence: '/ per person',
     description:
       'Guided by parenting specialists and neutral mediators who help you create a sustainable parenting plan.',
@@ -43,7 +43,18 @@ export const pricingPlans: PricingPlan[] = [
       'Spousal and child support calculations'
     ],
     note: 'Couples who have both assets to divide and children needing support arrangements – includes both tracks with significant savings.',
-    badge: 'Save $1,000 Each',
+    badge: 'Save $2,000 Each',
     featured: true
   }
 ]
+
+// Approved final amounts. Combined includes a further $1 reduction beyond 10%.
+const militaryPrices = ['$3,150', '$4,320', '$5,390'] as const
+
+export const militaryPricingPlans: PricingPlan[] = pricingPlans.map((plan, index) => ({
+  ...plan,
+  features: [...plan.features],
+  regularPrice: plan.price,
+  price: militaryPrices[index]!,
+  eyebrow: 'Military Discount'
+}))
