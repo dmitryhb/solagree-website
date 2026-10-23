@@ -1,14 +1,17 @@
 <script setup lang="ts">
 import { pricingPlans } from '~/data/pricing-plans'
+import type { PricingPlan } from '~/types/pricing'
 
 withDefaults(defineProps<{
   showNote?: boolean
   animateCards?: boolean
   headingId?: string
+  plans?: PricingPlan[]
 }>(), {
   showNote: true,
   animateCards: true,
-  headingId: 'pricing-title'
+  headingId: 'pricing-title',
+  plans: () => pricingPlans
 })
 </script>
 
@@ -29,7 +32,7 @@ withDefaults(defineProps<{
 
       <div class="pricing-section__grid">
         <template
-          v-for="(plan, index) in pricingPlans"
+          v-for="(plan, index) in plans"
           :key="plan.name"
         >
           <PricingCard
