@@ -1,3 +1,4 @@
+import type { BrowserStorage } from '~/utils/browser-storage'
 /** Browser-only proof never belongs in links, analytics or provider metadata. */
 export interface BrowserMarketingContext { journeyId: string, proof: string }
 interface CaptureResponse { context: BrowserMarketingContext, expiresAt: string }
@@ -5,7 +6,7 @@ interface PendingSubmission { submissionId: string, context: BrowserMarketingCon
 interface MarketingRuntime {
   capture: () => Promise<BrowserMarketingContext>
   clear: () => void
-  storage: Storage
+  storage: BrowserStorage
 }
 let runtime: MarketingRuntime | null = null
 /** Installs a single browser runtime; SSR and dependency-injected service tests stay isolated. */
