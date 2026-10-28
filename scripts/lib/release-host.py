@@ -31,12 +31,14 @@ def canonical(data):
 
 
 def load(path):
-    with open(path, "rb") as source:
-        return json.load(source)
+    return json.loads(bytes_at(path))
 
 
 def bytes_at(path):
-    with open(path, "rb") as source:
+    fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
+    with os.fdopen(fd, "rb") as source:
+        if not stat.S_ISREG(os.fstat(source.fileno()).st_mode):
+            raise ValueError("release content must be a regular file")
         return source.read()
 
 
@@ -74,6 +76,7 @@ def preserved(path):
 
 def verify_bundle(bundle, policy):
     artifact = os.path.join(bundle, "artifact")
+    actual = inventory(artifact)["files"]
     manifest_bytes = bytes_at(os.path.join(artifact, "release-manifest.json"))
     manifest = json.loads(manifest_bytes)
     proof = load(os.path.join(bundle, "release-proof.json"))
@@ -81,7 +84,6 @@ def verify_bundle(bundle, policy):
         raise ValueError("invalid artifact identity")
     if any(manifest.get(key) != value for key, value in policy.items()):
         raise ValueError("artifact environment or GA policy does not match destination")
-    actual = inventory(artifact)["files"]
     del actual["release-manifest.json"]
     if actual != manifest.get("files") or any(path not in actual for path in ["index.html", "200.html", "webinars/index.html", "sitemap.xml"]):
         raise ValueError("uploaded artifact hashes do not match manifest")
@@ -243,6 +245,7 @@ location / {{ try_files $uri $uri/ /200.html; }}
             release_id = digest(canonical(seal))
             with open(os.path.join(candidate, "release.json"), "wb") as output:
                 output.write(canonical(seal))
+            os.chmod(os.path.join(candidate, "release.json"), 0o600)
             os.chmod(candidate, 0o755)
             os.chmod(os.path.join(candidate, "bundle"), 0o700)
             self.candidate_http(candidate)
@@ -264,6 +267,7 @@ location / {{ try_files $uri $uri/ /200.html; }}
                 accepted = os.path.join(destination, "accepted.json")
                 temporary_acceptance = accepted + ".pending"
                 with open(temporary_acceptance, "wb") as output:
+                    os.chmod(temporary_acceptance, 0o600)
                     output.write(canonical({"schemaVersion": 1, "id": release_id, "commit": manifest["commit"]}))
                     output.flush()
                     os.fsync(output.fileno())

@@ -1,11 +1,11 @@
 import assert from 'node:assert/strict'
-import { cpSync, mkdirSync, readFileSync, readlinkSync, symlinkSync, writeFileSync } from 'node:fs'
+import { cpSync, mkdirSync, readFileSync, readlinkSync, rmSync, symlinkSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import test from 'node:test'
 import { canonical, releaseFixture } from './fixtures/release-deploy.mjs'
 import { sha256 } from '../scripts/lib/release-proof.mjs'
 
-for (const scenario of ['missing-proof', 'failed-proof', 'wrong-environment', 'altered-artifact', 'missing-acceptance', 'symlink-entry']) {
+for (const scenario of ['missing-proof', 'failed-proof', 'wrong-environment', 'altered-artifact', 'missing-acceptance', 'symlink-entry', 'metadata-symlink']) {
   test(`rollback rejects ${scenario} while preserving current release`, () => {
     const fixture = releaseFixture('staging')
     try {
@@ -37,10 +37,16 @@ for (const scenario of ['missing-proof', 'failed-proof', 'wrong-environment', 'a
       mkdirSync(destination, { recursive: true })
       cpSync(copy, destination, { recursive: true })
       if (scenario === 'symlink-entry') symlinkSync('/tmp', join(destination, 'public/escape'))
+      if (scenario === 'metadata-symlink') {
+        const outside = join(fixture.directory, 'target-acceptance.json')
+        cpSync(join(destination, 'accepted.json'), outside)
+        rmSync(join(destination, 'accepted.json'))
+        symlinkSync(outside, join(destination, 'accepted.json'))
+      }
       const result = fixture.host({ mode: 'rollback', release: id, expected: fixture.env.RELEASE_EXPECTED_TARGET_SHA256 })
       assert.equal(result.status, 1, result.stderr)
       assert.equal(readlinkSync(fixture.target), before)
-      assert.match(result.stderr, /proof|environment|hashes|acceptance|inventory|symlinks/)
+      assert.match(result.stderr, /proof|environment|hashes|acceptance|inventory|symlinks|symbolic links/)
     } finally { fixture.cleanup() }
   })
 }
