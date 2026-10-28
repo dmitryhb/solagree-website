@@ -36,7 +36,7 @@ export const useDailyAnalyticsAttempt=(instrument:'quiz'|'qualifier',enabled:()=
   const attempt=createAnalyticsAttempt({storage,instrument,emit})
   onMounted(()=>{void flush()})
   return {
-    restore:(legacy:boolean)=>{if(isEnabled())attempt.restore(legacy)},
+    restore:(legacy:boolean,completed=false)=>{if(isEnabled())attempt.restore(legacy,completed)},
     mutate:()=>{if(isEnabled())attempt.mutate()},
     result:(outcome:string)=>{if(isEnabled())attempt.result(outcome)},
     cta:(outcome:string)=>{if(isEnabled())attempt.cta(outcome)},

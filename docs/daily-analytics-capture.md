@@ -29,3 +29,9 @@ cannot create a booked/paid/signed/activated event.
 The reporting source/runbook is in Portal `docs/analytics.md`. Production enablement,
 coverage start, actual GA4/Cal/Zoom acceptance and scheduler activation remain
 separate authorized operations.
+
+A completed pre-capture quiz is excluded from new first-completion capture across
+Back/Next, answer edits and reloads until explicit Reset creates a new attempt.
+A partially restored legacy attempt may record a genuinely new explicit result,
+with no invented start. This distinction is separate from the existing host
+completion events and storage restoration behavior.

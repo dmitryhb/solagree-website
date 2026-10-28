@@ -45,7 +45,7 @@ export const useQuizHost = (
     )
   })
   const capture = useDailyAnalyticsAttempt('quiz', () => hostConfig.value.analytics.enabled)
-  onMounted(() => capture.restore(quizSession.didRestorePersistedState.value))
+  onMounted(() => capture.restore(quizSession.didRestorePersistedState.value, quizSession.hasCompletedAttempt.value))
   const resolvedResultView = computed(() => {
     const result = quizSession.resultView.value
     return result ? resolveQuizResultViewForHost(result, hostConfig.value) : undefined

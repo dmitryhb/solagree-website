@@ -15,11 +15,18 @@ describe('versioned analytics attempts',()=>{
   restored.reset();restored.mutate();expect(new Set(events.map(e=>e.attemptId)).size).toBe(2)
   expect(JSON.stringify(events)).not.toMatch(/answer|email|href|name|proof/)
  })
- it('does not invent starts or completions from a legacy restored snapshot',()=>{
+ it('a partial legacy snapshot records only its genuinely new explicit result',()=>{
   const events:AttemptEvent[]=[]
   const a=createAnalyticsAttempt({storage:storage(),instrument:'quiz',emit:e=>events.push(e)})
   a.restore(true);a.mutate();a.cta('solagree-fit');expect(events).toEqual([])
   a.result('solagree-fit');expect(events.map(e=>e.type)).toEqual(['result'])
+ })
+ it('legacy completed history stays excluded through edits, reload and result revisits until Reset',()=>{
+  const s=storage(),events:AttemptEvent[]=[]
+  const create=()=>createAnalyticsAttempt({storage:s,instrument:'quiz',emit:e=>events.push(e)})
+  const legacy=create();legacy.restore(true,true);legacy.result('solagree-fit');legacy.mutate();legacy.result('solagree-fit');legacy.cta('solagree-fit')
+  const restored=create();restored.restore(true,true);restored.result('solagree-fit');expect(events).toEqual([])
+  restored.reset();restored.mutate();restored.result('solagree-fit');expect(events.map(e=>e.type)).toEqual(['started','result'])
  })
  it('qualifier updates retain latest result events and outcome-at-CTA without claiming questionnaire completion',()=>{
   const events:AttemptEvent[]=[]

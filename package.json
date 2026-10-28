@@ -16,7 +16,7 @@
     "verify:sitemap": "node scripts/verify-sitemap.mjs",
     "verify:co-branded-noindex-nginx": "node scripts/verify-nginx-co-branded-noindex.mjs",
     "test": "npm run test:vitest && npm run test:node",
-    "test:vitest": "vitest run",
+    "test:vitest": "vitest run && npm run test:analytics-client",
     "test:node": "node --experimental-strip-types --test tests/*.test.mts tests/*.test.mjs",
     "test:co-branded-page-variants": "node --experimental-strip-types --test tests/co-branded-page-variant.test.mts",
     "test:co-branded-route": "vitest run tests/co-branded-route.component.test.ts",
@@ -39,7 +39,8 @@
     "test:phone-validation-e2e": "playwright test -c playwright.phone-validation.config.ts",
     "prebuild": "npm run validate:resource-content",
     "postinstall": "nuxt prepare",
-    "postgenerate": "node scripts/write-release-manifest.mjs"
+    "postgenerate": "node scripts/write-release-manifest.mjs",
+    "test:analytics-client": "vitest run --config vitest.analytics-client.config.ts"
   },
   "dependencies": {
     "@calcom/embed-snippet": "^1.3.3",
