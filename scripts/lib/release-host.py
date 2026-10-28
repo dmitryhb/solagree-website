@@ -185,10 +185,15 @@ class Host:
         with socket.socket() as sock:
             sock.bind(("127.0.0.1", 0))
             port = sock.getsockname()[1]
+        # The privileged staging publisher must use the same existing worker
+        # identity as its protected host. Nginx loads its supplementary groups;
+        # its compile-time default may not traverse the protected app ancestor.
+        # Production and non-root publishers retain their existing behavior.
+        worker = "user www-data;\n" if os.geteuid() == 0 and self.request["policy"]["environment"] == "staging" else ""
         with tempfile.TemporaryDirectory(prefix="candidate-", dir=self.store) as nginx:
             config = os.path.join(nginx, "nginx.conf")
             with open(config, "w") as output:
-                output.write(f'''pid {nginx}/nginx.pid;
+                output.write(f'''{worker}pid {nginx}/nginx.pid;
 error_log {nginx}/error.log;
 events {{ worker_connections 64; }}
 http {{ access_log off; default_type text/html; server {{

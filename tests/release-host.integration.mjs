@@ -11,6 +11,7 @@ import { chromium } from '@playwright/test'
 import { artifactFiles, releasePolicy } from '../scripts/lib/release-artifact.mjs'
 import { sha256 } from '../scripts/lib/release-proof.mjs'
 import { releaseFixture } from './fixtures/release-deploy.mjs'
+import { candidateAs, protectedNginx } from './fixtures/protected-release-nginx.mjs'
 
 const image = 'nginx:1.29-alpine'
 execFileSync('docker', ['image', 'inspect', image], { stdio: 'ignore' })
@@ -78,6 +79,37 @@ function childHost(fixture, request) {
 }
 
 if (process.env.TEST_PREPARED_RELEASE !== 'true') {
+test('privileged staging candidate uses the existing Linux worker group through a protected ancestor', () => {
+  for (const [environment, effectiveUid, allowed] of [['staging', 0, true], ['staging', 1005, false], ['production', 0, false]]) {
+    const fixture = releaseFixture(environment)
+    chmodSync(fixture.directory, 0o755)
+    rmSync(join(fixture.directory, 'bin/curl'))
+    const linux = protectedNginx(fixture)
+    try {
+      const id = fixture.seedTarget()
+      const result = candidateAs(fixture, join(fixture.store, 'releases', id), environment, effectiveUid)
+      assert.equal(result.status, allowed ? 0 : 1, result.stderr)
+      if (allowed) assert.match(result.stderr, /Route check passed: \/webinars returned HTTP 200/)
+      else assert.match(result.stderr, /HTTP 404; expected an authorized HTTP 200/)
+      const evidence = JSON.parse(readFileSync(linux.evidence))
+      assert.equal(evidence.directive, allowed)
+      assert.equal(evidence.home, '0:1005:750')
+      assert.equal(evidence.nobodyCanRead, false)
+      assert.equal(evidence.defaultCanRead, false)
+      assert.equal(evidence.workerCanRead, true)
+      assert.equal(evidence.workerCanWrite, false)
+      assert.equal(evidence.workerCanWriteHome, false)
+      assert.equal(evidence.appCanWrite, false)
+      assert.equal(evidence.appCanWriteHome, false)
+      assert.match(evidence.wwwDataId, /1005\(qa_fixture\)/)
+      if (allowed) {
+        assert.match(evidence.status, /Uid:\s+33\s+33\s+33\s+33/)
+        assert.match(evidence.status, /Groups:[^\n]*1005/)
+      }
+    } finally { fixture.cleanup() }
+  }
+})
+
 test('real nginx promotion is atomic, rollback needs no rebuild and browser tabs retain both generations of lazy chunks', async () => {
   const fixture = setup()
   let stop, browser

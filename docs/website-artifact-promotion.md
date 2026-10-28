@@ -67,6 +67,11 @@ absolute symlink to `website-releases/releases/<64-character-id>/public`.
 A live real directory, escaping symlink, symlink entry or special file fails
 closed. No automatic legacy-directory rename is attempted.
 
+For a privileged staging publisher, isolated candidate nginx explicitly uses the
+existing `www-data` worker and its normal supplementary groups. This keeps the
+prepared host's protected ancestor permissions intact. Production and non-root
+publishers retain their existing worker behavior; callers cannot select a user.
+
 The private store has `incoming/<random-token>` and `releases/<id>`. A single
 nonblocking filesystem lock serializes initialization, promotion and rollback.
 Every write operation checks the operator's reviewed active inventory pin.
