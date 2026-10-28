@@ -2,6 +2,8 @@ import { readFileSync, writeFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { join } from 'node:path'
 import { artifactFiles, manifestName, origin, releasePolicy, sourceCommit } from './lib/release-artifact.mjs'
+import { packagePublishableArtifact } from './lib/publishable-artifact.mjs'
+import { verifyStaticPolicy } from './lib/static-artifact-policy.mjs'
 
 const root = fileURLToPath(new URL('..', import.meta.url))
 const environment = process.env.NUXT_PUBLIC_DEPLOYMENT_ENVIRONMENT
@@ -26,7 +28,9 @@ if (!environment || environment === 'dev') {
     }
     if (runtimeString('deploymentEnvironment') !== policy.environment) throw new Error('generated fallback deploymentEnvironment does not match the deployment environment')
     if (runtimeString('gaMeasurementId') !== policy.ga.measurementId) throw new Error('generated fallback gaMeasurementId does not match the deployment policy')
+    packagePublishableArtifact(root, directory)
     const manifest = { schemaVersion: 1, commit: sourceCommit(root), ...policy, files: artifactFiles(directory) }
+    verifyStaticPolicy(directory, manifest)
     writeFileSync(join(directory, manifestName), `${JSON.stringify(manifest, null, 2)}\n`)
     console.log(`Release manifest written for ${environment} at commit ${manifest.commit}`)
   } catch (error) {

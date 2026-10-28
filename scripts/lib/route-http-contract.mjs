@@ -17,7 +17,7 @@ export function verifyResponse({ status, headers, body, expectedBody, noindex, r
   if (!body.equals(expectedBody)) throw new Error(`${route} body does not match the generated ${noindex ? 'HTML fallback' : 'webinar catalogue'}`)
 }
 
-export async function checkRoutes({ baseUrl, artifactDirectory, resolve, insecure = false, env = process.env }) {
+export async function checkRoutes({ baseUrl, artifactDirectory, resolve, insecure = false, legacyRedirect = false, env = process.env }) {
   const username = env.STAGING_BASIC_AUTH_USER ?? ''
   const password = env.STAGING_BASIC_AUTH_PASSWORD ?? ''
   if (Boolean(username) !== Boolean(password)) throw new Error('STAGING_BASIC_AUTH_USER and STAGING_BASIC_AUTH_PASSWORD must be set together')
@@ -28,7 +28,10 @@ export async function checkRoutes({ baseUrl, artifactDirectory, resolve, insecur
   try {
     for (const [route, file, noindex] of [
       ['/go/__co-branded-route-check__', '200.html', true],
+      ['/go/__co-branded-route-check__?campaign=release-check', '200.html', true],
       ['/cdfa/go/__co-branded-route-check__', '200.html', true],
+      ['/meet/__intake-route-check__', '200.html', true],
+      ['/meet/__intake-route-check__/thank-you', '200.html', true],
       ['/webinars/__webinar-route-check__', '200.html', true],
       ['/webinars', 'webinars/index.html', false]
     ]) {
@@ -53,6 +56,25 @@ export async function checkRoutes({ baseUrl, artifactDirectory, resolve, insecur
       if (result.code !== 0) throw new Error(`${route} connection error; route verification failed`)
       verifyResponse({ status: result.status, headers: readFileSync(headerPath, 'utf8'), body: readFileSync(bodyPath), expectedBody: readFileSync(join(artifactDirectory, file)), noindex, route })
       console.log(`Route check passed: ${route} returned HTTP 200 with the generated HTML${noindex ? ' and noindex' : ' and is indexable'}`)
+    }
+    if (legacyRedirect) {
+      const args = ['-sS', '--connect-timeout', '10', '--max-time', '30', '-o', '/dev/null', '-w', '%{http_code} %{redirect_url}']
+      if (resolve) args.push('--resolve', resolve)
+      if (insecure) args.push('--insecure')
+      if (authConfig) args.push('--config', '-')
+      args.push(`${baseUrl.replace(/\/$/, '')}/about/`)
+      const result = await new Promise((resolveResult, reject) => {
+        const child = spawn('curl', args, { env, stdio: ['pipe', 'pipe', 'pipe'] })
+        let output = ''
+        child.stdout.on('data', chunk => { output += chunk })
+        child.stderr.resume()
+        child.stdin.on('error', () => {})
+        child.on('error', () => reject(new Error('legacy redirect connection error')))
+        child.on('close', code => resolveResult({ code, output: output.trim() }))
+        child.stdin.end(authConfig)
+      })
+      if (result.code !== 0 || result.output !== `301 ${baseUrl.replace(/\/$/, '')}/about-us`) throw new Error('production legacy redirect check failed: /about/ must return HTTP 301 to /about-us')
+      console.log('Legacy redirect check passed: /about/ returned HTTP 301 to /about-us')
     }
   } finally { rmSync(directory, { recursive: true, force: true }) }
 }
