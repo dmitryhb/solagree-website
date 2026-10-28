@@ -6,7 +6,7 @@ import { sourceCommit } from './release-artifact.mjs'
 
 export const proofName = 'release-proof.json'
 export const gateCommands = ['npm run lint', 'npm run typecheck', 'npm test', 'npm run test:release-host', 'npm run generate', 'node scripts/verify-release-artifact.mjs', 'node scripts/verify-sitemap.mjs']
-export const runtimeFiles = ['scripts/lib/route-http-contract.mjs', 'scripts/lib/release-candidate.mjs', 'config/nginx/co-branded-noindex.conf', 'config/nginx/legacy-redirects.conf']
+export const runtimeFiles = ['scripts/lib/route-http-contract.mjs', 'scripts/lib/release-candidate.mjs', 'scripts/lib/static-artifact-policy.mjs', 'config/nginx/co-branded-noindex.conf', 'config/nginx/legacy-redirects.conf']
 export const sha256 = value => createHash('sha256').update(value).digest('hex')
 
 export function cleanSource(root) {

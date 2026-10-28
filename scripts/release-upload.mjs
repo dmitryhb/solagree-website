@@ -81,7 +81,7 @@ try {
     const expected = process.env.RELEASE_EXPECTED_TARGET_SHA256 ?? (!production ? process.env.STAGING_EXPECTED_TARGET_SHA256 : undefined)
     if (expected !== before.sha256) throw new Error('RELEASE_EXPECTED_TARGET_SHA256 must pin the reviewed active inventory; no files uploaded')
     if ((process.env.RELEASE_TARGET_QUIESCED ?? (!production ? process.env.STAGING_TARGET_QUIESCED : undefined)) !== 'true') throw new Error('target writers must be held; RELEASE_TARGET_QUIESCED=true is required')
-    const options = { expected, initialize: process.env.RELEASE_INITIALIZE === 'true', auth: production ? {} : { STAGING_BASIC_AUTH_USER: process.env.STAGING_BASIC_AUTH_USER ?? '', STAGING_BASIC_AUTH_PASSWORD: process.env.STAGING_BASIC_AUTH_PASSWORD ?? '' }, publicCheck: production
+    const options = { expected, initialize: process.env.RELEASE_INITIALIZE === 'true', nativeActivationApproved: process.env.STAGING_NATIVE_ACTIVATION_APPROVED === 'true', auth: production ? {} : { STAGING_BASIC_AUTH_USER: process.env.STAGING_BASIC_AUTH_USER ?? '', STAGING_BASIC_AUTH_PASSWORD: process.env.STAGING_BASIC_AUTH_PASSWORD ?? '' }, publicCheck: production
       ? { baseUrl: policy.siteOrigin, resolve: `www.solagree.com:443:${target.host}`, insecure: true }
       : { baseUrl: policy.siteOrigin } }
     let result

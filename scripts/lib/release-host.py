@@ -19,7 +19,7 @@ import tempfile
 import uuid
 
 GATES = ["npm run lint", "npm run typecheck", "npm test", "npm run test:release-host", "npm run generate", "node scripts/verify-release-artifact.mjs", "node scripts/verify-sitemap.mjs"]
-RUNTIME = ["scripts/lib/route-http-contract.mjs", "scripts/lib/release-candidate.mjs", "config/nginx/co-branded-noindex.conf", "config/nginx/legacy-redirects.conf"]
+RUNTIME = ["scripts/lib/route-http-contract.mjs", "scripts/lib/release-candidate.mjs", "scripts/lib/static-artifact-policy.mjs", "config/nginx/co-branded-noindex.conf", "config/nginx/legacy-redirects.conf"]
 
 
 def digest(data):
@@ -178,7 +178,7 @@ class Host:
             check.update(self.request["publicCheck"])
             # Credentials exist in stdin only. Neither proof nor release metadata
             # stores them. Public staging BasicAuth is never disabled.
-            check["env"] = {**os.environ, **self.request.get("auth", {})}
+            check["env"] = {**os.environ, **self.request.get("auth", {}), "STAGING_NATIVE_ACTIVATION_APPROVED": "true" if self.request.get("nativeActivationApproved") else ""}
             return subprocess.run(["node", os.path.join(runtime, "scripts/lib/release-candidate.mjs")], input=canonical(check), stdout=sys.stderr, check=True)
         with socket.socket() as sock:
             sock.bind(("127.0.0.1", 0))
@@ -201,7 +201,7 @@ location / {{ try_files $uri $uri/ /200.html; }}
                 subprocess.run(["nginx", "-p", nginx + "/", "-c", config, "-t"], stdout=sys.stderr, stderr=sys.stderr, check=True)
                 subprocess.run(["nginx", "-p", nginx + "/", "-c", config], stdout=sys.stderr, stderr=sys.stderr, check=True)
                 started = True
-                check.update({"baseUrl": f"http://127.0.0.1:{port}", "env": {**os.environ, "STAGING_BASIC_AUTH_USER": "", "STAGING_BASIC_AUTH_PASSWORD": ""}})
+                check.update({"baseUrl": f"http://127.0.0.1:{port}", "env": {**os.environ, "STAGING_BASIC_AUTH_USER": "", "STAGING_BASIC_AUTH_PASSWORD": "", "STAGING_NATIVE_ACTIVATION_APPROVED": "true" if self.request.get("nativeActivationApproved") else ""}})
                 subprocess.run(["node", os.path.join(runtime, "scripts/lib/release-candidate.mjs")], input=canonical(check), stdout=sys.stderr, check=True)
             finally:
                 if started:
@@ -224,8 +224,12 @@ location / {{ try_files $uri $uri/ /200.html; }}
                 if path not in manifest["files"] and not preserved(path):
                     os.unlink(os.path.join(public, path))
             for path, value in manifest["files"].items():
-                if path in before["inventory"]["files"] and preserved(path) and before["inventory"]["files"][path] != value:
-                    raise ValueError("artifact conflicts with protected legal history or retained asset")
+                existing = before["inventory"]["files"].get(path)
+                if existing is not None and existing != value:
+                    if preserved(path):
+                        raise ValueError("artifact conflicts with protected legal history or retained asset")
+                    if path not in previous_manifest["files"]:
+                        raise ValueError("artifact conflicts with a remote-only file; automatic ownership takeover is forbidden")
             for path in [*manifest["files"], "release-manifest.json"]:
                 destination = os.path.join(public, path)
                 # Avoid replacing a directory or using a former file as parent.

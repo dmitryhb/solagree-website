@@ -129,7 +129,8 @@ environment are rejected. Trailing slashes are accepted and normalized.
 `npm run generate` under the deployment script writes
 `.output/public/release-manifest.json` with the source commit, deployment
 environment, site origin, Portal URL/API origin, GA policy and SHA-256 hashes
-for every generated file. Reusing output requires a manifest matching the
+for every packaged artifact file (the exact tracked Apache-only `.htaccess`
+template is excluded before hashing). Reusing output requires a manifest matching the
 current commit and target policy, and an unchanged complete artifact. A build
 from another commit or environment must be regenerated through the target
 script. The sitemap origin is checked against that same target even when

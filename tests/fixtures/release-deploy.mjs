@@ -11,6 +11,8 @@ export function releaseFixture(environment = 'production', measurementId = '') {
   const directory = realpathSync(mkdtempSync(join(tmpdir(), 'solagree-release-')))
   for (const name of ['scripts', 'config']) cpSync(join(root, name), join(directory, name), { recursive: true })
   for (const name of ['package.json', 'package-lock.json']) cpSync(join(root, name), join(directory, name))
+  mkdirSync(join(directory, 'public'))
+  cpSync(join(root, 'public/.htaccess'), join(directory, 'public/.htaccess'))
   writeFileSync(join(directory, '.gitignore'), '.output\nbin\ntarget*\ncalls.log\nbundle*\n')
   const output = join(directory, '.output/public')
   const bin = join(directory, 'bin')

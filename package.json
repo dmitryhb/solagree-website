@@ -7,6 +7,7 @@
     "dev": "nuxt dev --host solagree.local --port 3003",
     "prepare:release": "node scripts/prepare-release.mjs",
     "test:release-host": "node --test tests/release-host.integration.mjs",
+    "test:prepared-release": "TEST_PREPARED_RELEASE=true node --test tests/release-host.integration.mjs",
     "deploy:staging": "./scripts/deploy-staging.sh",
     "deploy:production": "./scripts/deploy-production.sh",
     "generate": "nuxt generate",

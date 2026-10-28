@@ -4,6 +4,7 @@ import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { releasePolicy } from './lib/release-artifact.mjs'
 import { cleanSource, gateCommands, proofName, runtimeFiles, sha256, verifyProof } from './lib/release-proof.mjs'
+import { verifyStaticPolicy } from './lib/static-artifact-policy.mjs'
 
 const root = fileURLToPath(new URL('..', import.meta.url))
 const proofPath = join(root, '.output', proofName)
@@ -25,6 +26,7 @@ try {
   }
   const manifestBytes = readFileSync(join(root, '.output/public/release-manifest.json'))
   const manifest = JSON.parse(manifestBytes)
+  verifyStaticPolicy(join(root, '.output/public'), manifest)
   const proof = {
     schemaVersion: 1, ...source, manifestSha256: sha256(manifestBytes), files: manifest.files,
     gates: gateCommands.map(command => ({ command, exitCode: 0 })),

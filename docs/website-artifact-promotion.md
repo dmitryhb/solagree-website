@@ -19,9 +19,18 @@ A deployable release has the existing D1 `release-manifest.json` and a private
 6. `node scripts/verify-release-artifact.mjs`
 7. `node scripts/verify-sitemap.mjs`
 
+Nuxt's raw output includes the tracked Apache-only `public/.htaccess` template.
+Release postgeneration removes only a regular `.output/public/.htaccess` whose
+bytes exactly match `HEAD:public/.htaccess`, before creating the manifest or
+proof. A changed template, symlink or any other hidden file fails closed. Host
+BasicAuth files are never part of this packaged artifact and remain preserved.
+The manifest writer, preparation, uploader and candidate host all execute the
+same static artifact policy. Separate staging meeting mode still requires its
+explicit native-activation approval at each policy boundary.
+
 The command deletes any previous proof before starting. A failed command or
 source change leaves no proof. A successful proof records the source commit,
-Git tree, package-lock hash, every generated file hash, exact manifest hash,
+Git tree, package-lock hash, every packaged artifact file hash, exact manifest hash,
 successful fixed commands and the hashes of the candidate HTTP verifier and
 nginx snippets. This is integrity evidence from a trusted local checkout, not
 a cryptographic signature or an attestation against a malicious operator.
@@ -93,6 +102,11 @@ Composition preserves:
 - every prior `_nuxt/` asset except mutable `_nuxt/builds/latest.json`.
 
 A differing same-name retained asset or immutable legal document fails.
+For an ordinary remote-only file, a differing first claim by the next manifest
+also fails, in both promotion and rollback. An identical first claim can become
+managed; subsequent changes to a file already owned by the active manifest are
+allowed. A prior release's ownership alone never authorizes rollback to replace
+a currently remote-only file with differing bytes.
 Generated `legal/index.html`, and HTML/payloads for terms-of-service,
 privacy-policy and accessibility remain updatable. Files owned by the previous
 artifact but absent from the next artifact are removed from the candidate,
@@ -205,3 +219,11 @@ A managed sandbox may need an approved local process launch for Chromium.
 Missing tooling fails this required gate rather than skipping it. Containers
 are isolated, bound to loopback and cleaned up. No live SSH, nginx installation,
 scheduler changes or provider/analytics sends occur in these fixtures.
+
+After preparing the exact clean commit, run `npm run test:prepared-release` for
+the genuine-artifact regression. It uses that checkout's actual generated
+manifest and successful proof with the real release client and Python helper,
+redirecting SSH/rsync and all public HTTP requests exclusively into isolated
+local nginx. It verifies successful promotion while preserving seeded host auth
+and ACME files. This post-proof check is separate from synthetic failure fixtures
+and makes no live-host or provider requests.

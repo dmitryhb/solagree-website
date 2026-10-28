@@ -5,6 +5,7 @@ import { execFileSync, spawn } from 'node:child_process'
 import { chmodSync, cpSync, existsSync, mkdirSync, readFileSync, readlinkSync, rmSync, writeFileSync } from 'node:fs'
 import { createServer } from 'node:net'
 import { join } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import test from 'node:test'
 import { chromium } from '@playwright/test'
 import { artifactFiles, releasePolicy } from '../scripts/lib/release-artifact.mjs'
@@ -76,6 +77,7 @@ function childHost(fixture, request) {
   return new Promise(resolve => child.on('close', status => resolve({ status, stdout, stderr })))
 }
 
+if (process.env.TEST_PREPARED_RELEASE !== 'true') {
 test('real nginx promotion is atomic, rollback needs no rebuild and browser tabs retain both generations of lazy chunks', async () => {
   const fixture = setup()
   let stop, browser
@@ -190,3 +192,46 @@ test('concurrent promotion and rollback serialize on one lock and stale candidat
     }
   } finally { if (stop) stop(); fixture.cleanup() }
 })
+} else {
+  test('genuine prepared artifact promotes through the real client/helper and preserves host auth', async () => {
+    const root = fileURLToPath(new URL('..', import.meta.url))
+    const manifest = JSON.parse(readFileSync(join(root, '.output/public/release-manifest.json')))
+    const proof = JSON.parse(readFileSync(join(root, '.output/release-proof.json')))
+    assert.equal(manifest.environment, 'staging')
+    assert.equal(proof.commit, execFileSync('git', ['-C', root, 'rev-parse', 'HEAD'], { encoding: 'utf8' }).trim())
+    assert.equal(existsSync(join(root, '.output/public/.htaccess')), false)
+    assert.equal(Object.hasOwn(manifest.files, '.htaccess'), false)
+    assert.equal(Object.hasOwn(proof.files, '.htaccess'), false)
+    const fixture = setup()
+    let stop
+    try {
+      fixture.seedTarget({ '.htaccess': 'AuthType Basic\nhost-owned auth', '.well-known/token': 'host-owned challenge' })
+      stop = await startPublic(fixture)
+      // Only the SSH/rsync transport is replaced. curl executes against real
+      // local nginx, with every public URL mapped to the isolated fixture.
+      fixture.env.TEST_REAL_CURL_BASE_URL = fixture.baseUrl
+      fixture.env.TEST_PREPARED_SITE_ORIGIN = manifest.siteOrigin
+      fixture.executable('curl', `#!${process.execPath}
+import { readFileSync } from 'node:fs'
+import { spawnSync } from 'node:child_process'
+const args = process.argv.slice(2).map(arg => {
+  if (!/^https?:\\/\\//.test(arg)) return arg
+  const url = new URL(arg)
+  if (url.origin === process.env.TEST_PREPARED_SITE_ORIGIN) return process.env.TEST_REAL_CURL_BASE_URL + url.pathname + url.search
+  if (url.hostname !== '127.0.0.1') throw new Error('fixture refuses external HTTP requests')
+  return arg
+})
+const result = spawnSync('/usr/bin/curl', args, { input: readFileSync(0) })
+if (result.stdout) process.stdout.write(result.stdout)
+if (result.stderr) process.stderr.write(result.stderr)
+process.exit(result.status ?? 1)
+`)
+      const result = execFileSync(process.execPath, [join(root, 'scripts/release-upload.mjs')], { cwd: root, env: fixture.env, encoding: 'utf8' })
+      assert.match(result, /Activated immutable release/)
+      assert.deepEqual(JSON.parse(readFileSync(join(fixture.target, 'release-manifest.json'))), manifest)
+      assert.equal(readFileSync(join(fixture.target, '.htaccess'), 'utf8'), 'AuthType Basic\nhost-owned auth')
+      assert.equal(readFileSync(join(fixture.target, '.well-known/token'), 'utf8'), 'host-owned challenge')
+      assert.equal(fixture.state().accepted, true)
+    } finally { if (stop) stop(); fixture.cleanup() }
+  })
+}
