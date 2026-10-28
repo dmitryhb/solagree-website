@@ -1,5 +1,5 @@
 import { flushPromises, mount } from '@vue/test-utils'
-import { computed, nextTick, reactive, ref, watch } from 'vue'
+import { computed, effectScope, nextTick, reactive, ref, watch } from 'vue'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import ConsultRequestForm from '../app/components/consult/ConsultRequestForm.vue'
 import FormResultMessage from '../app/components/FormResultMessage.vue'
@@ -212,6 +212,85 @@ describe('useApplicationSubmission lifecycle (HIR-370)', () => {
     submission.resetSubmissionResult()
 
     expect(submission.submissionResult.value).toBeNull()
+  })
+})
+
+describe('useApplicationSubmission scope disposal (HIR-621)', () => {
+  it.each(['resolve', 'reject'] as const)('ignores a pending request that later %ss after disposal', async (outcome) => {
+    let resolveRequest!: (value: unknown) => void
+    let rejectRequest!: (reason: unknown) => void
+    const submit = vi.fn(() => new Promise((resolve, reject) => {
+      resolveRequest = resolve
+      rejectRequest = reject
+    }))
+    const onSuccess = vi.fn()
+    const getErrorMessage = vi.fn(() => 'Late error')
+    const scope = effectScope()
+    const submission = scope.run(() => createSubmission({ submit, onSuccess, getErrorMessage }))!
+    const pending = submission.handleSubmit()
+
+    expect(submit).toHaveBeenCalledTimes(1)
+    expect(submission.submitting.value).toBe(true)
+
+    scope.stop()
+    const retiredState = {
+      submitting: submission.submitting.value,
+      result: submission.submissionResult.value
+    }
+
+    if (outcome === 'resolve') {
+      resolveRequest({ requestId: 'fixture' })
+    } else {
+      rejectRequest(new Error('late failure'))
+    }
+
+    // A late rejection is consumed by the handler rather than escaping to
+    // Vue's event handler or becoming an unhandled rejection.
+    await expect(pending).resolves.toBeUndefined()
+    await submission.handleSubmit()
+
+    expect(onSuccess).not.toHaveBeenCalled()
+    expect(getErrorMessage).not.toHaveBeenCalled()
+    expect(submit).toHaveBeenCalledTimes(1)
+    expect(submission.submitting.value).toBe(retiredState.submitting)
+    expect(submission.submissionResult.value).toBe(retiredState.result)
+  })
+
+  it('does not start a request when async validation completes after disposal', async () => {
+    let resolveValidation!: (valid: boolean) => void
+    const validate = vi.fn(() => new Promise<boolean>((resolve) => {
+      resolveValidation = resolve
+    }))
+    const getFormState = vi.fn(() => ({ name: 'Avery' }))
+    const submit = vi.fn(async () => ({}))
+    const scope = effectScope()
+    const submission = scope.run(() => createSubmission({ validate, getFormState, submit }))!
+    const pending = submission.handleSubmit()
+
+    await submission.handleSubmit()
+    expect(validate).toHaveBeenCalledTimes(1)
+    scope.stop()
+    resolveValidation(true)
+    await expect(pending).resolves.toBeUndefined()
+
+    expect(getFormState).not.toHaveBeenCalled()
+    expect(submit).not.toHaveBeenCalled()
+  })
+
+  it('does not clear a retired result or start a request from a retained handler', async () => {
+    const submit = vi.fn(async () => ({}))
+    const scope = effectScope()
+    const submission = scope.run(() => createSubmission({ submit }))!
+    const result = { kind: 'error' as const, title: 'Request not sent', message: 'Please try again.' }
+
+    submission.submissionResult.value = result
+    scope.stop()
+    submission.resetSubmissionResult()
+    await submission.handleSubmit()
+
+    expect(submission.submissionResult.value).toEqual(result)
+    expect(submission.submitting.value).toBe(false)
+    expect(submit).not.toHaveBeenCalled()
   })
 })
 

@@ -1,3 +1,4 @@
+import { getCurrentScope, onScopeDispose, ref } from 'vue'
 import { isPortalApiConfigurationError } from '~/services/portal-api'
 import type { ApplicationResult } from '~/types/form-options'
 
@@ -35,19 +36,34 @@ export interface UseApplicationSubmissionReturn {
  * is supplied through the typed hooks above; successful submissions never
  * produce an inline result — `onSuccess` either navigates or swaps in the
  * form's own success view.
+ *
+ * Disposing the owning Vue scope permanently retires this UI lifecycle. A
+ * pending request still settles, but its result cannot invoke `onSuccess`,
+ * publish an error, or change the retired refs. This does not cancel a server
+ * submission and never retries one. Async success hooks own any effects they
+ * start after being called while the scope is active.
  */
 export const useApplicationSubmission = <TForm, TResponse>(
   options: UseApplicationSubmissionOptions<TForm, TResponse>
 ): UseApplicationSubmissionReturn => {
   const submitting = ref(false)
   const submissionResult = ref<ApplicationResult | null>(null)
+  let active = true
+
+  if (getCurrentScope()) {
+    onScopeDispose(() => {
+      active = false
+    })
+  }
 
   const resetSubmissionResult = () => {
-    submissionResult.value = null
+    if (active) {
+      submissionResult.value = null
+    }
   }
 
   const handleSubmit = async () => {
-    if (submitting.value) {
+    if (!active || submitting.value) {
       return
     }
 
@@ -62,10 +78,22 @@ export const useApplicationSubmission = <TForm, TResponse>(
         return
       }
 
+      // Async validation can outlive the form too. Do not start a new POST
+      // after its scope has gone away.
+      if (!active) {
+        return
+      }
+
       const response = await options.submit(options.getFormState())
 
-      await options.onSuccess(response)
+      if (active) {
+        await options.onSuccess(response)
+      }
     } catch (error) {
+      if (!active) {
+        return
+      }
+
       if (isPortalApiConfigurationError(error)) {
         console.error(error)
       }
@@ -76,7 +104,9 @@ export const useApplicationSubmission = <TForm, TResponse>(
         message: options.getErrorMessage(error)
       }
     } finally {
-      submitting.value = false
+      if (active) {
+        submitting.value = false
+      }
     }
   }
 
