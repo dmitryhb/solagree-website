@@ -1,3 +1,4 @@
+import { createSafeBrowserStorage } from '~/utils/browser-storage'
 import {
   solagreeCaseQualifierSchemaVersion,
   solagreeCaseQualifierStorageKey
@@ -13,6 +14,7 @@ import { parseCaseQualifierSessionSnapshot } from '~/utils/case-qualifier-sessio
 
 /** Owns qualifier selection, deterministic assessment, reset, and v1 persistence. */
 export const useCaseQualifierSession = () => {
+  const storage = createSafeBrowserStorage(() => window.localStorage)
   const selectedCriterionIds = ref<CaseQualifierCriterionId[]>([])
   const hasRestoredPersistedState = ref(false)
   const evaluation = computed(() => evaluateCaseQualifierAnswers(selectedCriterionIds.value))
@@ -37,13 +39,13 @@ export const useCaseQualifierSession = () => {
     selectedCriterionIds.value = []
 
     if (import.meta.client) {
-      window.localStorage.removeItem(solagreeCaseQualifierStorageKey)
+      storage.removeItem(solagreeCaseQualifierStorageKey)
     }
   }
 
   if (import.meta.client) {
     onMounted(() => {
-      const snapshotText = window.localStorage.getItem(solagreeCaseQualifierStorageKey)
+      const snapshotText = storage.getItem(solagreeCaseQualifierStorageKey)
 
       if (!snapshotText) {
         hasRestoredPersistedState.value = true
@@ -54,13 +56,13 @@ export const useCaseQualifierSession = () => {
         const snapshot = parseCaseQualifierSessionSnapshot(JSON.parse(snapshotText) as unknown)
 
         if (!snapshot) {
-          window.localStorage.removeItem(solagreeCaseQualifierStorageKey)
+          storage.removeItem(solagreeCaseQualifierStorageKey)
           return
         }
 
         selectedCriterionIds.value = snapshot.selectedCriterionIds
       } catch {
-        window.localStorage.removeItem(solagreeCaseQualifierStorageKey)
+        storage.removeItem(solagreeCaseQualifierStorageKey)
       } finally {
         hasRestoredPersistedState.value = true
       }
@@ -72,7 +74,7 @@ export const useCaseQualifierSession = () => {
       }
 
       if (selectedIds.length === 0) {
-        window.localStorage.removeItem(solagreeCaseQualifierStorageKey)
+        storage.removeItem(solagreeCaseQualifierStorageKey)
         return
       }
 
@@ -81,7 +83,7 @@ export const useCaseQualifierSession = () => {
         selectedCriterionIds: [...selectedIds]
       }
 
-      window.localStorage.setItem(solagreeCaseQualifierStorageKey, JSON.stringify(snapshot))
+      storage.setItem(solagreeCaseQualifierStorageKey, JSON.stringify(snapshot))
     })
   }
 

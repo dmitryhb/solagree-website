@@ -1,3 +1,4 @@
+import { createSafeBrowserStorage } from '~/utils/browser-storage'
 import { solagreeQuizLabels, solagreeQuizStorageKey } from '~/data/quiz'
 import { solagreeQuizQuestionIds } from '~/data/quiz-schema'
 import type {
@@ -26,6 +27,7 @@ const isQuizClient = import.meta.client || typeof window !== 'undefined'
  * Owns quiz answer state, branching navigation, result evaluation, and persistence.
  */
 export const useQuizSession = () => {
+  const storage = createSafeBrowserStorage(() => window.localStorage)
   const initialQuestionId = solagreeQuizQuestionIds[0] ?? 'state'
   const answers = ref<QuizAnswerMap>({})
   const currentQuestionId = ref<QuizQuestionId>(initialQuestionId)
@@ -155,13 +157,13 @@ export const useQuizSession = () => {
     resetProgressFloorToCurrentBranch()
 
     if (isQuizClient) {
-      window.localStorage.removeItem(solagreeQuizStorageKey)
+      storage.removeItem(solagreeQuizStorageKey)
     }
   }
 
   if (isQuizClient) {
     onMounted(() => {
-      const snapshotText = window.localStorage.getItem(solagreeQuizStorageKey)
+      const snapshotText = storage.getItem(solagreeQuizStorageKey)
 
       if (!snapshotText) {
         hasRestoredPersistedState.value = true
@@ -171,7 +173,7 @@ export const useQuizSession = () => {
       try {
         const snapshot = parseQuizSessionSnapshot(JSON.parse(snapshotText) as unknown)
         if (!snapshot) {
-          window.localStorage.removeItem(solagreeQuizStorageKey)
+          storage.removeItem(solagreeQuizStorageKey)
           return
         }
 
@@ -184,7 +186,7 @@ export const useQuizSession = () => {
         raiseForwardProgressFloor()
         didRestorePersistedState.value = true
       } catch {
-        window.localStorage.removeItem(solagreeQuizStorageKey)
+        storage.removeItem(solagreeQuizStorageKey)
       } finally {
         hasRestoredPersistedState.value = true
       }
@@ -198,7 +200,7 @@ export const useQuizSession = () => {
         }
 
         if (Object.keys(answers.value).length === 0 && phase.value === 'question') {
-          window.localStorage.removeItem(solagreeQuizStorageKey)
+          storage.removeItem(solagreeQuizStorageKey)
           return
         }
 
@@ -211,7 +213,7 @@ export const useQuizSession = () => {
           hasCompletedAttempt: hasCompletedAttempt.value || undefined
         }
 
-        window.localStorage.setItem(solagreeQuizStorageKey, JSON.stringify(snapshot))
+        storage.setItem(solagreeQuizStorageKey, JSON.stringify(snapshot))
       },
       { deep: true }
     )
