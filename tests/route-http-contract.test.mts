@@ -21,7 +21,7 @@ for (const mode of ['valid', '301', '401', '404', '500', '503', 'connection-erro
     try {
       await new Promise<void>(resolve => server.listen(0, '127.0.0.1', resolve))
       const address = server.address() as { port: number }
-      const promise = checkRoutes({ baseUrl: `http://127.0.0.1:${address.port}`, artifactDirectory: fixture.output, env: { ...fixture.env, PATH: process.env.PATH } })
+      const promise = checkRoutes({ httpContext: 'isolated-candidate', baseUrl: `http://127.0.0.1:${address.port}`, artifactDirectory: fixture.output, env: { ...fixture.env, PATH: process.env.PATH } })
       if (mode === 'valid') await promise
       else await assert.rejects(promise, /^Error:/)
     } finally {
@@ -41,13 +41,13 @@ test('protected staging accepts correct BasicAuth on every probe and rejects abs
     if (!valid) { response.writeHead(401); response.end('Unauthorized'); return }
     authorized++
     response.setHeader('Content-Type', 'text/html')
-    if (request.url !== '/webinars') response.setHeader('X-Robots-Tag', 'noindex, nofollow')
+    response.setHeader('X-Robots-Tag', 'noindex, nofollow')
     response.end(readFileSync(join(fixture.output, request.url === '/webinars' ? 'webinars/index.html' : '200.html')))
   })
   try {
     await new Promise<void>(resolve => server.listen(0, '127.0.0.1', resolve))
     const address = server.address() as { port: number }
-    const options = { baseUrl: `http://127.0.0.1:${address.port}`, artifactDirectory: fixture.output, env: { ...fixture.env, PATH: process.env.PATH } }
+    const options = { httpContext: 'public-staging', baseUrl: `http://127.0.0.1:${address.port}`, artifactDirectory: fixture.output, env: { ...fixture.env, PATH: process.env.PATH } }
     await assert.rejects(checkRoutes(options), /HTTP 401/)
     await assert.rejects(checkRoutes({ ...options, env: { ...options.env, STAGING_BASIC_AUTH_USER: username, STAGING_BASIC_AUTH_PASSWORD: 'wrong' } }), /HTTP 401/)
     await checkRoutes({ ...options, env: { ...options.env, STAGING_BASIC_AUTH_USER: username, STAGING_BASIC_AUTH_PASSWORD: password } })
