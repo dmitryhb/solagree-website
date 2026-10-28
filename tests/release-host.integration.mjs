@@ -14,8 +14,8 @@ import { releaseFixture } from './fixtures/release-deploy.mjs'
 
 const image = 'nginx:1.29-alpine'
 execFileSync('docker', ['image', 'inspect', image], { stdio: 'ignore' })
-function setup() {
-  const fixture = releaseFixture('staging')
+function setup(environment = 'staging') {
+  const fixture = releaseFixture(environment)
   chmodSync(fixture.directory, 0o755)
   rmSync(join(fixture.directory, 'bin/curl'))
   fixture.executable('nginx', `#!${process.execPath}
@@ -61,7 +61,7 @@ async function startPublic(fixture) {
   const prefix = join(fixture.directory, 'target-public-nginx')
   mkdirSync(prefix)
   const config = join(prefix, 'nginx.conf')
-  writeFileSync(config, `pid ${prefix}/nginx.pid; error_log ${prefix}/error.log; events {} http { access_log off; default_type text/html; types { application/javascript js mjs; } server { listen 127.0.0.1:${port}; root ${fixture.target}; add_header X-Robots-Tag "noindex, nofollow" always; include ${fixture.directory}/config/nginx/co-branded-noindex.conf; location / { try_files $uri $uri/ /200.html; } } }`)
+  writeFileSync(config, `pid ${prefix}/nginx.pid; error_log ${prefix}/error.log; events {} http { access_log off; default_type text/html; types { application/javascript js mjs; } server { listen 127.0.0.1:${port}; root ${fixture.target}; ${fixture.manifest.environment === 'staging' ? 'add_header X-Robots-Tag "noindex, nofollow" always;' : ''} include ${fixture.directory}/config/nginx/legacy-redirects.conf; include ${fixture.directory}/config/nginx/co-branded-noindex.conf; location / { try_files $uri $uri/ /200.html; } } }`)
   execFileSync(join(fixture.directory, 'bin/nginx'), ['-p', prefix + '/', '-c', config], { env: fixture.env, stdio: 'pipe' })
   fixture.baseUrl = `http://127.0.0.1:${port}`
   return () => execFileSync(join(fixture.directory, 'bin/nginx'), ['-p', prefix + '/', '-c', config, '-s', 'quit'], { env: fixture.env, stdio: 'ignore' })
@@ -131,6 +131,25 @@ test('real nginx promotion is atomic, rollback needs no rebuild and browser tabs
     assert.equal(await response.text(), readFileSync(join(fixture.target, '200.html'), 'utf8'))
     assert.equal(existsSync(join(fixture.store, 'releases', second.id)), true)
   } finally { if (browser) await browser.close(); if (stop) stop(); fixture.cleanup() }
+})
+
+test('real production nginx uses indexable public catalogue policy and preserves dynamic noindex', async () => {
+  const fixture = setup('production')
+  let stop
+  try {
+    stop = await startPublic(fixture)
+    const accepted = fixture.promote()
+    assert.equal(fixture.state().accepted, true)
+    const catalogue = await fetch(fixture.baseUrl + '/webinars')
+    assert.equal(catalogue.status, 200)
+    assert.equal(catalogue.headers.get('x-robots-tag'), null)
+    assert.equal(await catalogue.text(), readFileSync(join(fixture.output, 'webinars/index.html'), 'utf8'))
+    const dynamic = await fetch(fixture.baseUrl + '/meet/production-policy?probe=1')
+    assert.equal(dynamic.status, 200)
+    assert.match(dynamic.headers.get('x-robots-tag'), /noindex, nofollow/)
+    assert.equal(await dynamic.text(), readFileSync(join(fixture.output, '200.html'), 'utf8'))
+    assert.ok(accepted.id)
+  } finally { if (stop) stop(); fixture.cleanup() }
 })
 
 test('real candidate HTTP failure and failed public acceptance preserve the active release', async () => {
