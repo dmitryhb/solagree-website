@@ -30,6 +30,8 @@ export async function checkRoutes({ baseUrl, artifactDirectory, resolve, insecur
       ['/go/__co-branded-route-check__', '200.html', true],
       ['/go/__co-branded-route-check__?campaign=release-check', '200.html', true],
       ['/cdfa/go/__co-branded-route-check__', '200.html', true],
+      ['/meet/__intake-route-check__', '200.html', true],
+      ['/meet/__intake-route-check__/thank-you', '200.html', true],
       ['/webinars/__webinar-route-check__', '200.html', true],
       ['/webinars', 'webinars/index.html', false]
     ]) {

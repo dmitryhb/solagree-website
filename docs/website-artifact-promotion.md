@@ -79,6 +79,11 @@ production pre-DNS resolve/TLS behavior retained). A failure restores the old
 symlink while still holding the lock, or removes the initial symlink on failed
 first bootstrap. Only successful public checks produce an acceptance record.
 A failed upload or pre-switch check never changes the active release.
+An abrupt process/host interruption after the atomic switch can leave a complete
+candidate active before public acceptance is recorded. `--inspect` reports that
+missing acceptance, further promotions refuse, and the operator can explicitly
+roll back to a retained accepted release without rebuilding. No background
+recovery or remote scheduler is installed.
 
 Composition preserves:
 

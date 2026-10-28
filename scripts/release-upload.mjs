@@ -74,7 +74,7 @@ try {
     } catch { throw new Error('remote release validation failed; inspect the error above') }
   }
   const before = remote({ mode: 'inspect' })
-  console.log(`Active release: ${before.id ?? 'absent'}; reviewed inventory SHA-256: ${before.sha256}`)
+  console.log(`Active release: ${before.id ?? 'absent'}; public acceptance: ${before.accepted === true ? 'passed' : 'not recorded'}; reviewed inventory SHA-256: ${before.sha256}`)
   if (process.env.STAGING_TARGET_INVENTORY_FILE) writeFileSync(process.env.STAGING_TARGET_INVENTORY_FILE, `${JSON.stringify(before, null, 2)}\n`, { mode: 0o600 })
   if (!dryRun && !inspect) {
     const expected = process.env.RELEASE_EXPECTED_TARGET_SHA256 ?? (!production ? process.env.STAGING_EXPECTED_TARGET_SHA256 : undefined)

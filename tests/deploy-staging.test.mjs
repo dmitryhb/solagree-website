@@ -17,7 +17,7 @@ const authConfigIndex = args.indexOf('--config')
 const authPath = authConfigIndex === -1 ? '' : args[authConfigIndex + 1]
 const auth = authPath === '-' ? readFileSync(0, 'utf8') : authPath ? readFileSync(authPath, 'utf8') : ''
 const mode = process.env.TEST_CURL_MODE
-const isDynamic = /\\/(go|cdfa\\/go|webinars)\\//.test(url)
+const isDynamic = /\\/(go|cdfa\\/go|webinars|meet)\\//.test(url)
 const isCatalogue = url.endsWith('/webinars')
 appendFileSync(process.env.TEST_DEPLOY_LOG, 'curl auth=' + (auth ? 'provided' : 'none') + ' url=' + url + '\\n')
 if (mode === 'transport-failure') { process.stdout.write('000'); process.exit(7) }

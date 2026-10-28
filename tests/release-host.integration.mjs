@@ -8,6 +8,7 @@ import { join } from 'node:path'
 import test from 'node:test'
 import { chromium } from '@playwright/test'
 import { artifactFiles, releasePolicy } from '../scripts/lib/release-artifact.mjs'
+import { sha256 } from '../scripts/lib/release-proof.mjs'
 import { releaseFixture } from './fixtures/release-deploy.mjs'
 
 const image = 'nginx:1.29-alpine'
@@ -93,7 +94,24 @@ test('real nginx promotion is atomic, rollback needs no rebuild and browser tabs
     writeFileSync(join(fixture.output, '_nuxt/new.c3d4.mjs'), 'export const value = "new lazy chunk"')
     writeFileSync(join(fixture.output, '200.html'), readFileSync(join(fixture.output, '200.html'), 'utf8').replace('</body>', 'release two</body>'))
     save(fixture)
-    const second = fixture.promote()
+    const options = fixture.request({})
+    const incoming = fixture.helper({ ...options, mode: 'begin' })
+    cpSync(fixture.bundle(), incoming.path, { recursive: true })
+    const oldBody = readFileSync(join(fixture.target, '200.html'), 'utf8')
+    const nextBody = readFileSync(join(fixture.output, '200.html'), 'utf8')
+    let finished = false
+    const promotion = childHost(fixture, { ...options, mode: 'promote', token: incoming.token }).then(result => { finished = true; return result })
+    let reads = 0
+    while (!finished) {
+      const response = await fetch(fixture.baseUrl + '/go/atomic-reader?check=1')
+      assert.equal(response.status, 200)
+      assert.ok([oldBody, nextBody].includes(await response.text()), 'reader saw partial or mixed output')
+      reads++
+    }
+    const promoted = await promotion
+    assert.equal(promoted.status, 0, promoted.stderr)
+    assert.ok(reads > 0)
+    const second = JSON.parse(promoted.stdout)
     assert.notEqual(second.id, first.id)
     assert.equal(await oldTab.evaluate(async () => (await import('/_nuxt/old.a1b2.mjs?old-tab=1')).value), 'old lazy chunk')
     const newTab = await browser.newPage()
@@ -124,8 +142,13 @@ test('real candidate HTTP failure and failed public acceptance preserve the acti
     cpSync(fixture.bundle(), incoming.path, { recursive: true })
     // The valid manifest/proof cannot mask an invalid copied HTTP contract.
     writeFileSync(join(incoming.path, 'runtime/config/nginx/co-branded-noindex.conf'), '# broken candidate config')
+    const proofPath = join(incoming.path, 'release-proof.json')
+    const proof = JSON.parse(readFileSync(proofPath))
+    proof.runtime['config/nginx/co-branded-noindex.conf'] = sha256('# broken candidate config')
+    writeFileSync(proofPath, JSON.stringify(proof))
     const rejected = fixture.host({ ...options, mode: 'promote', token: incoming.token })
     assert.equal(rejected.status, 1)
+    assert.match(rejected.stderr, /without an X-Robots-Tag/)
     assert.equal(readlinkSync(fixture.target), before)
     // A valid private candidate with an unreachable public endpoint is switched
     // back under the same lock. The prior immutable release is untouched.

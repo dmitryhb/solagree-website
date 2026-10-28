@@ -125,7 +125,9 @@ class Host:
         release = os.path.dirname(target)
         self.verify_seal(release)
         data = inventory(target)
-        return {"id": match[1], "inventory": data, "sha256": digest(canonical({"id": match[1], **data}))}
+        accepted_path = os.path.join(release, "accepted.json")
+        accepted = load(accepted_path) if os.path.isfile(accepted_path) else {}
+        return {"id": match[1], "accepted": accepted.get("schemaVersion") == 1 and accepted.get("id") == match[1], "inventory": data, "sha256": digest(canonical({"id": match[1], **data}))}
 
     def verify_seal(self, release):
         if os.path.realpath(release) != release:
@@ -162,6 +164,8 @@ class Host:
             raise ValueError("active inventory changed since reviewed preflight")
         if before["id"] is None and not self.request.get("initialize"):
             raise ValueError("absent webroot requires explicit first-release initialization")
+        if before["id"] and not before.get("accepted") and self.request["mode"] != "rollback":
+            raise ValueError("active release lacks public acceptance; inspect and roll back to a retained accepted release")
         return before
 
     def candidate_http(self, release, public=False):
@@ -257,15 +261,21 @@ location / {{ try_files $uri $uri/ /200.html; }}
             self.switch(os.path.join(destination, "public"))
             try:
                 self.candidate_http(destination, public=True)
+                accepted = os.path.join(destination, "accepted.json")
+                temporary_acceptance = accepted + ".pending"
+                with open(temporary_acceptance, "wb") as output:
+                    output.write(canonical({"schemaVersion": 1, "id": release_id, "commit": manifest["commit"]}))
+                    output.flush()
+                    os.fsync(output.fileno())
+                os.replace(temporary_acceptance, accepted)
+                active = self.active()
             except Exception:
                 if previous:
                     self.switch(os.path.join(previous, "public"))
                 else:
                     os.unlink(self.root)
                 raise ValueError("public HTTP check failed; previous webroot restored") from None
-            with open(os.path.join(destination, "accepted.json"), "wb") as output:
-                output.write(canonical({"schemaVersion": 1, "id": release_id, "commit": manifest["commit"]}))
-            return {"id": release_id, "previous": before["id"], "commit": manifest["commit"], "sha256": self.active()["sha256"]}
+            return {"id": release_id, "previous": before["id"], "commit": manifest["commit"], "sha256": active["sha256"]}
         finally:
             if os.path.isdir(candidate):
                 shutil.rmtree(candidate)

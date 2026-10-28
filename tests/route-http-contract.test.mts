@@ -51,7 +51,7 @@ test('protected staging accepts correct BasicAuth on every probe and rejects abs
     await assert.rejects(checkRoutes(options), /HTTP 401/)
     await assert.rejects(checkRoutes({ ...options, env: { ...fixture.env, STAGING_BASIC_AUTH_USER: username, STAGING_BASIC_AUTH_PASSWORD: 'wrong' } }), /HTTP 401/)
     await checkRoutes({ ...options, env: { ...fixture.env, STAGING_BASIC_AUTH_USER: username, STAGING_BASIC_AUTH_PASSWORD: password } })
-    assert.equal(authorized, 5)
+    assert.equal(authorized, 7)
   } finally {
     await new Promise<void>(resolve => server.close(() => resolve()))
     fixture.cleanup()
