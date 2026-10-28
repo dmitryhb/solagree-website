@@ -1,3 +1,4 @@
+import { useDailyAnalyticsAttempt } from '~/composables/useDailyAnalyticsAttempt'
 import { resolveQuizHostConfig, resolveQuizResultViewForHost } from '~/data/quiz-host'
 import type {
   QuizCtaClickedEvent,
@@ -43,6 +44,8 @@ export const useQuizHost = (
       toValue(options.hostConfig)
     )
   })
+  const capture = useDailyAnalyticsAttempt('quiz', () => hostConfig.value.analytics.enabled)
+  onMounted(() => capture.restore(quizSession.didRestorePersistedState.value))
   const resolvedResultView = computed(() => {
     const result = quizSession.resultView.value
     return result ? resolveQuizResultViewForHost(result, hostConfig.value) : undefined
@@ -125,7 +128,9 @@ export const useQuizHost = (
   }
 
   const handleSingleAnswer = (questionId: QuizQuestionId, value: string | undefined) => {
+    const previousValue = quizSession.answers.value[questionId]
     quizSession.setSingleAnswer(questionId, value)
+    if (previousValue !== quizSession.answers.value[questionId]) capture.mutate()
 
     const nextValue = getTrackedAnswerValue(questionId)
     if (nextValue !== undefined) {
@@ -135,7 +140,9 @@ export const useQuizHost = (
   }
 
   const handleMultiAnswer = (questionId: QuizQuestionId, payload: { value: string, checked: boolean }) => {
+    const previousValue = JSON.stringify(quizSession.answers.value[questionId])
     quizSession.toggleMultiAnswer(questionId, payload.value, payload.checked)
+    if (previousValue !== JSON.stringify(quizSession.answers.value[questionId])) capture.mutate()
 
     const nextValue = getTrackedAnswerValue(questionId)
     if (nextValue !== undefined) {
@@ -149,6 +156,10 @@ export const useQuizHost = (
     const previousPhase = quizSession.phase.value
 
     quizSession.goNext()
+    if (previousPhase === 'question' && quizSession.phase.value === 'result') {
+      const evaluation = quizSession.evaluation.value
+      capture.result(evaluation.kind === 'resolved' ? evaluation.outcome : 'open-policy')
+    }
 
     if (!shouldEmitEvents() || previousPhase !== 'question') {
       return
@@ -169,6 +180,7 @@ export const useQuizHost = (
 
   const handleReset = () => {
     quizSession.reset()
+    capture.reset()
     hasTrackedQuizStart.value = false
     hasTrackedCompletion.value = false
 
@@ -190,6 +202,7 @@ export const useQuizHost = (
     const evaluation = quizSession.evaluation.value
     const outcome = evaluation.kind === 'resolved' ? evaluation.outcome : 'open-policy'
     const policyId = evaluation.kind === 'open-policy' ? evaluation.policyId : undefined
+    capture.cta(outcome)
 
     if (shouldEmitEvents()) {
       const event: QuizCtaClickedEvent = {

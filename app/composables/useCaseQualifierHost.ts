@@ -1,3 +1,4 @@
+import { useDailyAnalyticsAttempt } from '~/composables/useDailyAnalyticsAttempt'
 import { resolveCaseQualifierHostConfig, resolveCaseQualifierResultViewForHost } from '~/data/case-qualifier-host'
 import type {
   CaseQualifierCompletedEvent,
@@ -42,6 +43,8 @@ export const useCaseQualifierHost = (
       toValue(options.hostConfig)
     )
   })
+  const capture = useDailyAnalyticsAttempt('qualifier', () => hostConfig.value.analytics.enabled)
+  onMounted(() => capture.restore(caseQualifierSession.selectedCriterionIds.value.length > 0))
   const resolvedResultView = computed(() => {
     const result = caseQualifierSession.resultView.value
     return result ? resolveCaseQualifierResultViewForHost(result, hostConfig.value) : null
@@ -178,8 +181,13 @@ export const useCaseQualifierHost = (
     selected: boolean
   ): void => {
     const previousOutcome = caseQualifierSession.outcome.value
+    const previousSelection = caseQualifierSession.isSelected(criterionId)
 
     caseQualifierSession.setCriterionSelected(criterionId, selected)
+    if (previousSelection !== caseQualifierSession.isSelected(criterionId)) {
+      capture.mutate()
+      if (caseQualifierSession.outcome.value) capture.result(caseQualifierSession.outcome.value)
+    }
     trackStarted()
     trackCriterionToggled(criterionId, selected)
     trackCompleted()
@@ -191,6 +199,7 @@ export const useCaseQualifierHost = (
 
   const handleReset = (): void => {
     caseQualifierSession.reset()
+    capture.reset()
     hasTrackedCaseQualifierStart.value = false
     hasTrackedCompletion.value = false
 
@@ -214,6 +223,7 @@ export const useCaseQualifierHost = (
       return
     }
 
+    capture.cta(outcome)
     if (shouldEmitEvents()) {
       const event: CaseQualifierCtaClickedEvent = {
         type: 'cta_clicked',
