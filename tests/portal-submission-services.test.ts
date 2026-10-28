@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 
 import {
   getAdminIntakeSubmissionErrorMessage,
@@ -26,7 +26,7 @@ import {
   getWebinarRegistrationErrorMessage,
   submitWebinarRegistration
 } from '../app/services/webinar-registration-api'
-import { isPortalApiConfigurationError } from '../app/services/portal-api'
+import { isPortalApiConfigurationError, type PortalRequestOptions } from '../app/services/portal-api'
 import type { AdminIntakeFormState } from '../app/types/admin-intake'
 import type { AttorneyApplicationFormState } from '../app/types/attorney-application'
 import type { CdfaApplicationFormState } from '../app/types/cdfa-application'
@@ -91,7 +91,7 @@ interface MalformedSuccessResponse {
 
 interface ServiceEntry {
   name: string
-  submit: (fetcher: RecordingFetcher, portalApiBaseUrl?: string) => Promise<unknown>
+  submit: (fetcher: RecordingFetcher, portalApiBaseUrl?: string, requestOptions?: PortalRequestOptions) => Promise<unknown>
   endpoint: string
   expectedPayload: unknown
   successResponse: unknown
@@ -193,10 +193,11 @@ const webinarForm: WebinarFormState = {
 const serviceEntries: ServiceEntry[] = [
   {
     name: 'submitAdminIntake',
-    submit: (fetcher, portalApiBaseUrl = PORTAL_BASE_URL) => submitAdminIntake(
+    submit: (fetcher, portalApiBaseUrl = PORTAL_BASE_URL, requestOptions = {}) => submitAdminIntake(
       adminIntakeForm,
       'rivera-mediation',
       {
+        ...requestOptions,
         portalApiBaseUrl,
         fetcher,
         sourceUrl: 'https://www.solagree.com/meet/rivera-mediation'
@@ -224,7 +225,8 @@ const serviceEntries: ServiceEntry[] = [
   },
   {
     name: 'submitAttorneyApplication',
-    submit: (fetcher, portalApiBaseUrl = PORTAL_BASE_URL) => submitAttorneyApplication(attorneyForm, {
+    submit: (fetcher, portalApiBaseUrl = PORTAL_BASE_URL, requestOptions = {}) => submitAttorneyApplication(attorneyForm, {
+      ...requestOptions,
       portalApiBaseUrl,
       fetcher
     }),
@@ -262,7 +264,8 @@ const serviceEntries: ServiceEntry[] = [
   },
   {
     name: 'submitCdfaApplication',
-    submit: (fetcher, portalApiBaseUrl = PORTAL_BASE_URL) => submitCdfaApplication(cdfaForm, {
+    submit: (fetcher, portalApiBaseUrl = PORTAL_BASE_URL, requestOptions = {}) => submitCdfaApplication(cdfaForm, {
+      ...requestOptions,
       portalApiBaseUrl,
       fetcher
     }),
@@ -298,7 +301,8 @@ const serviceEntries: ServiceEntry[] = [
   },
   {
     name: 'submitConsultRequest',
-    submit: (fetcher, portalApiBaseUrl = PORTAL_BASE_URL) => submitConsultRequest(consultForm, {
+    submit: (fetcher, portalApiBaseUrl = PORTAL_BASE_URL, requestOptions = {}) => submitConsultRequest(consultForm, {
+      ...requestOptions,
       portalApiBaseUrl,
       fetcher,
       consultType: 'initial',
@@ -331,7 +335,8 @@ const serviceEntries: ServiceEntry[] = [
   },
   {
     name: 'submitCoBrandedConsultRequest',
-    submit: (fetcher, portalApiBaseUrl = PORTAL_BASE_URL) => submitCoBrandedConsultRequest(coBrandedForm, {
+    submit: (fetcher, portalApiBaseUrl = PORTAL_BASE_URL, requestOptions = {}) => submitCoBrandedConsultRequest(coBrandedForm, {
+      ...requestOptions,
       portalApiBaseUrl,
       fetcher,
       pageType: 'standard',
@@ -366,7 +371,8 @@ const serviceEntries: ServiceEntry[] = [
   },
   {
     name: 'submitContactSubmission',
-    submit: (fetcher, portalApiBaseUrl = PORTAL_BASE_URL) => submitContactSubmission(contactForm, {
+    submit: (fetcher, portalApiBaseUrl = PORTAL_BASE_URL, requestOptions = {}) => submitContactSubmission(contactForm, {
+      ...requestOptions,
       portalApiBaseUrl,
       fetcher,
       sourceUrl: 'https://www.solagree.com/contact'
@@ -392,7 +398,8 @@ const serviceEntries: ServiceEntry[] = [
   },
   {
     name: 'submitWebinarRegistration',
-    submit: (fetcher, portalApiBaseUrl = PORTAL_BASE_URL) => submitWebinarRegistration(webinarForm, {
+    submit: (fetcher, portalApiBaseUrl = PORTAL_BASE_URL, requestOptions = {}) => submitWebinarRegistration(webinarForm, {
+      ...requestOptions,
       portalApiBaseUrl,
       fetcher,
       submissionType: 'attorney_webinar',
@@ -455,6 +462,31 @@ for (const entry of serviceEntries) {
       expect(calls[0]?.request).toBe(`${PORTAL_BASE_URL}${entry.endpoint}`)
       expect(calls[0]?.method).toBe('POST')
       expect(calls[0]?.body).toStrictEqual(entry.expectedPayload)
+    })
+
+    it('forwards caller cancellation without posting or retrying', async () => {
+      const controller = new AbortController()
+      controller.abort()
+      const fetcher = vi.fn(createRecordingFetcher(() => entry.successResponse).fetcher)
+      await expect(entry.submit(fetcher, PORTAL_BASE_URL, { signal: controller.signal }))
+        .rejects.toMatchObject({ kind: 'aborted' })
+      expect(fetcher).not.toHaveBeenCalled()
+    })
+
+    it('bounds a hanging injected POST and makes only one attempt', async () => {
+      vi.useFakeTimers()
+      try {
+        const fetcher = vi.fn((_request: string, _options: { method: 'POST', body: unknown }) => new Promise<never>(() => {}))
+        const rejected = expect(entry.submit(fetcher, PORTAL_BASE_URL, { timeoutMs: 20 }))
+          .rejects.toMatchObject({ kind: 'timeout' })
+        await vi.advanceTimersByTimeAsync(20)
+        await rejected
+        expect(fetcher).toHaveBeenCalledTimes(1)
+        expect(fetcher.mock.calls[0]?.[1]).toMatchObject({ retry: 0, signal: expect.any(AbortSignal) })
+        expect(vi.getTimerCount()).toBe(0)
+      } finally {
+        vi.useRealTimers()
+      }
     })
 
     it('strips trailing slashes from the portal base URL', async () => {
@@ -594,13 +626,13 @@ describe('verifyAdminIntakeSlug', () => {
     await expect(verifyAdminIntakeSlug('rivera-mediation', verifyOptions(fetcher))).rejects.toBe(nuxtFetchError)
   })
 
-  it('rethrows network failures without a status code', async () => {
+  it('classifies network failures without turning them into a missing slug', async () => {
     const networkError = new TypeError('fetch failed')
     const { fetcher } = createVerificationFetcher(() => {
       throw networkError
     })
 
-    await expect(verifyAdminIntakeSlug('rivera-mediation', verifyOptions(fetcher))).rejects.toBe(networkError)
+    await expect(verifyAdminIntakeSlug('rivera-mediation', verifyOptions(fetcher))).rejects.toMatchObject({ kind: 'network', cause: networkError })
   })
 
   it('throws a configuration error for an empty portal base URL', async () => {

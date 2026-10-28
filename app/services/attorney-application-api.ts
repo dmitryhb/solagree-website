@@ -95,8 +95,7 @@ export const submitAttorneyApplication = async (
   options: SubmitAttorneyApplicationOptions
 ): Promise<AttorneyApplicationApiResponse> => {
   return await submitToPortal({
-    portalApiBaseUrl: options.portalApiBaseUrl,
-    fetcher: options.fetcher,
+    ...options,
     endpoint: ATTORNEY_APPLICATIONS_ENDPOINT,
     payload: createAttorneyApplicationSubmissionPayload(form),
     parseSuccess: parsePortalApplicationIdSuccess<AttorneyApplicationApiResponse>,
