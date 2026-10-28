@@ -1,5 +1,5 @@
 import type { ProfessionalTermsAvailability } from '#shared/types/professional-terms'
-import { normalizePortalApiBaseUrl } from '~/services/portal-api'
+import { fetchFromPortal, normalizePortalApiBaseUrl, websitePortalFetcher } from '~/services/portal-api'
 
 /** Loads the portal's current approved document in the browser for the static website. */
 export const useProfessionalTerms = () => {
@@ -9,7 +9,7 @@ export const useProfessionalTerms = () => {
   const refresh = async (): Promise<void> => {
     try {
       const baseUrl = normalizePortalApiBaseUrl(portalApiBaseUrl)
-      const response = await $fetch<ProfessionalTermsAvailability>(`${baseUrl}/api/public/professional-terms`)
+      const response = await fetchFromPortal<ProfessionalTermsAvailability>(`${baseUrl}/api/public/professional-terms`, { fetcher: websitePortalFetcher })
       terms.value = response?.available === true && response.current?.version && response.current.url
         ? response
         : { available: false, current: null }

@@ -1,6 +1,8 @@
 import { prepareWebsiteMarketingSubmission } from './marketing-origin'
 const DEFAULT_PORTAL_SUBMISSION_ERROR_MESSAGE = 'We could not submit your request. Please try again.'
-const PORTAL_API_CONFIG_ERROR_MESSAGE = 'Portal API base URL is not configured. Set NUXT_PUBLIC_PORTAL_API_BASE_URL to an absolute URL before using portal integrations.'
+const PORTAL_API_CONFIG_ERROR_MESSAGE = 'Portal API base URL is not configured. Set NUXT_PUBLIC_PORTAL_API_BASE_URL to an http or https origin, without a path, query, fragment, or credentials.'
+export const DEFAULT_PORTAL_REQUEST_TIMEOUT_MS = 15_000
+export const MAX_PORTAL_REQUEST_TIMEOUT_MS = 60_000
 
 export class PortalApiConfigurationError extends Error {
   constructor(message = PORTAL_API_CONFIG_ERROR_MESSAGE) {
@@ -9,46 +11,130 @@ export class PortalApiConfigurationError extends Error {
   }
 }
 
-export interface PortalFetchOptions<TBody> {
+/** Caller cancellation and a finite deadline cover the whole transport operation. */
+export interface PortalRequestOptions {
+  signal?: AbortSignal
+  /** Defaults to 15 seconds. Must be positive and no more than 60 seconds. */
+  timeoutMs?: number
+}
+
+export interface PortalGetFetchOptions {
+  signal?: AbortSignal
+  /** Portal calls never retry implicitly, including non-idempotent POSTs. */
+  retry?: 0
+}
+
+export interface PortalFetchOptions<TBody> extends PortalGetFetchOptions {
   method: 'POST'
   body: TBody
 }
 
-/**
- * Fetch implementation used by portal submission services.
- */
+/** Existing body-specific injected fetchers remain compatible. */
 export type PortalFetcher<TBody> = <TResponse>(
   request: string,
   options: PortalFetchOptions<TBody>
 ) => Promise<TResponse>
 
-/** Fetch implementation used by portal lookups that do not send a body. */
-export type PortalGetFetcher = <TResponse>(request: string) => Promise<TResponse>
+/** The optional second argument keeps existing one-argument lookup fetchers valid. */
+export type PortalGetFetcher = <TResponse>(request: string, options?: PortalGetFetchOptions) => Promise<TResponse>
 
-/**
- * Shared dependencies required by portal submission services.
- */
-export interface PortalSubmitOptions<TBody> {
+export interface PortalSubmitOptions<TBody> extends PortalRequestOptions {
   portalApiBaseUrl: string
   fetcher: PortalFetcher<TBody>
 }
 
+export type PortalRequestFailure = 'network' | 'aborted' | 'timeout'
+
+const PORTAL_REQUEST_MESSAGES: Record<PortalRequestFailure, string> = {
+  network: 'We could not confirm whether your request was received. Check your connection before submitting again.',
+  aborted: 'The request was interrupted. We could not confirm whether it was received. Check before submitting again.',
+  timeout: 'The request timed out. We could not confirm whether it was received. Check before submitting again.'
+}
+
+/** Cancellation or a deadline stops waiting; it cannot undo an accepted server submission. */
+export class PortalRequestError extends Error {
+  constructor(public readonly kind: PortalRequestFailure, cause?: unknown) {
+    super(PORTAL_REQUEST_MESSAGES[kind], { cause })
+    this.name = 'PortalRequestError'
+  }
+}
+
+const isAbortError = (error: unknown): boolean => {
+  if (!error || typeof error !== 'object') return false
+  return ('name' in error && error.name === 'AbortError')
+    || ('cause' in error && error.cause !== error && isAbortError(error.cause))
+}
+
 /**
- * Default website fetcher for portal submissions.
- *
- * Wraps Nuxt's global `$fetch` in the injectable `PortalFetcher` shape so
- * components pass one typed fetcher instead of repeating the double cast at
- * every call site. Dependency injection is unchanged: services still accept
- * any `PortalFetcher`-compatible implementation.
+ * Owns one deadline, one caller listener and one attempt, even if an injected
+ * fetcher ignores AbortSignal. The losing promise stays observed after we stop
+ * waiting. HTTP errors retain their status/message for existing domain callers.
  */
+const runPortalRequest = async <TResponse>(
+  perform: (signal: AbortSignal) => Promise<TResponse>,
+  options: PortalRequestOptions
+): Promise<TResponse> => {
+  const timeoutMs = options.timeoutMs ?? DEFAULT_PORTAL_REQUEST_TIMEOUT_MS
+  if (!Number.isFinite(timeoutMs) || timeoutMs <= 0 || timeoutMs > MAX_PORTAL_REQUEST_TIMEOUT_MS) {
+    throw new PortalApiConfigurationError('Portal API timeout must be a positive number no greater than 60000 milliseconds.')
+  }
+  if (options.signal?.aborted) throw new PortalRequestError('aborted', options.signal.reason)
+
+  const controller = new AbortController()
+  let cancellation: PortalRequestError | undefined
+  let timer: ReturnType<typeof setTimeout> | undefined
+  let onAbort: (() => void) | undefined
+  const interrupted = new Promise<never>((_resolve, reject) => {
+    const cancel = (kind: 'aborted' | 'timeout', cause?: unknown) => {
+      if (cancellation) return
+      cancellation = new PortalRequestError(kind, cause)
+      controller.abort(cancellation)
+      reject(cancellation)
+    }
+    onAbort = () => cancel('aborted', options.signal?.reason)
+    options.signal?.addEventListener('abort', onAbort, { once: true })
+    timer = setTimeout(() => cancel('timeout'), timeoutMs)
+  })
+
+  try {
+    return await Promise.race([
+      Promise.resolve().then(() => {
+        if (cancellation) throw cancellation
+        return perform(controller.signal)
+      }),
+      interrupted
+    ])
+  } catch (error) {
+    if (cancellation) throw cancellation
+    if (error instanceof PortalRequestError || getPortalErrorStatusCode(error) !== null) throw error
+    throw new PortalRequestError(isAbortError(error) ? 'aborted' : 'network', error)
+  } finally {
+    clearTimeout(timer)
+    if (onAbort) options.signal?.removeEventListener('abort', onAbort)
+  }
+}
+
+/** Shared GET boundary, using the same injectable contract as POST services. */
+export const fetchFromPortal = <TResponse>(
+  request: string,
+  options: PortalRequestOptions & { fetcher: PortalGetFetcher }
+): Promise<TResponse> => runPortalRequest(
+  signal => options.fetcher<TResponse>(request, { signal, retry: 0 }),
+  options
+)
+
+/** Nuxt adapter only: services own deadlines and cancellation, including injected fetchers. */
 export const websitePortalFetcher = async <TResponse>(
   request: string,
-  options?: PortalFetchOptions<unknown>
+  options?: PortalFetchOptions<unknown> | PortalGetFetchOptions
 ): Promise<TResponse> => {
-  if (!options) return await $fetch(request) as TResponse
+  options?.signal?.throwIfAborted()
+  if (!options || !('body' in options)) return await $fetch(request, { ...options, retry: 0 }) as TResponse
   const endpoint = new URL(request).pathname
   const prepared = await prepareWebsiteMarketingSubmission(endpoint, options.body)
-  const response: unknown = await $fetch(request, { ...options, body: prepared.body as Record<string, unknown> })
+  // Preparing attribution can be asynchronous. Never start a POST after its deadline/cancellation.
+  options.signal?.throwIfAborted()
+  const response: unknown = await $fetch(request, { ...options, retry: 0, body: prepared.body as Record<string, unknown> })
   if (response && typeof response === 'object' && 'ok' in response && response.ok === true) prepared.complete()
   return response as TResponse
 }
@@ -117,35 +203,30 @@ export const getPortalRouteErrorDetails = (
   }
 }
 
-/**
- * Validates and removes trailing slashes so endpoint paths can be appended consistently.
- */
+/** Only an HTTP(S) origin is accepted; endpoint paths are owned by services. */
 export const normalizePortalApiBaseUrl = (portalApiBaseUrl: string): string => {
-  const normalizedPortalApiBaseUrl = String(portalApiBaseUrl || '').trim().replace(/\/+$/, '')
-
-  if (!normalizedPortalApiBaseUrl) {
-    throw new PortalApiConfigurationError()
-  }
+  const value = String(portalApiBaseUrl || '').trim()
+  if (!value) throw new PortalApiConfigurationError()
 
   try {
-    const parsedUrl = new URL(normalizedPortalApiBaseUrl)
-
-    if (parsedUrl.protocol !== 'http:' && parsedUrl.protocol !== 'https:') {
+    const parsedUrl = new URL(value)
+    // Inspect the supplied suffix too: URL parsing erases empty ?/#, dot paths,
+    // backslashes and empty credentials, which must not conceal invalid config.
+    const originOnly = /^https?:\/\/[^/\\?#@]+\/?$/i.test(value)
+    if (!originOnly || !['http:', 'https:'].includes(parsedUrl.protocol)
+      || parsedUrl.username || parsedUrl.password || parsedUrl.pathname !== '/'
+      || parsedUrl.search || parsedUrl.hash) {
       throw new PortalApiConfigurationError(
-        'Portal API base URL must use http or https. Set NUXT_PUBLIC_PORTAL_API_BASE_URL to an absolute URL before using portal integrations.'
+        'Portal API base URL must be an http or https origin, without a path, query, fragment, or credentials. Set NUXT_PUBLIC_PORTAL_API_BASE_URL to an origin such as https://portal.example.com.'
       )
     }
+    return parsedUrl.origin
   } catch (error) {
-    if (isPortalApiConfigurationError(error)) {
-      throw error
-    }
-
+    if (isPortalApiConfigurationError(error)) throw error
     throw new PortalApiConfigurationError(
-      'Portal API base URL is invalid. Set NUXT_PUBLIC_PORTAL_API_BASE_URL to an absolute URL before using portal integrations.'
+      'Portal API base URL is invalid. Set NUXT_PUBLIC_PORTAL_API_BASE_URL to an http or https origin such as https://portal.example.com.'
     )
   }
-
-  return normalizedPortalApiBaseUrl
 }
 
 /**
@@ -254,7 +335,8 @@ export const parsePortalRequestIdSuccess = <TSuccess extends { requestId: string
  * - malformed 2xx responses throw the user-safe fallback instead of leaking
  *   native errors such as `Cannot use 'in' operator` through the UI.
  *
- * Fetch, network, and configuration errors propagate to the caller unchanged.
+ * HTTP and configuration errors retain their contract. Transport failures are
+ * classified without claiming the server rejected or canceled a submission.
  */
 export const submitToPortal = async <TPayload, TSuccess>(
   options: PortalSubmitOptions<TPayload> & {
@@ -278,9 +360,12 @@ export const submitToPortal = async <TPayload, TSuccess>(
   const fallbackMessage = options.fallbackMessage ?? DEFAULT_PORTAL_SUBMISSION_ERROR_MESSAGE
   const portalApiBaseUrl = normalizePortalApiBaseUrl(options.portalApiBaseUrl)
 
-  const response: unknown = await options.fetcher<unknown>(
-    `${portalApiBaseUrl}${options.endpoint}`,
-    { method: 'POST', body: options.payload }
+  const response: unknown = await runPortalRequest(
+    signal => options.fetcher<unknown>(
+      `${portalApiBaseUrl}${options.endpoint}`,
+      { method: 'POST', body: options.payload, signal, retry: 0 }
+    ),
+    options
   )
 
   if (typeof response !== 'object' || response === null) {

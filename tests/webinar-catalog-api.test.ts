@@ -46,7 +46,7 @@ describe('public webinar catalogue boundary', () => {
     const fetcher = vi.fn(post(response))
     await expect(resolveWebinarAccess('event-1', 'opaque', { portalApiBaseUrl: 'https://portal.example.com', fetcher })).resolves.toEqual(response)
     expect(fetcher).toHaveBeenCalledWith('https://portal.example.com/api/public/webinars/event-1/access/resolve', {
-      method: 'POST', body: { token: 'opaque' }
+      method: 'POST', body: { token: 'opaque' }, signal: expect.any(AbortSignal), retry: 0
     })
     await expect(resolveWebinarAccess('event-1', 'opaque', {
       portalApiBaseUrl: 'https://portal.example.com', fetcher: post({ ...response, accessPath: '/api/public/webinars/other/recording?token=opaque' })

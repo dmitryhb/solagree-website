@@ -5,10 +5,12 @@ import FormResultMessage from '../../../app/components/FormResultMessage.vue'
 import FormSmsOptInField from '../../../app/components/form/SmsOptInField.vue'
 import SiteFormSubmit from '../../../app/components/SiteFormSubmit.vue'
 import { useApplicationSubmission } from '../../../app/composables/useApplicationSubmission'
+import type { PortalFetchOptions } from '../../../app/services/portal-api'
 import { initialConsultRequestContent } from '../../../app/data/consult-request'
 
 const analyticsCount = ref(0)
 const settledCount = ref(0)
+const abortCount = ref(0)
 
 const OtherPage = defineComponent({
   setup() {
@@ -52,10 +54,14 @@ Object.assign(globalThis, {
   navigateTo: router.push.bind(router),
   // The production form and service use their normal injectable fetch path.
   // Playwright intercepts this local endpoint before any submission begins.
-  $fetch: async (request: string, options: { method: string, body: unknown }) => {
+  $fetch: async (request: string, options: PortalFetchOptions<unknown>) => {
+    options.signal?.addEventListener('abort', () => { abortCount.value += 1 }, { once: true })
     try {
       const response = await fetch(request, {
         method: options.method,
+        // HIR-621 retains an ignoring-signal fixture for late-result regression.
+        // HIR-623 also exercises native fetch abort via this fixture-only query.
+        signal: window.location.search.includes('abort-fetch=1') ? options.signal : undefined,
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify(options.body)
       })
@@ -75,7 +81,8 @@ Object.assign(globalThis, {
 const app = createApp({
   setup: () => () => h('div', {
     'data-analytics-count': analyticsCount.value,
-    'data-settled-count': settledCount.value
+    'data-settled-count': settledCount.value,
+    'data-abort-count': abortCount.value
   }, [
     h(RouterLink, { to: '/other' }, () => 'Leave form'),
     h('main', { id: 'main-content', tabindex: '-1' }, [h(RouterView)])
