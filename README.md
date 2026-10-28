@@ -243,6 +243,13 @@ Unknown slugs render the site's standard 404 page — no form is shown and no
 PII is exposed. These pages carry a `noindex` meta tag and are not linked from
 the website navigation, footer, or sitemap.
 
+The complete `config/nginx/co-branded-noindex.conf` snippet also sends
+`X-Robots-Tag: noindex, nofollow` on the first HTTP response for every `/meet/*`
+path, including thank-you pages, unknown slugs, and any matching static files.
+The named SPA fallback preserves this header before client hydration. See the
+[route indexing policy](docs/route-indexing-policy.md) for the sitemap and HTTP
+contract and its local nginx checks.
+
 ## Co-branded partner pages
 
 Published co-branded partner pages are served by the website under:

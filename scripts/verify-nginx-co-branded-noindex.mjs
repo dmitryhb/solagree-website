@@ -3,7 +3,7 @@ import { fileURLToPath } from 'node:url'
 
 const ROOT_DIR = fileURLToPath(new URL('..', import.meta.url))
 
-export const DYNAMIC_NOINDEX_LOCATION_PREFIXES = ['/go/', '/cdfa/go/', '/webinars/']
+export const DYNAMIC_NOINDEX_LOCATION_PREFIXES = ['/go/', '/cdfa/go/', '/webinars/', '/meet/']
 export const NOINDEX_HEADER_VARIABLE = '$co_branded_noindex_header'
 export const EXPECTED_X_ROBOTS_TAG_DIRECTIVE = `add_header X-Robots-Tag ${NOINDEX_HEADER_VARIABLE} always;`
 export const SPA_FALLBACK_LOCATION = '@solagree_spa_fallback'
@@ -35,8 +35,9 @@ const normalizeDirective = (line) => line.trim().replace(/\s+/g, ' ')
 /**
  * Textual regression check for the dynamic-route noindex nginx snippet.
  *
- * `nginx -t` is not available in CI or on developer laptops for this repo, so
- * this validates the structure the static hosting contract depends on:
+ * This fast check does not need nginx or Docker. The companion runtime test
+ * exercises the same snippet with real nginx when Docker is available. This
+ * validates the structure the static hosting contract depends on:
  * all dynamic location families, the X-Robots-Tag noindex header on every
  * fallback response, the /200.html SPA fallback, and
  * deploy scripts that install and verify the snippet. The header is configured
@@ -140,8 +141,20 @@ export const verifyCoBrandedNoindexNginxConfig = () => {
     ['scripts/deploy-production.sh', productionScript],
     ['scripts/deploy-staging.sh', stagingScript]
   ]) {
-    if (!script.includes('scripts/verify-deployed-routes.mjs')) {
-      failures.push(`${scriptName} must call the shared post-deployment route verifier.`)
+    if (script.includes('scripts/verify-deployed-routes.mjs')) {
+      continue
+    }
+
+    let releaseUploader = ''
+    if (script.includes('scripts/release-upload.mjs')) {
+      try {
+        releaseUploader = readRepoFile('scripts/release-upload.mjs')
+      } catch { /* A missing delegate is reported with the contract failure below. */ }
+    }
+
+    if (!releaseUploader.includes('./lib/route-http-contract.mjs')
+      || !releaseUploader.includes('co-branded-noindex.conf')) {
+      failures.push(`${scriptName} must call the shared route verifier directly or delegate to a release uploader with the HTTP route contract and noindex snippet.`)
     }
   }
 
@@ -156,7 +169,7 @@ export const verifyCoBrandedNoindexNginxConfig = () => {
 
   if (!productionScript.includes('co-branded-noindex.conf')) {
     failures.push(
-      'scripts/deploy-production.sh must install config/nginx/co-branded-noindex.conf on the server.'
+      'scripts/deploy-production.sh must reference the required config/nginx/co-branded-noindex.conf host contract.'
     )
   }
 
