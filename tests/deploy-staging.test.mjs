@@ -31,7 +31,8 @@ if (/^\\d+$/.test(mode) && isDynamic) status = mode
 let headers = 'HTTP/1.1 ' + status + '\\nContent-Type: text/html; charset=utf-8\\n'
 if (isDynamic && mode !== 'header-failure') headers += 'X-Robots-Tag: noindex, nofollow\\n'
 if (isCatalogue) {
-  if (mode === 'catalogue-noindex') headers += 'X-Robots-Tag: noindex, nofollow\\n'
+  if (mode === 'catalogue-nofollow-missing' && !url.startsWith('http://127.0.0.1:')) headers += 'X-Robots-Tag: noindex\\n'
+  if (mode === 'catalogue-noindex' || (process.env.NUXT_PUBLIC_DEPLOYMENT_ENVIRONMENT === 'staging' && !url.startsWith('http://127.0.0.1:') && mode !== 'catalogue-indexable' && mode !== 'catalogue-nofollow-missing')) headers += 'X-Robots-Tag: noindex, nofollow\\n'
   if (mode === 'catalogue-status-failure') status = '500'
 }
 if (headerIndex !== -1) writeFileSync(args[headerIndex + 1], headers)
@@ -119,12 +120,12 @@ test('staging deployment rejects partial credentials before requests or upload',
   assert.equal(result.log, '')
 })
 
-for (const mode of ['catalogue-noindex', 'catalogue-status-failure']) {
+for (const mode of ['catalogue-noindex', 'catalogue-indexable', 'catalogue-nofollow-missing', 'catalogue-status-failure']) {
   test(`staging deployment rejects ${mode}`, () => {
     const result = runDeployment({ mode })
 
     assert.equal(result.status, 1)
-    assert.match(result.stderr, /catalogue check failed|webinars returned HTTP 500/)
+    assert.match(result.stderr, /catalogue check failed|webinars returned HTTP 500|without an X-Robots-Tag/)
   })
 }
 
@@ -139,3 +140,19 @@ for (const environment of ['staging', 'production']) {
     })
   }
 }
+
+test('production catalogue cannot inherit staging crawler protection', () => {
+  const result = runDeployment({ environment: 'production', mode: 'catalogue-noindex' })
+  assert.equal(result.status, 1)
+  assert.match(result.stderr, /catalogue check failed/)
+})
+
+test('staging publisher is pinned to the existing administrative transport', () => {
+  const fixture = releaseFixture('staging')
+  try {
+    const result = fixture.deploy('staging', ['--skip-build'], { SSH_USER: 'qa_solagree' })
+    assert.equal(result.status, 1)
+    assert.match(result.stderr, /SSH_USER must match/)
+    assert.equal(result.log, '')
+  } finally { fixture.cleanup() }
+})

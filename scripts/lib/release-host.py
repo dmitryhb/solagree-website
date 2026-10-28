@@ -173,9 +173,11 @@ class Host:
     def candidate_http(self, release, public=False):
         runtime = os.path.join(release, "bundle", "runtime")
         artifact = os.path.join(release, "public")
-        check = {"artifactDirectory": artifact, "legacyRedirect": self.request["policy"]["environment"] == "production"}
+        check = {"artifactDirectory": artifact, "legacyRedirect": self.request["policy"]["environment"] == "production", "httpContext": "isolated-candidate"}
         if public:
             check.update(self.request["publicCheck"])
+            # Derive this after caller options: no generic catalogue bypass.
+            check["httpContext"] = "public-" + self.request["policy"]["environment"]
             # Credentials exist in stdin only. Neither proof nor release metadata
             # stores them. Public staging BasicAuth is never disabled.
             check["env"] = {**os.environ, **self.request.get("auth", {}), "STAGING_NATIVE_ACTIVATION_APPROVED": "true" if self.request.get("nativeActivationApproved") else ""}
@@ -343,9 +345,14 @@ location / {{ try_files $uri $uri/ /200.html; }}
             raise ValueError("unsupported release operation")
 
 
-try:
-    request = json.loads(sys.stdin.buffer.read())
-    print(json.dumps(Host(request).run(), sort_keys=True))
-except Exception as error:
-    print("Release operation refused/failed: " + str(error), file=sys.stderr)
-    sys.exit(1)
+def main():
+    try:
+        request = json.loads(sys.stdin.buffer.read())
+        print(json.dumps(Host(request).run(), sort_keys=True))
+    except Exception as error:
+        print("Release operation refused/failed: " + str(error), file=sys.stderr)
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()

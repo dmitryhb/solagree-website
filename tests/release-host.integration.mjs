@@ -61,7 +61,7 @@ async function startPublic(fixture) {
   const prefix = join(fixture.directory, 'target-public-nginx')
   mkdirSync(prefix)
   const config = join(prefix, 'nginx.conf')
-  writeFileSync(config, `pid ${prefix}/nginx.pid; error_log ${prefix}/error.log; events {} http { access_log off; default_type text/html; types { application/javascript js mjs; } server { listen 127.0.0.1:${port}; root ${fixture.target}; include ${fixture.directory}/config/nginx/co-branded-noindex.conf; location / { try_files $uri $uri/ /200.html; } } }`)
+  writeFileSync(config, `pid ${prefix}/nginx.pid; error_log ${prefix}/error.log; events {} http { access_log off; default_type text/html; types { application/javascript js mjs; } server { listen 127.0.0.1:${port}; root ${fixture.target}; add_header X-Robots-Tag "noindex, nofollow" always; include ${fixture.directory}/config/nginx/co-branded-noindex.conf; location / { try_files $uri $uri/ /200.html; } } }`)
   execFileSync(join(fixture.directory, 'bin/nginx'), ['-p', prefix + '/', '-c', config], { env: fixture.env, stdio: 'pipe' })
   fixture.baseUrl = `http://127.0.0.1:${port}`
   return () => execFileSync(join(fixture.directory, 'bin/nginx'), ['-p', prefix + '/', '-c', config, '-s', 'quit'], { env: fixture.env, stdio: 'ignore' })

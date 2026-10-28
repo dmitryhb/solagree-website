@@ -22,7 +22,7 @@ try {
   if (!production && (Boolean(username) !== Boolean(password) || /[:\r\n]/.test(username) || /[\r\n]/.test(password))) throw new Error('Staging BasicAuth credentials must be set together without unsupported characters')
   const target = production
     ? { user: 'ubuntu', host: '15.204.253.205', root: '/home/solagree/public_html', store: '/home/solagree/website-releases', owner: 'solagree' }
-    : { user: 'qa_solagree', host: 'solagree.qamachine.com', root: '/home/qa_solagree/public_html', store: '/home/qa_solagree/website-releases' }
+    : { user: 'ubuntu', host: 'solagree.qamachine.com', root: '/home/qa_solagree/public_html', store: '/home/qa_solagree/website-releases', owner: 'root' }
   for (const [variable, expected] of [['SSH_USER', target.user], ['SSH_HOST', target.host], ['REMOTE_PATH', target.root]]) {
     if (process.env[variable] !== undefined && process.env[variable].replace(/\/$/, '') !== expected) throw new Error(`${variable} must match the reviewed ${environment} destination`)
   }

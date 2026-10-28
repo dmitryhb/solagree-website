@@ -3,7 +3,7 @@ import { mkdtempSync, readFileSync, rmSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 
-export function verifyResponse({ status, headers, body, expectedBody, noindex, route }) {
+export function verifyResponse({ status, headers, body, expectedBody, noindex, route, catalogue = false }) {
   if (status !== '200') throw new Error(`${route} returned HTTP ${status}; expected an authorized HTTP 200 response`)
   // curl can include proxy CONNECT or informational headers: use only the final response block.
   const finalHeaders = headers.trim().split(/\r?\n\r?\n/).at(-1) ?? ''
@@ -14,10 +14,12 @@ export function verifyResponse({ status, headers, body, expectedBody, noindex, r
     throw new Error(`${route} responded without an X-Robots-Tag: noindex, nofollow header`)
   }
   if (!noindex && (robots.includes('noindex') || robots.includes('none'))) throw new Error('webinar catalogue check failed: /webinars must remain indexable')
-  if (!body.equals(expectedBody)) throw new Error(`${route} body does not match the generated ${noindex ? 'HTML fallback' : 'webinar catalogue'}`)
+  if (!body.equals(expectedBody)) throw new Error(`${route} body does not match the generated ${catalogue ? 'webinar catalogue' : 'HTML fallback'}`)
 }
 
-export async function checkRoutes({ baseUrl, artifactDirectory, resolve, insecure = false, legacyRedirect = false, env = process.env }) {
+export async function checkRoutes({ baseUrl, artifactDirectory, resolve, insecure = false, legacyRedirect = false, httpContext, env = process.env }) {
+  if (!['isolated-candidate', 'public-staging', 'public-production'].includes(httpContext)) throw new Error('A trusted explicit HTTP verification context is required')
+  const catalogueNoindex = httpContext === 'public-staging'
   const username = env.STAGING_BASIC_AUTH_USER ?? ''
   const password = env.STAGING_BASIC_AUTH_PASSWORD ?? ''
   if (Boolean(username) !== Boolean(password)) throw new Error('STAGING_BASIC_AUTH_USER and STAGING_BASIC_AUTH_PASSWORD must be set together')
@@ -33,7 +35,7 @@ export async function checkRoutes({ baseUrl, artifactDirectory, resolve, insecur
       ['/meet/__intake-route-check__', '200.html', true],
       ['/meet/__intake-route-check__/thank-you', '200.html', true],
       ['/webinars/__webinar-route-check__', '200.html', true],
-      ['/webinars', 'webinars/index.html', false]
+      ['/webinars', 'webinars/index.html', catalogueNoindex]
     ]) {
       const headerPath = join(directory, 'headers')
       const bodyPath = join(directory, 'body')
@@ -54,7 +56,7 @@ export async function checkRoutes({ baseUrl, artifactDirectory, resolve, insecur
         child.stdin.end(authConfig)
       })
       if (result.code !== 0) throw new Error(`${route} connection error; route verification failed`)
-      verifyResponse({ status: result.status, headers: readFileSync(headerPath, 'utf8'), body: readFileSync(bodyPath), expectedBody: readFileSync(join(artifactDirectory, file)), noindex, route })
+      verifyResponse({ status: result.status, headers: readFileSync(headerPath, 'utf8'), body: readFileSync(bodyPath), expectedBody: readFileSync(join(artifactDirectory, file)), noindex, route, catalogue: route === '/webinars' })
       console.log(`Route check passed: ${route} returned HTTP 200 with the generated HTML${noindex ? ' and noindex' : ' and is indexable'}`)
     }
     if (legacyRedirect) {

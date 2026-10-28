@@ -2,7 +2,9 @@
 
 HIR-624 replaces the previous non-atomic in-place staging uploader with the
 shared [verified artifact promotion and rollback mechanism](website-artifact-promotion.md).
-The destination remains `qa_solagree@solagree.qamachine.com`, and BasicAuth,
+The destination is `ubuntu@solagree.qamachine.com`, using the existing
+`sudo -n -u root` publisher for the protected staging home and root-owned
+release store (HIR-686). BasicAuth,
 hidden server configuration, remote-only content, Partner Terms versions,
 metadata and unclassified legal history remain protected. Generated legal app
 HTML/payloads remain updatable. Previous hashed lazy assets survive promotion

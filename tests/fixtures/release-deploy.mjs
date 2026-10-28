@@ -76,7 +76,7 @@ import { join } from 'node:path'
 const args = process.argv.slice(2)
 const url = new URL(args.at(-1))
 if (url.pathname === '/about/') { process.stdout.write('301 ' + url.origin + '/about-us'); process.exit(0) }
-if (args.includes('-D')) writeFileSync(args[args.indexOf('-D') + 1], 'HTTP/1.1 200 OK\\nContent-Type: text/html\\n' + (url.pathname !== '/webinars' ? 'X-Robots-Tag: noindex, nofollow\\n' : ''))
+if (args.includes('-D')) writeFileSync(args[args.indexOf('-D') + 1], 'HTTP/1.1 200 OK\\nContent-Type: text/html\\n' + ((url.pathname !== '/webinars' || (process.env.NUXT_PUBLIC_DEPLOYMENT_ENVIRONMENT === 'staging' && url.hostname !== '127.0.0.1')) ? 'X-Robots-Tag: noindex, nofollow\\n' : ''))
 if (args[args.indexOf('-o') + 1] !== '/dev/null') writeFileSync(args[args.indexOf('-o') + 1], readFileSync(join(process.cwd(), '.output/public', url.pathname === '/webinars' ? 'webinars/index.html' : '200.html')))
 process.stdout.write('200')
 `)
@@ -89,7 +89,7 @@ process.stdout.write('200')
   }
   const host = request => spawnSync('python3', [join(directory, 'scripts/lib/release-host.py')], { input: JSON.stringify({ root: target, store, policy, ...request }), env, cwd: directory, encoding: 'utf8' })
   function inventory(path) {
-    return JSON.parse(execFileSync('python3', ['-c', `import sys; code=open(sys.argv[1]).read().split('\\ntry:\\n    request =')[0]; exec(code); print(json.dumps(inventory(sys.argv[2])))`, join(directory, 'scripts/lib/release-host.py'), path], { encoding: 'utf8' }))
+    return JSON.parse(execFileSync('python3', ['-c', `import sys,json; import importlib.util; spec=importlib.util.spec_from_file_location('release_host',sys.argv[1]); module=importlib.util.module_from_spec(spec); spec.loader.exec_module(module); inventory=module.inventory; print(json.dumps(inventory(sys.argv[2])))`, join(directory, 'scripts/lib/release-host.py'), path], { encoding: 'utf8' }))
   }
   function bundle(destination = join(directory, 'bundle')) {
     rmSync(destination, { recursive: true, force: true })
