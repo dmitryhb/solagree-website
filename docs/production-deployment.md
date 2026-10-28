@@ -2,33 +2,28 @@
 
 The website is deployed as static Nuxt output (`npm run generate`) to the production server at `15.204.253.205`.
 
-## TL;DR
+## Release mechanism
 
-```bash
-cd website
-npm run deploy:production
-```
+Production uses the verified immutable promotion and rollback mechanism in
+[Website artifact promotion](website-artifact-promotion.md). Read its prepared-host
+prerequisites and separately approved legacy-directory conversion plan first.
+The scripts refuse an unconverted real-directory webroot.
 
-The script will:
+The script runs fixed lint, typecheck, test, local nginx/browser and generation
+gates, requires their artifact-bound proof, uploads a private candidate, verifies
+its bytes and HTTP contract, then atomically replaces the webroot symlink. A
+failed public check restores the previous symlink under the release lock. No
+static deploy installs snippets, changes ownership recursively, or reloads nginx.
 
-1. Run `nuxt generate` with the production env baked in
-   - `NUXT_PUBLIC_SITE_URL=https://www.solagree.com`
-   - `NUXT_PUBLIC_PORTAL_URL=https://portal.solagree.com`
-   - `NUXT_PUBLIC_PORTAL_API_BASE_URL=https://portal.solagree.com`
-   - `NUXT_PUBLIC_DEPLOYMENT_ENVIRONMENT=production`
-   - `NUXT_PUBLIC_GA_MEASUREMENT_ID` is disabled by default; explicitly select `G-TCGL2PDNNY` to enable production analytics
-2. `rsync -avz --delete` `.output/public/` to `/home/solagree/public_html/` (via `sudo -n rsync` over SSH as `ubuntu`)
-3. Re-`chown solagree:solagree`
-4. Install `config/nginx/legacy-redirects.conf` to `/etc/nginx/snippets/solagree-legacy-redirects.conf` and `config/nginx/co-branded-noindex.conf` to `/etc/nginx/snippets/solagree-co-branded-noindex.conf`, ensure both are included in the `www.solagree.com` server block, run `nginx -t`, and reload nginx
-5. Probe dynamic `/go/*`, `/cdfa/go/*`, and `/webinars/*` URLs (against the server IP via `--resolve`, since DNS isn't pointed yet) to ensure the nginx SPA fallback is intact and the responses carry `X-Robots-Tag: noindex, nofollow`; confirm `/webinars` remains indexable
+`--skip-build` requires the complete matching proof. `--dry-run` reads the target
+inventory without uploading. `--inspect` reads it without requiring local output.
+`--rollback=<retained-release-id>` restores a verified artifact without rebuilding.
+`--skip-route-check` is rejected. Public URL/Portal environment and GA policies
+remain mandatory. SSH destinations and webroots are fixed to the reviewed host.
 
-Flags:
-
-- `--dry-run` — skip the rsync write
-- `--skip-build` — reuse existing `.output/public/`
-- `--skip-route-check` — don't probe dynamic routes or the webinar catalogue after upload
-
-Overridable env vars: `SSH_USER`, `SSH_HOST`, `REMOTE_PATH`, `REMOTE_OWNER`, `ROUTE_CHECK_HOST`, `ROUTE_CHECK_RESOLVE_IP`, `NUXT_PUBLIC_GA_MEASUREMENT_ID`.
+After live-release authorization and host conversion, use the commands and
+inventory-pin/writer-hold procedure in the mechanism runbook. Do not use the old
+active-directory rsync or directory-rename procedure.
 
 ## nginx
 
@@ -42,15 +37,11 @@ Overridable env vars: `SSH_USER`, `SSH_HOST`, `REMOTE_PATH`, `REMOTE_OWNER`, `RO
 - `_nuxt/*` immutable cache headers
 - TLS via `/etc/nginx/snippets/solagree-ssl.conf` (currently the self-signed cert at `/etc/ssl/solagree/`; flip to Let's Encrypt on DNS cutover)
 
-After syncing static files, the production deploy script uses one SSH session to
-re-apply ownership, install `config/nginx/legacy-redirects.conf` to
-`/etc/nginx/snippets/solagree-legacy-redirects.conf` and
-`config/nginx/co-branded-noindex.conf` to
-`/etc/nginx/snippets/solagree-co-branded-noindex.conf`, ensure the
-`www.solagree.com` server block includes both before the SPA fallback, test
-nginx, and reload it. It then verifies that `/about/` returns a true HTTP 301 to
-`/about-us`, that the dynamic route probes carry the noindex header, and that
-`/webinars` has no noindex header.
+The snippets are an operator-managed hosting prerequisite. Their installation,
+configuration backup, `nginx -t` and reload require a separately reviewed hosting
+change. The immutable release helper uses private loopback nginx for candidate
+validation and checks the public `/about/` redirect plus dynamic route contract
+before/after activation. It never edits the public nginx site configuration.
 
 The `www.solagree.com` server block must include both snippets before the SPA
 fallback:
@@ -139,12 +130,14 @@ building is skipped. Normal local generation does not create a deployable
 manifest unless an explicit staging/production environment is supplied.
 
 The manifest is an accidental-mismatch and integrity guard for locally built
-artifacts; it is not a signature or remote build attestation. Deploys still
-replace the active directory with rsync; atomic promotion belongs to HIR-624.
+artifacts; it is not a signature or remote build attestation. HIR-624 adds a mandatory preflight proof and private candidate upload, with
+verified atomic promotion and rollback; see the mechanism runbook above.
 
 ## Shared HTTP acceptance (HIR-618)
 
-Both scripts run `scripts/verify-deployed-routes.mjs` after upload. Each dynamic
+Both scripts delegate to `scripts/release-upload.mjs`, which uses the same
+shared HTTP contract as `scripts/verify-deployed-routes.mjs` on the private
+candidate before switching and on the public hostname after switching. Each dynamic
 probe must return HTTP 200, `Content-Type: text/html`, an `X-Robots-Tag` carrying
 both noindex and nofollow, and a body exactly matching the uploaded `200.html`.
 The `/webinars` catalogue must return HTTP 200, its generated catalogue HTML,
@@ -155,8 +148,8 @@ Responses are decoded for compression before comparing with the artifact.
 Staging probes retain BasicAuth, passing the configured credentials to curl
 through stdin rather than command arguments or logs. The production verifier
 retains the pre-DNS `--resolve` and self-signed-certificate options. These
-post-upload checks remain separate from the mandatory pre-upload artifact gate.
-Neither fixture tests nor a skipped route check prove live server acceptance.
+HTTP checks remain separate from the mandatory artifact/proof gate. Route
+checks cannot be skipped. Local fixtures do not prove live server acceptance.
 
 ## Deployment analytics (HIR-619)
 

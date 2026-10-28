@@ -10,7 +10,7 @@ const runDeployment = ({ mode, credentials, environment = 'staging' } = {}) => {
 import { appendFileSync, readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 const args = process.argv.slice(2)
-const url = args.find(argument => argument.startsWith('https://'))
+const url = args.find(argument => argument.startsWith('https://') || argument.startsWith('http://'))
 const headerIndex = args.indexOf('-D')
 const bodyIndex = args.indexOf('-o')
 const authConfigIndex = args.indexOf('--config')
@@ -21,9 +21,9 @@ const isDynamic = /\\/(go|cdfa\\/go|webinars)\\//.test(url)
 const isCatalogue = url.endsWith('/webinars')
 appendFileSync(process.env.TEST_DEPLOY_LOG, 'curl auth=' + (auth ? 'provided' : 'none') + ' url=' + url + '\\n')
 if (mode === 'transport-failure') { process.stdout.write('000'); process.exit(7) }
-if (url.endsWith('/about/')) { process.stdout.write('301 https://www.solagree.com/about-us'); process.exit(0) }
+if (url.endsWith('/about/')) { process.stdout.write('301 ' + new URL(url).origin + '/about-us'); process.exit(0) }
 let status = '200'
-if (mode === 'protected-success' && auth !== 'user = "test-user:${testPassword}"\\n') status = '401'
+if (mode === 'protected-success' && !url.startsWith('http://127.0.0.1:') && auth !== 'user = "test-user:${testPassword}"\\n') status = '401'
 if (mode === 'public-success' && auth) status = '500'
 if (mode === 'invalid-credentials' && url.endsWith('/')) status = '401'
 if (mode === 'status-failure' && isDynamic) status = '500'

@@ -1,57 +1,39 @@
-# Website staging artifact deployment — HIR-618
+# Website staging artifact deployment
 
-`scripts/deploy-staging.sh` uploads the complete verified `.output/public` artifact to the fixed
-`qa_solagree@solagree.qamachine.com:/home/qa_solagree/public_html` destination. It never deletes
-remote files, changes nginx, or replaces hidden server configuration such as `.htaccess` and
-`.well-known`. Existing `legal/partner-terms/**` versions and unclassified standalone legal history
-must match incoming bytes when paths overlap. Generated `index.html` and `_payload.json` files under
-`legal/{terms-of-service,privacy-policy,accessibility}/`, plus the `legal/index.html` redirect, update with the complete
-application artifact under backup and hash verification. Other legal paths need explicit
-classification before overlapping bytes can change. Old assets and unrelated remote content remain available.
+HIR-624 replaces the previous non-atomic in-place staging uploader with the
+shared [verified artifact promotion and rollback mechanism](website-artifact-promotion.md).
+The destination remains `qa_solagree@solagree.qamachine.com`, and BasicAuth,
+hidden server configuration, remote-only content, Partner Terms versions,
+metadata and unclassified legal history remain protected. Generated legal app
+HTML/payloads remain updatable. Previous hashed lazy assets survive promotion
+and rollback.
 
-## Inventory and provenance
+Read the mechanism runbook's prepared-host prerequisites and migration handoff
+before any live operation. Existing real-directory hosting fails closed and
+requires a separately approved maintenance conversion. The uploader never
+installs nginx snippets or renames a live nonempty webroot.
 
-Extract the reviewed archive into `.output/public`. For an artifact built before a later tooling
-or merge commit, explicitly set `STAGING_ARTIFACT_COMMIT` to the full reviewed source SHA and
-`STAGING_ARTIFACT_MANIFEST_SHA256` to the SHA-256 of the exact extracted manifest. The source must
-be an ancestor of the deployment checkout. Destination/GA policy and every artifact file hash are
-still checked. Without those paired pins the manifest must match the current HEAD.
+`npm run deploy:staging -- --skip-build --dry-run` requires the exact original
+artifact manifest and successful preflight proof, then reads the target inventory
+without uploading or changing any remote files. Normal staging retains mixed
+Initial Consult meeting mode. Separate Phone/Zoom still requires explicit
+`STAGING_NATIVE_ACTIVATION_APPROVED=true`; this flag is not provider acceptance.
 
-Run `npm run deploy:staging -- --skip-build --dry-run`. This now performs a **read-only SSH target
-inventory** and rsync preview. It requires remote Python 3 and rejects symlinks, non-regular entries,
-unsafe target paths, path type conflicts, or changed existing immutable legal bytes. Set
-`STAGING_TARGET_INVENTORY_FILE` to save the hash/path inventory in a local private file for review.
-No file bodies or BasicAuth credentials are logged.
+Archived staging artifacts retain the explicit `STAGING_ARTIFACT_COMMIT` and
+`STAGING_ARTIFACT_MANIFEST_SHA256` pin, plus the matching original preflight proof.
+The pinned commit must be an ancestor of the clean current checkout and the
+candidate HTTP runtime/snippets must match its proof. A metadata-only legacy
+manifest cannot be upgraded to a verified release without rerunning preflight.
 
-Mixed Initial Consult mode is required for the current staging window. A separate Phone/Zoom
-artifact is refused unless a separately authorized operator explicitly sets
-`STAGING_NATIVE_ACTIVATION_APPROVED=true`. This flag does not configure or open provider events.
+For an authorized promotion, `RELEASE_EXPECTED_TARGET_SHA256` must pin the reviewed
+active inventory and `RELEASE_TARGET_QUIESCED=true` records that target writers
+are held. The old `STAGING_EXPECTED_TARGET_SHA256` and `STAGING_TARGET_QUIESCED`
+names remain compatible when the generic names are absent. `STAGING_TARGET_INVENTORY_FILE`
+can save the read-only inventory privately. `STAGING_BASIC_AUTH_USER` and
+`STAGING_BASIC_AUTH_PASSWORD` must be set together when the host is protected.
+Credentials are sent through stdin and never stored in release files or logs.
 
-## Approved upload
-
-Hold external writers and staging traffic for the upload window. Set `STAGING_TARGET_QUIESCED=true`
-to record that hold and `STAGING_EXPECTED_TARGET_SHA256` to the reviewed inventory SHA printed by
-the preview. Provide the existing staging BasicAuth credentials through the protected environment.
-Run `npm run deploy:staging -- --skip-build` with the same artifact pins and public staging policy.
-
-Before rsync, the helper checks the target fingerprint again, creates a private full backup under
-`/home/qa_solagree/website-backups/<timestamp>-<fingerprint-prefix>/public`, verifies the backup
-against its saved `inventory.json`, and rechecks the live target for drift. Existing backup paths
-are never overwritten. A mismatch stops before upload. No backup is created in dry-run mode.
-
-Delivery uses `rsync -az --delay-updates --exclude='.*'` without deletion. It is not an atomic
-site switch: keep the maintenance window until verification completes. Afterwards every uploaded
-artifact file including the release manifest must match its local SHA-256, all prior remote-only
-files and directories must still exist, and hidden configuration and prior immutable legal bytes
-must be unchanged. Generated legal pages must match the new artifact. Then the shared authenticated
-HTTP body/status/noindex/catalogue checks run.
-
-The reviewed nginx noindex snippet requires its own inspected server configuration operation and
-`nginx -t`; this static uploader deliberately provides no nginx installation path. Missing live
-headers fail acceptance even when all uploaded file hashes match. `--skip-route-check` only skips
-HTTP probes; it never skips artifact, inventory, backup, preservation or upload hash checks.
-
-If upload or HTTP verification fails, retain the hold and inspect the verified backup. There is no
-automatic rollback or deletion. Restore reviewed previous generated files from that backup while
-preserving authentication and any externally added files; recheck hashes and HTTP before reopening
-traffic. Native events, bookings, charges, refunds, messages and production are outside this helper.
+Use `--inspect` for the current release/inventory and
+`--rollback=<retained-release-id>` for verified rollback without a rebuild or
+upload. Both candidate and public HTTP checks are mandatory. The joint launch
+order and external acceptance remain owned by HIR-275.
