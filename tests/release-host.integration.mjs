@@ -115,6 +115,7 @@ test('real nginx promotion is atomic, rollback needs no rebuild and browser tabs
     assert.notEqual(second.id, first.id)
     assert.equal(await oldTab.evaluate(async () => (await import('/_nuxt/old.a1b2.mjs?old-tab=1')).value), 'old lazy chunk')
     const newTab = await browser.newPage()
+    await newTab.route('**/*', route => route.request().url().startsWith(fixture.baseUrl) ? route.continue() : route.abort())
     await newTab.goto(fixture.baseUrl)
     const restored = fixture.rollback(first.id)
     assert.equal(restored.commit, first.commit)

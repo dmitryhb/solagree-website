@@ -4,6 +4,18 @@ import { readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { spawnSync } from 'node:child_process'
 import test from 'node:test'
 import { releaseFixture } from './fixtures/release-deploy.mjs'
+import { artifactFiles } from '../scripts/lib/release-artifact.mjs'
+
+test('artifact inventory records every regular filename including prototype property names', () => {
+  const fixture = releaseFixture()
+  try {
+    writeFileSync(join(fixture.output, '__proto__'), 'regular static file')
+    assert.equal(Object.hasOwn(artifactFiles(fixture.output), '__proto__'), true)
+    const result = fixture.deploy()
+    assert.equal(result.status, 1)
+    assert.equal(result.log, '')
+  } finally { fixture.cleanup() }
+})
 
 for (const environment of ['staging', 'production']) {
   test(`${environment} valid --skip-build dry-run inventories without upload`, () => {

@@ -46,7 +46,7 @@ export function sourceCommit(root) {
 }
 
 export function artifactFiles(directory) {
-  const files = {}
+  const files = Object.create(null)
   function visit(folder) {
     for (const entry of readdirSync(folder).sort()) {
       const fullPath = join(folder, entry)
@@ -62,7 +62,7 @@ export function artifactFiles(directory) {
   for (const required of ['index.html', '200.html', 'webinars/index.html', 'sitemap.xml']) {
     if (!files[required]) throw new Error(`artifact is missing ${required}`)
   }
-  return files
+  return Object.fromEntries(Object.entries(files))
 }
 
 export function verifyManifest(manifest, expected, commit, directory) {
