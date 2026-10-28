@@ -121,6 +121,7 @@ gtag('config', '${gaMeasurementId}', {
   },
   runtimeConfig: {
     public: {
+      analyticsCaptureEnabled: process.env.NUXT_PUBLIC_ANALYTICS_CAPTURE_ENABLED === 'true' && deploymentEnvironment === 'production',
       siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'https://www.solagree.com',
       portalUrl,
       portalApiBaseUrl,

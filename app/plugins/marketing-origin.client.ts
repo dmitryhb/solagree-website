@@ -1,3 +1,4 @@
+import { createSafeBrowserStorage } from '~/utils/browser-storage'
 import { installMarketingOriginRuntime, parseBrowserMarketingCapture } from '~/services/marketing-origin'
 import { normalizePortalApiBaseUrl } from '~/services/portal-api'
 
@@ -6,8 +7,10 @@ export default defineNuxtPlugin(() => {
   const config = useRuntimeConfig()
   const router = useRouter()
   const journeyId = useState<string | null>('marketing-journey-id', () => null)
+  const storage = createSafeBrowserStorage(() => window.localStorage)
+  const submissionStorage = createSafeBrowserStorage(() => window.sessionStorage)
   const storageKey = 'solagree-marketing-origin-v1'
-  let remembered = parseBrowserMarketingCapture(localStorage.getItem(storageKey))
+  let remembered = parseBrowserMarketingCapture(storage.getItem(storageKey))
   journeyId.value = null
   let queue: Promise<unknown> = Promise.resolve()
   const capture = () => {
@@ -24,7 +27,7 @@ export default defineNuxtPlugin(() => {
           method: 'POST', body: { context: remembered?.context ?? null, referralCode: code, entrySurface }
         })
       remembered = response
-      localStorage.setItem(storageKey, JSON.stringify(response))
+      storage.setItem(storageKey, JSON.stringify(response))
       journeyId.value = response.context.journeyId
       return response.context
     })
@@ -33,8 +36,8 @@ export default defineNuxtPlugin(() => {
   }
   installMarketingOriginRuntime({
     capture,
-    storage: sessionStorage,
-    clear: () => { remembered = null; localStorage.removeItem(storageKey); journeyId.value = null }
+    storage: submissionStorage,
+    clear: () => { remembered = null; storage.removeItem(storageKey); journeyId.value = null }
   })
   router.afterEach((_to, _from, failure) => { if (!failure) void capture().catch(() => {}) })
   // Attribution outages never create guessed credit. Form submission will retry and surface failure.
