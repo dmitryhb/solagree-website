@@ -31,6 +31,7 @@ try {
   const inspect = args.includes('--inspect')
   const rollback = args.find(arg => arg.startsWith('--rollback='))?.slice('--rollback='.length)
   if (args.some(arg => arg !== '--dry-run' && arg !== '--inspect' && !/^--rollback=[a-f0-9]{64}$/.test(arg))) throw new Error('unsupported release option; rollback requires a full release id')
+  if (inspect && rollback) throw new Error('--inspect and --rollback cannot be combined')
   if (!inspect && !rollback) {
     execFileSync(process.execPath, [join(root, 'scripts/verify-release-artifact.mjs')], { stdio: 'inherit' })
     execFileSync(process.execPath, [join(root, 'scripts/verify-sitemap.mjs')], { stdio: 'inherit' })
@@ -95,7 +96,10 @@ try {
       result = remote({ ...options, mode: 'promote', token: incoming.token })
     }
     console.log(`Activated immutable release ${result.id}; previous ${result.previous ?? 'absent'}; commit ${result.commit}`)
-  } else if (!inspect) console.log('Dry run verified; no candidate uploaded or webroot switched.')
+  } else if (!inspect) {
+    if (rollback) remote({ mode: 'verify-rollback', release: rollback })
+    console.log('Dry run verified; no candidate uploaded or webroot switched. Candidate/public HTTP checks remain mandatory for activation.')
+  }
 } catch (error) {
   console.error(`Release upload refused/failed: ${error.message}`)
   process.exitCode = 1

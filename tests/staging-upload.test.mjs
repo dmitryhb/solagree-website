@@ -137,6 +137,21 @@ test('dry run validates proof and inventories the target without any remote writ
   } finally { fixture.cleanup() }
 })
 
+test('rollback dry-run verifies the retained proof without local output and rejects an unknown release', () => {
+  const fixture = releaseFixture('staging')
+  try {
+    const release = fixture.seedTarget()
+    const before = readlinkSync(fixture.target)
+    rmSync(join(fixture.directory, '.output'), { recursive: true })
+    const valid = run(fixture, {}, ['--dry-run', `--rollback=${release}`])
+    assert.equal(valid.status, 0, valid.stderr)
+    const unknown = run(fixture, {}, ['--dry-run', `--rollback=${'0'.repeat(64)}`])
+    assert.equal(unknown.status, 1)
+    assert.doesNotMatch(unknown.log, /rsync/)
+    assert.equal(readlinkSync(fixture.target), before)
+  } finally { fixture.cleanup() }
+})
+
 test('separate Phone/Zoom artifact requires explicit native activation approval', () => {
   const fixture = releaseFixture('staging')
   try {

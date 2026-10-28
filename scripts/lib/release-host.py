@@ -293,10 +293,25 @@ location / {{ try_files $uri $uri/ /200.html; }}
             if os.path.lexists(link):
                 os.unlink(link)
 
+    def rollback_release(self):
+        release_id = self.request.get("release", "")
+        if not re.fullmatch(r"[a-f0-9]{64}", release_id):
+            raise ValueError("rollback requires a full retained release id")
+        release = os.path.join(self.store, "releases", release_id)
+        self.verify_seal(release)
+        accepted = load(os.path.join(release, "accepted.json"))
+        if accepted.get("schemaVersion") != 1 or accepted.get("id") != release_id:
+            raise ValueError("rollback target has no successful HTTP acceptance record")
+        manifest = verify_bundle(os.path.join(release, "bundle"), self.request["policy"])
+        return release, manifest
+
     def run(self):
         mode = self.request["mode"]
         if mode == "inspect":
             return self.active()
+        if mode == "verify-rollback":
+            release, manifest = self.rollback_release()
+            return {"id": os.path.basename(release), "commit": manifest["commit"]}
         with self.locked():
             before = self.expected()
             if mode == "begin":
@@ -319,14 +334,7 @@ location / {{ try_files $uri $uri/ /200.html; }}
                 shutil.rmtree(bundle)
                 return result
             if mode == "rollback":
-                release_id = self.request.get("release", "")
-                if not re.fullmatch(r"[a-f0-9]{64}", release_id):
-                    raise ValueError("rollback requires a full retained release id")
-                release = os.path.join(self.store, "releases", release_id)
-                self.verify_seal(release)
-                accepted = load(os.path.join(release, "accepted.json"))
-                if accepted.get("schemaVersion") != 1 or accepted.get("id") != release_id:
-                    raise ValueError("rollback target has no successful HTTP acceptance record")
+                release, _ = self.rollback_release()
                 return self.activate(os.path.join(release, "bundle"), before)
             raise ValueError("unsupported release operation")
 
