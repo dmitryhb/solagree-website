@@ -11,11 +11,12 @@ import { chromium } from '@playwright/test'
 import { artifactFiles, releasePolicy } from '../scripts/lib/release-artifact.mjs'
 import { sha256 } from '../scripts/lib/release-proof.mjs'
 import { releaseFixture } from './fixtures/release-deploy.mjs'
+import { candidateAs, protectedNginx } from './fixtures/protected-release-nginx.mjs'
 
 const image = 'nginx:1.29-alpine'
 execFileSync('docker', ['image', 'inspect', image], { stdio: 'ignore' })
-function setup() {
-  const fixture = releaseFixture('staging')
+function setup(environment = 'staging') {
+  const fixture = releaseFixture(environment)
   chmodSync(fixture.directory, 0o755)
   rmSync(join(fixture.directory, 'bin/curl'))
   fixture.executable('nginx', `#!${process.execPath}
@@ -61,7 +62,7 @@ async function startPublic(fixture) {
   const prefix = join(fixture.directory, 'target-public-nginx')
   mkdirSync(prefix)
   const config = join(prefix, 'nginx.conf')
-  writeFileSync(config, `pid ${prefix}/nginx.pid; error_log ${prefix}/error.log; events {} http { access_log off; default_type text/html; types { application/javascript js mjs; } server { listen 127.0.0.1:${port}; root ${fixture.target}; include ${fixture.directory}/config/nginx/co-branded-noindex.conf; location / { try_files $uri $uri/ /200.html; } } }`)
+  writeFileSync(config, `pid ${prefix}/nginx.pid; error_log ${prefix}/error.log; events {} http { access_log off; default_type text/html; types { application/javascript js mjs; } server { listen 127.0.0.1:${port}; root ${fixture.target}; ${fixture.manifest.environment === 'staging' ? 'add_header X-Robots-Tag "noindex, nofollow" always;' : ''} include ${fixture.directory}/config/nginx/legacy-redirects.conf; include ${fixture.directory}/config/nginx/co-branded-noindex.conf; location / { try_files $uri $uri/ /200.html; } } }`)
   execFileSync(join(fixture.directory, 'bin/nginx'), ['-p', prefix + '/', '-c', config], { env: fixture.env, stdio: 'pipe' })
   fixture.baseUrl = `http://127.0.0.1:${port}`
   return () => execFileSync(join(fixture.directory, 'bin/nginx'), ['-p', prefix + '/', '-c', config, '-s', 'quit'], { env: fixture.env, stdio: 'ignore' })
@@ -78,6 +79,37 @@ function childHost(fixture, request) {
 }
 
 if (process.env.TEST_PREPARED_RELEASE !== 'true') {
+test('privileged staging candidate uses the existing Linux worker group through a protected ancestor', () => {
+  for (const [environment, effectiveUid, allowed] of [['staging', 0, true], ['staging', 1005, false], ['production', 0, false]]) {
+    const fixture = releaseFixture(environment)
+    chmodSync(fixture.directory, 0o755)
+    rmSync(join(fixture.directory, 'bin/curl'))
+    const linux = protectedNginx(fixture)
+    try {
+      const id = fixture.seedTarget()
+      const result = candidateAs(fixture, join(fixture.store, 'releases', id), environment, effectiveUid)
+      assert.equal(result.status, allowed ? 0 : 1, result.stderr)
+      if (allowed) assert.match(result.stderr, /Route check passed: \/webinars returned HTTP 200/)
+      else assert.match(result.stderr, /HTTP 404; expected an authorized HTTP 200/)
+      const evidence = JSON.parse(readFileSync(linux.evidence))
+      assert.equal(evidence.directive, allowed)
+      assert.equal(evidence.home, '0:1005:750')
+      assert.equal(evidence.nobodyCanRead, false)
+      assert.equal(evidence.defaultCanRead, false)
+      assert.equal(evidence.workerCanRead, true)
+      assert.equal(evidence.workerCanWrite, false)
+      assert.equal(evidence.workerCanWriteHome, false)
+      assert.equal(evidence.appCanWrite, false)
+      assert.equal(evidence.appCanWriteHome, false)
+      assert.match(evidence.wwwDataId, /1005\(qa_fixture\)/)
+      if (allowed) {
+        assert.match(evidence.status, /Uid:\s+33\s+33\s+33\s+33/)
+        assert.match(evidence.status, /Groups:[^\n]*1005/)
+      }
+    } finally { fixture.cleanup() }
+  }
+})
+
 test('real nginx promotion is atomic, rollback needs no rebuild and browser tabs retain both generations of lazy chunks', async () => {
   const fixture = setup()
   let stop, browser
@@ -131,6 +163,25 @@ test('real nginx promotion is atomic, rollback needs no rebuild and browser tabs
     assert.equal(await response.text(), readFileSync(join(fixture.target, '200.html'), 'utf8'))
     assert.equal(existsSync(join(fixture.store, 'releases', second.id)), true)
   } finally { if (browser) await browser.close(); if (stop) stop(); fixture.cleanup() }
+})
+
+test('real production nginx uses indexable public catalogue policy and preserves dynamic noindex', async () => {
+  const fixture = setup('production')
+  let stop
+  try {
+    stop = await startPublic(fixture)
+    const accepted = fixture.promote()
+    assert.equal(fixture.state().accepted, true)
+    const catalogue = await fetch(fixture.baseUrl + '/webinars')
+    assert.equal(catalogue.status, 200)
+    assert.equal(catalogue.headers.get('x-robots-tag'), null)
+    assert.equal(await catalogue.text(), readFileSync(join(fixture.output, 'webinars/index.html'), 'utf8'))
+    const dynamic = await fetch(fixture.baseUrl + '/meet/production-policy?probe=1')
+    assert.equal(dynamic.status, 200)
+    assert.match(dynamic.headers.get('x-robots-tag'), /noindex, nofollow/)
+    assert.equal(await dynamic.text(), readFileSync(join(fixture.output, '200.html'), 'utf8'))
+    assert.ok(accepted.id)
+  } finally { if (stop) stop(); fixture.cleanup() }
 })
 
 test('real candidate HTTP failure and failed public acceptance preserve the active release', async () => {

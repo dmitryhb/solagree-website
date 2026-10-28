@@ -11,6 +11,8 @@ try {
   }
   await checkRoutes({
     baseUrl: siteUrl.origin,
+    // Only the reviewed public staging origin receives staging crawler policy.
+    httpContext: siteUrl.origin === 'https://solagree.qamachine.com' ? 'public-staging' : 'public-production',
     artifactDirectory: fileURLToPath(new URL('../.output/public', import.meta.url)),
     resolve: args.includes('--resolve') ? value('--resolve') : undefined,
     insecure: args.includes('--insecure'),
