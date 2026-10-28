@@ -1,5 +1,5 @@
-import { normalizePortalApiBaseUrl, submitToPortal } from '~/services/portal-api'
-import type { PortalGetFetcher, PortalSubmitOptions } from '~/services/portal-api'
+import { fetchFromPortal, normalizePortalApiBaseUrl, submitToPortal } from '~/services/portal-api'
+import type { PortalGetFetcher, PortalRequestOptions, PortalSubmitOptions } from '~/services/portal-api'
 import type { WebinarAccessResponse, WebinarCatalogItem } from '~/types/webinar-catalog'
 import type { WebinarFormState } from '~/types/webinar'
 
@@ -27,15 +27,15 @@ const parseWebinar = (value: unknown): WebinarCatalogItem => {
 }
 
 /** Fetches only public metadata and validates the response before rendering. */
-export const getPublicWebinars = async (baseUrl: string, fetcher: PortalGetFetcher): Promise<WebinarCatalogItem[]> => {
-  const response = await fetcher<{ webinars?: unknown }>(`${normalizePortalApiBaseUrl(baseUrl)}${publicEndpoint}`)
+export const getPublicWebinars = async (baseUrl: string, fetcher: PortalGetFetcher, options: PortalRequestOptions = {}): Promise<WebinarCatalogItem[]> => {
+  const response = await fetchFromPortal<{ webinars?: unknown }>(`${normalizePortalApiBaseUrl(baseUrl)}${publicEndpoint}`, { ...options, fetcher })
   if (!response || !Array.isArray(response.webinars)) throw new Error(failureMessage)
   return response.webinars.map(parseWebinar)
 }
 
 /** Fetches public detail; Portal owns access checks and 404 responses. */
-export const getPublicWebinar = async (baseUrl: string, id: string, fetcher: PortalGetFetcher): Promise<WebinarCatalogItem> => {
-  const response = await fetcher<{ webinar?: unknown }>(`${normalizePortalApiBaseUrl(baseUrl)}${publicEndpoint}/${encodeURIComponent(id)}`)
+export const getPublicWebinar = async (baseUrl: string, id: string, fetcher: PortalGetFetcher, options: PortalRequestOptions = {}): Promise<WebinarCatalogItem> => {
+  const response = await fetchFromPortal<{ webinar?: unknown }>(`${normalizePortalApiBaseUrl(baseUrl)}${publicEndpoint}/${encodeURIComponent(id)}`, { ...options, fetcher })
   return parseWebinar(response?.webinar)
 }
 

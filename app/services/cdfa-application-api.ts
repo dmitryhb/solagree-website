@@ -87,8 +87,7 @@ export const submitCdfaApplication = async (
   options: SubmitCdfaApplicationOptions
 ): Promise<CdfaApplicationApiResponse> => {
   return await submitToPortal({
-    portalApiBaseUrl: options.portalApiBaseUrl,
-    fetcher: options.fetcher,
+    ...options,
     endpoint: CDFA_APPLICATIONS_ENDPOINT,
     payload: createCdfaApplicationSubmissionPayload(form),
     parseSuccess: parsePortalApplicationIdSuccess<CdfaApplicationApiResponse>,

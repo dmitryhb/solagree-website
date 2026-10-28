@@ -59,8 +59,7 @@ export const submitContactSubmission = async (
   options: SubmitContactSubmissionOptions
 ): Promise<ContactSubmissionApiResponse> => {
   return await submitToPortal({
-    portalApiBaseUrl: options.portalApiBaseUrl,
-    fetcher: options.fetcher,
+    ...options,
     endpoint: PORTAL_CONTACT_SUBMISSIONS_ENDPOINT,
     payload: createContactSubmissionPayload(form, options),
     parseSuccess: parsePortalSubmissionIdSuccess<ContactSubmissionApiResponse>,

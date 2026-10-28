@@ -114,8 +114,7 @@ export const submitConsultRequest = async (
   options: SubmitConsultRequestOptions
 ): Promise<ConsultRequestApiResponse> => {
   return await submitToPortal({
-    portalApiBaseUrl: options.portalApiBaseUrl,
-    fetcher: options.fetcher,
+    ...options,
     endpoint: CONSULT_REQUESTS_ENDPOINT,
     payload: createConsultRequestSubmissionPayload(form, options),
     parseSuccess: parsePortalRequestIdSuccess<ConsultRequestApiResponse>,
@@ -131,8 +130,7 @@ export const submitCoBrandedConsultRequest = async (
   options: SubmitCoBrandedConsultRequestOptions
 ): Promise<ConsultRequestApiResponse> => {
   return await submitToPortal({
-    portalApiBaseUrl: options.portalApiBaseUrl,
-    fetcher: options.fetcher,
+    ...options,
     endpoint: CONSULT_REQUESTS_ENDPOINT,
     payload: createCoBrandedConsultRequestPayload(form, options),
     parseSuccess: parsePortalRequestIdSuccess<ConsultRequestApiResponse>,
