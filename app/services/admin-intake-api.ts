@@ -1,11 +1,12 @@
 import {
+  fetchFromPortal,
   getPortalErrorStatusCode,
   getPortalSubmissionErrorMessage,
   isNonEmptyString,
   normalizePortalApiBaseUrl,
   submitToPortal
 } from '~/services/portal-api'
-import type { PortalFetcher, PortalGetFetcher, PortalSubmitOptions } from '~/services/portal-api'
+import type { PortalFetcher, PortalGetFetcher, PortalRequestOptions, PortalSubmitOptions } from '~/services/portal-api'
 import type {
   AdminIntakeFormState,
   AdminIntakeSubmissionPayload
@@ -28,7 +29,7 @@ export interface SubmitAdminIntakeOptions extends PortalSubmitOptions<AdminIntak
 /**
  * Dependencies required to verify an admin intake slug.
  */
-export interface VerifyAdminIntakeSlugOptions {
+export interface VerifyAdminIntakeSlugOptions extends PortalRequestOptions {
   portalApiBaseUrl: string
   fetcher: PortalGetFetcher
 }
@@ -96,7 +97,7 @@ export const verifyAdminIntakeSlug = async (
   const endpoint = `${portalApiBaseUrl}${ADMIN_INTAKES_ENDPOINT_PREFIX}/${encodeURIComponent(slug)}`
 
   try {
-    const response = await options.fetcher<{ ok?: unknown }>(endpoint)
+    const response = await fetchFromPortal<{ ok?: unknown }>(endpoint, options)
 
     if (typeof response === 'object' && response !== null && 'ok' in response && response.ok === true) {
       return { status: 'verified' }
@@ -135,8 +136,7 @@ export const submitAdminIntake = async (
   options: SubmitAdminIntakeOptions
 ): Promise<{ submissionId: string }> => {
   return await submitToPortal({
-    portalApiBaseUrl: options.portalApiBaseUrl,
-    fetcher: options.fetcher,
+    ...options,
     endpoint: `${ADMIN_INTAKES_ENDPOINT_PREFIX}/${encodeURIComponent(slug)}`,
     payload: createAdminIntakeSubmissionPayload(form, options),
     parseSuccess: parseAdminIntakeSuccess,

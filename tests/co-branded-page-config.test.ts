@@ -134,7 +134,7 @@ describe('fetchCoBrandedPageConfig', () => {
       slug: 'missing-partner'
     })).toBeNull()
 
-    expect(fetchMock).toHaveBeenCalledWith(`${PORTAL_BASE_URL}/api/public/co-branded-pages/missing-partner`)
+    expect(fetchMock).toHaveBeenCalledWith(`${PORTAL_BASE_URL}/api/public/co-branded-pages/missing-partner`, { signal: expect.any(AbortSignal), retry: 0 })
   })
 
   it('propagates upstream failures so the route can preserve their status', async () => {

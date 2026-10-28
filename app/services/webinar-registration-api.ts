@@ -66,8 +66,7 @@ export const submitWebinarRegistration = async (
   options: SubmitWebinarRegistrationOptions
 ): Promise<ContactSubmissionApiResponse> => {
   return await submitToPortal({
-    portalApiBaseUrl: options.portalApiBaseUrl,
-    fetcher: options.fetcher,
+    ...options,
     endpoint: PORTAL_CONTACT_SUBMISSIONS_ENDPOINT,
     payload: createWebinarRegistrationPayload(form, options),
     parseSuccess: parsePortalSubmissionIdSuccess<ContactSubmissionApiResponse>,

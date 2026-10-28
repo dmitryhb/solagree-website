@@ -37,7 +37,7 @@ Overridable env vars: `SSH_USER`, `SSH_HOST`, `REMOTE_PATH`, `REMOTE_OWNER`, `RO
 - HTTP→HTTPS redirect (with `/.well-known/acme-challenge/` carve-out for future certbot)
 - `https://www.solagree.com` root → `/home/solagree/public_html`, with SPA fallback `try_files $uri $uri/ /200.html;` so dynamic Nuxt paths (`/go/:slug`, `/cdfa/go/:slug`, `/webinars/:id`) work after a static deploy
 - legacy pre-Nuxt URLs → 301 redirects via `/etc/nginx/snippets/solagree-legacy-redirects.conf`
-- `X-Robots-Tag: noindex, nofollow` response headers for `/go/*`, `/cdfa/go/*`, and `/webinars/*` via `/etc/nginx/snippets/solagree-co-branded-noindex.conf`; exact `/webinars` stays indexable
+- `X-Robots-Tag: noindex, nofollow` response headers for `/go/*`, `/cdfa/go/*`, `/webinars/*`, and `/meet/*` (including intake thank-you pages) via `/etc/nginx/snippets/solagree-co-branded-noindex.conf`; exact `/webinars` stays indexable
 - `https://solagree.com` → 301 to `https://www.solagree.com`
 - `_nuxt/*` immutable cache headers
 - TLS via `/etc/nginx/snippets/solagree-ssl.conf` (currently the self-signed cert at `/etc/ssl/solagree/`; flip to Let's Encrypt on DNS cutover)
@@ -76,6 +76,13 @@ BasicAuth and security headers intact. The exact `/webinars` catalogue and its
 indexable. The snippet initializes the marker unconditionally, so ordinary
 pages plus direct, encoded, and duplicate-slash aliases of `/200.html` emit no
 robots header and no uninitialized-variable warning.
+
+The [route indexing policy](route-indexing-policy.md) records sitemap inclusion,
+HTTP headers, and static fallback behavior together. Intake forms and thank-you
+pages use the same normalized `/meet/` location and named fallback, including
+unknown slugs and trailing-slash/query variants. Existing exact legacy redirects,
+the server-only `/site-map` redirect, and public legal routes keep their current
+location precedence.
 
 ## Dynamic URLs cannot return a true HTTP 404
 

@@ -1,4 +1,5 @@
-import { getPortalErrorStatusCode, normalizePortalApiBaseUrl } from '~/services/portal-api'
+import type { PortalGetFetcher, PortalRequestOptions } from '~/services/portal-api'
+import { fetchFromPortal, getPortalErrorStatusCode, normalizePortalApiBaseUrl, websitePortalFetcher } from '~/services/portal-api'
 import type { CoBrandedPagePublicConfig } from '#shared/types/co-branded-page'
 import {
   resolveCoBrandedPageTemplateId,
@@ -30,7 +31,8 @@ interface RawCoBrandedPagePublicConfig {
   ctaUrl?: unknown
 }
 
-export interface FetchCoBrandedPageOptions {
+export interface FetchCoBrandedPageOptions extends PortalRequestOptions {
+  fetcher?: PortalGetFetcher
   portalApiBaseUrl: string
   slug: string
   pageType?: CoBrandedPageType
@@ -212,8 +214,9 @@ export const fetchCoBrandedPageConfig = async (
   }
 
   try {
-    const payload = await $fetch<unknown>(
-      `${portalApiBaseUrl}${endpointPrefix}/${encodeURIComponent(slug)}`
+    const payload = await fetchFromPortal<unknown>(
+      `${portalApiBaseUrl}${endpointPrefix}/${encodeURIComponent(slug)}`,
+      { ...options, fetcher: options.fetcher ?? websitePortalFetcher }
     )
 
     return normalizeCoBrandedPageConfig(payload, slug, portalApiBaseUrl, options.pageType ?? 'standard')

@@ -16,6 +16,7 @@ const NON_INDEXABLE_PATH_PATTERNS: Array<readonly [string, RegExp]> = [
   ['unlisted partner tools', /^\/partner-tools(\/|$)/],
   ['consult booking flows', /^\/book-(a-solagree|an-attorney)-consult(\/|$)/],
   ['meeting short links', /^\/meet(\/|$)/],
+  ['webinar event details', /^\/webinars\//],
   ['external news details', /^\/news\//]
 ]
 
