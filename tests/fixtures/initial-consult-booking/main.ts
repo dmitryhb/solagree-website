@@ -16,11 +16,9 @@ const events = resolveInitialConsultBookingEvents({
   tajEventPath: 'initial-consults/initial-consult-taj',
   stacieEventPath: 'initial-consults/initial-consult-stacie',
   jessicaEventPath: 'initial-consults/initial-consult-jessica',
-  jamesEventPath: 'initial-consults/initial-consult-james',
   firstAvailablePhoneEventPath: 'initial-consults/initial-consult-phone',
   tajPhoneEventPath: 'initial-consults/initial-consult-taj-phone',
-  staciePhoneEventPath: 'initial-consults/initial-consult-stacie-phone',
-  jamesPhoneEventPath: 'initial-consults/initial-consult-james-phone'
+  staciePhoneEventPath: 'initial-consults/initial-consult-stacie-phone'
 })
 const firstEvent = events[0]
 

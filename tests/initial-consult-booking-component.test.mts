@@ -21,11 +21,10 @@ const events = resolveInitialConsultBookingEvents({
   firstAvailableEventPath: 'initial-consults/initial-consult',
   tajEventPath: 'initial-consults/initial-consult-taj',
   stacieEventPath: 'initial-consults/initial-consult-stacie',
-  jessicaEventPath: 'initial-consults/initial-consult-jessica',
-  jamesEventPath: 'initial-consults/initial-consult-james'
+  jessicaEventPath: 'initial-consults/initial-consult-jessica'
 })
 
-if (events.length !== 5) {
+if (events.length !== 4) {
   throw new Error('Initial Consult test configuration must resolve booking events.')
 }
 
