@@ -1,5 +1,5 @@
 /** Identifies a bookable Initial Consult path in the website selector. */
-export type InitialConsultSelectionId = 'first-available' | 'taj' | 'stacie' | 'jessica' | 'james'
+export type InitialConsultSelectionId = 'first-available' | 'taj' | 'stacie' | 'jessica'
 
 export type InitialConsultMeetingMethod = 'phone' | 'zoom'
 export type InitialConsultMeetingMethodMode = 'mixed' | 'separate'
@@ -12,12 +12,10 @@ export interface InitialConsultBookingRuntimeConfig {
   tajEventPath?: unknown
   stacieEventPath?: unknown
   jessicaEventPath?: unknown
-  jamesEventPath?: unknown
   firstAvailablePhoneEventPath?: unknown
   tajPhoneEventPath?: unknown
   staciePhoneEventPath?: unknown
   jessicaPhoneEventPath?: unknown
-  jamesPhoneEventPath?: unknown
 }
 
 /** Optional client-approved consultant content. Empty fields deliberately render as neutral cards. */
@@ -55,7 +53,6 @@ const initialConsultEventDefinitions = [
   { id: 'first-available', label: 'First Available', configKey: 'firstAvailableEventPath', phoneConfigKey: 'firstAvailablePhoneEventPath' },
   { id: 'taj', label: 'Taj Johnson Chiu', configKey: 'tajEventPath', phoneConfigKey: 'tajPhoneEventPath' },
   { id: 'stacie', label: 'Stacie Sanders', configKey: 'stacieEventPath', phoneConfigKey: 'staciePhoneEventPath' },
-  { id: 'james', label: 'James Traub', configKey: 'jamesEventPath', phoneConfigKey: 'jamesPhoneEventPath' },
   { id: 'jessica', label: 'Jessica Urash', configKey: 'jessicaEventPath', phoneConfigKey: 'jessicaPhoneEventPath' }
 ] as const satisfies readonly InitialConsultEventDefinition[]
 
@@ -75,10 +72,6 @@ export const initialConsultantProfileContent: Partial<Record<InitialConsultSelec
   jessica: {
     bio: 'Faith-rooted divorce coach offering trauma-informed, compassionate support for emotional healing and healthy co-parenting through separation.',
     headshotUrl: '/images/initial-consult-jessica-urash.webp'
-  },
-  james: {
-    bio: "Certified Divorce Coach & Kids-First Mediator helping parents avoid court conflict with calm, structured guidance focused on kids' wellbeing.",
-    headshotUrl: '/images/initial-consult-james-traub.webp'
   }
 }
 
@@ -91,6 +84,9 @@ const safeTrackingKeys = new Set([
   'utm_term',
   'utm_content'
 ])
+
+/** Consultants removed from the team. Old deployment environments may still list them as unpublished. */
+const retiredConsultantIds = new Set(['james'])
 
 const eventPathPattern = /^[a-z0-9][a-z0-9-]*(?:\/[a-z0-9][a-z0-9-]*)+$/i
 const trackingValuePattern = /^[a-z0-9][a-z0-9._~-]*$/i
@@ -139,10 +135,10 @@ export const resolveInitialConsultBookingEvents = (
   const meetingMethodMode = resolveInitialConsultMeetingMethodMode(config)
   if (!meetingMethodMode) return []
 
-  const unpublishedValue = config.unpublishedConsultants ?? 'jessica,james'
+  const unpublishedValue = config.unpublishedConsultants ?? 'jessica'
   if (typeof unpublishedValue !== 'string') return []
 
-  const unpublished = unpublishedValue.split(',').map(id => id.trim()).filter(Boolean)
+  const unpublished = unpublishedValue.split(',').map(id => id.trim()).filter(id => id && !retiredConsultantIds.has(id))
   if (unpublished.some(id => !initialConsultEventDefinitions.some(
     definition => definition.id !== 'first-available' && definition.id === id
   ))) return []

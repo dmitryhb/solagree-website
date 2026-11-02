@@ -12,14 +12,13 @@ const events = resolveInitialConsultBookingEvents({
   firstAvailableEventPath: 'initial-consults/initial-consult',
   tajEventPath: 'initial-consults/initial-consult-taj',
   stacieEventPath: 'initial-consults/initial-consult-stacie',
-  jessicaEventPath: 'initial-consults/initial-consult-jessica',
-  jamesEventPath: 'initial-consults/initial-consult-james'
+  jessicaEventPath: 'initial-consults/initial-consult-jessica'
 })
 
 const firstEvent = events[0]
 
-if (!firstEvent || events.length !== 5) {
-  throw new Error('Initial Consult component test configuration must resolve five booking events.')
+if (!firstEvent || events.length !== 4) {
+  throw new Error('Initial Consult component test configuration must resolve four booking events.')
 }
 
 const originalScrollIntoView = Object.getOwnPropertyDescriptor(Element.prototype, 'scrollIntoView')
@@ -42,7 +41,7 @@ describe('InitialConsultBookingPage', () => {
       global: { stubs: { CalComBookingEmbed: true, SiteFooter: true } }
     })
     expect(wrapper.find('[data-consultant-id="jessica"]').exists()).toBe(false)
-    expect(wrapper.findAll('.consultant-selector__headshot')).toHaveLength(3)
+    expect(wrapper.findAll('.consultant-selector__headshot')).toHaveLength(2)
   })
 
   it.each(['mixed', 'separate'] as const)('renders the client-approved booking policy in %s mode', (meetingMethodMode) => {
@@ -88,14 +87,13 @@ describe('InitialConsultBookingPage', () => {
 
     const headshots = wrapper.findAll<HTMLImageElement>('.consultant-selector__headshot')
 
-    expect(headshots).toHaveLength(4)
+    expect(headshots).toHaveLength(3)
     expect(headshots.map(image => [image.attributes('alt'), image.attributes('src')])).toEqual([
       ['Taj Johnson Chiu', '/images/initial-consult-taj-johnson-chiu.webp'],
       ['Stacie Sanders', '/images/initial-consult-stacie-sanders.webp'],
-      ['James Traub', '/images/initial-consult-james-traub.webp'],
       ['Jessica Urash', '/images/initial-consult-jessica-urash.webp']
     ])
-    expect(wrapper.findAll('.consultant-selector__option-bio')).toHaveLength(4)
+    expect(wrapper.findAll('.consultant-selector__option-bio')).toHaveLength(3)
     expect(wrapper.get('[data-consultant-id="stacie"] .consultant-selector__option-bio').text())
       .toContain('client advocate – 15+ years')
     expect(wrapper.find('[data-consultant-id="first-available"] img').exists()).toBe(false)
@@ -300,11 +298,9 @@ describe('InitialConsultBookingPage', () => {
       firstAvailableEventPath: 'initial-consults/initial-consult',
       tajEventPath: 'initial-consults/initial-consult-taj',
       stacieEventPath: 'initial-consults/initial-consult-stacie',
-      jamesEventPath: 'initial-consults/initial-consult-james',
       firstAvailablePhoneEventPath: 'initial-consults/initial-consult-phone',
       tajPhoneEventPath: 'initial-consults/initial-consult-taj-phone',
-      staciePhoneEventPath: 'initial-consults/initial-consult-stacie-phone',
-      jamesPhoneEventPath: 'initial-consults/initial-consult-james-phone'
+      staciePhoneEventPath: 'initial-consults/initial-consult-stacie-phone'
     })
     const mountedPaths: string[] = []
     const unmountedPaths: string[] = []

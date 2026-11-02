@@ -15,8 +15,7 @@ const configuredEvents: InitialConsultBookingRuntimeConfig = {
   firstAvailableEventPath: 'initial-consults/initial-consult',
   tajEventPath: 'initial-consults/initial-consult-taj',
   stacieEventPath: 'initial-consults/initial-consult-stacie',
-  jessicaEventPath: 'initial-consults/initial-consult-jessica',
-  jamesEventPath: 'initial-consults/initial-consult-james'
+  jessicaEventPath: 'initial-consults/initial-consult-jessica'
 }
 
 test('maps every Initial Consult selector option to its configured Cal.com event', () => {
@@ -28,7 +27,6 @@ test('maps every Initial Consult selector option to its configured Cal.com event
       ['first-available', 'First Available', 'initial-consults/initial-consult'],
       ['taj', 'Taj Johnson Chiu', 'initial-consults/initial-consult-taj'],
       ['stacie', 'Stacie Sanders', 'initial-consults/initial-consult-stacie'],
-      ['james', 'James Traub', 'initial-consults/initial-consult-james'],
       ['jessica', 'Jessica Urash', 'initial-consults/initial-consult-jessica']
     ]
   )
@@ -50,11 +48,6 @@ test('maps every Initial Consult selector option to its configured Cal.com event
       bio: 'Former family law paralegal turned client advocate – 15+ years guiding clients through the legal and emotional sides of divorce with care.'
     },
     {
-      id: 'james',
-      headshotUrl: '/images/initial-consult-james-traub.webp',
-      bio: "Certified Divorce Coach & Kids-First Mediator helping parents avoid court conflict with calm, structured guidance focused on kids' wellbeing."
-    },
-    {
       id: 'jessica',
       headshotUrl: '/images/initial-consult-jessica-urash.webp',
       bio: 'Faith-rooted divorce coach offering trauma-informed, compassionate support for emotional healing and healthy co-parenting through separation.'
@@ -74,7 +67,7 @@ test('requires the complete validated event mapping before enabling the booking 
   }).length, 0)
   assert.equal(resolveInitialConsultBookingEvents({
     ...configuredEvents,
-    jamesEventPath: ''
+    stacieEventPath: ''
   }).length, 0)
   assert.equal(normalizeInitialConsultEventPath('initial-consults/initial-consult?name=Jane'), null)
 })
@@ -96,13 +89,18 @@ test('forwards only a compact non-identifying Cal.com tracking allowlist', () =>
 })
 
 
-test('unpublishes Jessica and James by default without requiring their event paths and supports restoration', () => {
-  const events = resolveInitialConsultBookingEvents({ ...configuredEvents, unpublishedConsultants: undefined, jessicaEventPath: '', jamesEventPath: '' })
+test('unpublishes Jessica by default without requiring her event path and supports restoration', () => {
+  const events = resolveInitialConsultBookingEvents({ ...configuredEvents, unpublishedConsultants: undefined, jessicaEventPath: '' })
   assert.deepEqual(events.map(event => event.id), ['first-available', 'taj', 'stacie'])
   assert.equal(resolveInitialConsultBookingEvent(events, 'jessica'), null)
-  assert.equal(resolveInitialConsultBookingEvent(events, 'james'), null)
-  assert.equal(resolveInitialConsultBookingEvents(configuredEvents).length, 5)
-  assert.equal(resolveInitialConsultBookingEvents({ ...configuredEvents, unpublishedConsultants: ' taj, jessica ', tajEventPath: '' }).length, 3)
+  assert.equal(resolveInitialConsultBookingEvents(configuredEvents).length, 4)
+  assert.equal(resolveInitialConsultBookingEvents({ ...configuredEvents, unpublishedConsultants: ' taj, jessica ', tajEventPath: '' }).length, 2)
+})
+
+test('ignores the retired James id in an existing unpublished list', () => {
+  const events = resolveInitialConsultBookingEvents({ ...configuredEvents, unpublishedConsultants: 'jessica,james', jessicaEventPath: '' })
+  assert.deepEqual(events.map(event => event.id), ['first-available', 'taj', 'stacie'])
+  assert.equal(resolveInitialConsultBookingEvent(events, 'james' as never), null)
 })
 
 test('rejects invalid publishing settings and an entirely unpublished team', () => {
@@ -117,8 +115,7 @@ const separateConfig: InitialConsultBookingRuntimeConfig = {
   unpublishedConsultants: 'jessica',
   firstAvailablePhoneEventPath: 'initial-consults/initial-consult-phone',
   tajPhoneEventPath: 'initial-consults/initial-consult-taj-phone',
-  staciePhoneEventPath: 'initial-consults/initial-consult-stacie-phone',
-  jamesPhoneEventPath: 'initial-consults/initial-consult-james-phone'
+  staciePhoneEventPath: 'initial-consults/initial-consult-stacie-phone'
 }
 
 test('keeps mixed routing by default and requires an explicit supported mode', () => {
@@ -132,10 +129,10 @@ test('keeps mixed routing by default and requires an explicit supported mode', (
   }
 })
 
-test('resolves eight separate native routes without requiring paused Jessica paths', () => {
+test('resolves six separate native routes without requiring paused Jessica paths', () => {
   const events = resolveInitialConsultBookingEvents({ ...separateConfig, jessicaEventPath: '', jessicaPhoneEventPath: 'invalid' })
-  assert.deepEqual(events.map(event => event.id), ['first-available', 'taj', 'stacie', 'james'])
-  assert.equal(new Set(events.flatMap(event => [event.eventPath, event.phoneEventPath])).size, 8)
+  assert.deepEqual(events.map(event => event.id), ['first-available', 'taj', 'stacie'])
+  assert.equal(new Set(events.flatMap(event => [event.eventPath, event.phoneEventPath])).size, 6)
   for (const event of events) {
     assert.equal(resolveInitialConsultBookingMethodEvent(event, null), null)
     assert.equal(resolveInitialConsultBookingMethodEvent(event, 'zoom')?.eventPath, event.eventPath)
@@ -150,10 +147,10 @@ test('fails closed on partial, malformed or colliding separate routes', () => {
     { tajPhoneEventPath: '' },
     { tajPhoneEventPath: undefined },
     { staciePhoneEventPath: 'https://solagree.cal.com/initial-consults/initial-consult-stacie-phone' },
-    { jamesEventPath: 'initial-consults/initial-consult-james?method=zoom' },
+    { stacieEventPath: 'initial-consults/initial-consult-stacie?method=zoom' },
     { tajPhoneEventPath: separateConfig.tajEventPath },
     { tajPhoneEventPath: separateConfig.staciePhoneEventPath },
-    { tajPhoneEventPath: 'INITIAL-CONSULTS/INITIAL-CONSULT-JAMES' },
+    { tajPhoneEventPath: 'INITIAL-CONSULTS/INITIAL-CONSULT-STACIE' },
     { tajEventPath: separateConfig.stacieEventPath },
     { unpublishedConsultants: '' }
   ]) {
@@ -163,5 +160,5 @@ test('fails closed on partial, malformed or colliding separate routes', () => {
     ...separateConfig,
     unpublishedConsultants: '',
     jessicaPhoneEventPath: 'initial-consults/initial-consult-jessica-phone'
-  }).length, 5)
+  }).length, 4)
 })

@@ -205,7 +205,7 @@ The Nuxt runtime configuration uses paths relative to `https://solagree.cal.com`
 | Taj Chiu | `6658975` | `initial-consults/initial-consult-taj` | Taj only |
 | Stacie Sanders | `6658981` | `initial-consults/initial-consult-stacie` | Stacie only |
 | Jessica Urash | `6659009` | `initial-consults/initial-consult-jessica` | Jessica only |
-| James Traub | `6659015` | `initial-consults/initial-consult-james` | James only |
+| James Traub | `6659015` | `initial-consults/initial-consult-james` | Retired November 2, 2026: removed from the website; the client owns the Cal.com/Zoom removal |
 
 The matching environment variables are documented in `.env.example` and `README.md`.
 
@@ -273,11 +273,13 @@ Use the current matrix for per-criterion status and controlled test preparation.
 
 ## Temporarily unpublishing consultants
 
-The website setting `NUXT_PUBLIC_CALCOM_INITIAL_CONSULT_UNPUBLISHED_CONSULTANTS` accepts comma-separated consultant ids: `taj`, `stacie`, `james`, `jessica`. It defaults to `jessica,james`. An explicitly empty value publishes everyone. Profiles and event paths are retained for restoration; unpublished event paths are not required. Invalid ids or unpublishing the entire team disable the booking UI. Staging and production deployment scripts export this default before building, overriding stale local `.env` values unless the operator explicitly supplies the setting in the deployment environment.
+The website setting `NUXT_PUBLIC_CALCOM_INITIAL_CONSULT_UNPUBLISHED_CONSULTANTS` accepts comma-separated consultant ids: `taj`, `stacie`, `jessica`. It defaults to `jessica`. The retired id `james` is ignored so an older deployment environment that still lists it does not disable booking. An explicitly empty value publishes everyone. Profiles and event paths are retained for restoration; unpublished event paths are not required. Invalid ids or unpublishing the entire team disable the booking UI. Staging and production deployment scripts export this default before building, overriding stale local `.env` values unless the operator explicitly supplies the setting in the deployment environment.
 
 Rebuild and deploy the static website after changing this setting. This is an environment setting, not a Portal admin draft control.
 
 October 12, 2026 (HIR-665): the client is not moving forward with James Traub and will remove him from Cal.com and Zoom. Website defaults now unpublish both James and Jessica, leaving First Available, Taj and Stacie. This records website visibility only; the client owns Cal.com/Zoom removal and any existing appointments. Verify James is removed from First Available and his old direct booking URL no longer accepts bookings separately.
+
+November 2, 2026: the client confirmed James is not used at all, so he was removed from the website code instead of only hidden: selector id, event path and phone path settings (`NUXT_PUBLIC_CALCOM_INITIAL_CONSULT_JAMES_EVENT_PATH`, `NUXT_PUBLIC_CALCOM_INITIAL_CONSULT_JAMES_PHONE_EVENT_PATH`), headshot, deploy-script defaults and tests. Jessica remains the only paused consultant. The dated records below describe the earlier state. The Cal.com side (First Available round robin, his direct event, Zoom) still has to be removed by the client.
 
 Staging removal was deployed on October 12 as a targeted update to the existing static release: 40 HTML runtime configurations changed to `jessica,james`, and James's prerendered selector button was removed. JavaScript assets and the newer staging release were preserved. A browser preview of that exact release verified all three remaining events and no hydration warnings; server verification confirmed the deployed choices. Rollback archive: local `artifacts/hir-665/staging-before-20261012.tar.gz`, with a remote copy at `/tmp/hir-665-staging-before-20261012.tar.gz` on `solagree.qamachine.com`. The server denied creation of a backup directory under the account home; the archive was reconstructed from the pre-deployment snapshot and checked against all 40 original file hashes. The public production release still uses the older consultation form and contains no James profile; it did not need this selector update.
 
