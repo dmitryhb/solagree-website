@@ -24,8 +24,8 @@ const events = resolveInitialConsultBookingEvents({
 })
 const firstEvent = events[0]
 
-if (!firstEvent || events.length !== 4) {
-  throw new Error('Initial Consult E2E fixture must resolve First Available and three published consultants.')
+if (!firstEvent || events.length !== 3) {
+  throw new Error('Initial Consult E2E fixture must resolve First Available, Taj and Stacie.')
 }
 
 const app = createApp({

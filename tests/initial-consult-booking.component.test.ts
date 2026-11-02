@@ -353,14 +353,14 @@ describe('InitialConsultBookingPage', () => {
     expect(wrapper.get('iframe').attributes('data-calcom-event-path')).toBe('initial-consults/initial-consult-stacie')
 
     await wrapper.get('.consultant-selection-summary button').trigger('click')
-    await wrapper.get('[data-consultant-id="james"]').trigger('click')
+    await wrapper.get('[data-consultant-id="taj"]').trigger('click')
     expect(wrapper.get('input[value="zoom"]').element).toHaveProperty('checked', true)
     expect(wrapper.findAll('iframe')).toHaveLength(1)
-    expect(wrapper.get('iframe').attributes('data-calcom-event-path')).toBe('initial-consults/initial-consult-james')
+    expect(wrapper.get('iframe').attributes('data-calcom-event-path')).toBe('initial-consults/initial-consult-taj')
     expect(mountedPaths).toEqual([
       'initial-consults/initial-consult-stacie-phone',
       'initial-consults/initial-consult-stacie',
-      'initial-consults/initial-consult-james'
+      'initial-consults/initial-consult-taj'
     ])
     expect(unmountedPaths).toEqual(mountedPaths.slice(0, -1))
     wrapper.unmount()
