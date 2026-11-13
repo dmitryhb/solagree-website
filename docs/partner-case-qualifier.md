@@ -42,8 +42,9 @@ criteria, so it is not the same as the number of checked boxes.
 - Progress is the score divided by the total weight (13), not by the number of
   criteria.
 - Analytics events (`criterion_toggled`, `completed`, `outcome_changed`,
-  `cta_clicked`) carry the weighted `score` and `progress`. Figures from before
-  the weighting change are not comparable with later ones.
+  `cta_clicked`) carry the weighted `score` and `progress`, and the
+  `criteria_met` analytics parameter carries the weighted score too. Figures
+  from before the weighting change are not comparable with later ones.
 
 ## Saved sessions and renamed criteria
 
