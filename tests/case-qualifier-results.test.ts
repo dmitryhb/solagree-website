@@ -2,11 +2,15 @@ import { describe, expect, it } from 'vitest'
 import { solagreeCaseQualifierCopy } from '../app/data/case-qualifier'
 import {
   solagreeCaseQualifierCriterionGroups,
-  solagreeCaseQualifierCriterionIds
+  solagreeCaseQualifierCriterionIds,
+  solagreeCaseQualifierCriterionWeightMap,
+  solagreeCaseQualifierTotalWeight
 } from '../app/data/case-qualifier-schema'
+import type { CaseQualifierCriterionId } from '../app/data/case-qualifier-types'
 import {
   evaluateCaseQualifierAnswers,
   getCaseQualifierOutcome,
+  getCaseQualifierProgressValue,
   getCaseQualifierResultViewModel
 } from '../app/utils/case-qualifier-results'
 
@@ -18,16 +22,15 @@ describe('case qualifier results', () => {
     [3, 'good-fit'],
     [5, 'good-fit'],
     [6, 'ideal-fit'],
-    [12, 'ideal-fit']
-  ] as const)('maps score %i to %s', (score, outcome) => {
+    [13, 'ideal-fit']
+  ] as const)('maps weighted score %i to %s', (score, outcome) => {
     expect(getCaseQualifierOutcome(score)).toBe(outcome)
-    expect(evaluateCaseQualifierAnswers(solagreeCaseQualifierCriterionIds.slice(0, score))).toEqual({ score, outcome })
   })
 
   it('rejects scores outside the approved integer range', () => {
     expect(getCaseQualifierOutcome(-1)).toBeNull()
     expect(getCaseQualifierOutcome(1.5)).toBeNull()
-    expect(getCaseQualifierOutcome(13)).toBeNull()
+    expect(getCaseQualifierOutcome(14)).toBeNull()
   })
 
   it('preserves the exact approved instructions, groups, listening cues, and criteria copy', () => {
@@ -40,6 +43,7 @@ describe('case qualifier results', () => {
         title: 'Financial & Asset Alignment',
         listeningCue: '"I don\'t have $10,000 for a retainer," or "We\'re spending more fighting than the house is worth."',
         criteria: [
+          { id: 'cost-limitations', title: 'Cost Limitations', description: 'Client wants a fair, high-integrity process but can\'t afford the cost that comes with it.', weight: 2 },
           { id: 'simple-estate', title: 'Simple Estate', description: 'Marital estate is approximately $500,000 or less' },
           { id: 'budget-constraints', title: 'Budget Constraints', description: 'Client is hesitant or unable to pay a $7,500+ litigation retainer' },
           { id: 'financial-transparency', title: 'Financial Transparency', description: 'Neither party is alleging hidden assets or significant financial misconduct' },
@@ -62,12 +66,27 @@ describe('case qualifier results', () => {
         title: 'Case Suitability',
         listeningCue: '"This case has been dragging on forever," or "We have some things we can\'t agree on."',
         criteria: [
-          { id: 'willing-participants', title: 'Willing Participants', description: 'Both parties will engage in good faith (even if they disagree on outcomes)' },
+          { id: 'spouse-participation-potential', title: 'Potential for Both Spouses to Participate', description: 'There is evidence that the other spouse may be open to something other than litigation (for example, wants to save costs, time or embarrassment; has already indicated openness to alternatives).' },
           { id: 'specific-disagreements', title: 'Specific Disagreements', description: 'Parties have identifiable issues they can\'t resolve on their own' },
-          { id: 'litigation-stuck', title: 'Litigation Stuck', description: 'Case is stuck in litigation and has had too many delays' },
-          { id: 'integrity-deficit', title: 'Integrity Deficit', description: 'Client deserves a high-integrity process but can\'t afford the cost that comes with it' }
+          { id: 'litigation-stuck', title: 'Litigation Stuck', description: 'Case is stuck in litigation and has had too many delays' }
         ]
       }
+    ])
+  })
+
+  it('orders Cost Limitations first in Section 1 and the participation criterion first in Section 3', () => {
+    const [financial, , suitability] = solagreeCaseQualifierCriterionGroups
+    expect(financial.criteria.map(criterion => criterion.title)).toEqual([
+      'Cost Limitations',
+      'Simple Estate',
+      'Budget Constraints',
+      'Financial Transparency',
+      'High-Net-Worth Exception'
+    ])
+    expect(suitability.criteria.map(criterion => criterion.title)).toEqual([
+      'Potential for Both Spouses to Participate',
+      'Specific Disagreements',
+      'Litigation Stuck'
     ])
   })
 
@@ -105,6 +124,64 @@ describe('case qualifier results', () => {
         href: '/book-a-solagree-consult'
       },
       resetLabel: 'Start Over'
+    })
+  })
+
+  describe('weighted scoring', () => {
+    const evaluate = (ids: CaseQualifierCriterionId[]) => evaluateCaseQualifierAnswers(ids)
+
+    it('gives Cost Limitations a weight of 2 and every other criterion a weight of 1', () => {
+      expect(solagreeCaseQualifierCriterionWeightMap['cost-limitations']).toBe(2)
+      expect(
+        solagreeCaseQualifierCriterionIds.filter(id => id !== 'cost-limitations')
+          .every(id => solagreeCaseQualifierCriterionWeightMap[id] === 1)
+      ).toBe(true)
+      expect(solagreeCaseQualifierCriterionIds).toHaveLength(12)
+      expect(solagreeCaseQualifierTotalWeight).toBe(13)
+    })
+
+    it('treats no selection as no outcome', () => {
+      expect(evaluate([])).toEqual({ score: 0, outcome: null })
+      expect(getCaseQualifierProgressValue(0)).toBe(0)
+    })
+
+    it('scores Cost Limitations alone as 2 (Possible Fit)', () => {
+      expect(evaluate(['cost-limitations'])).toEqual({ score: 2, outcome: 'possible-fit' })
+    })
+
+    it('scores Cost Limitations plus one other criterion as 3 (Good Fit)', () => {
+      expect(evaluate(['cost-limitations', 'budget-constraints'])).toEqual({ score: 3, outcome: 'good-fit' })
+    })
+
+    it('scores one regular criterion as 1 and two as 2 (Possible Fit)', () => {
+      expect(evaluate(['simple-estate'])).toEqual({ score: 1, outcome: 'possible-fit' })
+      expect(evaluate(['simple-estate', 'court-avoidance'])).toEqual({ score: 2, outcome: 'possible-fit' })
+    })
+
+    it('keeps the 5 and 6 boundaries on the weighted score', () => {
+      expect(evaluate(['cost-limitations', 'simple-estate', 'court-avoidance', 'resolution-focus'])).toEqual({
+        score: 5,
+        outcome: 'good-fit'
+      })
+      expect(evaluate(['cost-limitations', 'simple-estate', 'court-avoidance', 'resolution-focus', 'litigation-stuck'])).toEqual({
+        score: 6,
+        outcome: 'ideal-fit'
+      })
+    })
+
+    it('scores all 12 criteria as 13 (Ideal Fit) without rejection and at 100% progress', () => {
+      const evaluation = evaluate([...solagreeCaseQualifierCriterionIds])
+
+      expect(evaluation).toEqual({ score: 13, outcome: 'ideal-fit' })
+      expect(getCaseQualifierProgressValue(evaluation.score)).toBe(100)
+      expect(getCaseQualifierResultViewModel(evaluation.score)).not.toBeNull()
+    })
+
+    it('bounds progress by the total weight', () => {
+      expect(getCaseQualifierProgressValue(2)).toBe(15)
+      expect(getCaseQualifierProgressValue(6)).toBe(46)
+      expect(getCaseQualifierProgressValue(99)).toBe(100)
+      expect(getCaseQualifierProgressValue(-3)).toBe(0)
     })
   })
 })

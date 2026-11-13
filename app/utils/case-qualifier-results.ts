@@ -1,4 +1,7 @@
-import { solagreeCaseQualifierCriterionIds } from '~/data/case-qualifier-schema'
+import {
+  solagreeCaseQualifierCriterionWeightMap,
+  solagreeCaseQualifierTotalWeight
+} from '~/data/case-qualifier-schema'
 import { solagreeCaseQualifierResultContent } from '~/data/case-qualifier-results'
 import type {
   CaseQualifierCriterionId,
@@ -7,9 +10,9 @@ import type {
   CaseQualifierResultViewModel
 } from '~/data/case-qualifier-types'
 
-/** Resolves the approved assessment tier for a criterion count. */
+/** Resolves the approved assessment tier for a weighted score. */
 export const getCaseQualifierOutcome = (score: number): CaseQualifierOutcomeId | null => {
-  if (!Number.isInteger(score) || score <= 0 || score > solagreeCaseQualifierCriterionIds.length) {
+  if (!Number.isInteger(score) || score <= 0 || score > solagreeCaseQualifierTotalWeight) {
     return null
   }
 
@@ -28,7 +31,10 @@ export const getCaseQualifierOutcome = (score: number): CaseQualifierOutcomeId |
 export const evaluateCaseQualifierAnswers = (
   selectedCriterionIds: readonly CaseQualifierCriterionId[]
 ): CaseQualifierEvaluation => {
-  const score = selectedCriterionIds.length
+  const score = selectedCriterionIds.reduce(
+    (total, criterionId) => total + (solagreeCaseQualifierCriterionWeightMap[criterionId] ?? 0),
+    0
+  )
 
   return {
     score,
@@ -54,8 +60,8 @@ export const getCaseQualifierResultViewModel = (score: number): CaseQualifierRes
   }
 }
 
-/** Converts selection count into bounded progress for host analytics. */
+/** Converts the weighted score into bounded progress for host analytics. */
 export const getCaseQualifierProgressValue = (score: number): number => {
-  const boundedScore = Math.min(Math.max(score, 0), solagreeCaseQualifierCriterionIds.length)
-  return Math.round((boundedScore / solagreeCaseQualifierCriterionIds.length) * 100)
+  const boundedScore = Math.min(Math.max(score, 0), solagreeCaseQualifierTotalWeight)
+  return Math.round((boundedScore / solagreeCaseQualifierTotalWeight) * 100)
 }
