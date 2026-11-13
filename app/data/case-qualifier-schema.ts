@@ -12,6 +12,12 @@ export const solagreeCaseQualifierCriterionGroups = [
       '"I don\'t have $10,000 for a retainer," or "We\'re spending more fighting than the house is worth."',
     criteria: [
       {
+        id: 'cost-limitations',
+        title: 'Cost Limitations',
+        description: 'Client wants a fair, high-integrity process but can\'t afford the cost that comes with it.',
+        weight: 2
+      },
+      {
         id: 'simple-estate',
         title: 'Simple Estate',
         description: 'Marital estate is approximately $500,000 or less'
@@ -68,9 +74,10 @@ export const solagreeCaseQualifierCriterionGroups = [
       '"This case has been dragging on forever," or "We have some things we can\'t agree on."',
     criteria: [
       {
-        id: 'willing-participants',
-        title: 'Willing Participants',
-        description: 'Both parties will engage in good faith (even if they disagree on outcomes)'
+        id: 'spouse-participation-potential',
+        title: 'Potential for Both Spouses to Participate',
+        description:
+          'There is evidence that the other spouse may be open to something other than litigation (for example, wants to save costs, time or embarrassment; has already indicated openness to alternatives).'
       },
       {
         id: 'specific-disagreements',
@@ -81,11 +88,6 @@ export const solagreeCaseQualifierCriterionGroups = [
         id: 'litigation-stuck',
         title: 'Litigation Stuck',
         description: 'Case is stuck in litigation and has had too many delays'
-      },
-      {
-        id: 'integrity-deficit',
-        title: 'Integrity Deficit',
-        description: 'Client deserves a high-integrity process but can\'t afford the cost that comes with it'
       }
     ]
   }
@@ -106,3 +108,25 @@ export const solagreeCaseQualifierCriterionIds = solagreeCaseQualifierCriteria.m
 export const solagreeCaseQualifierCriterionMap = Object.fromEntries(
   solagreeCaseQualifierCriteria.map(criterion => [criterion.id, criterion])
 ) as Record<CaseQualifierCriterionId, CaseQualifierCriterionDefinition>
+
+/** Point value of one criterion. A definition without an explicit `weight` counts as 1. */
+export const defaultCaseQualifierCriterionWeight = 1
+
+export const solagreeCaseQualifierCriterionWeightMap = Object.fromEntries(
+  solagreeCaseQualifierCriteria.map(criterion => [criterion.id, criterion.weight ?? defaultCaseQualifierCriterionWeight])
+) as Record<CaseQualifierCriterionId, number>
+
+/** Maximum score: the sum of every criterion weight (13 with 12 criteria and one double-weight item). */
+export const solagreeCaseQualifierTotalWeight = solagreeCaseQualifierCriteria.reduce(
+  (total, criterion) => total + (criterion.weight ?? defaultCaseQualifierCriterionWeight),
+  0
+)
+
+/**
+ * Criterion ids that were renamed. Saved browser sessions written before the
+ * rename carry the old ids, so they are mapped to the current ones on parse.
+ */
+export const solagreeCaseQualifierLegacyCriterionIdMap: Readonly<Record<string, CaseQualifierCriterionId>> = {
+  'integrity-deficit': 'cost-limitations',
+  'willing-participants': 'spouse-participation-potential'
+}

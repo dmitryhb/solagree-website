@@ -27,3 +27,35 @@ The iframe bridge is disabled by default. When `bridge.postMessage` is enabled,
 `https://partner.example`. Missing, wildcard (`*`), malformed, non-web, and
 path-bearing values send no parent-window message while local Vue callbacks
 continue to receive qualifier events.
+
+## Scoring
+
+Each criterion carries a `weight` in `app/data/case-qualifier-schema.ts`
+(default 1 when omitted). The score is the sum of the weights of the checked
+criteria, so it is not the same as the number of checked boxes.
+
+- Cost Limitations (Section 1, first item) has weight 2; the other 11 criteria
+  have weight 1. The maximum score is 13.
+- Outcome thresholds are unchanged: 1-2 Possible Fit, 3-5 Good Fit,
+  6 and above Ideal Fit. Cost Limitations alone therefore scores 2 (Possible
+  Fit).
+- Progress is the score divided by the total weight (13), not by the number of
+  criteria.
+- Analytics events (`criterion_toggled`, `completed`, `outcome_changed`,
+  `cta_clicked`) carry the weighted `score` and `progress`, and the
+  `criteria_met` analytics parameter carries the weighted score too. Figures
+  from before the weighting change are not comparable with later ones.
+
+## Saved sessions and renamed criteria
+
+Criterion ids are stable storage keys. Two criteria were renamed with new ids:
+
+| Previous id | Current id | Current label |
+| --- | --- | --- |
+| `integrity-deficit` | `cost-limitations` | Cost Limitations |
+| `willing-participants` | `spouse-participation-potential` | Potential for Both Spouses to Participate |
+
+Snapshots saved under `solagree.case-qualifier.session.v1` with the previous
+ids are mapped to the current ids when parsed
+(`solagreeCaseQualifierLegacyCriterionIdMap`), so an in-progress selection is
+kept. The schema version stays at 1.

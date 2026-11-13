@@ -1,5 +1,4 @@
 import { describe, expect, it } from 'vitest'
-import { solagreeCaseQualifierCriterionIds } from '../app/data/case-qualifier-schema'
 import {
   normalizeCaseQualifierCriterionIds,
   toggleCaseQualifierCriterionSelection
@@ -33,6 +32,23 @@ describe('case qualifier session safety', () => {
     })).toBeNull()
   })
 
+  it('maps legacy criterion IDs to the renamed criteria instead of dropping the selection', () => {
+    expect(parseCaseQualifierSessionSnapshot({
+      version: 1,
+      selectedCriterionIds: ['integrity-deficit', 'willing-participants', 'simple-estate']
+    })).toEqual({
+      version: 1,
+      selectedCriterionIds: ['cost-limitations', 'simple-estate', 'spouse-participation-potential']
+    })
+  })
+
+  it('still rejects a snapshot that selects a renamed criterion under both its old and new ID', () => {
+    expect(parseCaseQualifierSessionSnapshot({
+      version: 1,
+      selectedCriterionIds: ['integrity-deficit', 'cost-limitations']
+    })).toBeNull()
+  })
+
   it('normalizes input and applies checkbox changes deterministically', () => {
     expect(normalizeCaseQualifierCriterionIds([
       'court-avoidance',
@@ -41,8 +57,8 @@ describe('case qualifier session safety', () => {
       'court-avoidance'
     ])).toEqual(['simple-estate', 'court-avoidance'])
 
-    const selected = toggleCaseQualifierCriterionSelection([], solagreeCaseQualifierCriterionIds[2], true)
+    const selected = toggleCaseQualifierCriterionSelection([], 'financial-transparency', true)
     expect(selected).toEqual(['financial-transparency'])
-    expect(toggleCaseQualifierCriterionSelection(selected, solagreeCaseQualifierCriterionIds[2], false)).toEqual([])
+    expect(toggleCaseQualifierCriterionSelection(selected, 'financial-transparency', false)).toEqual([])
   })
 })

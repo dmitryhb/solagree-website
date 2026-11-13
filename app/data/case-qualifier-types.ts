@@ -8,6 +8,7 @@ import type {
 } from '~/utils/host-integration'
 
 export type CaseQualifierCriterionId =
+  | 'cost-limitations'
   | 'simple-estate'
   | 'budget-constraints'
   | 'financial-transparency'
@@ -16,10 +17,9 @@ export type CaseQualifierCriterionId =
   | 'resolution-focus'
   | 'co-parenting-priority'
   | 'ready-to-move-forward'
-  | 'willing-participants'
+  | 'spouse-participation-potential'
   | 'specific-disagreements'
   | 'litigation-stuck'
-  | 'integrity-deficit'
 
 export type CaseQualifierCriterionGroupId =
   | 'financial-asset-alignment'
@@ -35,6 +35,8 @@ export interface CaseQualifierCriterionDefinition {
   id: CaseQualifierCriterionId
   title: string
   description: string
+  /** Points this criterion adds to the score. Defaults to 1 when omitted. */
+  weight?: number
 }
 
 /** A practitioner-facing criterion group and its approved listening cue. */
