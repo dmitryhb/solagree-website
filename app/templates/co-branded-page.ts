@@ -52,23 +52,9 @@ const sharedContent = {
     ]
   },
   guideTitle: 'How We Guide You',
-  tracks: {
-    title: 'Two Paths to Resolution',
-    intro: [
-      'Both paths include neutral experts, mediation, and binding arbitration.',
-      'We\'ll recommend the right fit for your case.'
-    ],
-    items: [
-      {
-        title: 'SOLAGREE – CORE',
-        description: 'A streamlined path with predictable attorney fees, designed for standard cases that can move efficiently to resolution.'
-      },
-      {
-        title: 'SOLAGREE – COMPASS',
-        description: 'An extended path with hourly attorney support, designed for complex cases requiring additional time and expertise.'
-      }
-    ],
-    closingLead: 'We continue to provide strategic guidance throughout the Solagree process.'
+  pricing: {
+    title: 'Find Your Track',
+    note: 'For higher-conflict or complex cases requiring extended support, the Solagree-COMPASS program is available.'
   },
   questionsTitle: 'Common Questions',
   nextSteps: {
@@ -78,18 +64,6 @@ const sharedContent = {
     cardDescription: 'Request a consultation to learn more about Solagree and discuss whether it\'s the right approach for your case.'
   }
 } as const
-
-const mergeTracks = (
-  trackFeatures: CoBrandedPageVariantContent['trackFeatures']
-): CoBrandedPageContent['tracks']['items'] => {
-  const [coreFeatures, compassFeatures] = trackFeatures
-  const [coreTrack, compassTrack] = sharedContent.tracks.items
-
-  return [
-    { ...coreTrack, ...coreFeatures },
-    { ...compassTrack, ...compassFeatures }
-  ]
-}
 
 const createPageContent = (variant: CoBrandedPageVariantContent): CoBrandedPageContent => ({
   ctaLabel: sharedContent.ctaLabel,
@@ -105,13 +79,7 @@ const createPageContent = (variant: CoBrandedPageVariantContent): CoBrandedPageC
     lede: variant.guideLede,
     items: variant.guideItems
   },
-  tracks: {
-    title: sharedContent.tracks.title,
-    intro: sharedContent.tracks.intro,
-    items: mergeTracks(variant.trackFeatures),
-    closingLead: sharedContent.tracks.closingLead,
-    closing: variant.tracksClosing
-  },
+  pricing: sharedContent.pricing,
   questions: {
     title: sharedContent.questionsTitle,
     intro: variant.questionsIntro,

@@ -14,27 +14,6 @@ export const attorneyCoBrandedPageContent = {
     { title: 'Before arbitration', description: 'Helping you present your position and advising on what matters most' },
     { title: 'After resolution', description: 'Reviewing the final award and handling all court filing' }
   ],
-  trackFeatures: [
-    {
-      features: [
-        'Standard financial matters',
-        'Cooperative parenting plans',
-        'Lower-conflict situations',
-        'Flat-fee attorney structure'
-      ],
-      note: 'Best for couples ready to move efficiently through the process.'
-    },
-    {
-      features: [
-        'Complex financial or business assets',
-        'Challenging custody or co-parenting needs',
-        'Higher-conflict situations',
-        'Hourly attorney support'
-      ],
-      note: 'Best for cases requiring extended support and specialized expertise.'
-    }
-  ],
-  tracksClosing: 'Solagree platform fees are separate from attorney fees. We\'ll discuss both during your consultation.',
   questionsIntro: [
     'Solagree offers a structured alternative to traditional divorce litigation - combining expert financial guidance, mediation, and binding arbitration.',
     'Our process is designed for couples who can\'t agree on everything but want to avoid lengthy court battles and reach resolution efficiently.'
