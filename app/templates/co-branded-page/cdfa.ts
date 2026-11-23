@@ -14,27 +14,6 @@ export const cdfaCoBrandedPageContent = {
     { title: 'Before arbitration', description: 'Reviewing what we\'ve gathered, identifying key issues, and helping you prepare for productive conversations' },
     { title: 'After resolution', description: 'Continuing to provide financial guidance to help you implement your settlement and plan for your future' }
   ],
-  trackFeatures: [
-    {
-      features: [
-        'Standard financial matters',
-        'Cooperative parenting plans',
-        'Lower-conflict situations',
-        'Efficient timelines',
-        'Clear next-step recommendations'
-      ]
-    },
-    {
-      features: [
-        'Complex financial or business assets',
-        'Challenging custody or co-parenting needs',
-        'Higher-conflict situations',
-        'Specialized expertise',
-        'Frameworks for ongoing decision-making'
-      ]
-    }
-  ],
-  tracksClosing: 'We\'ll discuss Solagree platform fees and any additional services during your consultation.',
   questionsIntro: [
     'Solagree offers a structured alternative to traditional divorce litigation – combining expert guidance, mediation, and binding arbitration.',
     'Our process is designed for couples who want to avoid lengthy, costly court battles and reach resolution efficiently, even when you don\'t agree on everything.'

@@ -607,14 +607,13 @@
   font-size: 17px;
 }
 
-.co-branded-page__tracks {
+.co-branded-page__pricing {
   display: grid;
   min-width: 0;
-  gap: 0;
   padding-block: clamp(5rem, 5.45vw, 7rem) clamp(4.5rem, 4.45vw, 5.75rem);
 }
 
-.co-branded-page__tracks h2 {
+.co-branded-page__pricing h2 {
   margin: 0;
   color: var(--color-heading);
   font-family: var(--font-display);
@@ -624,137 +623,19 @@
   text-align: center;
 }
 
-.co-branded-page__tracks-intro,
-.co-branded-page__tracks-note {
-  max-width: 66rem;
-  margin: 0 auto;
-  color: var(--color-black);
-  font-family: var(--font-body);
-  font-size: clamp(1.125rem, 1.08vw, 1.375rem);
-  line-height: 1.28;
-  text-align: center;
-}
-
-.co-branded-page__tracks-intro {
-  margin-top: 1rem;
-}
-
-.co-branded-page__tracks-note {
-  max-width: 82rem;
-  margin-top: 2.25rem;
-  font-size: clamp(1.125rem, 1.08vw, 1.375rem);
-  line-height: 1.35;
-}
-
-.co-branded-page__tracks-note p {
-  margin: 0;
-}
-
-.co-branded-page__tracks-note strong {
-  font-weight: 800;
-}
-
-.co-branded-page__tracks-grid {
-  display: grid;
+.co-branded-page__pricing-grid {
   min-width: 0;
-  grid-template-columns: repeat(2, minmax(0, 420px));
-  justify-content: center;
-  gap: 24px;
   margin-top: clamp(3.5rem, 3.4vw, 4.5rem);
 }
 
-.co-branded-page--standard .co-branded-page__tracks-grid {
-  width: min(calc(100vw - 4rem), 864px);
-  margin-inline: calc(50% - min(calc(50vw - 2rem), 432px));
-}
-
-.co-branded-page__track-card {
-  display: flex;
-  min-width: 0;
-  min-height: clamp(37rem, 34.4vw, 44rem);
-  flex-direction: column;
-  padding: clamp(2rem, 2.25vw, 2.875rem) clamp(2rem, 2.25vw, 2.875rem) clamp(2.75rem, 2.65vw, 3.375rem);
-  border-radius: 22px;
-  background: var(--color-surface-cool);
-  color: var(--color-text-muted);
-}
-
-.co-branded-page__track-card h3,
-.co-branded-page__track-includes-title {
-  font-family: var(--font-nav);
-  line-height: 1.1;
-  letter-spacing: 0.075em;
-  text-transform: uppercase;
-}
-
-.co-branded-page__track-card h3 {
-  margin: 0;
-  color: var(--color-text-muted);
-  font-size: clamp(1.625rem, 1.46vw, 1.875rem);
-  font-weight: 600;
+.co-branded-page__pricing-note {
+  max-width: 66rem;
+  margin: 2.25rem auto 0;
+  color: var(--color-black);
+  font-family: var(--font-body);
+  font-size: clamp(1.125rem, 1.08vw, 1.375rem);
+  line-height: 1.35;
   text-align: center;
-  white-space: nowrap;
-}
-
-.co-branded-page__track-description,
-.co-branded-page__track-note {
-  margin: 0;
-  font-family: var(--font-body);
-}
-
-.co-branded-page__track-description {
-  max-width: 31.5rem;
-  margin-top: clamp(2.5rem, 2.35vw, 3rem);
-  color: rgba(39, 36, 31, 0.8);
-  font-size: clamp(1.0625rem, 0.98vw, 1.25rem);
-  line-height: 1.42;
-}
-
-.co-branded-page__track-includes {
-  display: grid;
-  gap: clamp(1.625rem, 1.75vw, 2.25rem);
-  margin-top: clamp(2rem, 1.9vw, 2.375rem);
-}
-
-.co-branded-page__track-includes-title {
-  margin: 0;
-  color: var(--color-text-muted);
-  font-size: clamp(0.75rem, 0.7vw, 0.875rem);
-  font-weight: 400;
-}
-
-.co-branded-page__track-features {
-  display: grid;
-  gap: clamp(1rem, 1.2vw, 1.5rem);
-  padding: 0;
-  margin: 0;
-  list-style: none;
-}
-
-.co-branded-page__track-features li {
-  display: flex;
-  align-items: center;
-  gap: 22px;
-  color: var(--color-text-muted);
-  font-family: var(--font-body);
-  font-size: clamp(1.0625rem, 0.98vw, 1.25rem);
-  line-height: 1.5;
-}
-
-.co-branded-page__track-features li::before {
-  content: "";
-  display: inline-flex;
-  width: 34px;
-  height: 34px;
-  flex: 0 0 auto;
-  background: url("/icons/co-branded-check-light.svg") center / contain no-repeat;
-}
-
-.co-branded-page__track-note {
-  margin-top: auto;
-  color: rgba(39, 36, 31, 0.58);
-  font-size: clamp(1.0625rem, 0.98vw, 1.25rem);
-  line-height: 1.15;
 }
 
 .co-branded-page__questions {
@@ -1291,7 +1172,6 @@
   .co-branded-page__how-steps,
   .co-branded-page__hero,
   .co-branded-page__what-is-grid,
-  .co-branded-page__tracks-grid,
   .co-branded-page__attorney-guide,
   .co-branded-page__questions,
   .co-branded-page__next-steps-grid,
@@ -1337,18 +1217,6 @@
     gap: 48px;
   }
 
-  .co-branded-page__tracks-grid {
-    width: 100%;
-    max-width: 640px;
-    grid-template-columns: minmax(0, 1fr);
-    margin-inline: auto;
-  }
-
-  .co-branded-page--standard .co-branded-page__tracks-grid {
-    width: 100%;
-    margin-inline: auto;
-  }
-
   .co-branded-page__attorney-guide-image,
   .co-branded-page__attorney-guide-content {
     width: 100%;
@@ -1363,10 +1231,6 @@
   .co-branded-page__attorney-guide h2 {
     max-width: 11ch;
     font-size: clamp(2.6rem, 8vw, 3.3rem);
-  }
-
-  .co-branded-page__track-card {
-    min-height: 0;
   }
 
   .co-branded-page__what-is-image,
@@ -1432,30 +1296,14 @@
     line-height: 1.15;
   }
 
-  .co-branded-page__tracks {
-    gap: 0;
-  }
-
-  .co-branded-page__tracks h2 {
+  .co-branded-page__pricing h2 {
     font-size: 40px;
     line-height: 1.15;
     text-align: left;
   }
 
-  .co-branded-page__track-card {
-    padding: 28px 24px;
-  }
-
-  .co-branded-page__track-card h3 {
-    white-space: normal;
-  }
-
-  .co-branded-page__track-description {
-    margin-top: 2.25rem;
-  }
-
-  .co-branded-page__track-includes {
-    margin-top: 2rem;
+  .co-branded-page__pricing-note {
+    text-align: left;
   }
 
   .feature-strip {

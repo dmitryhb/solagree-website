@@ -11,13 +11,6 @@ export interface CoBrandedPageGuideItem {
   description: string
 }
 
-export interface CoBrandedPageTrackContent {
-  title: string
-  description: string
-  features: readonly string[]
-  note?: string
-}
-
 export interface CoBrandedPageFaqContent {
   question: string
   paragraphs: readonly string[]
@@ -30,11 +23,6 @@ export interface CoBrandedPageVariantContent {
   whatIsDescription: string
   guideLede: string
   guideItems: readonly CoBrandedPageGuideItem[]
-  trackFeatures: readonly [
-    Pick<CoBrandedPageTrackContent, 'features' | 'note'>,
-    Pick<CoBrandedPageTrackContent, 'features' | 'note'>
-  ]
-  tracksClosing: string
   questionsIntro: readonly string[]
   faqs: readonly CoBrandedPageFaqContent[]
 }
@@ -64,12 +52,10 @@ export interface CoBrandedPageContent {
     lede: string
     items: readonly CoBrandedPageGuideItem[]
   }
-  tracks: {
+  /** Section with the main-site pricing cards (data from ~/data/pricing-plans). */
+  pricing: {
     title: string
-    intro: readonly string[]
-    items: readonly [CoBrandedPageTrackContent, CoBrandedPageTrackContent]
-    closingLead: string
-    closing: string
+    note: string
   }
   questions: {
     title: string

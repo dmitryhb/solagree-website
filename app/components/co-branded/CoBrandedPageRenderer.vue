@@ -5,6 +5,8 @@ import CoBrandedConsultLink from '~/components/co-branded/CoBrandedConsultLink.v
 import CoBrandedConsultModal from '~/components/co-branded/CoBrandedConsultModal.vue'
 import CoBrandedFaqAccordion from '~/components/co-branded/CoBrandedFaqAccordion.vue'
 import FeatureStrip from '~/components/FeatureStrip.vue'
+import PricingCard from '~/components/PricingCard.vue'
+import { pricingPlans } from '~/data/pricing-plans'
 import { resolveCoBrandedPageContent } from '~/templates/co-branded-page'
 import type { CoBrandedPageRenderMode } from '~/types/co-branded-page'
 
@@ -193,60 +195,24 @@ const closeConsultModal = (): void => {
     </section>
 
     <section
-      class="co-branded-page__tracks"
-      aria-labelledby="co-branded-tracks-title"
+      class="co-branded-page__pricing"
+      aria-labelledby="co-branded-pricing-title"
     >
-      <h2 id="co-branded-tracks-title">
-        {{ content.tracks.title }}
+      <h2 id="co-branded-pricing-title">
+        {{ content.pricing.title }}
       </h2>
-      <p class="co-branded-page__tracks-intro">
-        <template
-          v-for="(line, index) in content.tracks.intro"
-          :key="line"
-        >
-          <br v-if="index">
-          {{ line }}
-        </template>
+
+      <div class="pricing-section__grid co-branded-page__pricing-grid">
+        <PricingCard
+          v-for="plan in pricingPlans"
+          :key="plan.name"
+          :plan="plan"
+        />
+      </div>
+
+      <p class="co-branded-page__pricing-note">
+        {{ content.pricing.note }}
       </p>
-
-      <div class="co-branded-page__tracks-grid">
-        <article
-          v-for="track in content.tracks.items"
-          :key="track.title"
-          class="co-branded-page__track-card"
-        >
-          <h3>{{ track.title }}</h3>
-          <p class="co-branded-page__track-description">
-            {{ track.description }}
-          </p>
-
-          <div class="co-branded-page__track-includes">
-            <p class="co-branded-page__track-includes-title">
-              For cases involving
-            </p>
-            <ul class="co-branded-page__track-features">
-              <li
-                v-for="feature in track.features"
-                :key="feature"
-              >
-                {{ feature }}
-              </li>
-            </ul>
-          </div>
-
-          <p
-            v-if="track.note"
-            class="co-branded-page__track-note"
-          >
-            {{ track.note }}
-          </p>
-        </article>
-      </div>
-
-      <div class="co-branded-page__tracks-note">
-        <p><strong>{{ content.tracks.closingLead }}</strong></p>
-        <p>{{ content.tracks.closing }}</p>
-      </div>
     </section>
 
     <section
