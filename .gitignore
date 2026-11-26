@@ -25,3 +25,6 @@ logs
 
 # HIR-368 visual regression evidence (not committed)
 .qa-screenshots/
+
+# Refactor baselines (HIR-734), generated locally
+baseline-output/

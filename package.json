@@ -43,7 +43,9 @@
     "prebuild": "npm run validate:resource-content",
     "postinstall": "node scripts/patch-devtools-simple-git.mjs && nuxt prepare",
     "postgenerate": "node scripts/write-release-manifest.mjs",
-    "test:analytics-client": "vitest run --config vitest.analytics-client.config.ts"
+    "test:analytics-client": "vitest run --config vitest.analytics-client.config.ts",
+    "baseline:static": "node scripts/baseline/static-output.mjs",
+    "baseline:tests": "node scripts/baseline/test-inventory.mjs"
   },
   "dependencies": {
     "@calcom/embed-snippet": "^1.3.3",
