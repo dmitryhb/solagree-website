@@ -16,6 +16,10 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     setupFiles: ['./tests/vitest.setup.ts'],
-    include: ['./tests/analytics-lifecycle.client.spec.ts']
+    include: [
+      './tests/analytics-lifecycle.client.spec.ts',
+      './tests/daily-analytics-attempt.test.ts',
+      './tests/quiz-host-event-sequence.client.test.ts'
+    ]
   }
 })
