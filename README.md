@@ -91,6 +91,43 @@ These commands use the repository's npm-installed `vite` and `nuxt` binaries.
 They are local browser checks; provider-backed acceptance needs the required
 provider configuration and must be run deliberately outside `npm test`.
 
+## Refactor baselines
+
+Behavior-preserving refactors (epic HIR-705) prove "nothing changed" with two snapshots.
+Results go to `baseline-output/`, which is git-ignored and never committed.
+
+Static output: normalizes every `.output/public/**/*.html`, `_payload.json` and `sitemap.xml`
+(drops HTML comments, content hashes in `/_nuxt/*` names, the Nuxt build id, prerender timestamps,
+the stray tail after `</html>` and whitespace) and hashes each page twice: normalized markup and visible
+text. It also hashes the `_nuxt/*.css` rules (sorted selector list and full rule text). Two builds of the
+same commit give an identical file.
+
+```bash
+# before the task, on the base commit
+npm run generate
+npm run baseline:static -- --out baseline-output/static-before.json
+
+# after the task
+npm run generate
+npm run baseline:static -- --compare baseline-output/static-before.json
+```
+
+`--compare` prints one line per changed, added or removed page (`[pages]` markup, `[textContent]` visible text,
+`[payloads]` Nuxt payloads, `[css]` rule counts and hashes) and exits 1 on any difference. Without
+`--compare` the script writes `baseline-output/static-output.json`; its `overallHash` is the single value to quote.
+Use `--dir <path>` to read a copy of the output instead of `.output/public`.
+
+Test inventory: `vitest list --json` for both vitest configs, every `node --test` file with its tests, and
+`playwright test --list` for all Playwright configs. `node --test` cannot list without running, so those files are
+executed once (about 1.5 minutes in total).
+
+```bash
+npm run baseline:tests -- --out baseline-output/tests-before.json
+npm run baseline:tests -- --compare baseline-output/tests-before.json
+```
+
+A refactor must report no `REMOVED` or `STATUS` lines; `ADDED` lines are fine when the task adds tests.
+
 ## Portal API integration
 
 The attorney application and Solagree consult forms submit to the Solagree Portal API.
